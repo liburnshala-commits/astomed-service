@@ -135,6 +135,15 @@ export default function Customers() {
           onClose={() => { setShowForm(false); setEditing(null); }}
         />
       )}
+
+      {deletingCustomer && (
+        <DeleteCustomerDialog
+          customer={deletingCustomer}
+          machineCount={getMachineCount(deletingCustomer.id)}
+          onDeleted={() => { setDeletingCustomer(null); load(); }}
+          onCancel={() => setDeletingCustomer(null)}
+        />
+      )}
     </div>
   );
 }
