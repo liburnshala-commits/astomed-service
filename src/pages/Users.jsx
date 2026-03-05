@@ -3,6 +3,7 @@ import { base44 } from "@/api/base44Client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { Users as UsersIcon } from "lucide-react";
 import {
   Select,
@@ -16,6 +17,8 @@ export default function Users() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
+  const [pendingRoles, setPendingRoles] = useState({});
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -48,12 +51,33 @@ export default function Users() {
     }
   };
 
-  const handleRoleChange = async (email, newRole) => {
+  const handleRoleChange = (email, newRole) => {
+    setPendingRoles({
+      ...pendingRoles,
+      [email]: newRole
+    });
+  };
+
+  const handleSaveRoles = async () => {
+    setSaving(true);
     try {
-      await base44.functions.invoke("updateUserRole", { email, role: newRole });
-      setUsers(users.map(u => u.email === email ? { ...u, role: newRole } : u));
+      await Promise.all(
+        Object.entries(pendingRoles).map(([email, newRole]) =>
+          base44.functions.invoke("updateUserRole", { email, role: newRole })
+        )
+      );
+      
+      // Uppdatera users lokalt
+      setUsers(users.map(u => 
+        pendingRoles[u.email] ? { ...u, role: pendingRoles[u.email] } : u
+      ));
+      
+      // Rensa pending roles
+      setPendingRoles({});
     } catch (error) {
-      console.error("Fel vid uppdatering av roll:", error);
+      console.error("Fel vid uppdatering av roller:", error);
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -91,41 +115,62 @@ export default function Users() {
             Ingen användare hittad
           </div>
         ) : (
-          <div className="grid gap-4">
-            {filteredUsers.map((user) => (
-              <Card key={user.id} className="astomed-card">
-                <CardContent className="pt-6">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <h3 className="astomed-title font-semibold">
-                        {user.full_name || "Ingen namn"}
-                      </h3>
-                      <p className="astomed-subtitle text-sm">{user.email}</p>
-                      <p className="astomed-muted text-xs mt-2">
-                        Skapad:{" "}
-                        {new Date(user.created_date).toLocaleDateString("sv-SE")}
-                      </p>
+          <>
+            <div className="grid gap-4">
+              {filteredUsers.map((user) => (
+                <Card key={user.id} className="astomed-card">
+                  <CardContent className="pt-6">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h3 className="astomed-title font-semibold">
+                          {user.full_name || "Ingen namn"}
+                        </h3>
+                        <p className="astomed-subtitle text-sm">{user.email}</p>
+                        <p className="astomed-muted text-xs mt-2">
+                          Skapad:{" "}
+                          {new Date(user.created_date).toLocaleDateString("sv-SE")}
+                        </p>
+                      </div>
+                      <Select
+                        value={pendingRoles[user.email] || user.role}
+                        onValueChange={(newRole) =>
+                          handleRoleChange(user.email, newRole)
+                        }
+                      >
+                        <SelectTrigger className="w-32">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="admin">Admin</SelectItem>
+                          <SelectItem value="technician">Tekniker</SelectItem>
+                          <SelectItem value="user">Användare</SelectItem>
+                        </SelectContent>
+                      </Select>
                     </div>
-                    <Select
-                      value={user.role}
-                      onValueChange={(newRole) =>
-                        handleRoleChange(user.email, newRole)
-                      }
-                    >
-                      <SelectTrigger className="w-32">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="admin">Admin</SelectItem>
-                        <SelectItem value="technician">Tekniker</SelectItem>
-                        <SelectItem value="user">Användare</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+
+            {Object.keys(pendingRoles).length > 0 && (
+              <div className="mt-6 flex gap-3 sticky bottom-6">
+                <Button
+                  onClick={handleSaveRoles}
+                  disabled={saving}
+                  className="bg-green-600 hover:bg-green-700 text-white"
+                >
+                  {saving ? "Sparar..." : "Spara ändringar"}
+                </Button>
+                <Button
+                  onClick={() => setPendingRoles({})}
+                  variant="outline"
+                  disabled={saving}
+                >
+                  Avbryt
+                </Button>
+              </div>
+            )}
+          </>
         )}
 
         <div className="mt-8 text-sm astomed-subtitle">
