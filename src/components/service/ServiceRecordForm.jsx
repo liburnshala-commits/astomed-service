@@ -300,7 +300,7 @@ export default function ServiceRecordForm({ record, machines, customers, presele
             </div>
             <div className="space-y-1">
               <Label>Arbetskostnad (kr)</Label>
-              <Input type="number" value={form.labor_cost} onChange={e => set("labor_cost", parseFloat(e.target.value))} placeholder="0" />
+              <Input type="number" value={form.labor_cost} onChange={e => set("labor_cost", e.target.value === "" ? "" : parseFloat(e.target.value))} placeholder="0" />
             </div>
             <div className="col-span-2 p-3 bg-slate-50 rounded-lg flex items-center justify-between">
               <span className="text-sm text-slate-600">Beräknad totalkostnad</span>
