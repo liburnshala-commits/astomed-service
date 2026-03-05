@@ -67,10 +67,9 @@ export default function Users() {
         )
       );
       
-      // Uppdatera users lokalt
-      setUsers(users.map(u => 
-        pendingRoles[u.email] ? { ...u, role: pendingRoles[u.email] } : u
-      ));
+      // Hämta uppdaterad användarlista från server
+      const allUsers = await base44.entities.User.list();
+      setUsers(allUsers);
       
       // Rensa pending roles
       setPendingRoles({});
