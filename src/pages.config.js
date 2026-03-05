@@ -50,6 +50,7 @@
 import Dashboard from './pages/Dashboard';
 import Customers from './pages/Customers';
 import Machines from './pages/Machines';
+import ServiceRecords from './pages/ServiceRecords';
 import __Layout from './Layout.jsx';
 
 
@@ -57,6 +58,7 @@ export const PAGES = {
     "Dashboard": Dashboard,
     "Customers": Customers,
     "Machines": Machines,
+    "ServiceRecords": ServiceRecords,
 }
 
 export const pagesConfig = {
