@@ -67,7 +67,18 @@ export default function Customers() {
       });
       const token = response.data.token;
       const portalUrl = `${window.location.origin}/customer-portal?token=${token}`;
-      navigator.clipboard.writeText(portalUrl);
+      
+      try {
+        await navigator.clipboard.writeText(portalUrl);
+      } catch {
+        const textarea = document.createElement("textarea");
+        textarea.value = portalUrl;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand("copy");
+        document.body.removeChild(textarea);
+      }
+      
       setCopiedId(customer.id);
       toast.success("Portal-länk kopierad!");
       setTimeout(() => setCopiedId(null), 2000);
