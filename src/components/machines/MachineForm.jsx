@@ -56,9 +56,22 @@ export default function MachineForm({ machine, customers, preselectedCustomerId,
                 <SelectTrigger><SelectValue placeholder="Välj modell" /></SelectTrigger>
                 <SelectContent>
                   {MODELS.map(m => <SelectItem key={m} value={m}>{m}</SelectItem>)}
+                  <SelectItem value="Annan">Annan</SelectItem>
                 </SelectContent>
               </Select>
             </div>
+            {form.model === "Annan" && (
+              <>
+                <div className="col-span-2 space-y-1">
+                  <Label>Maskinnamn *</Label>
+                  <Input value={form.custom_model} onChange={e => set("custom_model", e.target.value)} placeholder="Ange maskinens namn" />
+                </div>
+                <div className="col-span-2 space-y-1">
+                  <Label>Tillverkare</Label>
+                  <Input value={form.manufacturer} onChange={e => set("manufacturer", e.target.value)} placeholder="Ange tillverkare" />
+                </div>
+              </>
+            )}
             <div className="col-span-2 space-y-1">
               <Label>Serienummer *</Label>
               <Input value={form.serial_number} onChange={e => set("serial_number", e.target.value)} placeholder="SN-XXXXXX" />
