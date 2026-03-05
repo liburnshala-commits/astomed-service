@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
-import { Wrench, Monitor, Calendar, FileText, AlertCircle, ChevronDown, ChevronUp, LogOut } from "lucide-react";
+import { Wrench, Monitor, Calendar, FileText, AlertCircle, ChevronDown, ChevronUp, LogOut, PlusCircle } from "lucide-react";
+import RequestServiceModal from "@/components/portal/RequestServiceModal";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
