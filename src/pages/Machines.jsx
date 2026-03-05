@@ -105,23 +105,23 @@ export default function Machines() {
           const serviceCount = getServiceCount(machine.id);
           const lastService = getLastService(machine.id);
           return (
-            <Card key={machine.id} className="hover:shadow-md transition-shadow">
+            <Card key={machine.id} className="astomed-card">
               <CardContent className="p-5">
                 <div className="flex items-start justify-between mb-3">
-                  <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                    <Monitor className="w-5 h-5 text-blue-600" />
+                  <div className="astomed-icon-box flex-shrink-0" style={{ width: 40, height: 40 }}>
+                    <Monitor className="w-5 h-5" style={{ color: "#1b3a3a" }} />
                   </div>
                   <Badge className={statusColor[machine.status || "active"]}>{statusLabel[machine.status || "active"]}</Badge>
                 </div>
-                <h3 className="font-bold text-slate-900 mb-0.5">{machine.model}</h3>
-                <p className="text-xs text-slate-400 mb-3 font-mono">SN: {machine.serial_number}</p>
+                <h3 className="font-bold astomed-title mb-0.5">{machine.model}</h3>
+                <p className="text-xs astomed-muted mb-3 font-mono">SN: {machine.serial_number}</p>
                 {customer && (
-                  <div className="flex items-center gap-1.5 text-sm text-slate-600 mb-3">
-                    <Building2 className="w-3.5 h-3.5 text-slate-400" />
+                  <div className="flex items-center gap-1.5 text-sm astomed-subtitle mb-3">
+                    <Building2 className="w-3.5 h-3.5 astomed-muted" />
                     {customer.company_name}
                   </div>
                 )}
-                <div className="flex items-center justify-between text-xs text-slate-400 mb-4 pt-3 border-t">
+                <div className="flex items-center justify-between text-xs astomed-muted mb-4 pt-3 border-t" style={{ borderColor: "#dce8e8" }}>
                   <span>{serviceCount} servicetillfällen</span>
                   {lastService && <span>Senast: {lastService.service_date}</span>}
                 </div>
