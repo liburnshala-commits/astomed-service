@@ -139,7 +139,7 @@ export default function ServiceRecords() {
                       <span>{record.service_date ? format(new Date(record.service_date), "d MMM yyyy", { locale: sv }) : ""}</span>
                     </div>
                     {record.total_cost > 0 && (
-                      <div className="text-sm font-semibold text-slate-800 mt-1">{record.total_cost?.toLocaleString("sv-SE")} kr</div>
+                      <div className="text-sm font-semibold astomed-title mt-1">{record.total_cost?.toLocaleString("sv-SE")} kr</div>
                     )}
                   </div>
                   <div className="flex gap-2 flex-shrink-0 self-start" onClick={e => e.stopPropagation()}>
