@@ -132,8 +132,8 @@ export default function ServiceRecords() {
                       <Badge className={typeColor[record.service_type]}>{typeLabel[record.service_type]}</Badge>
                       <Badge className={statusColor[record.status]}>{statusLabel[record.status]}</Badge>
                     </div>
-                    <div className="text-xs text-slate-400 font-mono mb-1">SN: {machine?.serial_number}</div>
-                    <div className="flex flex-wrap gap-4 text-sm text-slate-600">
+                    <div className="text-xs astomed-muted font-mono mb-1">SN: {machine?.serial_number}</div>
+                    <div className="flex flex-wrap gap-4 text-sm astomed-subtitle">
                       <span>{customer?.company_name || "Okänd kund"}</span>
                       <span>Tekniker: {record.technician_name}</span>
                       <span>{record.service_date ? format(new Date(record.service_date), "d MMM yyyy", { locale: sv }) : ""}</span>
