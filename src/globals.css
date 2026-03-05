@@ -1,6 +1,12 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Astomed brand colors */
+:root {
+  --primary: 180 42% 17%; /* #1b3a3a */
+}
 
 @media print {
   body * {
