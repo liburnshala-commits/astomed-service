@@ -51,11 +51,19 @@ export default function Customers() {
     load();
   };
 
-  const copyPortalLink = (token, id) => {
-    const url = `${window.location.origin}${createPageUrl("CustomerPortal")}?token=${token}`;
-    navigator.clipboard.writeText(url);
-    setCopied(id);
-    setTimeout(() => setCopied(null), 2000);
+  const inviteCustomer = async (customer) => {
+    if (!customer.email) {
+      toast.error("Kunden saknar e-postadress.");
+      return;
+    }
+    setInviting(customer.id);
+    try {
+      await base44.users.inviteUser(customer.email, "customer");
+      toast.success(`Inbjudan skickad till ${customer.email}`);
+    } catch (e) {
+      toast.error("Kunde inte skicka inbjudan: " + (e.message || "okänt fel"));
+    }
+    setInviting(null);
   };
 
   return (
