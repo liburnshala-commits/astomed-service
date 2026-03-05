@@ -11,9 +11,15 @@ const MODELS = [
   "PrimeLase", "Elysion", "PicoLo", "Helius", "Splendor X", "Pento"
 ];
 
+const isCustomModel = (model) => model && !MODELS.includes(model);
+
 export default function MachineForm({ machine, customers, preselectedCustomerId, onSave, onClose }) {
+  const existingIsCustom = machine?.model ? isCustomModel(machine.model) : false;
+
   const [form, setForm] = useState({
-    model: machine?.model || "",
+    model: existingIsCustom ? "Annan" : (machine?.model || ""),
+    custom_model: existingIsCustom ? machine.model : "",
+    manufacturer: machine?.manufacturer || "",
     serial_number: machine?.serial_number || "",
     customer_id: machine?.customer_id || preselectedCustomerId || "",
     installation_date: machine?.installation_date || "",
@@ -25,6 +31,15 @@ export default function MachineForm({ machine, customers, preselectedCustomerId,
   });
 
   const set = (field, value) => setForm(prev => ({ ...prev, [field]: value }));
+
+  const handleSave = () => {
+    const saveData = { ...form };
+    if (form.model === "Annan") {
+      saveData.model = form.custom_model;
+    }
+    delete saveData.custom_model;
+    onSave(saveData);
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
