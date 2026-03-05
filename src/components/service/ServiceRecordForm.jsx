@@ -115,6 +115,20 @@ export default function ServiceRecordForm({ record, machines, customers, presele
         <div className="p-6 space-y-6">
           {/* Basic info */}
           <div className="grid grid-cols-2 gap-4">
+            {/* Serial number lookup */}
+            <div className="col-span-2 space-y-1">
+              <Label>Serienummer</Label>
+              <div className="relative">
+                <Input
+                  value={serialInput}
+                  onChange={e => handleSerialChange(e.target.value)}
+                  placeholder="Ange serienummer..."
+                  className={serialMatch === "found" ? "border-green-400 focus-visible:ring-green-400" : serialMatch === "not_found" ? "border-orange-400 focus-visible:ring-orange-400" : ""}
+                />
+                {serialMatch === "found" && <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-green-600 font-medium">✓ Maskin hittad</span>}
+                {serialMatch === "not_found" && <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-orange-500 font-medium">Ej registrerad</span>}
+              </div>
+            </div>
             <div className="col-span-2 space-y-1">
               <Label>Maskin *</Label>
               <Select value={form.machine_id} onValueChange={handleMachineChange}>
@@ -125,7 +139,7 @@ export default function ServiceRecordForm({ record, machines, customers, presele
               </Select>
             </div>
             <div className="col-span-2 space-y-1">
-              <Label>Kund *</Label>
+              <Label>Kund</Label>
               <Select value={form.customer_id} onValueChange={v => set("customer_id", v)}>
                 <SelectTrigger><SelectValue placeholder="Välj kund" /></SelectTrigger>
                 <SelectContent>
