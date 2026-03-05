@@ -155,11 +155,14 @@ export default function Layout({ children, currentPageName }) {
 
         <div className="p-4 border-t border-white/10">
           {user && (
-            <div className="mb-3 px-3">
+            <button 
+              onClick={() => setShowUserInfo(!showUserInfo)}
+              className="w-full text-left mb-3 px-3 py-2 rounded hover:bg-white/10 transition-colors"
+            >
               <div className="text-xs" style={{ color: "#7aadad" }}>Inloggad som</div>
               <div className="text-sm text-white font-medium truncate">{user.full_name || user.email}</div>
               <div className="text-xs capitalize" style={{ color: "#7aadad" }}>{user.role || "technician"}</div>
-            </div>
+            </button>
           )}
           <Button
             variant="ghost"
