@@ -9,8 +9,8 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { format } from "date-fns";
 import { sv } from "date-fns/locale";
-import ServiceRecordForm from "@/components/service/ServiceRecordForm";
-import ServiceRecordDetail from "@/components/service/ServiceRecordDetail";
+import ServiceRecordForm from "@/components/service/ServiceRecordForm.jsx";
+import ServiceRecordDetail from "@/components/service/ServiceRecordDetail.jsx";
 
 const statusColor = {
   pending: "bg-yellow-100 text-yellow-800",
