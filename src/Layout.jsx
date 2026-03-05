@@ -69,7 +69,6 @@ export default function Layout({ children, currentPageName }) {
   }
 
   const userRole = user?.role || "technician";
-  const visibleNav = navItems.filter(item => item.roles.includes(userRole));
 
   return (
     <div className="min-h-screen bg-gray-50 flex">
