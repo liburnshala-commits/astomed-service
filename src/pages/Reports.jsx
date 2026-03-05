@@ -43,6 +43,7 @@ export default function Reports() {
   const [sendingEmail, setSendingEmail] = useState(false);
 
   useEffect(() => {
+    base44.auth.me().then(setUser).catch(() => {});
     Promise.all([
       base44.entities.ServiceRecord.list("-service_date"),
       base44.entities.Machine.list(),
