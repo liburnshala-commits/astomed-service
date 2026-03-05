@@ -46,7 +46,13 @@ Deno.serve(async (req) => {
         Antal serviceärenden: ${recordCount}
       </div>
       
-      <p>Rapporten är tillgänglig i er kundportal. Logga in för att se fullständig information om serviceärendena.</p>
+      <p>Rapporten är tillgänglig i er kundportal. Logga in för att se fullständig information om serviceärendena och er kundbild.</p>
+      
+      <div style="text-align: center; margin: 20px 0;">
+        <a href="${process.env.BASE44_APP_URL || 'https://astomed-pro.base44.app'}/login" style="background: #3a9e9e; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block; font-weight: bold;">
+          Logga in på kundportalen
+        </a>
+      </div>
       
       <p>Har ni frågor om rapporten eller era serviceärenden är ni välkomna att kontakta oss.</p>
       
