@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
 import { sv } from "date-fns/locale";
-import ServiceReportModal from "./ServiceReportModal";
+import ServiceReportModal from "./ServiceReportModal.jsx";
 import { useState } from "react";
 
 const statusColor = {
