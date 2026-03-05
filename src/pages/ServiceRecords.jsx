@@ -120,15 +120,15 @@ export default function ServiceRecords() {
           const machine = getMachine(record.machine_id);
           const customer = getCustomer(record.customer_id);
           return (
-            <Card key={record.id} className="hover:shadow-md transition-shadow cursor-pointer" onClick={() => setViewing(record)}>
+            <Card key={record.id} className="astomed-card cursor-pointer" onClick={() => setViewing(record)}>
               <CardContent className="p-5">
                 <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                    <Wrench className="w-5 h-5 text-slate-500" />
+                  <div className="w-10 h-10 astomed-icon-box flex-shrink-0" style={{ width: 40, height: 40 }}>
+                    <Wrench className="w-5 h-5" style={{ color: "#1b3a3a" }} />
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex flex-wrap items-center gap-2 mb-1">
-                      <span className="font-semibold text-slate-900">{machine?.model || "Okänd maskin"}</span>
+                      <span className="font-semibold astomed-title">{machine?.model || "Okänd maskin"}</span>
                       <Badge className={typeColor[record.service_type]}>{typeLabel[record.service_type]}</Badge>
                       <Badge className={statusColor[record.status]}>{statusLabel[record.status]}</Badge>
                     </div>
