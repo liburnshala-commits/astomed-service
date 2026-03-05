@@ -4,6 +4,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Users as UsersIcon } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export default function Users() {
   const [users, setUsers] = useState([]);
@@ -38,6 +45,15 @@ export default function Users() {
         return "bg-blue-100 text-blue-800";
       default:
         return "bg-gray-100 text-gray-800";
+    }
+  };
+
+  const handleRoleChange = async (email, newRole) => {
+    try {
+      await base44.functions.invoke("updateUserRole", { email, role: newRole });
+      setUsers(users.map(u => u.email === email ? { ...u, role: newRole } : u));
+    } catch (error) {
+      console.error("Fel vid uppdatering av roll:", error);
     }
   };
 
@@ -90,16 +106,21 @@ export default function Users() {
                         {new Date(user.created_date).toLocaleDateString("sv-SE")}
                       </p>
                     </div>
-                    <Badge
-                      className={getRoleBadgeColor(user.role)}
-                      variant="outline"
+                    <Select
+                      value={user.role}
+                      onValueChange={(newRole) =>
+                        handleRoleChange(user.email, newRole)
+                      }
                     >
-                      {user.role === "admin"
-                        ? "Admin"
-                        : user.role === "technician"
-                        ? "Tekniker"
-                        : user.role}
-                    </Badge>
+                      <SelectTrigger className="w-32">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="admin">Admin</SelectItem>
+                        <SelectItem value="technician">Tekniker</SelectItem>
+                        <SelectItem value="user">Användare</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
                 </CardContent>
               </Card>
