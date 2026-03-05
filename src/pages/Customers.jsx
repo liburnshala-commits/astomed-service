@@ -110,9 +110,15 @@ export default function Customers() {
                     </Badge>
                   </Link>
                   <div className="flex flex-wrap justify-end gap-2">
-                    <Button size="sm" variant="outline" onClick={() => copyPortalLink(customer.portal_token, customer.id)}>
-                      {copied === customer.id ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
-                      <span className="ml-1 text-xs hidden sm:inline">{copied === customer.id ? "Kopierad!" : "Portal"}</span>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => inviteCustomer(customer)}
+                      disabled={inviting === customer.id || !customer.email}
+                      title={customer.email ? "Bjud in kunden att skapa konto" : "Kunden saknar e-post"}
+                    >
+                      {inviting === customer.id ? <Check className="w-3 h-3 text-green-500" /> : <UserPlus className="w-3 h-3" />}
+                      <span className="ml-1 text-xs hidden sm:inline">{inviting === customer.id ? "Skickat!" : "Bjud in"}</span>
                     </Button>
                     <Link to={createPageUrl(`Machines?customer=${customer.id}`)}>
                       <Button size="sm" variant="outline">
