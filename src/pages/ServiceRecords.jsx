@@ -153,6 +153,9 @@ export default function ServiceRecords() {
                     <Button size="sm" variant="outline" onClick={() => { setEditing(record); setShowForm(true); }}>
                       <span className="hidden sm:inline">Redigera</span><span className="sm:hidden">✏️</span>
                     </Button>
+                    <Button size="sm" variant="ghost" className="text-red-500 hover:text-red-700 hover:bg-red-50" onClick={(e) => handleDelete(record, e)}>
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
                   </div>
                 </div>
               </CardContent>
