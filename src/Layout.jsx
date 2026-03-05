@@ -22,6 +22,7 @@ const navItems = [
   { label: "Maskiner", page: "Machines", icon: Monitor, roles: ["admin", "technician"] },
   { label: "Kunder", page: "Customers", icon: Users, roles: ["admin", "technician"] },
   { label: "Rapporter", page: "Reports", icon: FileText, roles: ["admin", "technician"] },
+  { label: "Audit Log (GDPR)", page: "AuditLog", icon: Shield, roles: ["admin"] },
 ];
 
 export default function Layout({ children, currentPageName }) {

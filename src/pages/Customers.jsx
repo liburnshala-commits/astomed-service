@@ -2,12 +2,13 @@ import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { createPageUrl } from "@/utils";
 import { Link } from "react-router-dom";
-import { Plus, Search, Building2, Phone, Mail, ExternalLink, Copy, Check } from "lucide-react";
+import { Plus, Search, Building2, Phone, Mail, ExternalLink, Copy, Check, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import CustomerForm from "@/components/customers/CustomerForm.jsx";
+import DeleteCustomerDialog from "@/components/gdpr/DeleteCustomerDialog.jsx";
 
 export default function Customers() {
   const [customers, setCustomers] = useState([]);
