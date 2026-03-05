@@ -34,6 +34,7 @@ www.astomed.se`;
       to: customerEmail,
       subject,
       body,
+      from_name: "Astomed Servicerapporter"
     });
 
     return Response.json({ success: true });
