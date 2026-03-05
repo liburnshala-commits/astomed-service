@@ -63,6 +63,7 @@ export default function Layout({ children, currentPageName }) {
   const [user, setUser] = useState(null);
   const [userLoaded, setUserLoaded] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [showUserInfo, setShowUserInfo] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
 
