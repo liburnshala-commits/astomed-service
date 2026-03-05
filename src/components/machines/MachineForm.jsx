@@ -19,6 +19,8 @@ export default function MachineForm({ machine, customers, preselectedCustomerId,
     installation_date: machine?.installation_date || "",
     warranty_expiry: machine?.warranty_expiry || "",
     status: machine?.status || "active",
+    service_interval: machine?.service_interval || "",
+    service_contract: machine?.service_contract || "none",
     notes: machine?.notes || ""
   });
 
