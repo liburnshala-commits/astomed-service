@@ -77,7 +77,7 @@ export default function ServiceRecords() {
     <div className="p-6 space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Serviceärenden</h1>
+          <h1 className="text-2xl font-bold astomed-title">Serviceärenden</h1>
           {preselectedMachine && (
             <p className="text-slate-500 text-sm">
               Filtrerat: {getMachine(preselectedMachine)?.model} · {getMachine(preselectedMachine)?.serial_number}
