@@ -70,10 +70,10 @@ export default function Machines() {
     <div className="p-6 space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Maskiner</h1>
-          <p className="text-slate-500 text-sm">{machines.length} maskiner registrerade</p>
+          <h1 className="text-2xl font-bold astomed-title">Maskiner</h1>
+          <p className="astomed-subtitle text-sm">{machines.length} maskiner registrerade</p>
         </div>
-        <Button onClick={() => { setEditing(null); setShowForm(true); }} className="bg-blue-600 hover:bg-blue-700">
+        <Button onClick={() => { setEditing(null); setShowForm(true); }} className="astomed-btn-primary">
           <Plus className="w-4 h-4 mr-2" /> Ny maskin
         </Button>
       </div>
