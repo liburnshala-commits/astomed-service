@@ -7,10 +7,20 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { base44 } from "@/api/base44Client";
 
+const TECHNICIANS = [
+  "Anders Karlsson",
+  "Erik Lindström",
+  "Maria Johansson",
+  "Peter Svensson",
+  "Sara Nilsson",
+];
+
 export default function ServiceRecordForm({ record, machines, customers, preselectedMachineId, onSave, onClose }) {
+  const preselectedMachine = machines.find(m => m.id === preselectedMachineId);
+
   const [form, setForm] = useState({
     machine_id: record?.machine_id || preselectedMachineId || "",
-    customer_id: record?.customer_id || "",
+    customer_id: record?.customer_id || (preselectedMachine?.customer_id || ""),
     service_type: record?.service_type || "standard",
     service_date: record?.service_date || new Date().toISOString().split("T")[0],
     technician_name: record?.technician_name || "",
@@ -24,15 +34,37 @@ export default function ServiceRecordForm({ record, machines, customers, presele
     images: record?.images || []
   });
 
+  const [serialInput, setSerialInput] = useState(() => {
+    if (record?.machine_id) {
+      const m = machines.find(m => m.id === record.machine_id);
+      return m?.serial_number || "";
+    }
+    if (preselectedMachine) return preselectedMachine.serial_number || "";
+    return "";
+  });
+  const [serialMatch, setSerialMatch] = useState(null); // null | "found" | "not_found"
   const [uploading, setUploading] = useState(false);
 
   const set = (field, value) => setForm(prev => ({ ...prev, [field]: value }));
 
-  // Auto-fill customer when machine is selected
+  const handleSerialChange = (value) => {
+    setSerialInput(value);
+    const machine = machines.find(m => m.serial_number?.toLowerCase() === value.trim().toLowerCase());
+    if (machine) {
+      setSerialMatch("found");
+      setForm(prev => ({ ...prev, machine_id: machine.id, customer_id: machine.customer_id || prev.customer_id }));
+    } else {
+      setSerialMatch(value.trim().length > 0 ? "not_found" : null);
+      setForm(prev => ({ ...prev, machine_id: "", customer_id: "" }));
+    }
+  };
+
+  // Auto-fill customer when machine is selected from dropdown
   const handleMachineChange = (machineId) => {
     const machine = machines.find(m => m.id === machineId);
-    set("machine_id", machineId);
-    if (machine?.customer_id) set("customer_id", machine.customer_id);
+    setSerialInput(machine?.serial_number || "");
+    setSerialMatch(machine ? "found" : null);
+    setForm(prev => ({ ...prev, machine_id: machineId, customer_id: machine?.customer_id || prev.customer_id }));
   };
 
   const addPart = () => {
