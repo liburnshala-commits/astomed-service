@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
-import { Wrench, Monitor, Calendar, FileText, AlertCircle, ChevronDown, ChevronUp } from "lucide-react";
+import { Wrench, Monitor, Calendar, FileText, AlertCircle, ChevronDown, ChevronUp, LogOut } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
 import { sv } from "date-fns/locale";
 
@@ -16,6 +17,7 @@ const statusLabel = { pending: "Väntar", in_progress: "Pågående", completed: 
 const typeLabel = { standard: "Standardservice", advanced: "Avancerad service" };
 
 export default function CustomerPortal() {
+  const [user, setUser] = useState(null);
   const [customer, setCustomer] = useState(null);
   const [machines, setMachines] = useState([]);
   const [records, setRecords] = useState([]);
@@ -23,24 +25,38 @@ export default function CustomerPortal() {
   const [error, setError] = useState(null);
   const [expandedRecord, setExpandedRecord] = useState(null);
 
-  const urlParams = new URLSearchParams(window.location.search);
-  const token = urlParams.get("token");
-
   useEffect(() => {
-    if (!token) { setError("Ogiltig länk – token saknas."); setLoading(false); return; }
-    base44.entities.Customer.filter({ portal_token: token }).then(customers => {
-      if (!customers || customers.length === 0) { setError("Ogiltig länk – kund hittades inte."); setLoading(false); return; }
+    base44.auth.me().then(async (u) => {
+      if (!u) {
+        base44.auth.redirectToLogin(window.location.href);
+        return;
+      }
+      setUser(u);
+      if (u.role !== "customer") {
+        setError("Denna sida är endast tillgänglig för kunder.");
+        setLoading(false);
+        return;
+      }
+      // Match customer record by email
+      const customers = await base44.entities.Customer.filter({ email: u.email });
+      if (!customers || customers.length === 0) {
+        setError("Inget kundkonto är kopplat till din e-postadress. Kontakta Astomed.");
+        setLoading(false);
+        return;
+      }
       const c = customers[0];
       setCustomer(c);
-      return Promise.all([
+      const [m, r] = await Promise.all([
         base44.entities.Machine.filter({ customer_id: c.id }),
         base44.entities.ServiceRecord.filter({ customer_id: c.id }, "-service_date")
       ]);
-    }).then(results => {
-      if (results) { setMachines(results[0]); setRecords(results[1]); }
+      setMachines(m);
+      setRecords(r);
       setLoading(false);
-    }).catch(() => { setError("Kunde inte ladda data."); setLoading(false); });
-  }, [token]);
+    }).catch(() => {
+      base44.auth.redirectToLogin(window.location.href);
+    });
+  }, []);
 
   if (loading) {
     return (
@@ -61,6 +77,9 @@ export default function CustomerPortal() {
             <AlertCircle className="w-12 h-12 text-red-400 mx-auto mb-3" />
             <h2 className="font-bold text-lg text-slate-800 mb-2">Åtkomst nekad</h2>
             <p className="text-slate-500">{error}</p>
+            <Button variant="outline" className="mt-4" onClick={() => base44.auth.logout()}>
+              <LogOut className="w-4 h-4 mr-2" /> Logga ut
+            </Button>
           </CardContent>
         </Card>
       </div>
@@ -73,14 +92,19 @@ export default function CustomerPortal() {
   return (
     <div className="min-h-screen bg-slate-50">
       <header className="bg-slate-900 text-white py-6 px-6">
-        <div className="max-w-4xl mx-auto flex items-center gap-3">
-          <div className="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center">
-            <Wrench className="w-5 h-5" />
+        <div className="max-w-4xl mx-auto flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center">
+              <Wrench className="w-5 h-5" />
+            </div>
+            <div>
+              <div className="text-xs text-slate-400">Kundportal</div>
+              <h1 className="text-xl font-bold">{customer?.company_name}</h1>
+            </div>
           </div>
-          <div>
-            <div className="text-xs text-slate-400">Kundportal</div>
-            <h1 className="text-xl font-bold">{customer?.company_name}</h1>
-          </div>
+          <Button variant="ghost" size="sm" className="text-white/70 hover:text-white hover:bg-white/10" onClick={() => base44.auth.logout()}>
+            <LogOut className="w-4 h-4 mr-1" /> Logga ut
+          </Button>
         </div>
       </header>
 
@@ -101,7 +125,7 @@ export default function CustomerPortal() {
           </Card>
           <Card>
             <CardContent className="p-4 text-center">
-              <div className="text-2xl font-bold text-slate-900">{totalCost.toLocaleString("sv-SE")} kr</div>
+              <div className="text-2xl font-bold text-slate-900">{totalCost > 0 ? totalCost.toLocaleString("sv-SE") + " kr" : "–"}</div>
               <div className="text-xs text-slate-500 mt-1">Total kostnad</div>
             </CardContent>
           </Card>
@@ -221,7 +245,7 @@ export default function CustomerPortal() {
       </main>
 
       <footer className="text-center py-6 text-xs text-slate-400 border-t mt-8">
-        ServiceLog Pro · Kundportal
+        Astomed Klinikutrustning Sverige AB · Kundportal
       </footer>
     </div>
   );
