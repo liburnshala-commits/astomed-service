@@ -84,7 +84,7 @@ export default function Layout({ children, currentPageName }) {
               <Wrench className="w-5 h-5 text-white" />
             </div>
             <div>
-              <div className="font-bold text-white text-sm">ServiceLog Pro</div>
+              <div className="font-bold text-white text-sm">Astomed Pro</div>
               <div className="text-xs text-slate-400">Servicehantering</div>
             </div>
           </div>
@@ -166,7 +166,7 @@ export default function Layout({ children, currentPageName }) {
           <Link to={createPageUrl("Dashboard")} className="flex items-center justify-center w-8 h-8 rounded-lg bg-slate-100 hover:bg-blue-100 hover:text-blue-600 transition-colors" title="Gå till Dashboard">
             <LayoutDashboard className="w-4 h-4" />
           </Link>
-          <span className="font-semibold text-slate-800 lg:hidden">ServiceLog Pro</span>
+          <span className="font-semibold text-slate-800 lg:hidden">Astomed Pro</span>
         </header>
         <main className="flex-1 overflow-auto">
           {children}
