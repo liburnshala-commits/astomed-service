@@ -164,6 +164,14 @@ export default function Layout({ children, currentPageName }) {
               <div className="text-xs capitalize" style={{ color: "#7aadad" }}>{user.role || "technician"}</div>
             </button>
           )}
+          {showUserInfo && user && (
+            <div className="mb-3 px-3 py-2 bg-white/10 rounded text-xs space-y-1">
+              <div style={{ color: "#7aadad" }}>E-postadress:</div>
+              <div className="text-white break-all">{user.email}</div>
+              <div style={{ color: "#7aadad" }} className="mt-2">ID:</div>
+              <div className="text-white text-xs break-all">{user.id}</div>
+            </div>
+          )}
           <Button
             variant="ghost"
             size="sm"
