@@ -6,7 +6,11 @@ Deno.serve(async (req) => {
     const user = await base44.auth.me();
     if (!user) return Response.json({ error: 'Unauthorized' }, { status: 401 });
 
-    const { customerName, filterLabel, recordCount } = await req.json();
+    const { customerEmail, customerName, filterLabel, recordCount } = await req.json();
+
+    if (!customerEmail) {
+      return Response.json({ error: 'Ingen e-postadress angiven' }, { status: 400 });
+    }
 
     const subject = `Servicerapport från Astomed – ${filterLabel}`;
 
@@ -27,7 +31,7 @@ E-post: info@astomed.se
 www.astomed.se`;
 
     await base44.integrations.Core.SendEmail({
-      to: user.email,
+      to: customerEmail,
       subject,
       body,
       from_name: "Astomed Servicerapporter"
