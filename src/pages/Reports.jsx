@@ -52,6 +52,20 @@ export default function Reports() {
   const getMachine = (id) => machines.find(m => m.id === id);
   const getCustomer = (id) => customers.find(c => c.id === id);
 
+  // Auto-select machine when customer has only one
+  useEffect(() => {
+    if (filterCustomer === "all") {
+      setFilterMachine("all");
+      return;
+    }
+    const customerMachines = machines.filter(m => m.customer_id === filterCustomer);
+    if (customerMachines.length === 1) {
+      setFilterMachine(customerMachines[0].id);
+    } else {
+      setFilterMachine("all");
+    }
+  }, [filterCustomer, machines]);
+
   const currentYear = new Date().getFullYear();
   const availableYears = getYears(records);
 
