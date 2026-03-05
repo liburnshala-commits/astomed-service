@@ -17,7 +17,7 @@ export default function Customers() {
   const [search, setSearch] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [editing, setEditing] = useState(null);
-  const [copied, setCopied] = useState(null);
+  const [inviting, setInviting] = useState(null);
   const [deletingCustomer, setDeletingCustomer] = useState(null);
 
   const load = () => {
