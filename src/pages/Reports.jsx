@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
 import { sv } from "date-fns/locale";
-import ServiceReportModal from "@/components/service/ServiceReportModal";
+import ServiceReportModal from "@/components/service/ServiceReportModal.jsx";
 
 const statusColor = {
   pending: "bg-yellow-100 text-yellow-800",
