@@ -54,58 +54,66 @@ export default function Dashboard() {
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card>
-          <CardContent className="p-5">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-xs text-slate-500 font-medium uppercase tracking-wide">Maskiner</p>
-                <p className="text-3xl font-bold text-slate-900 mt-1">{machines.length}</p>
+        <Link to={createPageUrl("Machines")} className="block">
+          <Card className="hover:shadow-md transition-shadow cursor-pointer hover:border-blue-300">
+            <CardContent className="p-5">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-xs text-slate-500 font-medium uppercase tracking-wide">Maskiner</p>
+                  <p className="text-3xl font-bold text-slate-900 mt-1">{machines.length}</p>
+                </div>
+                <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
+                  <Monitor className="w-5 h-5 text-blue-600" />
+                </div>
               </div>
-              <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
-                <Monitor className="w-5 h-5 text-blue-600" />
+            </CardContent>
+          </Card>
+        </Link>
+        <Link to={createPageUrl("Customers")} className="block">
+          <Card className="hover:shadow-md transition-shadow cursor-pointer hover:border-green-300">
+            <CardContent className="p-5">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-xs text-slate-500 font-medium uppercase tracking-wide">Kunder</p>
+                  <p className="text-3xl font-bold text-slate-900 mt-1">{customers.length}</p>
+                </div>
+                <div className="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center">
+                  <Users className="w-5 h-5 text-green-600" />
+                </div>
               </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-5">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-xs text-slate-500 font-medium uppercase tracking-wide">Kunder</p>
-                <p className="text-3xl font-bold text-slate-900 mt-1">{customers.length}</p>
+            </CardContent>
+          </Card>
+        </Link>
+        <Link to={createPageUrl("ServiceRecords?status=in_progress")} className="block">
+          <Card className="hover:shadow-md transition-shadow cursor-pointer hover:border-orange-300">
+            <CardContent className="p-5">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-xs text-slate-500 font-medium uppercase tracking-wide">Pågående</p>
+                  <p className="text-3xl font-bold text-slate-900 mt-1">{inProgress}</p>
+                </div>
+                <div className="w-10 h-10 bg-orange-100 rounded-xl flex items-center justify-center">
+                  <Clock className="w-5 h-5 text-orange-600" />
+                </div>
               </div>
-              <div className="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center">
-                <Users className="w-5 h-5 text-green-600" />
+            </CardContent>
+          </Card>
+        </Link>
+        <Link to={createPageUrl("ServiceRecords?status=completed")} className="block">
+          <Card className="hover:shadow-md transition-shadow cursor-pointer hover:border-purple-300">
+            <CardContent className="p-5">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-xs text-slate-500 font-medium uppercase tracking-wide">Slutförda</p>
+                  <p className="text-3xl font-bold text-slate-900 mt-1">{completed}</p>
+                </div>
+                <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
+                  <CheckCircle className="w-5 h-5 text-purple-600" />
+                </div>
               </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-5">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-xs text-slate-500 font-medium uppercase tracking-wide">Pågående</p>
-                <p className="text-3xl font-bold text-slate-900 mt-1">{inProgress}</p>
-              </div>
-              <div className="w-10 h-10 bg-orange-100 rounded-xl flex items-center justify-center">
-                <Clock className="w-5 h-5 text-orange-600" />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-5">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-xs text-slate-500 font-medium uppercase tracking-wide">Slutförda</p>
-                <p className="text-3xl font-bold text-slate-900 mt-1">{completed}</p>
-              </div>
-              <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
-                <CheckCircle className="w-5 h-5 text-purple-600" />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        </Link>
       </div>
 
       <div className="grid lg:grid-cols-2 gap-6">
