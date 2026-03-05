@@ -216,7 +216,10 @@ export default function Reports() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">Alla maskiner</SelectItem>
-                  {machines.map(m => (
+                  {(filterCustomer !== "all"
+                    ? machines.filter(m => m.customer_id === filterCustomer)
+                    : machines
+                  ).map(m => (
                     <SelectItem key={m.id} value={m.id}>{m.model} · {m.serial_number}</SelectItem>
                   ))}
                 </SelectContent>
