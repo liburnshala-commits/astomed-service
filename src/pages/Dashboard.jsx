@@ -117,6 +117,8 @@ export default function Dashboard() {
         </Link>
       </div>
 
+      <DashboardCharts records={records} machines={machines} />
+
       <div className="grid lg:grid-cols-2 gap-6">
         <Card className="astomed-card">
           <CardHeader className="pb-3">
