@@ -16,8 +16,15 @@ const statusColor = {
 const statusLabel = { pending: "Väntar", in_progress: "Pågående", completed: "Slutförd", invoiced: "Fakturerad" };
 const typeLabel = { standard: "Standardservice", advanced: "Avancerad service" };
 
-export default function ServiceRecordDetail({ record, machine, customer, onClose, onEdit }) {
+export default function ServiceRecordDetail({ record, machine, customer, onClose, onEdit, onDeleted }) {
   const [showReport, setShowReport] = useState(false);
+
+  const handleDelete = async () => {
+    if (!window.confirm("Radera detta serviceärende helt? Detta kan inte ångras.")) return;
+    await base44.entities.ServiceRecord.delete(record.id);
+    onClose();
+    if (onDeleted) onDeleted();
+  };
 
   return (
     <>
