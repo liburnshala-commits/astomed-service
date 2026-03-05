@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { createPageUrl } from "@/utils";
 import { Link } from "react-router-dom";
-import { Plus, Search, Building2, Phone, Mail, ExternalLink, Trash2, UserPlus, Check } from "lucide-react";
+import { Plus, Search, Building2, Phone, Mail, ExternalLink, Trash2, UserPlus, Check, Copy, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -19,6 +19,8 @@ export default function Customers() {
   const [showForm, setShowForm] = useState(false);
   const [editing, setEditing] = useState(null);
   const [inviting, setInviting] = useState(null);
+  const [generatingLink, setGeneratingLink] = useState(null);
+  const [copiedId, setCopiedId] = useState(null);
   const [deletingCustomer, setDeletingCustomer] = useState(null);
 
   const load = () => {
@@ -91,6 +93,29 @@ export default function Customers() {
     setInviting(null);
   };
 
+  const generateAndCopyPortalLink = async (customer) => {
+    if (!customer.email) {
+      toast.error("Kunden saknar e-postadress.");
+      return;
+    }
+    setGeneratingLink(customer.id);
+    try {
+      const response = await base44.functions.invoke("generateCustomerPortalToken", {
+        customer_id: customer.id,
+      });
+      const token = response.data.token;
+      const portalUrl = `${window.location.origin}/customer-portal?token=${token}`;
+      navigator.clipboard.writeText(portalUrl);
+      setCopiedId(customer.id);
+      toast.success("Portal-länk kopierad!");
+      setTimeout(() => setCopiedId(null), 2000);
+    } catch (error) {
+      toast.error("Fel: " + error.message);
+    } finally {
+      setGeneratingLink(null);
+    }
+  };
+
   return (
     <div className="p-6 space-y-6">
       <div className="flex items-center justify-between">
@@ -148,12 +173,20 @@ export default function Customers() {
                     <Button
                       size="sm"
                       variant="outline"
-                      onClick={() => inviteCustomer(customer)}
-                      disabled={inviting === customer.id || !customer.email}
-                      title={customer.email ? "Bjud in kunden att skapa konto" : "Kunden saknar e-post"}
+                      onClick={() => generateAndCopyPortalLink(customer)}
+                      disabled={!customer.email || generatingLink === customer.id}
+                      title={customer.email ? "Generera och kopiera portal-länk" : "Kunden saknar e-post"}
                     >
-                      {inviting === customer.id ? <Check className="w-3 h-3 text-green-500" /> : <UserPlus className="w-3 h-3" />}
-                      <span className="ml-1 text-xs hidden sm:inline">{inviting === customer.id ? "Skickat!" : "Bjud in"}</span>
+                      {generatingLink === customer.id ? (
+                        <Loader2 className="w-3 h-3 animate-spin" />
+                      ) : copiedId === customer.id ? (
+                        <Check className="w-3 h-3 text-green-500" />
+                      ) : (
+                        <Copy className="w-3 h-3" />
+                      )}
+                      <span className="ml-1 text-xs hidden sm:inline">
+                        {copiedId === customer.id ? "Kopierad" : "Kopiera länk"}
+                      </span>
                     </Button>
                     <Link to={createPageUrl(`Machines?customer=${customer.id}`)}>
                       <Button size="sm" variant="outline">
