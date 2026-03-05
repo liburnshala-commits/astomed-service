@@ -62,6 +62,13 @@ export default function ServiceRecords() {
     return matchSearch && matchStatus && matchType && matchMachine;
   });
 
+  const handleDelete = async (record, e) => {
+    e.stopPropagation();
+    if (!window.confirm(`Radera serviceärendet för ${getMachine(record.machine_id)?.model || "maskinen"}? Detta kan inte ångras.`)) return;
+    await base44.entities.ServiceRecord.delete(record.id);
+    load();
+  };
+
   const handleSave = async (data) => {
     if (editing) {
       await base44.entities.ServiceRecord.update(editing.id, data);
