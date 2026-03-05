@@ -179,7 +179,12 @@ export default function ServiceRecordForm({ record, machines, customers, presele
             </div>
             <div className="col-span-2 space-y-1">
               <Label>Tekniker</Label>
-              <Input value={form.technician_name} onChange={e => set("technician_name", e.target.value)} placeholder="Namn på tekniker" />
+              <Select value={form.technician_name} onValueChange={v => set("technician_name", v)}>
+                <SelectTrigger><SelectValue placeholder="Välj tekniker" /></SelectTrigger>
+                <SelectContent>
+                  {TECHNICIANS.map(t => <SelectItem key={t} value={t}>{t}</SelectItem>)}
+                </SelectContent>
+              </Select>
             </div>
             <div className="col-span-2 space-y-1">
               <Label>Beskrivning av utfört arbete</Label>
