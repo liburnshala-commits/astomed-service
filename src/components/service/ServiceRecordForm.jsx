@@ -1,11 +1,57 @@
 import { useState } from "react";
-import { X, Plus, Trash2, Upload } from "lucide-react";
+import { X, Plus, Trash2, Upload, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { base44 } from "@/api/base44Client";
+
+const SERVICE_CONTRACTS = [
+  {
+    value: "none",
+    label: "Inget avtal",
+    description: null,
+    features: []
+  },
+  {
+    value: "basic",
+    label: "BAS – Regelefterlevnad",
+    interval: "Var 24:e månad",
+    description: "Fokus på att uppfylla de lagstadgade kraven för anmälningsplikt till lägsta möjliga kostnad.",
+    features: [
+      "Säkerhetskontroll – Teknisk genomgång av maskinens säkerhetsfunktioner",
+      "Dokumentation – Serviceprotokoll inför myndighetstillsyn",
+      "Filterservice – Grundläggande funktionskontroll och rengöring av filterenheter"
+    ]
+  },
+  {
+    value: "standard",
+    label: "STANDARD – Drift & Trygghet",
+    interval: "Var 12:e månad",
+    badge: "Rekommenderas",
+    description: "Säkerställer hög drifttid och att personalen är \"väl förtrogen\" med tekniken enligt de nya kraven.",
+    features: [
+      "Allt i BAS ingår",
+      "Prestandakontroll – Mätning av uteffekt och kalibrering",
+      "Lokalanalys – Rådgivning kring rummets lasersäkerhet",
+      "Support – Fri teknisk rådgivning via telefon och fjärrsupport"
+    ]
+  },
+  {
+    value: "premium",
+    label: "PREMIUM – Total Partner",
+    interval: "Var 6:e månad (eller var 3:e vid hög belastning)",
+    description: "All-inclusive-lösning för kliniker med hög belastning som kräver maximal trygghet.",
+    features: [
+      "Allt i STANDARD ingår",
+      "Certifierande Utbildning – Årlig privat utbildning på plats",
+      "Prioriterad Service – Garanterad teknikerrespons inom 24–48 timmar",
+      "Lånemaskin – Tillgång till ersättningsutrustning vid servicebehov",
+      "Förmåner – Rabatterade priser på filter, tippar och förbrukningsvaror"
+    ]
+  }
+];
 
 const TECHNICIANS = [
   "Anders Karlsson",
