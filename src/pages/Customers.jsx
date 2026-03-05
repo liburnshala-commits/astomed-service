@@ -90,18 +90,18 @@ export default function Customers() {
   };
 
   const inviteCustomer = async (customer) => {
-    if (!customer.email) {
-      toast.error("Kunden saknar e-postadress.");
-      return;
-    }
-    setInviting(customer.id);
-    try {
-      await base44.users.inviteUser(customer.email, "user");
-      toast.success(`Inbjudan skickad till ${customer.email}`);
-    } catch (e) {
-      toast.error("Kunde inte skicka inbjudan: " + (e.message || "okänt fel"));
-    }
-    setInviting(null);
+   if (!customer.email) {
+     toast.error("Kunden saknar e-postadress.");
+     return;
+   }
+   setInviting(customer.id);
+   try {
+     await base44.users.inviteUser(customer.email, "customer");
+     toast.success(`Inbjudan skickad till ${customer.email}`);
+   } catch (e) {
+     toast.error("Kunde inte skicka inbjudan: " + (e.message || "okänt fel"));
+   }
+   setInviting(null);
   };
 
   return (

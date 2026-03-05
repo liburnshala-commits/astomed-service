@@ -26,6 +26,8 @@ export default function ServiceRecords() {
   const [records, setRecords] = useState([]);
   const [machines, setMachines] = useState([]);
   const [customers, setCustomers] = useState([]);
+  const [user, setUser] = useState(null);
+  const [userCustomer, setUserCustomer] = useState(null);
   const urlParams = new URLSearchParams(window.location.search);
   const preselectedMachine = urlParams.get("machine");
 
@@ -36,12 +38,25 @@ export default function ServiceRecords() {
   const [editing, setEditing] = useState(null);
   const [viewing, setViewing] = useState(null);
 
-  const load = () => {
-    Promise.all([
+  const load = async () => {
+    const currentUser = await base44.auth.me();
+    setUser(currentUser);
+    
+    const [r, m, c] = await Promise.all([
       base44.entities.ServiceRecord.list("-service_date"),
       base44.entities.Machine.list(),
       base44.entities.Customer.list()
-    ]).then(([r, m, c]) => { setRecords(r); setMachines(m); setCustomers(c); });
+    ]);
+    
+    setRecords(r);
+    setMachines(m);
+    setCustomers(c);
+    
+    // If customer role, find their customer record by email
+    if (currentUser?.role === "customer") {
+      const cust = c.find(c => c.email === currentUser.email);
+      setUserCustomer(cust);
+    }
   };
 
   useEffect(() => { load(); }, []);
@@ -50,6 +65,11 @@ export default function ServiceRecords() {
   const getCustomer = (id) => customers.find(c => c.id === id);
 
   const filtered = records.filter(r => {
+    // Customers only see their own records
+    if (user?.role === "customer" && userCustomer && r.customer_id !== userCustomer.id) {
+      return false;
+    }
+    
     const machine = getMachine(r.machine_id);
     const customer = getCustomer(r.customer_id);
     const matchSearch = machine?.model?.toLowerCase().includes(search.toLowerCase()) ||
