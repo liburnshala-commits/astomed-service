@@ -130,12 +130,11 @@ export default function Reports() {
     setSendingEmail(true);
     try {
       await base44.functions.invoke("sendReportEmail", {
-        customerEmail: email,
         customerName,
         filterLabel: buildFilterLabel(),
         recordCount: filtered.length,
       });
-      toast.success(`Rapport skickad till ${email}`);
+      toast.success(`Rapport skickad till ${user?.email || "din e-post"}`);
     } catch (e) {
       toast.error("Kunde inte skicka e-post: " + e.message);
     }
