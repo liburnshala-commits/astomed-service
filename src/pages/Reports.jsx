@@ -1,13 +1,16 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
-import { FileText, Download, Search, Eye } from "lucide-react";
+import { FileText, Search, Eye, Mail, Filter, CalendarDays } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { format } from "date-fns";
 import { sv } from "date-fns/locale";
 import ServiceReportModal from "@/components/service/ServiceReportModal.jsx";
+import SummaryReportModal from "@/components/reports/SummaryReportModal.jsx";
+import { toast } from "sonner";
 
 const statusColor = {
   pending: "bg-yellow-100 text-yellow-800",
@@ -17,12 +20,26 @@ const statusColor = {
 };
 const statusLabel = { pending: "Väntar", in_progress: "Pågående", completed: "Slutförd", invoiced: "Fakturerad" };
 
+function getYears(records) {
+  const years = new Set();
+  records.forEach(r => {
+    if (r.service_date) years.add(new Date(r.service_date).getFullYear());
+  });
+  return Array.from(years).sort((a, b) => b - a);
+}
+
 export default function Reports() {
   const [records, setRecords] = useState([]);
   const [machines, setMachines] = useState([]);
   const [customers, setCustomers] = useState([]);
   const [search, setSearch] = useState("");
+  const [filterYear, setFilterYear] = useState("current");
+  const [filterCustomer, setFilterCustomer] = useState("all");
+  const [filterMachine, setFilterMachine] = useState("all");
+  const [filterStatus, setFilterStatus] = useState("all");
   const [selectedRecord, setSelectedRecord] = useState(null);
+  const [showSummary, setShowSummary] = useState(false);
+  const [sendingEmail, setSendingEmail] = useState(false);
 
   useEffect(() => {
     Promise.all([
@@ -35,28 +52,196 @@ export default function Reports() {
   const getMachine = (id) => machines.find(m => m.id === id);
   const getCustomer = (id) => customers.find(c => c.id === id);
 
-  const completedRecords = records.filter(r => r.status === "completed" || r.status === "invoiced");
+  const currentYear = new Date().getFullYear();
+  const availableYears = getYears(records);
 
-  const filtered = completedRecords.filter(r => {
-    const machine = getMachine(r.machine_id);
-    const customer = getCustomer(r.customer_id);
-    return machine?.model?.toLowerCase().includes(search.toLowerCase()) ||
-      customer?.company_name?.toLowerCase().includes(search.toLowerCase()) ||
-      r.technician_name?.toLowerCase().includes(search.toLowerCase());
+  const filtered = records.filter(r => {
+    // Year filter
+    if (filterYear === "current") {
+      if (!r.service_date || new Date(r.service_date).getFullYear() !== currentYear) return false;
+    } else if (filterYear !== "all") {
+      if (!r.service_date || new Date(r.service_date).getFullYear() !== parseInt(filterYear)) return false;
+    }
+    // Customer filter
+    if (filterCustomer !== "all" && r.customer_id !== filterCustomer) return false;
+    // Machine filter
+    if (filterMachine !== "all" && r.machine_id !== filterMachine) return false;
+    // Status filter
+    if (filterStatus !== "all" && r.status !== filterStatus) return false;
+    // Search
+    if (search) {
+      const machine = getMachine(r.machine_id);
+      const customer = getCustomer(r.customer_id);
+      const q = search.toLowerCase();
+      return (
+        machine?.model?.toLowerCase().includes(q) ||
+        customer?.company_name?.toLowerCase().includes(q) ||
+        r.technician_name?.toLowerCase().includes(q)
+      );
+    }
+    return true;
   });
+
+  // Build a human-readable filter label for the report
+  function buildFilterLabel() {
+    const parts = [];
+    if (filterYear === "current") parts.push(`År ${currentYear}`);
+    else if (filterYear === "all") parts.push("Hela historiken");
+    else parts.push(`År ${filterYear}`);
+    if (filterCustomer !== "all") {
+      const c = customers.find(c => c.id === filterCustomer);
+      if (c) parts.push(c.company_name);
+    }
+    if (filterMachine !== "all") {
+      const m = machines.find(m => m.id === filterMachine);
+      if (m) parts.push(m.model);
+    }
+    if (filterStatus !== "all") parts.push(statusLabel[filterStatus] || filterStatus);
+    return parts.join(" · ");
+  }
+
+  async function handleSendEmail() {
+    // Determine customer email to use
+    let email = null;
+    let customerName = null;
+    if (filterCustomer !== "all") {
+      const c = customers.find(c => c.id === filterCustomer);
+      email = c?.email;
+      customerName = c?.company_name;
+    }
+    if (!email) {
+      toast.error("Välj en specifik kund för att skicka rapport via e-post.");
+      return;
+    }
+    setSendingEmail(true);
+    try {
+      await base44.functions.invoke("sendReportEmail", {
+        customerEmail: email,
+        customerName,
+        filterLabel: buildFilterLabel(),
+        recordCount: filtered.length,
+      });
+      toast.success(`Rapport skickad till ${email}`);
+    } catch (e) {
+      toast.error("Kunde inte skicka e-post: " + e.message);
+    }
+    setSendingEmail(false);
+  }
 
   return (
     <div className="p-6 space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-slate-900">Rapporter</h1>
-        <p className="text-slate-500 text-sm">Generera och visa servicerapporter för slutförda ärenden</p>
+      <div className="flex flex-wrap items-start justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold text-slate-900">Rapporter</h1>
+          <p className="text-slate-500 text-sm">Filtrera och generera sammanställningar av serviceärenden</p>
+        </div>
+        <div className="flex gap-2 flex-wrap">
+          <Button
+            variant="outline"
+            onClick={() => setShowSummary(true)}
+            disabled={filtered.length === 0}
+          >
+            <FileText className="w-4 h-4 mr-1" />
+            Generera rapport ({filtered.length})
+          </Button>
+          <Button
+            onClick={handleSendEmail}
+            disabled={sendingEmail || filtered.length === 0}
+            className="astomed-btn-primary"
+          >
+            <Mail className="w-4 h-4 mr-1" />
+            {sendingEmail ? "Skickar..." : "Skicka till kund"}
+          </Button>
+        </div>
       </div>
 
+      {/* Filters */}
+      <Card>
+        <CardContent className="p-4">
+          <div className="flex items-center gap-2 mb-3 text-slate-600 font-medium text-sm">
+            <Filter className="w-4 h-4" /> Filter
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            {/* Year */}
+            <div>
+              <div className="text-xs text-slate-400 mb-1 flex items-center gap-1"><CalendarDays className="w-3 h-3" /> Tidsperiod</div>
+              <Select value={filterYear} onValueChange={setFilterYear}>
+                <SelectTrigger className="h-8 text-sm">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="current">Innevarande år ({currentYear})</SelectItem>
+                  <SelectItem value="all">Hela historiken</SelectItem>
+                  {availableYears.filter(y => y !== currentYear).map(y => (
+                    <SelectItem key={y} value={String(y)}>{y}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            {/* Customer */}
+            <div>
+              <div className="text-xs text-slate-400 mb-1">Kund</div>
+              <Select value={filterCustomer} onValueChange={setFilterCustomer}>
+                <SelectTrigger className="h-8 text-sm">
+                  <SelectValue placeholder="Alla kunder" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Alla kunder</SelectItem>
+                  {customers.map(c => (
+                    <SelectItem key={c.id} value={c.id}>{c.company_name}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            {/* Machine */}
+            <div>
+              <div className="text-xs text-slate-400 mb-1">Maskin</div>
+              <Select value={filterMachine} onValueChange={setFilterMachine}>
+                <SelectTrigger className="h-8 text-sm">
+                  <SelectValue placeholder="Alla maskiner" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Alla maskiner</SelectItem>
+                  {machines.map(m => (
+                    <SelectItem key={m.id} value={m.id}>{m.model} · {m.serial_number}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            {/* Status */}
+            <div>
+              <div className="text-xs text-slate-400 mb-1">Status</div>
+              <Select value={filterStatus} onValueChange={setFilterStatus}>
+                <SelectTrigger className="h-8 text-sm">
+                  <SelectValue placeholder="Alla statusar" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Alla statusar</SelectItem>
+                  <SelectItem value="pending">Väntar</SelectItem>
+                  <SelectItem value="in_progress">Pågående</SelectItem>
+                  <SelectItem value="completed">Slutförd</SelectItem>
+                  <SelectItem value="invoiced">Fakturerad</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Search */}
       <div className="relative">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
         <Input placeholder="Sök kund, maskin eller tekniker..." className="pl-9" value={search} onChange={e => setSearch(e.target.value)} />
       </div>
 
+      {/* Active filter label */}
+      {filtered.length > 0 && (
+        <div className="text-xs text-slate-500 flex items-center gap-1">
+          <span className="font-medium text-slate-700">{filtered.length} ärenden</span> för: {buildFilterLabel()}
+        </div>
+      )}
+
+      {/* Records list */}
       <div className="space-y-3">
         {filtered.map(record => {
           const machine = getMachine(record.machine_id);
@@ -81,8 +266,8 @@ export default function Reports() {
                       <Eye className="w-4 h-4 mr-1" /> Visa rapport
                     </Button>
                   </div>
-                  <Button size="sm" onClick={() => setSelectedRecord({ record, machine, customer })} className="flex-shrink-0 hidden sm:flex">
-                    <Eye className="w-4 h-4 mr-1" /> Visa rapport
+                  <Button size="sm" variant="outline" onClick={() => setSelectedRecord({ record, machine, customer })} className="flex-shrink-0 hidden sm:flex">
+                    <Eye className="w-4 h-4 mr-1" /> Visa ärende
                   </Button>
                 </div>
               </CardContent>
@@ -92,17 +277,29 @@ export default function Reports() {
         {filtered.length === 0 && (
           <div className="text-center py-12 text-slate-400">
             <FileText className="w-12 h-12 mx-auto mb-3 opacity-30" />
-            <p>Inga slutförda ärenden hittades</p>
+            <p>Inga ärenden matchar valda filter</p>
           </div>
         )}
       </div>
 
+      {/* Single service record modal */}
       {selectedRecord && (
         <ServiceReportModal
           record={selectedRecord.record}
           machine={selectedRecord.machine}
           customer={selectedRecord.customer}
           onClose={() => setSelectedRecord(null)}
+        />
+      )}
+
+      {/* Summary report modal */}
+      {showSummary && (
+        <SummaryReportModal
+          records={filtered}
+          machines={machines}
+          customers={customers}
+          filterLabel={buildFilterLabel()}
+          onClose={() => setShowSummary(false)}
         />
       )}
     </div>
