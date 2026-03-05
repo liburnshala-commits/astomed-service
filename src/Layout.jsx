@@ -159,11 +159,14 @@ export default function Layout({ children, currentPageName }) {
 
       {/* Main */}
       <div className="flex-1 flex flex-col min-w-0">
-        <header className="bg-white border-b px-4 py-3 flex items-center gap-3 lg:hidden">
-          <Button variant="ghost" size="icon" onClick={() => setSidebarOpen(true)}>
+        <header className="bg-white border-b px-4 py-3 flex items-center gap-3">
+          <Button variant="ghost" size="icon" onClick={() => setSidebarOpen(true)} className="lg:hidden">
             <Menu className="w-5 h-5" />
           </Button>
-          <span className="font-semibold text-slate-800">ServiceLog Pro</span>
+          <Link to={createPageUrl("Dashboard")} className="flex items-center justify-center w-8 h-8 rounded-lg bg-slate-100 hover:bg-blue-100 hover:text-blue-600 transition-colors" title="Gå till Dashboard">
+            <LayoutDashboard className="w-4 h-4" />
+          </Link>
+          <span className="font-semibold text-slate-800 lg:hidden">ServiceLog Pro</span>
         </header>
         <main className="flex-1 overflow-auto">
           {children}
