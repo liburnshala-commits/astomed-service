@@ -164,13 +164,13 @@ export default function Dashboard() {
                     return acc;
                   }, {})
                 ).sort((a,b) => b[1]-a[1]).map(([model, count]) => (
-                  <div key={model} className="flex items-center gap-3">
-                    <div className="flex-1 text-sm text-slate-700">{model}</div>
+                  <Link key={model} to={createPageUrl(`Machines?model=${encodeURIComponent(model)}`)} className="flex items-center gap-3 p-2 rounded-lg hover:bg-slate-50 transition-colors cursor-pointer group">
+                    <div className="flex-1 text-sm text-slate-700 group-hover:text-blue-600">{model}</div>
                     <div className="text-sm font-semibold text-slate-900">{count}</div>
                     <div className="w-24 bg-slate-100 rounded-full h-2">
                       <div className="bg-blue-500 h-2 rounded-full" style={{ width: `${(count / machines.length) * 100}%` }} />
                     </div>
-                  </div>
+                  </Link>
                 ))}
                 {machines.length === 0 && <p className="text-slate-400 text-sm text-center py-6">Inga maskiner registrerade</p>}
               </div>
