@@ -95,9 +95,11 @@ export default function Customers() {
                   )}
                 </div>
                 <div className="flex flex-col items-end gap-2 flex-shrink-0">
-                  <Badge variant="secondary" className="bg-[#e8f2f2] text-[#1b3a3a]">
-                    {getMachineCount(customer.id)} maskin{getMachineCount(customer.id) !== 1 ? "er" : ""}
-                  </Badge>
+                  <Link to={createPageUrl(`Machines?customer=${customer.id}`)}>
+                    <Badge variant="secondary" className="bg-[#e8f2f2] text-[#1b3a3a] cursor-pointer hover:bg-[#d0e8e8] transition-colors">
+                      {getMachineCount(customer.id)} maskin{getMachineCount(customer.id) !== 1 ? "er" : ""}
+                    </Badge>
+                  </Link>
                   <div className="flex flex-wrap justify-end gap-2">
                     <Button size="sm" variant="outline" onClick={() => copyPortalLink(customer.portal_token, customer.id)}>
                       {copied === customer.id ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
