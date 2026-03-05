@@ -25,6 +25,7 @@ export default function CustomerPortal() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [expandedRecord, setExpandedRecord] = useState(null);
+  const [showServiceModal, setShowServiceModal] = useState(false);
 
   useEffect(() => {
     base44.auth.me().then(async (u) => {
