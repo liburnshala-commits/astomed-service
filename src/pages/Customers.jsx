@@ -61,41 +61,41 @@ export default function Customers() {
     <div className="p-6 space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Kunder</h1>
-          <p className="text-slate-500 text-sm">{customers.length} kunder registrerade</p>
+          <h1 className="text-2xl font-bold astomed-title">Kunder</h1>
+          <p className="astomed-subtitle text-sm">{customers.length} kunder registrerade</p>
         </div>
-        <Button onClick={() => { setEditing(null); setShowForm(true); }} className="bg-blue-600 hover:bg-blue-700">
+        <Button onClick={() => { setEditing(null); setShowForm(true); }} className="astomed-btn-primary">
           <Plus className="w-4 h-4 mr-2" /> Ny kund
         </Button>
       </div>
 
       <div className="relative">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 astomed-muted" />
         <Input placeholder="Sök kund, org.nr eller kontaktperson..." className="pl-9" value={search} onChange={e => setSearch(e.target.value)} />
       </div>
 
       <div className="grid gap-4">
         {filtered.map(customer => (
-          <Card key={customer.id} className="hover:shadow-md transition-shadow">
+          <Card key={customer.id} className="astomed-card">
             <CardContent className="p-5">
               <div className="flex items-start justify-between gap-4">
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1">
-                    <Building2 className="w-4 h-4 text-slate-400 flex-shrink-0" />
-                    <h3 className="font-semibold text-slate-900 truncate">{customer.company_name}</h3>
+                    <Building2 className="w-4 h-4 astomed-muted flex-shrink-0" />
+                    <h3 className="font-semibold astomed-title truncate">{customer.company_name}</h3>
                   </div>
-                  {customer.org_number && <p className="text-xs text-slate-400 ml-6 mb-2">Org.nr: {customer.org_number}</p>}
+                  {customer.org_number && <p className="text-xs astomed-muted ml-6 mb-2">Org.nr: {customer.org_number}</p>}
                   <div className="grid sm:grid-cols-3 gap-2 ml-6">
-                    {customer.contact_person && <div className="text-sm text-slate-600">👤 {customer.contact_person}</div>}
-                    {customer.phone && <div className="text-sm text-slate-600 flex items-center gap-1"><Phone className="w-3 h-3" /> {customer.phone}</div>}
-                    {customer.email && <div className="text-sm text-slate-600 flex items-center gap-1"><Mail className="w-3 h-3" /> {customer.email}</div>}
+                    {customer.contact_person && <div className="text-sm astomed-subtitle">👤 {customer.contact_person}</div>}
+                    {customer.phone && <div className="text-sm astomed-subtitle flex items-center gap-1"><Phone className="w-3 h-3" /> {customer.phone}</div>}
+                    {customer.email && <div className="text-sm astomed-subtitle flex items-center gap-1"><Mail className="w-3 h-3" /> {customer.email}</div>}
                   </div>
                   {(customer.address || customer.city) && (
-                    <div className="text-xs text-slate-400 ml-6 mt-1">{customer.address}{customer.city ? `, ${customer.city}` : ""}</div>
+                    <div className="text-xs astomed-muted ml-6 mt-1">{customer.address}{customer.city ? `, ${customer.city}` : ""}</div>
                   )}
                 </div>
                 <div className="flex flex-col items-end gap-2 flex-shrink-0">
-                  <Badge variant="secondary" className="bg-blue-50 text-blue-700">
+                  <Badge variant="secondary" className="bg-[#e8f2f2] text-[#1b3a3a]">
                     {getMachineCount(customer.id)} maskin{getMachineCount(customer.id) !== 1 ? "er" : ""}
                   </Badge>
                   <div className="flex flex-wrap justify-end gap-2">
