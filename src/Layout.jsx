@@ -75,7 +75,8 @@ export default function Layout({ children, currentPageName }) {
     <div className="min-h-screen bg-gray-50 flex">
       {/* Sidebar */}
       <aside className={cn(
-        "fixed inset-y-0 left-0 z-50 w-64 bg-slate-900 text-white flex flex-col transition-transform duration-300",
+      "fixed inset-y-0 left-0 z-50 w-64 flex flex-col transition-transform duration-300",
+      "bg-[#1b3a3a] text-white",
         sidebarOpen ? "translate-x-0" : "-translate-x-full",
         "lg:translate-x-0 lg:static lg:flex"
       )}>
