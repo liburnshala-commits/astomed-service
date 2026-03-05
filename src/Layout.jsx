@@ -24,6 +24,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import NotificationBell from "@/components/notifications/NotificationBell";
 
 const navSections = [
   {
@@ -194,25 +195,28 @@ export default function Layout({ children, currentPageName }) {
 
       {/* Main */}
       <div className="flex-1 flex flex-col min-w-0">
-        <header className="astomed-header px-4 py-3 flex items-center gap-3 shadow-sm">
-          <Button variant="ghost" size="icon" onClick={() => setSidebarOpen(true)} className="lg:hidden">
-            <Menu className="w-5 h-5" />
-          </Button>
-          <Link
-            to={createPageUrl("Dashboard")}
-            className="flex items-center justify-center w-8 h-8 rounded-lg transition-colors"
-            style={{ background: "#e8f2f2", color: "#1b3a3a" }}
-            title="Gå till Dashboard"
-          >
-            <Home className="w-4 h-4" />
-          </Link>
-          <Button variant="ghost" size="icon" onClick={() => navigate(-1)} title="Föregående sida" style={{ color: "#1b3a3a" }}>
-            <ChevronLeft className="w-5 h-5" />
-          </Button>
-          <Button variant="ghost" size="icon" onClick={() => navigate(1)} title="Nästa sida" style={{ color: "#1b3a3a" }}>
-            <ChevronRightIcon className="w-5 h-5" />
-          </Button>
-          <span className="font-semibold lg:hidden" style={{ color: "#1b3a3a" }}>Astomed Pro</span>
+        <header className="astomed-header px-4 py-3 flex items-center gap-3 shadow-sm justify-between">
+          <div className="flex items-center gap-3">
+            <Button variant="ghost" size="icon" onClick={() => setSidebarOpen(true)} className="lg:hidden">
+              <Menu className="w-5 h-5" />
+            </Button>
+            <Link
+              to={createPageUrl("Dashboard")}
+              className="flex items-center justify-center w-8 h-8 rounded-lg transition-colors"
+              style={{ background: "#e8f2f2", color: "#1b3a3a" }}
+              title="Gå till Dashboard"
+            >
+              <Home className="w-4 h-4" />
+            </Link>
+            <Button variant="ghost" size="icon" onClick={() => navigate(-1)} title="Föregående sida" style={{ color: "#1b3a3a" }}>
+              <ChevronLeft className="w-5 h-5" />
+            </Button>
+            <Button variant="ghost" size="icon" onClick={() => navigate(1)} title="Nästa sida" style={{ color: "#1b3a3a" }}>
+              <ChevronRightIcon className="w-5 h-5" />
+            </Button>
+            <span className="font-semibold lg:hidden" style={{ color: "#1b3a3a" }}>Astomed Pro</span>
+          </div>
+          <NotificationBell />
         </header>
         <main className="flex-1 overflow-auto">
           {children}
