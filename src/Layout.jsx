@@ -61,12 +61,13 @@ const navSections = [
 
 export default function Layout({ children, currentPageName }) {
   const [user, setUser] = useState(null);
+  const [userLoaded, setUserLoaded] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
 
   useEffect(() => {
-    base44.auth.me().then(setUser).catch(() => {});
+    base44.auth.me().then(setUser).catch(() => {}).finally(() => setUserLoaded(true));
   }, []);
 
   if (currentPageName === "CustomerPortal") {
@@ -113,7 +114,7 @@ export default function Layout({ children, currentPageName }) {
         </div>
 
         <nav className="flex-1 p-4 space-y-5 overflow-y-auto">
-          {navSections.map((section, si) => {
+          {userLoaded && navSections.map((section, si) => {
             const visibleItems = section.items.filter(item => item.roles.includes(userRole));
             if (visibleItems.length === 0) return null;
             return (
