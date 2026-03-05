@@ -19,7 +19,8 @@ import {
   Info,
   Home,
   ChevronLeft,
-  ChevronRight as ChevronRightIcon
+  ChevronRight as ChevronRightIcon,
+  Users as UsersIcon
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -50,6 +51,7 @@ const navSections = [
   {
     title: "GDPR & Dataskydd",
     items: [
+      { label: "Användare", page: "Users", icon: Users, roles: ["admin"] },
       { label: "Audit Log", page: "AuditLog", icon: Shield, roles: ["admin"] },
       { label: "Radera kunddata", page: "Customers", icon: Trash2, roles: ["admin"], highlight: "red" },
       { label: "Dataskyddsinformation", page: "AuditLog", icon: Info, roles: ["admin"] },
