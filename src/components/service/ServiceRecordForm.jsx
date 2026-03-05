@@ -296,7 +296,7 @@ export default function ServiceRecordForm({ record, machines, customers, presele
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1">
               <Label>Arbetstimmar</Label>
-              <Input type="number" value={form.labor_hours} onChange={e => set("labor_hours", parseFloat(e.target.value))} placeholder="0" />
+              <Input type="number" value={form.labor_hours} onChange={e => set("labor_hours", e.target.value === "" ? "" : parseFloat(e.target.value))} placeholder="0" />
             </div>
             <div className="space-y-1">
               <Label>Arbetskostnad (kr)</Label>
