@@ -191,6 +191,12 @@ export default function Layout({ children, currentPageName }) {
           >
             <Home className="w-4 h-4" />
           </Link>
+          <Button variant="ghost" size="icon" onClick={() => navigate(-1)} title="Föregående sida" style={{ color: "#1b3a3a" }}>
+            <ChevronLeft className="w-5 h-5" />
+          </Button>
+          <Button variant="ghost" size="icon" onClick={() => navigate(1)} title="Nästa sida" style={{ color: "#1b3a3a" }}>
+            <ChevronRightIcon className="w-5 h-5" />
+          </Button>
           <span className="font-semibold lg:hidden" style={{ color: "#1b3a3a" }}>Astomed Pro</span>
         </header>
         <main className="flex-1 overflow-auto">
