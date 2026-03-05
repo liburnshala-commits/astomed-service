@@ -142,9 +142,9 @@ export default function ServiceRecords() {
                       <div className="text-sm font-semibold text-slate-800 mt-1">{record.total_cost?.toLocaleString("sv-SE")} kr</div>
                     )}
                   </div>
-                  <div className="flex gap-2 flex-shrink-0" onClick={e => e.stopPropagation()}>
+                  <div className="flex gap-2 flex-shrink-0 self-start" onClick={e => e.stopPropagation()}>
                     <Button size="sm" variant="outline" onClick={() => { setEditing(record); setShowForm(true); }}>
-                      Redigera
+                      <span className="hidden sm:inline">Redigera</span><span className="sm:hidden">✏️</span>
                     </Button>
                   </div>
                 </div>

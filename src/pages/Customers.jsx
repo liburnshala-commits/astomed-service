@@ -98,18 +98,18 @@ export default function Customers() {
                   <Badge variant="secondary" className="bg-blue-50 text-blue-700">
                     {getMachineCount(customer.id)} maskin{getMachineCount(customer.id) !== 1 ? "er" : ""}
                   </Badge>
-                  <div className="flex gap-2">
+                  <div className="flex flex-wrap justify-end gap-2">
                     <Button size="sm" variant="outline" onClick={() => copyPortalLink(customer.portal_token, customer.id)}>
                       {copied === customer.id ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
-                      <span className="ml-1 text-xs">{copied === customer.id ? "Kopierad!" : "Portal"}</span>
+                      <span className="ml-1 text-xs hidden sm:inline">{copied === customer.id ? "Kopierad!" : "Portal"}</span>
                     </Button>
                     <Link to={createPageUrl(`Machines?customer=${customer.id}`)}>
                       <Button size="sm" variant="outline">
-                        <ExternalLink className="w-3 h-3 mr-1" /> Maskiner
+                        <ExternalLink className="w-3 h-3" /><span className="ml-1 hidden sm:inline">Maskiner</span>
                       </Button>
                     </Link>
                     <Button size="sm" variant="ghost" onClick={() => { setEditing(customer); setShowForm(true); }}>
-                      Redigera
+                      <span className="hidden sm:inline">Redigera</span><span className="sm:hidden">✏️</span>
                     </Button>
                     <Button size="sm" variant="ghost" className="text-red-500 hover:text-red-700 hover:bg-red-50" onClick={() => setDeletingCustomer(customer)}>
                       <Trash2 className="w-3 h-3" />

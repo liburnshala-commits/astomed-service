@@ -64,7 +64,7 @@ export default function Reports() {
           return (
             <Card key={record.id} className="hover:shadow-md transition-shadow">
               <CardContent className="p-5">
-                <div className="flex items-center gap-4">
+                <div className="flex items-start gap-4">
                   <div className="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center flex-shrink-0">
                     <FileText className="w-5 h-5 text-slate-500" />
                   </div>
@@ -74,11 +74,14 @@ export default function Reports() {
                       <Badge className={statusColor[record.status]}>{statusLabel[record.status]}</Badge>
                     </div>
                     <div className="text-sm text-slate-500">
-                      {customer?.company_name} · {r => r}{record.service_date ? format(new Date(record.service_date), "d MMM yyyy", { locale: sv }) : ""} · {record.technician_name}
+                      {customer?.company_name} · {record.service_date ? format(new Date(record.service_date), "d MMM yyyy", { locale: sv }) : ""} · {record.technician_name}
                     </div>
                     {record.total_cost > 0 && <div className="text-sm font-semibold text-slate-700 mt-0.5">{record.total_cost.toLocaleString("sv-SE")} kr</div>}
+                    <Button size="sm" className="mt-2 sm:hidden" onClick={() => setSelectedRecord({ record, machine, customer })}>
+                      <Eye className="w-4 h-4 mr-1" /> Visa rapport
+                    </Button>
                   </div>
-                  <Button size="sm" onClick={() => setSelectedRecord({ record, machine, customer })} className="flex-shrink-0">
+                  <Button size="sm" onClick={() => setSelectedRecord({ record, machine, customer })} className="flex-shrink-0 hidden sm:flex">
                     <Eye className="w-4 h-4 mr-1" /> Visa rapport
                   </Button>
                 </div>
