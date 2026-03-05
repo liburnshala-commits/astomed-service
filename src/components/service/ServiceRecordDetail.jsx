@@ -1,10 +1,11 @@
-import { X, Edit, FileText, Calendar, User, Building2, Monitor, Wrench } from "lucide-react";
+import { X, Edit, FileText, Calendar, User, Building2, Monitor, Wrench, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
 import { sv } from "date-fns/locale";
 import ServiceReportModal from "./ServiceReportModal.jsx";
 import { useState } from "react";
+import { base44 } from "@/api/base44Client";
 
 const statusColor = {
   pending: "bg-yellow-100 text-yellow-800",

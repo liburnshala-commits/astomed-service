@@ -36,6 +36,7 @@ export default function Customers() {
   );
 
   const getMachineCount = (customerId) => machines.filter(m => m.customer_id === customerId).length;
+  const getContractCount = (customerId) => machines.filter(m => m.customer_id === customerId && m.service_contract && m.service_contract !== "none").length;
 
   const handleSave = async (data) => {
     if (!data.portal_token) {
