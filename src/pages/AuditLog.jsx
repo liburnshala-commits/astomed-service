@@ -40,6 +40,18 @@ export default function AuditLog() {
     l.entity_type?.toLowerCase().includes(search.toLowerCase())
   );
 
+  if (!loading && user?.role !== "admin") {
+    return (
+      <div className="p-6 flex items-center justify-center min-h-[50vh]">
+        <div className="text-center">
+          <Shield className="w-12 h-12 text-slate-300 mx-auto mb-3" />
+          <h2 className="text-lg font-semibold text-slate-700">Åtkomst nekad</h2>
+          <p className="text-slate-400 text-sm mt-1">Enbart administratörer kan se audit log.</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="p-6 space-y-6">
       <div className="flex items-center gap-3">
