@@ -96,7 +96,7 @@ export default function Customers() {
     }
     setInviting(customer.id);
     try {
-      await base44.users.inviteUser(customer.email, "customer");
+      await base44.users.inviteUser(customer.email, "user");
       toast.success(`Inbjudan skickad till ${customer.email}`);
     } catch (e) {
       toast.error("Kunde inte skicka inbjudan: " + (e.message || "okänt fel"));
