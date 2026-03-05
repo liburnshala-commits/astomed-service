@@ -25,8 +25,10 @@ export default function InviteCustomerModal({ customer, onClose }) {
       const response = await base44.functions.invoke("generateCustomerPortalToken", {
         customer_id: customer.id,
       });
-      setToken(response.data.token);
-      setPortalUrl(response.data.portal_url);
+      const token = response.data.token;
+      setToken(token);
+      const url = `${window.location.origin}/customer-portal?token=${token}`;
+      setPortalUrl(url);
       toast.success("Portal-länk genererad!");
     } catch (error) {
       toast.error("Fel vid generering av länk: " + error.message);

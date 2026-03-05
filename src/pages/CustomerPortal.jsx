@@ -28,7 +28,38 @@ export default function CustomerPortal() {
   const [showServiceModal, setShowServiceModal] = useState(false);
 
   useEffect(() => {
+    // Kontrollera om det finns en token i URL:en (för portal-länk)
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get('token');
+
     base44.auth.me().then(async (u) => {
+      // Om det finns en token och ingen inloggad användare, hämta kund baserat på token
+      if (token && !u) {
+        try {
+          const customers = await base44.asServiceRole.entities.Customer.filter({ portal_token: token });
+          if (!customers || customers.length === 0) {
+            setError("Ogiltig portal-länk. Kontakta Astomed.");
+            setLoading(false);
+            return;
+          }
+          const c = customers[0];
+          setCustomer(c);
+          setUser({ email: c.email, role: 'customer', full_name: c.company_name });
+          const [m, r] = await Promise.all([
+            base44.asServiceRole.entities.Machine.filter({ customer_id: c.id }),
+            base44.asServiceRole.entities.ServiceRecord.filter({ customer_id: c.id }, "-service_date")
+          ]);
+          setMachines(m);
+          setRecords(r);
+          setLoading(false);
+          return;
+        } catch (err) {
+          setError("Fel vid validering av länk.");
+          setLoading(false);
+          return;
+        }
+      }
+
       if (!u) {
         base44.auth.redirectToLogin(window.location.href);
         return;

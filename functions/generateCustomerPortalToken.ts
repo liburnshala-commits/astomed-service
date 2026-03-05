@@ -31,8 +31,7 @@ Deno.serve(async (req) => {
 
     return Response.json({ 
       success: true, 
-      token,
-      portal_url: `${Deno.env.get('APP_URL') || 'https://your-app.com'}/customer-portal?token=${token}`
+      token
     });
   } catch (error) {
     console.error('Error:', error);
