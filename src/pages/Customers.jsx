@@ -93,29 +93,6 @@ export default function Customers() {
     setInviting(null);
   };
 
-  const generateAndCopyPortalLink = async (customer) => {
-    if (!customer.email) {
-      toast.error("Kunden saknar e-postadress.");
-      return;
-    }
-    setGeneratingLink(customer.id);
-    try {
-      const response = await base44.functions.invoke("generateCustomerPortalToken", {
-        customer_id: customer.id,
-      });
-      const token = response.data.token;
-      const portalUrl = `${window.location.origin}/customer-portal?token=${token}`;
-      navigator.clipboard.writeText(portalUrl);
-      setCopiedId(customer.id);
-      toast.success("Portal-länk kopierad!");
-      setTimeout(() => setCopiedId(null), 2000);
-    } catch (error) {
-      toast.error("Fel: " + error.message);
-    } finally {
-      setGeneratingLink(null);
-    }
-  };
-
   return (
     <div className="p-6 space-y-6">
       <div className="flex items-center justify-between">
