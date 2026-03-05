@@ -105,11 +105,20 @@ export default function Customers() {
                   )}
                 </div>
                 <div className="flex flex-col items-end gap-2 flex-shrink-0">
-                  <Link to={createPageUrl(`Machines?customer=${customer.id}`)}>
-                    <Badge variant="secondary" className="bg-[#e8f2f2] text-[#1b3a3a] cursor-pointer hover:bg-[#d0e8e8] transition-colors">
-                      {getMachineCount(customer.id)} maskin{getMachineCount(customer.id) !== 1 ? "er" : ""}
-                    </Badge>
-                  </Link>
+                  <div className="flex gap-2 flex-wrap justify-end">
+                    <Link to={createPageUrl(`Machines?customer=${customer.id}`)}>
+                      <Badge variant="secondary" className="bg-[#e8f2f2] text-[#1b3a3a] cursor-pointer hover:bg-[#d0e8e8] transition-colors">
+                        {getMachineCount(customer.id)} maskin{getMachineCount(customer.id) !== 1 ? "er" : ""}
+                      </Badge>
+                    </Link>
+                    {getContractCount(customer.id) > 0 && (
+                      <Link to={createPageUrl(`Machines?customer=${customer.id}`)}>
+                        <Badge variant="secondary" className="bg-[#f0f7f0] text-[#1a5c2a] cursor-pointer hover:bg-[#d8eddb] transition-colors">
+                          {getContractCount(customer.id)} serviceavtal
+                        </Badge>
+                      </Link>
+                    )}
+                  </div>
                   <div className="flex flex-wrap justify-end gap-2">
                     <Button
                       size="sm"
