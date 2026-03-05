@@ -26,15 +26,15 @@ export default function ServiceRecords() {
   const [records, setRecords] = useState([]);
   const [machines, setMachines] = useState([]);
   const [customers, setCustomers] = useState([]);
+  const urlParams = new URLSearchParams(window.location.search);
+  const preselectedMachine = urlParams.get("machine");
+
   const [search, setSearch] = useState("");
-  const [filterStatus, setFilterStatus] = useState("all");
+  const [filterStatus, setFilterStatus] = useState(urlParams.get("status") || "all");
   const [filterType, setFilterType] = useState("all");
   const [showForm, setShowForm] = useState(false);
   const [editing, setEditing] = useState(null);
   const [viewing, setViewing] = useState(null);
-
-  const urlParams = new URLSearchParams(window.location.search);
-  const preselectedMachine = urlParams.get("machine");
 
   const load = () => {
     Promise.all([
