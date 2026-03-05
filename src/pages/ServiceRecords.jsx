@@ -83,9 +83,9 @@ export default function ServiceRecords() {
               Filtrerat: {getMachine(preselectedMachine)?.model} · {getMachine(preselectedMachine)?.serial_number}
             </p>
           )}
-          {!preselectedMachine && <p className="text-slate-500 text-sm">{records.length} totalt</p>}
+          {!preselectedMachine && <p className="astomed-subtitle text-sm">{records.length} totalt</p>}
         </div>
-        <Button onClick={() => { setEditing(null); setShowForm(true); }} className="bg-blue-600 hover:bg-blue-700">
+        <Button onClick={() => { setEditing(null); setShowForm(true); }} className="astomed-btn-primary">
           <Plus className="w-4 h-4 mr-2" /> Nytt ärende
         </Button>
       </div>
