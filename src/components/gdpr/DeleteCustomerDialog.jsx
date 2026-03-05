@@ -1,34 +1,34 @@
 import { useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
-import { Trash2, AlertTriangle } from "lucide-react";
+import { Trash2, AlertTriangle, CheckCircle } from "lucide-react";
+
+// Personal data fields that must be erased per GDPR
+// Company name, org number, address, city, postal_code are allowed to keep for accounting/legal purposes
+const PERSONAL_DATA_FIELDS = {
+  contact_person: null,
+  email: null,
+  phone: null,
+  portal_token: null,
+  notes: null,
+};
 
 export default function DeleteCustomerDialog({ customer, machineCount, onDeleted, onCancel }) {
   const [loading, setLoading] = useState(false);
   const [confirm, setConfirm] = useState("");
+  const [done, setDone] = useState(false);
 
-  const handleDelete = async () => {
+  const handleAnonymize = async () => {
     setLoading(true);
     const user = await base44.auth.me();
 
-    // Fetch and delete all related machines
-    const machines = await base44.entities.Machine.filter({ customer_id: customer.id });
-    for (const machine of machines) {
-      // Delete service records for each machine
-      const records = await base44.entities.ServiceRecord.filter({ machine_id: machine.id });
-      for (const record of records) {
-        await base44.entities.ServiceRecord.delete(record.id);
-      }
-      await base44.entities.Machine.delete(machine.id);
-    }
+    // Anonymize only personal identifying data – keep company, org number, address for legal/accounting
+    await base44.entities.Customer.update(customer.id, {
+      ...PERSONAL_DATA_FIELDS,
+      company_name: `[RADERAD] ${customer.company_name}`,
+    });
 
-    // Delete service records directly linked to customer
-    const directRecords = await base44.entities.ServiceRecord.filter({ customer_id: customer.id });
-    for (const record of directRecords) {
-      await base44.entities.ServiceRecord.delete(record.id);
-    }
-
-    // Log the deletion
+    // Log the action
     await base44.entities.AuditLog.create({
       action: "delete",
       entity_type: "Customer",
@@ -36,15 +36,29 @@ export default function DeleteCustomerDialog({ customer, machineCount, onDeleted
       entity_label: customer.company_name,
       user_email: user.email,
       user_name: user.full_name || user.email,
-      details: `Kund och all tillhörande data raderades (GDPR – rätten att bli glömd). ${machines.length} maskin(er) och tillhörande serviceärenden raderades.`
+      details: `Personuppgifter raderade enligt GDPR (rätten att bli glömd): kontaktperson, e-post, telefon, portaltoken och anteckningar anonymiserades. Företagsnamn, organisationsnummer och adress behålls för bokföringssyfte.`
     });
 
-    // Delete the customer
-    await base44.entities.Customer.delete(customer.id);
-
     setLoading(false);
-    onDeleted();
+    setDone(true);
   };
+
+  if (done) {
+    return (
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+        <div className="bg-white rounded-xl shadow-2xl w-full max-w-md p-6 text-center">
+          <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <CheckCircle className="w-6 h-6 text-green-600" />
+          </div>
+          <h2 className="text-lg font-bold text-slate-900 mb-2">Personuppgifter raderade</h2>
+          <p className="text-sm text-slate-500 mb-4">
+            Alla personidentifierande uppgifter har anonymiserats och åtgärden har loggats i audit log.
+          </p>
+          <Button className="w-full" onClick={onDeleted}>Stäng</Button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
@@ -54,19 +68,31 @@ export default function DeleteCustomerDialog({ customer, machineCount, onDeleted
             <AlertTriangle className="w-5 h-5 text-red-600" />
           </div>
           <div>
-            <h2 className="text-lg font-bold text-slate-900">Radera kunddata (GDPR)</h2>
-            <p className="text-sm text-slate-500">Denna åtgärd kan inte ångras</p>
+            <h2 className="text-lg font-bold text-slate-900">Radera personuppgifter (GDPR)</h2>
+            <p className="text-sm text-slate-500">Rätten att bli glömd</p>
           </div>
         </div>
 
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-4 text-sm text-red-800 space-y-1">
-          <p className="font-semibold">Följande data kommer att raderas permanent:</p>
-          <ul className="list-disc ml-4 space-y-1">
-            <li>Kundprofil: <strong>{customer.company_name}</strong></li>
-            <li>{machineCount} maskin(er) kopplade till kunden</li>
-            <li>Alla serviceärenden för dessa maskiner</li>
+        <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-3 text-sm text-red-800 space-y-1">
+          <p className="font-semibold">Följande personuppgifter raderas permanent:</p>
+          <ul className="list-disc ml-4 space-y-0.5">
+            <li>Kontaktperson</li>
+            <li>E-postadress</li>
+            <li>Telefonnummer</li>
+            <li>Portaltoken</li>
+            <li>Anteckningar</li>
           </ul>
-          <p className="mt-2 text-xs text-red-600">Raderingen loggas i audit log enligt GDPR-krav.</p>
+        </div>
+
+        <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-4 text-sm text-green-800 space-y-1">
+          <p className="font-semibold">Följande data behålls (tillåtet enligt GDPR för bokföring):</p>
+          <ul className="list-disc ml-4 space-y-0.5">
+            <li>Företagsnamn (anonymiserat)</li>
+            <li>Organisationsnummer</li>
+            <li>Adressuppgifter</li>
+            <li>Maskiner och servicehistorik (utan persondata)</li>
+          </ul>
+          <p className="text-xs text-green-700 mt-1">Raderingen loggas i audit log (synlig enbart för admin).</p>
         </div>
 
         <div className="mb-4">
@@ -88,11 +114,11 @@ export default function DeleteCustomerDialog({ customer, machineCount, onDeleted
           </Button>
           <Button
             className="flex-1 bg-red-600 hover:bg-red-700 text-white"
-            onClick={handleDelete}
+            onClick={handleAnonymize}
             disabled={confirm !== customer.company_name || loading}
           >
             <Trash2 className="w-4 h-4 mr-2" />
-            {loading ? "Raderar..." : "Radera all data"}
+            {loading ? "Raderar..." : "Radera personuppgifter"}
           </Button>
         </div>
       </div>

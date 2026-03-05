@@ -17,12 +17,20 @@ export default function AuditLog() {
   const [logs, setLogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
-    base44.entities.AuditLog.list("-created_date", 200).then(data => {
-      setLogs(data);
-      setLoading(false);
-    });
+    base44.auth.me().then(u => {
+      setUser(u);
+      if (u?.role === "admin") {
+        base44.entities.AuditLog.list("-created_date", 200).then(data => {
+          setLogs(data);
+          setLoading(false);
+        });
+      } else {
+        setLoading(false);
+      }
+    }).catch(() => setLoading(false));
   }, []);
 
   const filtered = logs.filter(l =>
