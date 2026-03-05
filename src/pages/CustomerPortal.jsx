@@ -253,6 +253,15 @@ export default function CustomerPortal() {
         </Card>
       </main>
 
+      {showServiceModal && (
+        <RequestServiceModal
+          machines={machines}
+          customer={customer}
+          user={user}
+          onClose={() => setShowServiceModal(false)}
+        />
+      )}
+
       <footer className="text-center py-6 text-xs text-slate-400 border-t mt-8">
         Astomed Klinikutrustning Sverige AB · Kundportal
       </footer>
