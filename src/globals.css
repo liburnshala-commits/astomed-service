@@ -8,6 +8,35 @@
   --primary: 180 42% 17%; /* #1b3a3a */
 }
 
+/* Card and general UI overrides for Astomed brand */
+.astomed-card {
+  background: #ffffff;
+  border: 1px solid #dce8e8;
+  border-radius: 12px;
+  transition: box-shadow 0.2s, border-color 0.2s;
+}
+.astomed-card:hover {
+  box-shadow: 0 4px 16px rgba(27,58,58,0.10);
+  border-color: #3a9e9e;
+}
+.astomed-icon-box {
+  background: #e8f2f2;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+}
+.astomed-btn-primary {
+  background: #1b3a3a !important;
+  color: #fff !important;
+  border: none !important;
+}
+.astomed-btn-primary:hover {
+  background: #254f4f !important;
+}
+.astomed-title { color: #1b3a3a; font-weight: 700; }
+.astomed-subtitle { color: #6b8f8f; }
+.astomed-muted { color: #8aabab; }
+.astomed-label { color: #254f4f; font-weight: 600; }
+
 @media print {
   body * {
     visibility: hidden;
