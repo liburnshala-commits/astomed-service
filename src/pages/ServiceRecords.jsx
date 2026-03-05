@@ -189,6 +189,7 @@ export default function ServiceRecords() {
           onClose={() => setViewing(null)}
           onEdit={() => { setEditing(viewing); setViewing(null); setShowForm(true); }}
           onUpdated={load}
+          onDeleted={load}
         />
       )}
     </div>
