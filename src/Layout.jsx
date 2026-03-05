@@ -165,7 +165,7 @@ export default function Layout({ children, currentPageName }) {
             <Menu className="w-5 h-5" />
           </Button>
           <Link to={createPageUrl("Dashboard")} className="flex items-center justify-center w-8 h-8 rounded-lg bg-slate-100 hover:bg-blue-100 hover:text-blue-600 transition-colors" title="Gå till Dashboard">
-            <LayoutDashboard className="w-4 h-4" />
+            <Home className="w-4 h-4" />
           </Link>
           <span className="font-semibold text-slate-800 lg:hidden">Astomed Pro</span>
         </header>
