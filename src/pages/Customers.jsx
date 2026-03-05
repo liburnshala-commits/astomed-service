@@ -17,6 +17,7 @@ export default function Customers() {
   const [showForm, setShowForm] = useState(false);
   const [editing, setEditing] = useState(null);
   const [copied, setCopied] = useState(null);
+  const [deletingCustomer, setDeletingCustomer] = useState(null);
 
   const load = () => {
     Promise.all([
