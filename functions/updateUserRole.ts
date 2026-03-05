@@ -20,7 +20,14 @@ Deno.serve(async (req) => {
             return Response.json({ error: 'Invalid role' }, { status: 400 });
         }
 
-        await base44.asServiceRole.entities.User.update(email, { role });
+        // Hämta användaren först
+        const users = await base44.asServiceRole.entities.User.filter({ email });
+        if (!users || users.length === 0) {
+            return Response.json({ error: 'User not found' }, { status: 404 });
+        }
+
+        const userId = users[0].id;
+        await base44.asServiceRole.entities.User.update(userId, { role });
 
         return Response.json({ success: true, message: `User ${email} updated to role ${role}` });
     } catch (error) {
