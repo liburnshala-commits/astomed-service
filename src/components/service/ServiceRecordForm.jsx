@@ -335,7 +335,12 @@ export default function ServiceRecordForm({ record, machines, customers, presele
 
         <div className="flex justify-end gap-3 p-6 border-t bg-slate-50 rounded-b-2xl">
           <Button variant="outline" onClick={onClose}>Avbryt</Button>
-          <Button onClick={() => onSave({ ...form, total_cost: form.total_cost || calcTotal() })} className="bg-blue-600 hover:bg-blue-700" disabled={!form.machine_id || !form.customer_id || !form.service_date}>
+          <Button onClick={() => onSave({
+            ...form,
+            labor_hours: form.labor_hours === "" ? undefined : Number(form.labor_hours),
+            labor_cost: form.labor_cost === "" ? undefined : Number(form.labor_cost),
+            total_cost: form.total_cost === "" ? calcTotal() : Number(form.total_cost) || calcTotal()
+          })} className="bg-blue-600 hover:bg-blue-700" disabled={!form.machine_id || !form.customer_id || !form.service_date}>
             {record ? "Spara ändringar" : "Skapa ärende"}
           </Button>
         </div>
