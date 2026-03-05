@@ -53,6 +53,29 @@ export default function Customers() {
     load();
   };
 
+  const generateAndCopyPortalLink = async (customer) => {
+    if (!customer.email) {
+      toast.error("Kunden saknar e-postadress.");
+      return;
+    }
+    setGeneratingLink(customer.id);
+    try {
+      const response = await base44.functions.invoke("generateCustomerPortalToken", {
+        customer_id: customer.id,
+      });
+      const token = response.data.token;
+      const portalUrl = `${window.location.origin}/customer-portal?token=${token}`;
+      navigator.clipboard.writeText(portalUrl);
+      setCopiedId(customer.id);
+      toast.success("Portal-länk kopierad!");
+      setTimeout(() => setCopiedId(null), 2000);
+    } catch (error) {
+      toast.error("Fel: " + error.message);
+    } finally {
+      setGeneratingLink(null);
+    }
+  };
+
   const inviteCustomer = async (customer) => {
     if (!customer.email) {
       toast.error("Kunden saknar e-postadress.");
