@@ -136,7 +136,7 @@ export default function MachineForm({ machine, customers, preselectedCustomerId,
         </div>
         <div className="flex justify-end gap-3 p-6 border-t bg-slate-50 rounded-b-2xl">
           <Button variant="outline" onClick={onClose}>Avbryt</Button>
-          <Button onClick={() => onSave(form)} className="bg-blue-600 hover:bg-blue-700" disabled={!form.model || !form.serial_number || !form.customer_id}>
+          <Button onClick={handleSave} className="astomed-btn-primary" disabled={!form.model || (form.model === "Annan" && !form.custom_model) || !form.serial_number || !form.customer_id}>
             {machine ? "Spara ändringar" : "Registrera maskin"}
           </Button>
         </div>
