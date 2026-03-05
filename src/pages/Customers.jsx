@@ -10,6 +10,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import CustomerForm from "@/components/customers/CustomerForm.jsx";
 import DeleteCustomerDialog from "@/components/gdpr/DeleteCustomerDialog.jsx";
+import CustomerReportsSummary from "@/components/customers/CustomerReportsSummary.jsx";
 
 export default function Customers() {
   const [customers, setCustomers] = useState([]);
