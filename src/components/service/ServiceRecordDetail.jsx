@@ -44,6 +44,9 @@ export default function ServiceRecordDetail({ record, machine, customer, onClose
               <Button size="sm" variant="outline" onClick={onEdit}>
                 <Edit className="w-4 h-4 mr-1" /> Redigera
               </Button>
+              <Button size="sm" variant="ghost" className="text-red-500 hover:text-red-700 hover:bg-red-50" onClick={handleDelete}>
+                <Trash2 className="w-4 h-4 mr-1" /> Radera
+              </Button>
               <Button variant="ghost" size="icon" onClick={onClose}><X className="w-4 h-4" /></Button>
             </div>
           </div>
