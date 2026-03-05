@@ -32,6 +32,7 @@ export default function Reports() {
   const [records, setRecords] = useState([]);
   const [machines, setMachines] = useState([]);
   const [customers, setCustomers] = useState([]);
+  const [user, setUser] = useState(null);
   const [search, setSearch] = useState("");
   const [filterYear, setFilterYear] = useState("current");
   const [filterCustomer, setFilterCustomer] = useState("all");
