@@ -9,7 +9,6 @@ import {
   Monitor,
   FileText,
   Menu,
-  X,
   LogOut,
   ChevronRight,
   Shield,
@@ -64,7 +63,6 @@ export default function Layout({ children, currentPageName }) {
     base44.auth.me().then(setUser).catch(() => {});
   }, []);
 
-  // Customer portal pages don't need layout
   if (currentPageName === "CustomerPortal") {
     return <>{children}</>;
   }
@@ -72,34 +70,50 @@ export default function Layout({ children, currentPageName }) {
   const userRole = user?.role || "technician";
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
+    <div className="min-h-screen flex" style={{ background: "#f4f6f4" }}>
+      <style>{`
+        :root {
+          --astomed-dark: #1b3a3a;
+          --astomed-mid: #254f4f;
+          --astomed-accent: #3a9e9e;
+          --astomed-light: #e8f2f2;
+          --astomed-text: #1b3a3a;
+        }
+        .astomed-sidebar { background: var(--astomed-dark); }
+        .astomed-header { background: #ffffff; border-bottom: 1px solid #dce8e8; }
+        .astomed-nav-active { background: var(--astomed-accent) !important; color: #fff !important; }
+        .astomed-nav-item:hover { background: var(--astomed-mid) !important; color: #fff !important; }
+        .astomed-section-title { color: #7aadad; }
+        .astomed-logo-icon { background: var(--astomed-accent); }
+        body { color: var(--astomed-text); }
+      `}</style>
+
       {/* Sidebar */}
       <aside className={cn(
-      "fixed inset-y-0 left-0 z-50 w-64 flex flex-col transition-transform duration-300",
-      "bg-[#1b3a3a] text-white",
+        "astomed-sidebar fixed inset-y-0 left-0 z-50 w-64 flex flex-col transition-transform duration-300 text-white",
         sidebarOpen ? "translate-x-0" : "-translate-x-full",
         "lg:translate-x-0 lg:static lg:flex"
       )}>
-        <div className="p-6 border-b border-slate-700">
+        <div className="p-6 border-b border-white/10">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 bg-blue-500 rounded-lg flex items-center justify-center">
+            <div className="w-9 h-9 astomed-logo-icon rounded-lg flex items-center justify-center">
               <Wrench className="w-5 h-5 text-white" />
             </div>
             <div>
-              <div className="font-bold text-white text-sm">Astomed Pro</div>
-              <div className="text-xs text-slate-400">Servicehantering</div>
+              <div className="font-bold text-white text-sm tracking-wide">Astomed Pro</div>
+              <div className="text-xs" style={{ color: "#7aadad" }}>Servicehantering</div>
             </div>
           </div>
         </div>
 
-        <nav className="flex-1 p-4 space-y-4 overflow-y-auto">
+        <nav className="flex-1 p-4 space-y-5 overflow-y-auto">
           {navSections.map((section, si) => {
             const visibleItems = section.items.filter(item => item.roles.includes(userRole));
             if (visibleItems.length === 0) return null;
             return (
               <div key={si}>
                 {section.title && (
-                  <div className="text-xs font-semibold text-slate-500 uppercase tracking-wider px-3 mb-1">{section.title}</div>
+                  <div className="astomed-section-title text-xs font-semibold uppercase tracking-widest px-3 mb-2">{section.title}</div>
                 )}
                 <div className="space-y-0.5">
                   {visibleItems.map(item => {
@@ -111,12 +125,12 @@ export default function Layout({ children, currentPageName }) {
                         to={createPageUrl(item.page)}
                         onClick={() => setSidebarOpen(false)}
                         className={cn(
-                          "flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all",
+                          "astomed-nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all",
                           active
-                            ? "bg-blue-600 text-white"
+                            ? "astomed-nav-active"
                             : item.highlight === "red"
                             ? "text-red-400 hover:bg-red-900/30 hover:text-red-300"
-                            : "text-slate-300 hover:bg-slate-800 hover:text-white"
+                            : "text-white/70"
                         )}
                       >
                         <Icon className="w-4 h-4 flex-shrink-0" />
@@ -131,18 +145,18 @@ export default function Layout({ children, currentPageName }) {
           })}
         </nav>
 
-        <div className="p-4 border-t border-slate-700">
+        <div className="p-4 border-t border-white/10">
           {user && (
             <div className="mb-3 px-3">
-              <div className="text-xs text-slate-400">Inloggad som</div>
+              <div className="text-xs" style={{ color: "#7aadad" }}>Inloggad som</div>
               <div className="text-sm text-white font-medium truncate">{user.full_name || user.email}</div>
-              <div className="text-xs text-blue-400 capitalize">{user.role || "technician"}</div>
+              <div className="text-xs capitalize" style={{ color: "#7aadad" }}>{user.role || "technician"}</div>
             </div>
           )}
           <Button
             variant="ghost"
             size="sm"
-            className="w-full justify-start text-slate-300 hover:text-white hover:bg-slate-800"
+            className="w-full justify-start text-white/60 hover:text-white hover:bg-white/10"
             onClick={() => base44.auth.logout()}
           >
             <LogOut className="w-4 h-4 mr-2" />
@@ -161,14 +175,19 @@ export default function Layout({ children, currentPageName }) {
 
       {/* Main */}
       <div className="flex-1 flex flex-col min-w-0">
-        <header className="bg-white border-b px-4 py-3 flex items-center gap-3">
+        <header className="astomed-header px-4 py-3 flex items-center gap-3 shadow-sm">
           <Button variant="ghost" size="icon" onClick={() => setSidebarOpen(true)} className="lg:hidden">
             <Menu className="w-5 h-5" />
           </Button>
-          <Link to={createPageUrl("Dashboard")} className="flex items-center justify-center w-8 h-8 rounded-lg bg-slate-100 hover:bg-blue-100 hover:text-blue-600 transition-colors" title="Gå till Dashboard">
+          <Link
+            to={createPageUrl("Dashboard")}
+            className="flex items-center justify-center w-8 h-8 rounded-lg transition-colors"
+            style={{ background: "#e8f2f2", color: "#1b3a3a" }}
+            title="Gå till Dashboard"
+          >
             <Home className="w-4 h-4" />
           </Link>
-          <span className="font-semibold text-slate-800 lg:hidden">Astomed Pro</span>
+          <span className="font-semibold lg:hidden" style={{ color: "#1b3a3a" }}>Astomed Pro</span>
         </header>
         <main className="flex-1 overflow-auto">
           {children}
