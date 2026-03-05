@@ -21,13 +21,37 @@ import {
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-const navItems = [
-  { label: "Dashboard", page: "Dashboard", icon: LayoutDashboard, roles: ["admin", "technician"] },
-  { label: "Serviceärenden", page: "ServiceRecords", icon: Wrench, roles: ["admin", "technician"] },
-  { label: "Maskiner", page: "Machines", icon: Monitor, roles: ["admin", "technician"] },
-  { label: "Kunder", page: "Customers", icon: Users, roles: ["admin", "technician"] },
-  { label: "Rapporter", page: "Reports", icon: FileText, roles: ["admin", "technician"] },
-  { label: "Audit Log (GDPR)", page: "AuditLog", icon: Shield, roles: ["admin"] },
+const navSections = [
+  {
+    title: null,
+    items: [
+      { label: "Dashboard", page: "Dashboard", icon: LayoutDashboard, roles: ["admin", "technician"] },
+    ]
+  },
+  {
+    title: "Hantering",
+    items: [
+      { label: "Serviceärenden", page: "ServiceRecords", icon: Wrench, roles: ["admin", "technician"] },
+      { label: "Maskiner", page: "Machines", icon: Monitor, roles: ["admin", "technician"] },
+      { label: "Kunder", page: "Customers", icon: Users, roles: ["admin", "technician"] },
+      { label: "Rapporter", page: "Reports", icon: FileText, roles: ["admin", "technician"] },
+    ]
+  },
+  {
+    title: "Snabbfilter",
+    items: [
+      { label: "Pågående ärenden", page: "ServiceRecords?status=in_progress", icon: Clock, roles: ["admin", "technician"] },
+      { label: "Slutförda ärenden", page: "ServiceRecords?status=completed", icon: CheckCircle, roles: ["admin", "technician"] },
+    ]
+  },
+  {
+    title: "GDPR & Dataskydd",
+    items: [
+      { label: "Audit Log", page: "AuditLog", icon: Shield, roles: ["admin"] },
+      { label: "Radera kunddata", page: "Customers", icon: Trash2, roles: ["admin"], highlight: "red" },
+      { label: "Dataskyddsinformation", page: "AuditLog", icon: Info, roles: ["admin"] },
+    ]
+  },
 ];
 
 export default function Layout({ children, currentPageName }) {
