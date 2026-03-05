@@ -77,7 +77,8 @@ export default function ServiceRecordForm({ record, machines, customers, presele
     total_cost: record?.total_cost || "",
     status: record?.status || "pending",
     next_service_date: record?.next_service_date || "",
-    images: record?.images || []
+    images: record?.images || [],
+    service_contract: record?.service_contract || ""
   });
 
   const [serialInput, setSerialInput] = useState(() => {
