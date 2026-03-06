@@ -41,21 +41,34 @@ export default function ServiceRecords() {
   const load = async () => {
     const currentUser = await base44.auth.me();
     setUser(currentUser);
-    
-    const [r, m, c] = await Promise.all([
-      base44.entities.ServiceRecord.list("-service_date"),
-      base44.entities.Machine.list(),
-      base44.entities.Customer.list()
-    ]);
-    
-    setRecords(r);
-    setMachines(m);
-    setCustomers(c);
-    
-    // If customer role, find their customer record by email
+
     if (currentUser?.role === "customer") {
-      const cust = c.find(c => c.email === currentUser.email);
+      // Customers: only fetch their own data
+      const allCustomers = await base44.entities.Customer.filter({ email: currentUser.email });
+      const cust = allCustomers[0] || null;
       setUserCustomer(cust);
+      setCustomers(cust ? [cust] : []);
+
+      if (cust) {
+        const [r, m] = await Promise.all([
+          base44.entities.ServiceRecord.filter({ customer_id: cust.id }, "-service_date"),
+          base44.entities.Machine.filter({ customer_id: cust.id })
+        ]);
+        setRecords(r);
+        setMachines(m);
+      } else {
+        setRecords([]);
+        setMachines([]);
+      }
+    } else {
+      const [r, m, c] = await Promise.all([
+        base44.entities.ServiceRecord.list("-service_date"),
+        base44.entities.Machine.list(),
+        base44.entities.Customer.list()
+      ]);
+      setRecords(r);
+      setMachines(m);
+      setCustomers(c);
     }
   };
 
