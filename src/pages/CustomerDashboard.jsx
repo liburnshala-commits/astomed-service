@@ -168,7 +168,7 @@ export default function CustomerDashboard() {
       {/* Stats */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         <Link to={createPageUrl("Machines")} className="block">
-          <Card className="astomed-card cursor-pointer">
+          <Card className="astomed-card cursor-pointer" style={{ background: "#f4f9f9" }}>
             <CardContent className="p-5 text-center">
               <div className="w-10 h-10 astomed-icon-box mx-auto mb-3" style={{ width: 40, height: 40 }}>
                 <Monitor className="w-5 h-5" style={{ color: "#1b3a3a" }} />
@@ -179,7 +179,7 @@ export default function CustomerDashboard() {
           </Card>
         </Link>
         <Link to={createPageUrl("ServiceRecords?status=pending")} className="block">
-          <Card className="astomed-card cursor-pointer">
+          <Card className="astomed-card cursor-pointer" style={{ background: "#fffaf0" }}>
             <CardContent className="p-5 text-center">
               <div className="w-10 h-10 mx-auto mb-3 rounded-xl flex items-center justify-center" style={{ width: 40, height: 40, background: "#fef9e7" }}>
                 <Wrench className="w-5 h-5" style={{ color: "#d4a017" }} />
@@ -190,7 +190,7 @@ export default function CustomerDashboard() {
           </Card>
         </Link>
         <Link to={createPageUrl("ServiceRecords?status=in_progress")} className="block">
-          <Card className="astomed-card cursor-pointer">
+          <Card className="astomed-card cursor-pointer" style={{ background: "#f0fafa" }}>
             <CardContent className="p-5 text-center">
               <div className="w-10 h-10 astomed-icon-box mx-auto mb-3" style={{ width: 40, height: 40 }}>
                 <Clock className="w-5 h-5" style={{ color: "#3a9e9e" }} />
@@ -201,7 +201,7 @@ export default function CustomerDashboard() {
           </Card>
         </Link>
         <Link to={createPageUrl("ServiceRecords?status=completed")} className="block">
-          <Card className="astomed-card cursor-pointer">
+          <Card className="astomed-card cursor-pointer" style={{ background: "#f0faf9" }}>
             <CardContent className="p-5 text-center">
               <div className="w-10 h-10 astomed-icon-box mx-auto mb-3" style={{ width: 40, height: 40 }}>
                 <CheckCircle className="w-5 h-5" style={{ color: "#3a9e9e" }} />
