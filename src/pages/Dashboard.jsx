@@ -4,6 +4,7 @@ import { createPageUrl } from "@/utils";
 import { Link } from "react-router-dom";
 import { Monitor, Users, Wrench, CheckCircle, Clock } from "lucide-react";
 import DashboardCharts from "@/components/dashboard/DashboardCharts";
+import BillingChart from "@/components/dashboard/BillingChart";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
