@@ -355,6 +355,22 @@ export default function ServiceRecordForm({ record, machines, customers, presele
 
         <div className="flex justify-end gap-3 p-6 border-t bg-slate-50 rounded-b-2xl">
           <Button variant="outline" onClick={onClose}>Avbryt</Button>
+          {record && form.status === "in_progress" && form.total_cost && !record.quote_sent && (
+            <Button
+              variant="outline"
+              className="border-amber-400 text-amber-700 hover:bg-amber-50"
+              onClick={() => onSave({
+                ...form,
+                labor_hours: form.labor_hours === "" ? undefined : Number(form.labor_hours),
+                labor_cost: form.labor_cost === "" ? undefined : Number(form.labor_cost),
+                total_cost: form.total_cost === "" ? calcTotal() : Number(form.total_cost) || calcTotal(),
+                quote_sent: true,
+                quote_approved: "pending"
+              })}
+            >
+              Spara & skicka kostnadsförslag till kund
+            </Button>
+          )}
           <Button onClick={() => onSave({
             ...form,
             labor_hours: form.labor_hours === "" ? undefined : Number(form.labor_hours),
