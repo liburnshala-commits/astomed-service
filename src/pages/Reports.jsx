@@ -120,10 +120,12 @@ export default function Reports() {
     // Determine customer email to use
     let email = null;
     let customerName = null;
+    let customerId = null;
     if (filterCustomer !== "all") {
       const c = customers.find(c => c.id === filterCustomer);
       email = c?.email;
       customerName = c?.company_name;
+      customerId = c?.id;
     }
     if (!email) {
       toast.error("Välj en specifik kund för att skicka rapport via e-post.");
@@ -137,6 +139,18 @@ export default function Reports() {
         filterLabel: buildFilterLabel(),
         recordCount: filtered.length,
       });
+
+      // Log to AuditLog
+      await base44.entities.AuditLog.create({
+        action: "create",
+        entity_type: "Rapport",
+        entity_id: customerId || "unknown",
+        entity_label: customerName,
+        user_email: user?.email || "",
+        user_name: user?.full_name || user?.email || "",
+        details: `Servicerapport skickad till ${email} · ${buildFilterLabel()} · ${filtered.length} ärenden`,
+      });
+
       toast.success(`Rapport skickad till ${email}`);
     } catch (e) {
       toast.error("Kunde inte skicka e-post: " + e.message);
