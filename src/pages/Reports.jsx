@@ -127,6 +127,37 @@ export default function Reports() {
     return parts.join(" · ");
   }
 
+  function handleExportCSV() {
+    const headers = ["Datum", "Kund", "Maskin", "Serienummer", "Tekniker", "Status", "Arbetstimmar", "Arbetskostnad", "Reservdelskostnad", "Totalkostnad", "Beskrivning"];
+    const rows = filtered.map(r => {
+      const machine = getMachine(r.machine_id);
+      const customer = getCustomer(r.customer_id);
+      const partsTotal = (r.parts_used || []).reduce((s, p) => s + (p.unit_price || 0) * (p.quantity || 1), 0);
+      return [
+        r.service_date || "",
+        customer?.company_name || "",
+        machine?.model || "",
+        machine?.serial_number || "",
+        r.technician_name || "",
+        statusLabel[r.status] || r.status || "",
+        r.labor_hours || 0,
+        r.labor_cost || 0,
+        partsTotal,
+        r.total_cost || 0,
+        (r.description || "").replace(/"/g, '""'),
+      ];
+    });
+    const csvContent = [headers, ...rows].map(row => row.map(v => `"${v}"`).join(";")).join("\n");
+    const blob = new Blob(["\uFEFF" + csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `servicerapport_${format(new Date(), "yyyyMMdd")}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast.success("CSV exporterad!");
+  }
+
   async function handleSendEmail() {
     // Determine customer email to use
     let email = null;
