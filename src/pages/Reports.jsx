@@ -210,11 +210,19 @@ export default function Reports() {
         <div className="flex gap-2 flex-wrap">
           <Button
             variant="outline"
+            onClick={handleExportCSV}
+            disabled={filtered.length === 0}
+          >
+            <Download className="w-4 h-4 mr-1" />
+            Exportera CSV
+          </Button>
+          <Button
+            variant="outline"
             onClick={() => setShowSummary(true)}
             disabled={filtered.length === 0}
           >
             <FileText className="w-4 h-4 mr-1" />
-            Generera rapport ({filtered.length})
+            Generera PDF ({filtered.length})
           </Button>
           <Button
             onClick={handleSendEmail}
