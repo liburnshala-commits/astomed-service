@@ -61,6 +61,12 @@ const navSections = [
       { label: "Dataskyddsinformation", page: "AuditLog", icon: Info, roles: ["admin"] },
     ]
   },
+  {
+    title: "Automering",
+    items: [
+      { label: "Påminnelseinställningar", page: "ReminderSettings", icon: Clock, roles: ["admin"] },
+    ]
+  },
 ];
 
 export default function Layout({ children, currentPageName }) {
