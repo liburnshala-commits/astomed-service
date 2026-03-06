@@ -23,6 +23,9 @@ export default function QuoteApprovalCard({ record, machine, onUpdated }) {
       quote_note: note,
       status: answer === "approved" ? "in_progress" : "pending",
     });
+    if (answer === "approved") {
+      await base44.functions.invoke("sendQuoteConfirmation", { recordId: record.id });
+    }
     setDone(true);
     setLoading(false);
     onUpdated?.();
