@@ -23,11 +23,24 @@ export default function Customers() {
   const [copiedId, setCopiedId] = useState(null);
   const [deletingCustomer, setDeletingCustomer] = useState(null);
 
-  const load = () => {
-    Promise.all([
-      base44.entities.Customer.list("-created_date"),
-      base44.entities.Machine.list()
-    ]).then(([c, m]) => { setCustomers(c); setMachines(m); });
+  const load = async () => {
+    const currentUser = await base44.auth.me();
+    if (currentUser?.role === "customer") {
+      // Customers should not access this page at all
+      const ownCustomers = await base44.entities.Customer.filter({ email: currentUser.email });
+      setCustomers(ownCustomers);
+      if (ownCustomers[0]) {
+        const m = await base44.entities.Machine.filter({ customer_id: ownCustomers[0].id });
+        setMachines(m);
+      }
+    } else {
+      const [c, m] = await Promise.all([
+        base44.entities.Customer.list("-created_date"),
+        base44.entities.Machine.list()
+      ]);
+      setCustomers(c);
+      setMachines(m);
+    }
   };
 
   useEffect(() => { load(); }, []);
