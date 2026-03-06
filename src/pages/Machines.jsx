@@ -34,6 +34,7 @@ export default function Machines() {
 
   const load = async () => {
     const currentUser = await base44.auth.me();
+    setUserRole(currentUser?.role);
     if (currentUser?.role === "customer") {
       const ownCustomers = await base44.entities.Customer.filter({ email: currentUser.email });
       const cust = ownCustomers[0];
