@@ -171,7 +171,7 @@ export default function Dashboard() {
       <BillingChart records={records} />
 
       <div className="grid lg:grid-cols-2 gap-6">
-        <Card className="astomed-card">
+        <Card className="astomed-card" style={{ background: "#f4f9f9" }}>
           <CardHeader className="pb-3">
             <CardTitle className="text-base font-semibold astomed-title">Senaste serviceärenden</CardTitle>
           </CardHeader>
