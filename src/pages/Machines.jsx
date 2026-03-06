@@ -148,15 +148,17 @@ export default function Machines() {
                   {lastService && <span>Senast: {lastService.service_date}</span>}
                 </div>
                 <div className="flex gap-2">
-                  <Link to={createPageUrl(`ServiceRecords?machine=${machine.id}`)} className="flex-1">
-                    <Button size="sm" variant="outline" className="w-full">
-                      <Wrench className="w-3 h-3 mr-1" /> Service
-                    </Button>
-                  </Link>
-                  <Button size="sm" variant="ghost" onClick={() => { setEditing(machine); setShowForm(true); }}>
-                    Redigera
-                  </Button>
-                </div>
+                   <Link to={createPageUrl(`ServiceRecords?machine=${machine.id}`)} className="flex-1">
+                     <Button size="sm" variant="outline" className="w-full">
+                       <Wrench className="w-3 h-3 mr-1" /> Service
+                     </Button>
+                   </Link>
+                   {userRole !== "customer" && (
+                     <Button size="sm" variant="ghost" onClick={() => { setEditing(machine); setShowForm(true); }}>
+                       Redigera
+                     </Button>
+                   )}
+                 </div>
               </CardContent>
             </Card>
           );
