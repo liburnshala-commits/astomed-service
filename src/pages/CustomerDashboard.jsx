@@ -247,9 +247,9 @@ export default function CustomerDashboard() {
               })}
             </div>
           )}
-        </CardContent>
-      </Card>
-      </div>
+          </CardContent>
+          </Card>
+          </div>
     </div>
   );
 }
