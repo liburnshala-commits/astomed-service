@@ -81,6 +81,23 @@ export default function ServiceRecordForm({ record, machines, customers, presele
     service_contract: record?.service_contract || ""
   });
 
+  const [invoiceError, setInvoiceError] = useState(null);
+
+  const handleStatusChange = (v) => {
+    if (v === "completed" || v === "invoiced") {
+      const missing = [];
+      if (!form.technician_name) missing.push("Tekniker");
+      if (!form.labor_hours && form.labor_hours !== 0) missing.push("Arbetstimmar");
+      if (!form.labor_cost && form.labor_cost !== 0) missing.push("Arbetskostnad");
+      if (missing.length > 0) {
+        setInvoiceError(`Fakturaunderlag saknas: ${missing.join(", ")}`);
+        return;
+      }
+    }
+    setInvoiceError(null);
+    set("status", v);
+  };
+
   const [serialInput, setSerialInput] = useState(() => {
     if (record?.machine_id) {
       const m = machines.find(m => m.id === record.machine_id);
