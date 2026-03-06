@@ -16,16 +16,33 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    Promise.all([
-      base44.entities.Machine.list("-created_date"),
-      base44.entities.Customer.list("-created_date"),
-      base44.entities.ServiceRecord.list("-service_date", 50)
-    ]).then(([m, c, r]) => {
-      setMachines(m);
-      setCustomers(c);
-      setRecords(r);
+    const loadData = async () => {
+      const currentUser = await base44.auth.me();
+      if (currentUser?.role === "customer") {
+        const ownCustomers = await base44.entities.Customer.filter({ email: currentUser.email });
+        const cust = ownCustomers[0];
+        setCustomers(cust ? [cust] : []);
+        if (cust) {
+          const [m, r] = await Promise.all([
+            base44.entities.Machine.filter({ customer_id: cust.id }),
+            base44.entities.ServiceRecord.filter({ customer_id: cust.id }, "-service_date", 50)
+          ]);
+          setMachines(m);
+          setRecords(r);
+        }
+      } else {
+        const [m, c, r] = await Promise.all([
+          base44.entities.Machine.list("-created_date"),
+          base44.entities.Customer.list("-created_date"),
+          base44.entities.ServiceRecord.list("-service_date", 50)
+        ]);
+        setMachines(m);
+        setCustomers(c);
+        setRecords(r);
+      }
       setLoading(false);
-    });
+    };
+    loadData();
   }, []);
 
   const pending = records.filter(r => r.status === "pending").length;
