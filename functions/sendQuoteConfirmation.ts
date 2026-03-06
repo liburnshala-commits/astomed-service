@@ -62,13 +62,13 @@ Deno.serve(async (req) => {
     <div class="tagline">Klinikutrustning Sverige AB</div>
   </div>
   <div class="content">
-    <p style="font-size:15px;">Hej ${recipientName || (isCustomer ? customer?.contact_person : record.technician_name) || 'där'},</p>
+    <p style="font-size:15px; line-height:1.6; margin-bottom:20px;">Hej ${recipientName || (isCustomer ? customer?.contact_person : record.technician_name) || 'där'},</p>
 
     <div class="confirm-banner">
       <strong>✅ Orderbekräftelse – kostnadsförslag godkänt</strong>
       <p>${isCustomer
-        ? 'Du har godkänt kostnadsförslaget. Vi påbörjar arbetet inom kort.'
-        : `Kunden <strong>${customer?.company_name || ''}</strong> har godkänt kostnadsförslaget. Ärendet är nu <strong>Pågående</strong>.`
+        ? 'Tack för att du godkänt kostnadsförslaget. Vi påbörjar arbetet inom kort och håller dig uppdaterad.'
+        : `Kunden <strong>${customer?.company_name || ''}</strong> har godkänt kostnadsförslaget. Ärendet är nu <strong>Pågående</strong> och arbetet kan påbörjas.`
       }</p>
     </div>
 
