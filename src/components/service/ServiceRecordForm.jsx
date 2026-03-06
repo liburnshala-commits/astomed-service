@@ -339,7 +339,7 @@ export default function ServiceRecordForm({ record, machines, customers, presele
 
         <div className="flex justify-end gap-3 p-6 border-t bg-slate-50 rounded-b-2xl">
           <Button variant="outline" onClick={onClose}>Avbryt</Button>
-          {record && (form.status === "pending" || form.status === "in_progress") && (form.total_cost || calcTotal() > 0) && !record.quote_sent && (
+          {record && (form.total_cost || calcTotal() > 0) && !record.quote_sent && (
             <Button
               variant="outline"
               className="border-amber-400 text-amber-700 hover:bg-amber-50"
