@@ -26,6 +26,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import NotificationBell from "@/components/notifications/NotificationBell";
+import PrivacyPolicyModal from "@/components/PrivacyPolicyModal";
 
 const navSections = [
   {
