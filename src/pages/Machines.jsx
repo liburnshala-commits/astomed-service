@@ -89,14 +89,16 @@ export default function Machines() {
   return (
     <div className="p-6 space-y-6">
       <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold astomed-title">Maskiner</h1>
-          <p className="astomed-subtitle text-sm">{machines.length} maskiner registrerade</p>
-        </div>
-        <Button onClick={() => { setEditing(null); setShowForm(true); }} className="astomed-btn-primary">
-          <Plus className="w-4 h-4 mr-2" /> Ny maskin
-        </Button>
-      </div>
+         <div>
+           <h1 className="text-2xl font-bold astomed-title">Maskiner</h1>
+           <p className="astomed-subtitle text-sm">{machines.length} maskiner registrerade</p>
+         </div>
+         {userRole !== "customer" && (
+           <Button onClick={() => { setEditing(null); setShowForm(true); }} className="astomed-btn-primary">
+             <Plus className="w-4 h-4 mr-2" /> Ny maskin
+           </Button>
+         )}
+       </div>
 
       <div className="flex flex-col sm:flex-row gap-3">
         <div className="relative flex-1">
