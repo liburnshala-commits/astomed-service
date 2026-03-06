@@ -33,28 +33,15 @@ const SERVICE_CONTRACTS = [
   },
   {
     value: "standard",
-    label: "STANDARD – Drift & Trygghet",
-    interval: "Var 12:e månad",
-    badge: "Rekommenderas",
-    description: "Säkerställer hög drifttid och att personalen är \"väl förtrogen\" med tekniken enligt de nya kraven.",
+    label: "Inget Serviceavtal",
+    interval: null,
+    description: "Service utan avtal – ordinarie priser tillämpas.",
     features: [
-      "Allt i BAS ingår",
-      "Prestandakontroll – Mätning av uteffekt och kalibrering",
-      "Lokalanalys – Rådgivning kring rummets lasersäkerhet",
-      "Support – Fri teknisk rådgivning via telefon och fjärrsupport"
-    ]
-  },
-  {
-    value: "premium",
-    label: "PREMIUM – Total Partner",
-    interval: "Var 6:e månad (eller var 3:e vid hög belastning)",
-    description: "All-inclusive-lösning för kliniker med hög belastning som kräver maximal trygghet.",
-    features: [
-      "Allt i STANDARD ingår",
-      "Certifierande Utbildning – Årlig privat utbildning på plats",
-      "Prioriterad Service – Garanterad teknikerrespons inom 24–48 timmar",
-      "Lånemaskin – Tillgång till ersättningsutrustning vid servicebehov",
-      "Förmåner – Rabatterade priser på filter, tippar och förbrukningsvaror"
+      "Reservdelar debiteras enligt Astomeds ordinarie prislista.",
+      "Restid debiteras enligt ordinarie taxa baserat på avstånd och tidsåtgång.",
+      "Timpris för service och arbete utgår enligt gällande standardpris.",
+      "Ingen prioritering vid akuta serviceärenden.",
+      "Kontakt: 08-410 77 900 | kontakt@astomed.se | www.astomed.se/service"
     ]
   }
 ];
