@@ -2,10 +2,12 @@ import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { createPageUrl } from "@/utils";
 import { Link } from "react-router-dom";
-import { Monitor, Wrench, CheckCircle, Clock, Building2, Mail, Phone, MapPin, User, AlertTriangle } from "lucide-react";
+import { Monitor, Wrench, CheckCircle, Clock, Building2, Mail, Phone, MapPin, User, AlertTriangle, Plus } from "lucide-react";
 import QuoteApprovalCard from "@/components/portal/QuoteApprovalCard";
+import OtherMachineServiceForm from "@/components/portal/OtherMachineServiceForm";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
 import { sv } from "date-fns/locale";
 
