@@ -20,7 +20,8 @@ import {
   Home,
   ChevronLeft,
   ChevronRight as ChevronRightIcon,
-  Users as UsersIcon
+  Users as UsersIcon,
+  CalendarDays
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
