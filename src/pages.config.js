@@ -54,10 +54,10 @@ import CustomerPortal from './pages/CustomerPortal';
 import Customers from './pages/Customers';
 import Dashboard from './pages/Dashboard';
 import Machines from './pages/Machines';
+import ReminderSettings from './pages/ReminderSettings';
 import Reports from './pages/Reports';
 import ServiceRecords from './pages/ServiceRecords';
 import Users from './pages/Users';
-import ReminderSettings from './pages/ReminderSettings';
 import __Layout from './Layout.jsx';
 
 
@@ -69,10 +69,10 @@ export const PAGES = {
     "Customers": Customers,
     "Dashboard": Dashboard,
     "Machines": Machines,
+    "ReminderSettings": ReminderSettings,
     "Reports": Reports,
     "ServiceRecords": ServiceRecords,
     "Users": Users,
-    "ReminderSettings": ReminderSettings,
 }
 
 export const pagesConfig = {
