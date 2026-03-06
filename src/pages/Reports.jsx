@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
-import { FileText, Search, Eye, Mail, Filter, CalendarDays } from "lucide-react";
+import { FileText, Search, Eye, Mail, Filter, CalendarDays, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
