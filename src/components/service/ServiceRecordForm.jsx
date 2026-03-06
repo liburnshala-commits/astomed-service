@@ -227,6 +227,7 @@ export default function ServiceRecordForm({ record, machines, customers, presele
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="pending">Väntar</SelectItem>
+                  <SelectItem value="awaiting_approval">Inväntar godkännande</SelectItem>
                   <SelectItem value="in_progress">Pågående</SelectItem>
                   <SelectItem value="completed">Slutförd</SelectItem>
                   <SelectItem value="invoiced">Fakturerad</SelectItem>
