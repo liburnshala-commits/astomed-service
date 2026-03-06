@@ -90,15 +90,15 @@ export default function Dashboard() {
           </Card>
         </Link>
         <Link to={createPageUrl("Customers")} className="block">
-          <Card className="astomed-card cursor-pointer" style={{ background: "#f4f9f9" }}>
+          <Card className="astomed-card cursor-pointer" style={{ background: "#faf8f0" }}>
             <CardContent className="p-5">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-xs astomed-muted font-medium uppercase tracking-wide">Kunder</p>
                   <p className="text-3xl font-bold astomed-title mt-1">{customers.length}</p>
                 </div>
-                <div className="w-10 h-10 astomed-icon-box" style={{ width: 40, height: 40 }}>
-                  <Users className="w-5 h-5" style={{ color: "#1b3a3a" }} />
+                <div className="w-10 h-10 astomed-icon-box" style={{ width: 40, height: 40, background: "#f3e8d0" }}>
+                  <Users className="w-5 h-5" style={{ color: "#8b6f47" }} />
                 </div>
               </div>
             </CardContent>
