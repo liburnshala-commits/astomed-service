@@ -22,6 +22,7 @@ export default function Customers() {
   const [generatingLink, setGeneratingLink] = useState(null);
   const [copiedId, setCopiedId] = useState(null);
   const [deletingCustomer, setDeletingCustomer] = useState(null);
+  const [userRole, setUserRole] = useState(null);
 
   const load = async () => {
     const currentUser = await base44.auth.me();
