@@ -43,6 +43,7 @@ export default function CustomerDashboard() {
     load();
   }, []);
 
+  const awaitingQuoteApproval = records.filter(r => r.quote_sent && r.quote_approved === "pending");
   const pending = records.filter(r => r.status === "pending").length;
   const inProgress = records.filter(r => r.status === "in_progress").length;
   const completed = records.filter(r => r.status === "completed" || r.status === "invoiced").length;
