@@ -27,6 +27,7 @@ export default function Machines() {
   const [filterCustomer, setFilterCustomer] = useState("all");
   const [showForm, setShowForm] = useState(false);
   const [editing, setEditing] = useState(null);
+  const [userRole, setUserRole] = useState(null);
 
   const urlParams = new URLSearchParams(window.location.search);
   const preselectedCustomer = urlParams.get("customer");
