@@ -15,11 +15,12 @@ import CustomerServiceRequestForm from "@/components/service/CustomerServiceRequ
 
 const statusColor = {
   pending: "bg-yellow-100 text-yellow-800",
+  awaiting_approval: "bg-orange-100 text-orange-800",
   in_progress: "bg-blue-100 text-blue-800",
   completed: "bg-green-100 text-green-800",
   invoiced: "bg-purple-100 text-purple-800"
 };
-const statusLabel = { pending: "Väntar", in_progress: "Pågående", completed: "Slutförd", invoiced: "Fakturerad" };
+const statusLabel = { pending: "Väntar", awaiting_approval: "Inväntar godkännande", in_progress: "Pågående", completed: "Slutförd", invoiced: "Fakturerad" };
 const typeLabel = { standard: "Standard", advanced: "Avancerad" };
 const typeColor = { standard: "bg-slate-100 text-slate-700", advanced: "bg-indigo-100 text-indigo-700" };
 
