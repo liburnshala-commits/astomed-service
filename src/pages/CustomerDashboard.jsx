@@ -66,7 +66,7 @@ export default function CustomerDashboard() {
 
       {/* Customer info card */}
       {customer ? (
-        <Card className="astomed-card border-l-4" style={{ borderLeftColor: "#3a9e9e" }}>
+        <Card className="astomed-card border-l-4" style={{ borderLeftColor: "#3a9e9e", background: "#f4f9f9" }}>
           <CardContent className="p-5">
             <div className="flex items-start gap-4">
               <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: "#e8f2f2" }}>
