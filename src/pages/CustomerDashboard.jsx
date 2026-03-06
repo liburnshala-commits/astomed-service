@@ -24,6 +24,7 @@ export default function CustomerDashboard() {
   const [machines, setMachines] = useState([]);
   const [records, setRecords] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showOtherMachineForm, setShowOtherMachineForm] = useState(false);
 
   useEffect(() => {
     const load = async () => {
