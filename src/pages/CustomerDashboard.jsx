@@ -219,7 +219,7 @@ export default function CustomerDashboard() {
           <Wrench className="w-4 h-4" />
           Mina ärenden
         </h2>
-        <Card className="astomed-card">
+        <Card className="astomed-card" style={{ background: "#f4f9f9" }}>
           <CardHeader className="pb-3">
           <CardTitle className="text-base font-semibold astomed-title flex items-center gap-2">
             <Wrench className="w-4 h-4" />
