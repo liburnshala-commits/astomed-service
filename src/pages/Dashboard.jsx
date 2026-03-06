@@ -199,9 +199,9 @@ export default function Dashboard() {
               </div>
             )}
           </CardContent>
-        </Card>
+          </Card>
 
-        <Card className="astomed-card">
+          <Card className="astomed-card" style={{ background: "#f4f9f9" }}>
           <CardHeader className="pb-3">
             <CardTitle className="text-base font-semibold astomed-title">Maskiner per modell</CardTitle>
           </CardHeader>
