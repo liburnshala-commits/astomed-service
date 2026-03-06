@@ -212,16 +212,6 @@ export default function ServiceRecordForm({ record, machines, customers, presele
               </Select>
             </div>
             <div className="space-y-1">
-              <Label>Servicetyp *</Label>
-              <Select value={form.service_type} onValueChange={v => set("service_type", v)}>
-                <SelectTrigger><SelectValue /></SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="standard">Standardservice</SelectItem>
-                  <SelectItem value="advanced">Avancerad service</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="space-y-1">
               <Label>Status</Label>
               <Select value={form.status} onValueChange={handleStatusChange}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
