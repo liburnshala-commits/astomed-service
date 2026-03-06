@@ -86,6 +86,10 @@ export default function Layout({ children, currentPageName }) {
     return <>{children}</>;
   }
 
+  if (showPrivacyModal) {
+    return <PrivacyPolicyModal onAccepted={() => { setShowPrivacyModal(false); setUser(u => u ? { ...u, privacy_policy_accepted: true } : u); }} />;
+  }
+
   // Redirect customers to their own dashboard
   if (userLoaded && user?.role === "customer" && currentPageName === "Dashboard") {
     window.location.replace(createPageUrl("CustomerDashboard"));
