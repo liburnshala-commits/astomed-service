@@ -264,6 +264,17 @@ export default function CustomerDashboard() {
           </CardContent>
           </Card>
           </div>
-    </div>
-  );
-}
+
+          {showOtherMachineForm && (
+          <OtherMachineServiceForm
+          customerId={customer.id}
+          onClose={() => setShowOtherMachineForm(false)}
+          onSubmitted={async () => {
+           const updated = await base44.entities.ServiceRecord.filter({ customer_id: customer.id }, "-service_date", 50);
+           setRecords(updated);
+          }}
+          />
+          )}
+          </div>
+          );
+          }
