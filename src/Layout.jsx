@@ -82,6 +82,7 @@ export default function Layout({ children, currentPageName }) {
     return null;
   }
 
+
   const userRole = user?.role || "technician";
 
   return (
