@@ -223,7 +223,7 @@ export default function ServiceRecordForm({ record, machines, customers, presele
             </div>
             <div className="space-y-1">
               <Label>Status</Label>
-              <Select value={form.status} onValueChange={v => set("status", v)}>
+              <Select value={form.status} onValueChange={handleStatusChange}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="pending">Väntar</SelectItem>
@@ -232,6 +232,9 @@ export default function ServiceRecordForm({ record, machines, customers, presele
                   <SelectItem value="invoiced">Fakturerad</SelectItem>
                 </SelectContent>
               </Select>
+              {invoiceError && (
+                <p className="text-xs text-red-600 mt-1 bg-red-50 border border-red-200 rounded px-2 py-1">{invoiceError}</p>
+              )}
             </div>
             <div className="space-y-1">
               <Label>Servicedatum *</Label>
