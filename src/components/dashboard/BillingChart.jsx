@@ -60,7 +60,7 @@ export default function BillingChart({ records }) {
             <Tooltip content={<CustomTooltip />} />
             <Bar dataKey="amount" radius={[6, 6, 0, 0]}>
               {data.map((entry, index) => (
-                <rect key={index} fill={entry.fill} />
+                <Cell key={index} fill={entry.fill} />
               ))}
             </Bar>
           </BarChart>
