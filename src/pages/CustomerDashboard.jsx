@@ -139,12 +139,17 @@ export default function CustomerDashboard() {
       )}
 
       {/* Machines section */}
-      {machines.length > 0 && (
-        <div>
-          <h2 className="text-sm font-semibold astomed-label mb-4 flex items-center gap-2">
+      <div>
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-sm font-semibold astomed-label flex items-center gap-2">
             <Monitor className="w-4 h-4" />
             Mina maskiner
           </h2>
+          <Button size="sm" variant="outline" onClick={() => setShowOtherMachineForm(true)}>
+            <Plus className="w-3 h-3 mr-1" /> Annan maskin
+          </Button>
+        </div>
+        {machines.length > 0 ? (
           <div className="space-y-3">
             {machines.map((machine, idx) => (
               <div key={machine.id}>
@@ -165,8 +170,14 @@ export default function CustomerDashboard() {
               </div>
             ))}
           </div>
-        </div>
-      )}
+        ) : (
+          <Card className="astomed-card" style={{ background: "#f4f9f9" }}>
+            <CardContent className="p-4 text-center">
+              <p className="astomed-muted text-sm">Inga Astomed-maskiner registrerade</p>
+            </CardContent>
+          </Card>
+        )}
+      </div>
 
       {/* Stats */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
