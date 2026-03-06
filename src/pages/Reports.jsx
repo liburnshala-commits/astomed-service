@@ -245,7 +245,7 @@ export default function Reports() {
             {/* Year */}
             <div>
               <div className="text-xs text-slate-400 mb-1 flex items-center gap-1"><CalendarDays className="w-3 h-3" /> Tidsperiod</div>
-              <Select value={filterYear} onValueChange={setFilterYear}>
+              <Select value={filterYear} onValueChange={v => { setFilterYear(v); setFilterDateFrom(""); setFilterDateTo(""); }}>
                 <SelectTrigger className="h-8 text-sm">
                   <SelectValue />
                 </SelectTrigger>
@@ -257,6 +257,26 @@ export default function Reports() {
                   ))}
                 </SelectContent>
               </Select>
+            </div>
+            {/* Date from */}
+            <div>
+              <div className="text-xs text-slate-400 mb-1">Från datum</div>
+              <input
+                type="date"
+                className="h-8 text-sm w-full border border-input rounded-md px-2 bg-background"
+                value={filterDateFrom}
+                onChange={e => setFilterDateFrom(e.target.value)}
+              />
+            </div>
+            {/* Date to */}
+            <div>
+              <div className="text-xs text-slate-400 mb-1">Till datum</div>
+              <input
+                type="date"
+                className="h-8 text-sm w-full border border-input rounded-md px-2 bg-background"
+                value={filterDateTo}
+                onChange={e => setFilterDateTo(e.target.value)}
+              />
             </div>
             {/* Customer */}
             <div>
@@ -301,9 +321,25 @@ export default function Reports() {
                 <SelectContent>
                   <SelectItem value="all">Alla statusar</SelectItem>
                   <SelectItem value="pending">Väntar</SelectItem>
+                  <SelectItem value="awaiting_approval">Inv. godkänn.</SelectItem>
                   <SelectItem value="in_progress">Pågående</SelectItem>
                   <SelectItem value="completed">Slutförd</SelectItem>
                   <SelectItem value="invoiced">Fakturerad</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            {/* Technician */}
+            <div>
+              <div className="text-xs text-slate-400 mb-1">Tekniker</div>
+              <Select value={filterTechnician} onValueChange={setFilterTechnician}>
+                <SelectTrigger className="h-8 text-sm">
+                  <SelectValue placeholder="Alla tekniker" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Alla tekniker</SelectItem>
+                  {technicians.map(t => (
+                    <SelectItem key={t} value={t}>{t}</SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
