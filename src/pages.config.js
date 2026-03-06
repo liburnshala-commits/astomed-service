@@ -57,6 +57,7 @@ import Machines from './pages/Machines';
 import Reports from './pages/Reports';
 import ServiceRecords from './pages/ServiceRecords';
 import Users from './pages/Users';
+import ReminderSettings from './pages/ReminderSettings';
 import __Layout from './Layout.jsx';
 
 
@@ -71,6 +72,7 @@ export const PAGES = {
     "Reports": Reports,
     "ServiceRecords": ServiceRecords,
     "Users": Users,
+    "ReminderSettings": ReminderSettings,
 }
 
 export const pagesConfig = {
