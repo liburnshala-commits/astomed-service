@@ -49,8 +49,7 @@ const navSections = [
   {
     title: "Snabbfilter",
     items: [
-      { label: "Pågående ärenden", page: "ServiceRecords?status=in_progress", icon: Clock, roles: ["admin", "technician"] },
-      { label: "Slutförda ärenden", page: "ServiceRecords?status=completed", icon: CheckCircle, roles: ["admin", "technician"] },
+      { label: "Alla ärenden", page: "ServiceRecords", icon: Clock, roles: ["admin", "technician"] },
     ]
   },
   {
