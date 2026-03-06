@@ -145,7 +145,7 @@ export default function CustomerDashboard() {
             <Monitor className="w-4 h-4" />
             Mina maskiner
           </h2>
-          <Button size="sm" variant="outline" onClick={() => setShowOtherMachineForm(true)}>
+          <Button className="astomed-btn-primary" size="sm" onClick={() => setShowOtherMachineForm(true)}>
             <Plus className="w-3 h-3 mr-1" /> Annan maskin
           </Button>
         </div>
