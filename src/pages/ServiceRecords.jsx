@@ -211,7 +211,16 @@ export default function ServiceRecords() {
         )}
       </div>
 
-      {showForm && (
+      {showForm && user?.role === "customer" && (
+        <CustomerServiceRequestForm
+          machines={machines}
+          customer={userCustomer}
+          onClose={() => { setShowForm(false); setEditing(null); }}
+          onSaved={() => { setShowForm(false); load(); }}
+        />
+      )}
+
+      {showForm && user?.role !== "customer" && (
         <ServiceRecordForm
           record={editing}
           machines={machines}
