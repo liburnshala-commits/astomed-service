@@ -35,9 +35,12 @@ export default function Reports() {
   const [user, setUser] = useState(null);
   const [search, setSearch] = useState("");
   const [filterYear, setFilterYear] = useState("current");
+  const [filterDateFrom, setFilterDateFrom] = useState("");
+  const [filterDateTo, setFilterDateTo] = useState("");
   const [filterCustomer, setFilterCustomer] = useState("all");
   const [filterMachine, setFilterMachine] = useState("all");
   const [filterStatus, setFilterStatus] = useState("all");
+  const [filterTechnician, setFilterTechnician] = useState("all");
   const [selectedRecord, setSelectedRecord] = useState(null);
   const [showSummary, setShowSummary] = useState(false);
   const [sendingEmail, setSendingEmail] = useState(false);
