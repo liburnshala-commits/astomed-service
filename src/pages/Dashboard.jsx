@@ -75,7 +75,7 @@ export default function Dashboard() {
 
       <div className="grid grid-cols-2 lg:grid-cols-6 gap-4">
         <Link to={createPageUrl("Machines")} className="block">
-          <Card className="astomed-card cursor-pointer">
+          <Card className="astomed-card cursor-pointer" style={{ background: "#f4f9f9" }}>
             <CardContent className="p-5">
               <div className="flex items-center justify-between">
                 <div>
@@ -90,7 +90,7 @@ export default function Dashboard() {
           </Card>
         </Link>
         <Link to={createPageUrl("Customers")} className="block">
-          <Card className="astomed-card cursor-pointer">
+          <Card className="astomed-card cursor-pointer" style={{ background: "#f4f9f9" }}>
             <CardContent className="p-5">
               <div className="flex items-center justify-between">
                 <div>
@@ -105,7 +105,7 @@ export default function Dashboard() {
           </Card>
         </Link>
         <Link to={createPageUrl("ServiceRecords?status=pending")} className="block">
-          <Card className="astomed-card cursor-pointer">
+          <Card className="astomed-card cursor-pointer" style={{ background: "#fffaf0" }}>
             <CardContent className="p-5">
               <div className="flex items-center justify-between">
                 <div>
@@ -120,7 +120,7 @@ export default function Dashboard() {
           </Card>
         </Link>
         <Link to={createPageUrl("ServiceRecords?status=awaiting_approval")} className="block">
-          <Card className="astomed-card cursor-pointer">
+          <Card className="astomed-card cursor-pointer" style={{ background: "#fff5f0" }}>
             <CardContent className="p-5">
               <div className="flex items-center justify-between">
                 <div>
@@ -135,7 +135,7 @@ export default function Dashboard() {
           </Card>
         </Link>
         <Link to={createPageUrl("ServiceRecords?status=in_progress")} className="block">
-          <Card className="astomed-card cursor-pointer">
+          <Card className="astomed-card cursor-pointer" style={{ background: "#f0fafa" }}>
             <CardContent className="p-5">
               <div className="flex items-center justify-between">
                 <div>
@@ -150,7 +150,7 @@ export default function Dashboard() {
           </Card>
         </Link>
         <Link to={createPageUrl("ServiceRecords?status=completed")} className="block">
-          <Card className="astomed-card cursor-pointer">
+          <Card className="astomed-card cursor-pointer" style={{ background: "#f0faf9" }}>
             <CardContent className="p-5">
               <div className="flex items-center justify-between">
                 <div>
