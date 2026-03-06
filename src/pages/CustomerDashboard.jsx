@@ -145,8 +145,8 @@ export default function CustomerDashboard() {
           <div className="space-y-3">
             {machines.map((machine, idx) => (
               <div key={machine.id}>
-                <Card className="astomed-card">
-                  <CardContent className="p-4">
+                <Card className="astomed-card" style={{ background: "#f4f9f9" }}>
+                    <CardContent className="p-4">
                     <div className="flex items-start gap-3">
                       <div className="w-10 h-10 astomed-icon-box flex-shrink-0">
                         <Monitor className="w-5 h-5" style={{ color: "#1b3a3a" }} />
