@@ -74,7 +74,12 @@ export default function Layout({ children, currentPageName }) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    base44.auth.me().then(setUser).catch(() => {}).finally(() => setUserLoaded(true));
+    base44.auth.me().then(u => {
+      setUser(u);
+      if (u && !u.privacy_policy_accepted) {
+        setShowPrivacyModal(true);
+      }
+    }).catch(() => {}).finally(() => setUserLoaded(true));
   }, []);
 
   if (currentPageName === "CustomerPortal") {
