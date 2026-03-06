@@ -196,7 +196,7 @@ export default function CustomerDashboard() {
                 <Clock className="w-5 h-5" style={{ color: "#3a9e9e" }} />
               </div>
               <p className="text-3xl font-bold astomed-title">{inProgress}</p>
-              <p className="text-xs astomed-muted mt-1 font-medium uppercase tracking-wide">Pågående ärenden</p>
+              <p className="text-xs astomed-muted mt-1 font-medium uppercase tracking-wide">Pågående</p>
             </CardContent>
           </Card>
         </Link>
