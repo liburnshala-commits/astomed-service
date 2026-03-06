@@ -60,21 +60,26 @@ export default function Users() {
 
   const handleSaveRoles = async () => {
     setSaving(true);
+    setSaveError(null);
     try {
-      await Promise.all(
+      const results = await Promise.allSettled(
         Object.entries(pendingRoles).map(([email, newRole]) =>
           base44.functions.invoke("updateUserRole", { email, role: newRole })
         )
       );
       
-      // Hämta uppdaterad användarlista från server
+      const failed = results.filter(r => r.status === "rejected");
+      if (failed.length > 0) {
+        setSaveError("Rollbyte misslyckades. Ändra roller direkt i Base44-dashboarden under Settings → Users.");
+        setSaving(false);
+        return;
+      }
+      
       const allUsers = await base44.entities.User.list();
       setUsers(allUsers);
-      
-      // Rensa pending roles
       setPendingRoles({});
     } catch (error) {
-      console.error("Fel vid uppdatering av roller:", error);
+      setSaveError("Rollbyte misslyckades. Ändra roller direkt i Base44-dashboarden under Settings → Users.");
     } finally {
       setSaving(false);
     }
