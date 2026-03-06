@@ -39,6 +39,7 @@ const navSections = [
     title: "Hantering",
     items: [
       { label: "Serviceärenden", page: "ServiceRecords", icon: Wrench, roles: ["admin", "technician", "customer"] },
+      { label: "Servicekalender", page: "Calendar", icon: CalendarDays, roles: ["admin", "technician"] },
       { label: "Maskiner", page: "Machines", icon: Monitor, roles: ["admin", "technician", "customer"] },
       { label: "Kunder", page: "Customers", icon: Users, roles: ["admin", "technician"] },
       { label: "Rapporter", page: "Reports", icon: FileText, roles: ["admin", "technician"] },
