@@ -16,13 +16,19 @@ const SERVICE_CONTRACTS = [
   },
   {
     value: "basic",
-    label: "BAS – Regelefterlevnad",
-    interval: "Var 24:e månad",
-    description: "Fokus på att uppfylla de lagstadgade kraven för anmälningsplikt till lägsta möjliga kostnad.",
+    label: "BAS – Astomed 3.0",
+    interval: "Var 12:e månad",
+    description: "Serviceavtal & Framtidssäkring: Astomed 3.0\n\nDin partner för teknisk drift, juridisk trygghet och klinisk kompetens sedan 2005.\n\nMed de nya föreskrifterna från Strålsäkerhetsmyndigheten (SSM) som träder i kraft 2026, blir regelbunden service och dokumentation avgörande för att få driva din klinik vidare. Astomed erbjuder serviceavtal eller service utan avtal för att säkerställa att du uppfyller kraven på anmälningsplikt, leveranskontroll och personalkompetens.",
     features: [
-      "Säkerhetskontroll – Teknisk genomgång av maskinens säkerhetsfunktioner",
-      "Dokumentation – Serviceprotokoll inför myndighetstillsyn",
-      "Filterservice – Grundläggande funktionskontroll och rengöring av filterenheter"
+      "STANDARD: Drift & Trygghet – Säkerställer hög drifttid och att personalen är med tekniken enligt de nya kraven.",
+      "Intervall: Var 12:e månad.",
+      "Prestandakontroll: Mätning av uteffekt och kalibrering för att minimera risk för skador.",
+      "Lokalanalys: Rådgivning kring rummets lasersäkerhet (reflekterande ytor och strålskydd).",
+      "Support: Fri teknisk rådgivning via telefon och fjärrsupport under avtalstiden.",
+      "Egen Serviceverkstad: Vi har erfarna tekniker och ett komplett reservdelslager i Norden.",
+      "Juridiskt stöd: Vi förser dig med den dokumentation som krävs för din anmälan till SSM.",
+      "Utbildning i världsklass: Vi ser till att din personal inte bara kan hantera maskinen, utan förstår fysiken och säkerheten bakom.",
+      "Kontakt: 08-410 77 900 | kontakt@astomed.se | www.astomed.se/service"
     ]
   },
   {
