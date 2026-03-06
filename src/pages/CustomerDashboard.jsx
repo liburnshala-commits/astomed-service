@@ -112,7 +112,7 @@ export default function CustomerDashboard() {
       )}
 
       {/* Stats */}
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         <Link to={createPageUrl("Machines")} className="block">
           <Card className="astomed-card cursor-pointer">
             <CardContent className="p-5 text-center">
@@ -121,6 +121,17 @@ export default function CustomerDashboard() {
               </div>
               <p className="text-3xl font-bold astomed-title">{machines.length}</p>
               <p className="text-xs astomed-muted mt-1 font-medium uppercase tracking-wide">Maskiner</p>
+            </CardContent>
+          </Card>
+        </Link>
+        <Link to={createPageUrl("ServiceRecords?status=pending")} className="block">
+          <Card className="astomed-card cursor-pointer">
+            <CardContent className="p-5 text-center">
+              <div className="w-10 h-10 mx-auto mb-3 rounded-xl flex items-center justify-center" style={{ width: 40, height: 40, background: "#fef9e7" }}>
+                <Wrench className="w-5 h-5" style={{ color: "#d4a017" }} />
+              </div>
+              <p className="text-3xl font-bold astomed-title">{pending}</p>
+              <p className="text-xs astomed-muted mt-1 font-medium uppercase tracking-wide">Väntande ärenden</p>
             </CardContent>
           </Card>
         </Link>
