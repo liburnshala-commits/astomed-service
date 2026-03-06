@@ -158,6 +158,12 @@ export default function Users() {
               ))}
             </div>
 
+            {saveError && (
+              <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">
+                <strong>Fel:</strong> {saveError}
+              </div>
+            )}
+
             {Object.keys(pendingRoles).length > 0 && (
               <div className="mt-6 flex gap-3 sticky bottom-6">
                 <Button
