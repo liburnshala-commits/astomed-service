@@ -75,15 +75,15 @@ export default function Dashboard() {
 
       <div className="grid grid-cols-2 lg:grid-cols-6 gap-4">
         <Link to={createPageUrl("Machines")} className="block">
-          <Card className="astomed-card cursor-pointer" style={{ background: "#f4f9f9" }}>
+          <Card className="astomed-card cursor-pointer" style={{ background: "#f0faf5" }}>
             <CardContent className="p-5">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-xs astomed-muted font-medium uppercase tracking-wide">Maskiner</p>
                   <p className="text-3xl font-bold astomed-title mt-1">{machines.length}</p>
                 </div>
-                <div className="w-10 h-10 astomed-icon-box" style={{ width: 40, height: 40 }}>
-                  <Monitor className="w-5 h-5" style={{ color: "#1b3a3a" }} />
+                <div className="w-10 h-10 astomed-icon-box" style={{ width: 40, height: 40, background: "#e0f3f0" }}>
+                  <Monitor className="w-5 h-5" style={{ color: "#2d8a8a" }} />
                 </div>
               </div>
             </CardContent>
