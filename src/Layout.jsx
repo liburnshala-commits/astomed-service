@@ -31,13 +31,14 @@ const navSections = [
     title: null,
     items: [
       { label: "Dashboard", page: "Dashboard", icon: LayoutDashboard, roles: ["admin", "technician"] },
+      { label: "Min översikt", page: "CustomerDashboard", icon: LayoutDashboard, roles: ["customer"] },
     ]
   },
   {
     title: "Hantering",
     items: [
-      { label: "Serviceärenden", page: "ServiceRecords", icon: Wrench, roles: ["admin", "technician"] },
-      { label: "Maskiner", page: "Machines", icon: Monitor, roles: ["admin", "technician"] },
+      { label: "Serviceärenden", page: "ServiceRecords", icon: Wrench, roles: ["admin", "technician", "customer"] },
+      { label: "Maskiner", page: "Machines", icon: Monitor, roles: ["admin", "technician", "customer"] },
       { label: "Kunder", page: "Customers", icon: Users, roles: ["admin", "technician"] },
       { label: "Rapporter", page: "Reports", icon: FileText, roles: ["admin", "technician"] },
     ]
