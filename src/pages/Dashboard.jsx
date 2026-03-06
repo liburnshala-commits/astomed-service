@@ -47,6 +47,7 @@ export default function Dashboard() {
   }, []);
 
   const pending = records.filter(r => r.status === "pending").length;
+  const awaitingApproval = records.filter(r => r.status === "awaiting_approval").length;
   const inProgress = records.filter(r => r.status === "in_progress").length;
   const completed = records.filter(r => r.status === "completed").length;
   const recent = records.slice(0, 5);
