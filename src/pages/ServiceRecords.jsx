@@ -11,6 +11,7 @@ import { format } from "date-fns";
 import { sv } from "date-fns/locale";
 import ServiceRecordForm from "@/components/service/ServiceRecordForm.jsx";
 import ServiceRecordDetail from "@/components/service/ServiceRecordDetail.jsx";
+import CustomerServiceRequestForm from "@/components/service/CustomerServiceRequestForm.jsx";
 
 const statusColor = {
   pending: "bg-yellow-100 text-yellow-800",
