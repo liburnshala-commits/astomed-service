@@ -136,6 +136,11 @@ export default function CustomerPortal() {
             </div>
           </div>
           <div className="flex items-center gap-2">
+            {machines.length > 0 && (
+              <Button size="sm" className="bg-blue-500 hover:bg-blue-400 text-white" onClick={() => setShowServiceModal(true)}>
+                <PlusCircle className="w-4 h-4 mr-1" /> Beställ service
+              </Button>
+            )}
             <Button variant="ghost" size="sm" className="text-white/70 hover:text-white hover:bg-white/10" onClick={() => base44.auth.logout()}>
               <LogOut className="w-4 h-4 mr-1" /> Logga ut
             </Button>
