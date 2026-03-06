@@ -18,8 +18,23 @@ const statusColor = {
 const statusLabel = { pending: "Väntar", awaiting_approval: "Inväntar godkännande", in_progress: "Pågående", completed: "Slutförd", invoiced: "Fakturerad" };
 const typeLabel = { standard: "Standardservice", advanced: "Avancerad service" };
 
-export default function ServiceRecordDetail({ record, machine, customer, onClose, onEdit, onDeleted, userRole }) {
+export default function ServiceRecordDetail({ record, machine, customer, onClose, onEdit, onDeleted, onUpdated, userRole }) {
   const [showReport, setShowReport] = useState(false);
+  const [quoteNote, setQuoteNote] = useState("");
+  const [quoteLoading, setQuoteLoading] = useState(false);
+  const [quoteDone, setQuoteDone] = useState(false);
+
+  const handleQuoteRespond = async (answer) => {
+    setQuoteLoading(true);
+    await base44.entities.ServiceRecord.update(record.id, {
+      quote_approved: answer,
+      quote_note: quoteNote,
+      status: answer === "approved" ? "in_progress" : "pending",
+    });
+    setQuoteDone(answer);
+    setQuoteLoading(false);
+    onUpdated?.();
+  };
 
   const handlePickUp = async () => {
     await base44.entities.ServiceRecord.update(record.id, { status: "in_progress" });
