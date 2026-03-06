@@ -181,20 +181,51 @@ export default function Dashboard() {
               </div>
             ) : (
               <div className="space-y-2">
-                {Object.entries(
-                  machines.reduce((acc, m) => {
-                    acc[m.model] = (acc[m.model] || 0) + 1;
+                {(() => {
+                  const billingByModel = records.reduce((acc, r) => {
+                    const machine = machines.find(m => m.id === r.machine_id);
+                    if (!machine) return acc;
+                    if (!acc[machine.model]) acc[machine.model] = { invoiced: 0, planned: 0 };
+                    if (r.status === "invoiced") {
+                      acc[machine.model].invoiced += r.total_cost || 0;
+                    } else if (r.status === "completed" || r.status === "in_progress") {
+                      acc[machine.model].planned += r.total_cost || 0;
+                    }
                     return acc;
-                  }, {})
-                ).sort((a,b) => b[1]-a[1]).map(([model, count]) => (
-                  <Link key={model} to={createPageUrl(`Machines?model=${encodeURIComponent(model)}`)} className="flex items-center gap-3 p-2 rounded-lg transition-colors cursor-pointer group" style={{ background: "#f4f9f9" }} onMouseEnter={e => e.currentTarget.style.background="#e8f2f2"} onMouseLeave={e => e.currentTarget.style.background="#f4f9f9"}>
-                    <div className="flex-1 text-sm astomed-label">{model}</div>
-                    <div className="text-sm font-semibold astomed-title">{count}</div>
-                    <div className="w-24 rounded-full h-2" style={{ background: "#dce8e8" }}>
-                      <div className="h-2 rounded-full" style={{ width: `${(count / machines.length) * 100}%`, background: "#3a9e9e" }} />
-                    </div>
-                  </Link>
-                ))}
+                  }, {});
+
+                  return Object.entries(
+                    machines.reduce((acc, m) => {
+                      acc[m.model] = (acc[m.model] || 0) + 1;
+                      return acc;
+                    }, {})
+                  ).sort((a,b) => b[1]-a[1]).map(([model, count]) => {
+                    const billing = billingByModel[model] || { invoiced: 0, planned: 0 };
+                    return (
+                      <Link key={model} to={createPageUrl(`Machines?model=${encodeURIComponent(model)}`)} className="flex items-center gap-3 p-2 rounded-lg transition-colors cursor-pointer" style={{ background: "#f4f9f9" }} onMouseEnter={e => e.currentTarget.style.background="#e8f2f2"} onMouseLeave={e => e.currentTarget.style.background="#f4f9f9"}>
+                        <div className="flex-1 min-w-0">
+                          <div className="text-sm astomed-label truncate">{model}</div>
+                          <div className="flex gap-3 mt-0.5">
+                            {billing.invoiced > 0 && (
+                              <span className="text-xs" style={{ color: "#3a9e9e" }}>
+                                Fakturerat: {billing.invoiced.toLocaleString("sv-SE")} kr
+                              </span>
+                            )}
+                            {billing.planned > 0 && (
+                              <span className="text-xs text-amber-600">
+                                Planerat: {billing.planned.toLocaleString("sv-SE")} kr
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                        <div className="text-sm font-semibold astomed-title flex-shrink-0">{count}</div>
+                        <div className="w-16 rounded-full h-2 flex-shrink-0" style={{ background: "#dce8e8" }}>
+                          <div className="h-2 rounded-full" style={{ width: `${(count / machines.length) * 100}%`, background: "#3a9e9e" }} />
+                        </div>
+                      </Link>
+                    );
+                  });
+                })()}
                 {machines.length === 0 && <p className="astomed-muted text-sm text-center py-6">Inga maskiner registrerade</p>}
               </div>
             )}
