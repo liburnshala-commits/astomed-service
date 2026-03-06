@@ -10,9 +10,15 @@ import { base44 } from "@/api/base44Client";
 const SERVICE_CONTRACTS = [
   {
     value: "none",
-    label: "Inget avtal",
-    description: null,
-    features: []
+    label: "Inget Serviceavtal",
+    description: "Service utan avtal – ordinarie priser tillämpas.",
+    features: [
+      "Reservdelar debiteras enligt Astomeds ordinarie prislista.",
+      "Restid debiteras enligt ordinarie taxa baserat på avstånd och tidsåtgång.",
+      "Timpris för service och arbete utgår enligt gällande standardpris.",
+      "Ingen prioritering vid akuta serviceärenden.",
+      "Kontakt: 08-410 77 900 | kontakt@astomed.se | www.astomed.se/service"
+    ]
   },
   {
     value: "basic",
@@ -28,19 +34,6 @@ const SERVICE_CONTRACTS = [
       "Egen Serviceverkstad: Vi har erfarna tekniker och ett komplett reservdelslager i Norden.",
       "Juridiskt stöd: Vi förser dig med den dokumentation som krävs för din anmälan till SSM.",
       "Utbildning i världsklass: Vi ser till att din personal inte bara kan hantera maskinen, utan förstår fysiken och säkerheten bakom.",
-      "Kontakt: 08-410 77 900 | kontakt@astomed.se | www.astomed.se/service"
-    ]
-  },
-  {
-    value: "standard",
-    label: "Inget Serviceavtal",
-    interval: null,
-    description: "Service utan avtal – ordinarie priser tillämpas.",
-    features: [
-      "Reservdelar debiteras enligt Astomeds ordinarie prislista.",
-      "Restid debiteras enligt ordinarie taxa baserat på avstånd och tidsåtgång.",
-      "Timpris för service och arbete utgår enligt gällande standardpris.",
-      "Ingen prioritering vid akuta serviceärenden.",
       "Kontakt: 08-410 77 900 | kontakt@astomed.se | www.astomed.se/service"
     ]
   }
