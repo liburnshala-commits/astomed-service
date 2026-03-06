@@ -19,6 +19,7 @@ export default function Users() {
   const [search, setSearch] = useState("");
   const [pendingRoles, setPendingRoles] = useState({});
   const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState(null);
 
   useEffect(() => {
     const fetchUsers = async () => {
