@@ -103,6 +103,21 @@ export default function Dashboard() {
             </CardContent>
           </Card>
         </Link>
+        <Link to={createPageUrl("ServiceRecords?status=pending")} className="block">
+          <Card className="astomed-card cursor-pointer">
+            <CardContent className="p-5">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-xs astomed-muted font-medium uppercase tracking-wide">Väntande</p>
+                  <p className="text-3xl font-bold astomed-title mt-1">{pending}</p>
+                </div>
+                <div className="w-10 h-10 astomed-icon-box" style={{ width: 40, height: 40 }}>
+                  <Wrench className="w-5 h-5" style={{ color: "#e6a817" }} />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </Link>
         <Link to={createPageUrl("ServiceRecords?status=in_progress")} className="block">
           <Card className="astomed-card cursor-pointer">
             <CardContent className="p-5">
