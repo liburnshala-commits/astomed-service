@@ -1,6 +1,7 @@
-import { X, Edit, FileText, Calendar, User, Building2, Monitor, Wrench, Trash2 } from "lucide-react";
+import { X, Edit, FileText, Calendar, User, Building2, Monitor, Wrench, Trash2, CheckCircle, XCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Textarea } from "@/components/ui/textarea";
 import { format } from "date-fns";
 import { sv } from "date-fns/locale";
 import ServiceReportModal from "./ServiceReportModal.jsx";
