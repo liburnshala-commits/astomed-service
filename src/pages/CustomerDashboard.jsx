@@ -207,7 +207,7 @@ export default function CustomerDashboard() {
                 <CheckCircle className="w-5 h-5" style={{ color: "#3a9e9e" }} />
               </div>
               <p className="text-3xl font-bold astomed-title">{completed}</p>
-              <p className="text-xs astomed-muted mt-1 font-medium uppercase tracking-wide">Slutförda ärenden</p>
+              <p className="text-xs astomed-muted mt-1 font-medium uppercase tracking-wide">Slutförda</p>
             </CardContent>
           </Card>
         </Link>
