@@ -110,10 +110,8 @@ export default function MachineForm({ machine, customers, preselectedCustomerId,
               <Select value={form.service_contract} onValueChange={v => set("service_contract", v)}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="none">Inget avtal</SelectItem>
-                  <SelectItem value="basic">Bas</SelectItem>
-                  <SelectItem value="standard">Standard</SelectItem>
-                  <SelectItem value="premium">Premium</SelectItem>
+                  <SelectItem value="none">Inget Serviceavtal</SelectItem>
+                  <SelectItem value="basic">BAS – Astomed 3.0</SelectItem>
                 </SelectContent>
               </Select>
             </div>
