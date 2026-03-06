@@ -73,20 +73,28 @@ export default function Reports() {
 
   const currentYear = new Date().getFullYear();
   const availableYears = getYears(records);
+  const technicians = [...new Set(records.map(r => r.technician_name).filter(Boolean))].sort();
 
   const filtered = records.filter(r => {
-    // Year filter
-    if (filterYear === "current") {
-      if (!r.service_date || new Date(r.service_date).getFullYear() !== currentYear) return false;
-    } else if (filterYear !== "all") {
-      if (!r.service_date || new Date(r.service_date).getFullYear() !== parseInt(filterYear)) return false;
+    // Year filter (only if no custom date range)
+    if (!filterDateFrom && !filterDateTo) {
+      if (filterYear === "current") {
+        if (!r.service_date || new Date(r.service_date).getFullYear() !== currentYear) return false;
+      } else if (filterYear !== "all") {
+        if (!r.service_date || new Date(r.service_date).getFullYear() !== parseInt(filterYear)) return false;
+      }
     }
+    // Custom date range
+    if (filterDateFrom && r.service_date && r.service_date < filterDateFrom) return false;
+    if (filterDateTo && r.service_date && r.service_date > filterDateTo) return false;
     // Customer filter
     if (filterCustomer !== "all" && r.customer_id !== filterCustomer) return false;
     // Machine filter
     if (filterMachine !== "all" && r.machine_id !== filterMachine) return false;
     // Status filter
     if (filterStatus !== "all" && r.status !== filterStatus) return false;
+    // Technician filter
+    if (filterTechnician !== "all" && r.technician_name !== filterTechnician) return false;
     // Search
     if (search) {
       const machine = getMachine(r.machine_id);
