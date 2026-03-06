@@ -76,6 +76,12 @@ export default function Layout({ children, currentPageName }) {
     return <>{children}</>;
   }
 
+  // Redirect customers to their own dashboard
+  if (userLoaded && user?.role === "customer" && currentPageName === "Dashboard") {
+    window.location.replace(createPageUrl("CustomerDashboard"));
+    return null;
+  }
+
   const userRole = user?.role || "technician";
 
   return (
