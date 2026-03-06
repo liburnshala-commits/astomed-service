@@ -135,6 +135,36 @@ export default function CustomerDashboard() {
         </div>
       )}
 
+      {/* Machines section */}
+      {machines.length > 0 && (
+        <div>
+          <h2 className="text-sm font-semibold astomed-label mb-4 flex items-center gap-2">
+            <Monitor className="w-4 h-4" />
+            Mina maskiner
+          </h2>
+          <div className="space-y-3">
+            {machines.map((machine, idx) => (
+              <div key={machine.id}>
+                <Card className="astomed-card">
+                  <CardContent className="p-4">
+                    <div className="flex items-start gap-3">
+                      <div className="w-10 h-10 astomed-icon-box flex-shrink-0">
+                        <Monitor className="w-5 h-5" style={{ color: "#1b3a3a" }} />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h3 className="text-sm font-semibold astomed-title">{machine.model}</h3>
+                        <p className="text-xs astomed-muted">SN: {machine.serial_number}</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+                {idx < machines.length - 1 && <div className="h-px" style={{ background: "#dce8e8" }} />}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Stats */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         <Link to={createPageUrl("Machines")} className="block">
