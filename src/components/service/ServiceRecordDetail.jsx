@@ -43,7 +43,12 @@ export default function ServiceRecordDetail({ record, machine, customer, onClose
               </div>
               <h2 className="text-lg font-bold text-slate-900">Serviceärende</h2>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
+              {record.status === "pending" && (userRole === "admin" || userRole === "technician") && (
+                <Button size="sm" className="astomed-btn-primary" onClick={handlePickUp}>
+                  <Wrench className="w-4 h-4 mr-1" /> Ta upp ärende
+                </Button>
+              )}
               <Button size="sm" variant="outline" onClick={() => setShowReport(true)}>
                 <FileText className="w-4 h-4 mr-1" /> Rapport
               </Button>
