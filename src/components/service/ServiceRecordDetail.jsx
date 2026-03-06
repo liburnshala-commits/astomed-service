@@ -31,6 +31,9 @@ export default function ServiceRecordDetail({ record, machine, customer, onClose
       quote_note: quoteNote,
       status: answer === "approved" ? "in_progress" : "pending",
     });
+    if (answer === "approved") {
+      await base44.functions.invoke("sendQuoteConfirmation", { recordId: record.id });
+    }
     setQuoteDone(answer);
     setQuoteLoading(false);
     onUpdated?.();
