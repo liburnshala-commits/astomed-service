@@ -9,7 +9,17 @@ export default function PrivacyPolicyModal({ onAccepted }) {
 
   async function handleAccept() {
     setLoading(true);
+    const user = await base44.auth.me();
     await base44.auth.updateMe({ privacy_policy_accepted: true });
+    await base44.entities.AuditLog.create({
+      action: "create",
+      entity_type: "ConsentRecord",
+      entity_id: user.id,
+      entity_label: `Integritetspolicy godkänd av ${user.full_name || user.email}`,
+      user_email: user.email,
+      user_name: user.full_name || user.email,
+      details: `Användaren godkände integritetspolicyn (version 2025-10-20) via inloggningsflödet.`,
+    });
     setLoading(false);
     onAccepted();
   }
