@@ -21,6 +21,7 @@ export default function QuoteApprovalCard({ record, machine, onUpdated }) {
     await base44.entities.ServiceRecord.update(record.id, {
       quote_approved: answer,
       quote_note: note,
+      status: answer === "approved" ? "in_progress" : "pending",
     });
     setDone(true);
     setLoading(false);
