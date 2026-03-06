@@ -220,7 +220,7 @@ export default function CustomerDashboard() {
           Mina ärenden
         </h2>
         <Card className="astomed-card">
-        <CardHeader className="pb-3">
+          <CardHeader className="pb-3">
           <CardTitle className="text-base font-semibold astomed-title flex items-center gap-2">
             <Wrench className="w-4 h-4" />
             Senaste serviceärenden
