@@ -213,8 +213,13 @@ export default function CustomerDashboard() {
         </Link>
       </div>
 
-      {/* Recent service records */}
-      <Card className="astomed-card">
+      {/* Service records section */}
+      <div>
+        <h2 className="text-sm font-semibold astomed-label mb-4 flex items-center gap-2">
+          <Wrench className="w-4 h-4" />
+          Mina ärenden
+        </h2>
+        <Card className="astomed-card">
         <CardHeader className="pb-3">
           <CardTitle className="text-base font-semibold astomed-title flex items-center gap-2">
             <Wrench className="w-4 h-4" />
