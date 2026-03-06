@@ -236,6 +236,7 @@ export default function ServiceRecords() {
           record={viewing}
           machine={getMachine(viewing.machine_id)}
           customer={getCustomer(viewing.customer_id)}
+          userRole={user?.role}
           onClose={() => setViewing(null)}
           onEdit={() => { setEditing(viewing); setViewing(null); setShowForm(true); }}
           onUpdated={load}
