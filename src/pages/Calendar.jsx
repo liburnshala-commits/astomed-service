@@ -65,7 +65,7 @@ export default function Calendar() {
     }
   });
 
-  const pendingRecords = records.filter(r => r.status === "pending" && !r.service_date);
+  const pendingRecords = records.filter(r => r.status === "pending");
   const myRecords = user?.full_name
     ? records.filter(r => r.technician_name === user.full_name && r.service_date)
     : records.filter(r => r.service_date);
