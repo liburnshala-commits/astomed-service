@@ -195,6 +195,53 @@ export default function ServiceRecordDetail({ record, machine, customer, onClose
               </div>
             )}
 
+            {/* Quote approval for customers */}
+            {userRole === "customer" && record.quote_sent && record.quote_approved === "pending" && !quoteDone && (
+              <div className="border-2 rounded-xl p-4 space-y-3" style={{ borderColor: "#f59e0b", background: "#fffbeb" }}>
+                <div className="flex items-center gap-2">
+                  <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: "#fef3c7" }}>
+                    <Wrench className="w-3.5 h-3.5" style={{ color: "#d97706" }} />
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold" style={{ color: "#92400e" }}>Kostnadsförslag – godkännande krävs</p>
+                    <p className="text-xs" style={{ color: "#b45309" }}>Totalt: <span className="font-bold">{record.total_cost?.toLocaleString("sv-SE")} kr</span></p>
+                  </div>
+                </div>
+                <Textarea
+                  value={quoteNote}
+                  onChange={e => setQuoteNote(e.target.value)}
+                  placeholder="Valfritt meddelande till teknikern..."
+                  rows={2}
+                  className="text-sm"
+                />
+                <div className="flex gap-2">
+                  <Button
+                    size="sm"
+                    className="flex-1 bg-green-600 hover:bg-green-700 text-white"
+                    onClick={() => handleQuoteRespond("approved")}
+                    disabled={quoteLoading}
+                  >
+                    <CheckCircle className="w-3.5 h-3.5 mr-1" /> Godkänn
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="flex-1 border-red-300 text-red-600 hover:bg-red-50"
+                    onClick={() => handleQuoteRespond("rejected")}
+                    disabled={quoteLoading}
+                  >
+                    <XCircle className="w-3.5 h-3.5 mr-1" /> Avvisa
+                  </Button>
+                </div>
+              </div>
+            )}
+            {userRole === "customer" && quoteDone && (
+              <div className="rounded-xl p-4 flex items-center gap-2 bg-green-50 border border-green-200">
+                <CheckCircle className="w-4 h-4 text-green-600" />
+                <p className="text-sm text-green-800 font-medium">Ditt svar har skickats.</p>
+              </div>
+            )}
+
             {/* Next service */}
             {record.next_service_date && (
               <div className="flex items-center gap-2 text-sm bg-blue-50 text-blue-700 rounded-lg px-3 py-2.5 border border-blue-200">
