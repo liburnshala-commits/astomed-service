@@ -185,7 +185,7 @@ export default function CustomerDashboard() {
                 <Wrench className="w-5 h-5" style={{ color: "#d4a017" }} />
               </div>
               <p className="text-3xl font-bold astomed-title">{pending}</p>
-              <p className="text-xs astomed-muted mt-1 font-medium uppercase tracking-wide">Väntande ärenden</p>
+              <p className="text-xs astomed-muted mt-1 font-medium uppercase tracking-wide">Väntande</p>
             </CardContent>
           </Card>
         </Link>
