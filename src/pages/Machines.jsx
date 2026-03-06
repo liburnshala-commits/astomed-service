@@ -31,12 +31,30 @@ export default function Machines() {
   const urlParams = new URLSearchParams(window.location.search);
   const preselectedCustomer = urlParams.get("customer");
 
-  const load = () => {
-    Promise.all([
-      base44.entities.Machine.list("-created_date"),
-      base44.entities.Customer.list(),
-      base44.entities.ServiceRecord.list("-service_date")
-    ]).then(([m, c, r]) => { setMachines(m); setCustomers(c); setRecords(r); });
+  const load = async () => {
+    const currentUser = await base44.auth.me();
+    if (currentUser?.role === "customer") {
+      const ownCustomers = await base44.entities.Customer.filter({ email: currentUser.email });
+      const cust = ownCustomers[0];
+      setCustomers(cust ? [cust] : []);
+      if (cust) {
+        const [m, r] = await Promise.all([
+          base44.entities.Machine.filter({ customer_id: cust.id }, "-created_date"),
+          base44.entities.ServiceRecord.filter({ customer_id: cust.id }, "-service_date")
+        ]);
+        setMachines(m);
+        setRecords(r);
+      }
+    } else {
+      const [m, c, r] = await Promise.all([
+        base44.entities.Machine.list("-created_date"),
+        base44.entities.Customer.list(),
+        base44.entities.ServiceRecord.list("-service_date")
+      ]);
+      setMachines(m);
+      setCustomers(c);
+      setRecords(r);
+    }
   };
 
   useEffect(() => {
