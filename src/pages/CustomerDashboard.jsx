@@ -113,6 +113,28 @@ export default function CustomerDashboard() {
         </Card>
       )}
 
+      {/* Quote approval cards */}
+      {awaitingQuoteApproval.length > 0 && (
+        <div className="space-y-3">
+          <div className="flex items-center gap-2">
+            <AlertTriangle className="w-4 h-4" style={{ color: "#d97706" }} />
+            <h2 className="text-sm font-semibold astomed-label">Kräver ditt godkännande</h2>
+            <span className="text-xs px-2 py-0.5 rounded-full font-bold text-white" style={{ background: "#d97706" }}>{awaitingQuoteApproval.length}</span>
+          </div>
+          {awaitingQuoteApproval.map(r => (
+            <QuoteApprovalCard
+              key={r.id}
+              record={r}
+              machine={machines.find(m => m.id === r.machine_id)}
+              onUpdated={async () => {
+                const updated = await base44.entities.ServiceRecord.filter({ customer_id: customer.id }, "-service_date", 50);
+                setRecords(updated);
+              }}
+            />
+          ))}
+        </div>
+      )}
+
       {/* Stats */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         <Link to={createPageUrl("Machines")} className="block">
