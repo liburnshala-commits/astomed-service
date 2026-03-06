@@ -249,6 +249,7 @@ export default function CustomerDashboard() {
           )}
         </CardContent>
       </Card>
+      </div>
     </div>
   );
 }
