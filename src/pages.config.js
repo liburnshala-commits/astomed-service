@@ -51,16 +51,16 @@ import AuditLog from './pages/AuditLog';
 import Calendar from './pages/Calendar';
 import CustomerDashboard from './pages/CustomerDashboard';
 import CustomerPortal from './pages/CustomerPortal';
+import Customers from './pages/Customers';
+import Dashboard from './pages/Dashboard';
 import Machines from './pages/Machines';
 import PublicServiceLeads from './pages/PublicServiceLeads';
 import PublicServiceRequest from './pages/PublicServiceRequest';
 import ReminderSettings from './pages/ReminderSettings';
 import Reports from './pages/Reports';
+import ServiceRecords from './pages/ServiceRecords';
 import TechnicianMobile from './pages/TechnicianMobile';
 import Users from './pages/Users';
-import Dashboard from './pages/Dashboard';
-import ServiceRecords from './pages/ServiceRecords';
-import Customers from './pages/Customers';
 import __Layout from './Layout.jsx';
 
 
@@ -69,16 +69,16 @@ export const PAGES = {
     "Calendar": Calendar,
     "CustomerDashboard": CustomerDashboard,
     "CustomerPortal": CustomerPortal,
+    "Customers": Customers,
+    "Dashboard": Dashboard,
     "Machines": Machines,
     "PublicServiceLeads": PublicServiceLeads,
     "PublicServiceRequest": PublicServiceRequest,
     "ReminderSettings": ReminderSettings,
     "Reports": Reports,
+    "ServiceRecords": ServiceRecords,
     "TechnicianMobile": TechnicianMobile,
     "Users": Users,
-    "Dashboard": Dashboard,
-    "ServiceRecords": ServiceRecords,
-    "Customers": Customers,
 }
 
 export const pagesConfig = {
