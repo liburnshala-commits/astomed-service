@@ -89,7 +89,7 @@ export default function Layout({ children, currentPageName }) {
     }).catch(() => {}).finally(() => setUserLoaded(true));
   }, []);
 
-  if (currentPageName === "CustomerPortal") {
+  if (currentPageName === "CustomerPortal" || currentPageName === "PublicServiceRequest") {
     return <>{children}</>;
   }
 
