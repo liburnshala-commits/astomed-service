@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
 import { sv } from "date-fns/locale";
-import MobileTechnicianCard from "@/components/service/MobileTechnicianCard.jsx";
+import MobileTechnicianCard from "../components/service/MobileTechnicianCard.jsx";
 
 const statusColor = {
   pending: "bg-yellow-100 text-yellow-800 border-yellow-200",
