@@ -27,7 +27,8 @@ export default function ReminderSettings() {
             days_before: 3,
             reminder_time: "09:00",
             include_pending_quotes: true,
-            send_email: true
+            send_email: true,
+            send_inapp: true
           });
           setSettings(newSettings);
         } else {
