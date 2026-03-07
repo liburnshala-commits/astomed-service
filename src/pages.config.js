@@ -60,6 +60,7 @@ import ReminderSettings from './pages/ReminderSettings';
 import Reports from './pages/Reports';
 import ServiceRecords from './pages/ServiceRecords';
 import Users from './pages/Users';
+import TechnicianMobile from './pages/TechnicianMobile';
 import __Layout from './Layout.jsx';
 
 
@@ -77,6 +78,7 @@ export const PAGES = {
     "Reports": Reports,
     "ServiceRecords": ServiceRecords,
     "Users": Users,
+    "TechnicianMobile": TechnicianMobile,
 }
 
 export const pagesConfig = {
