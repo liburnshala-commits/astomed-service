@@ -261,7 +261,8 @@ export default function Reports() {
         <AnalyticsDashboard records={records} machines={machines} customers={customers} />
       )}
 
-      {activeTab === "list" && (<>
+      {activeTab === "list" && (
+      <div className="space-y-6">
 
       {/* Filters */}
       <Card>
