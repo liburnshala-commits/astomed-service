@@ -58,14 +58,45 @@ export default function Customers() {
     });
   }, []);
 
-  const filtered = customers.filter(c =>
+  const filtered = useMemo(() => customers.filter(c =>
     c.company_name?.toLowerCase().includes(search.toLowerCase()) ||
     c.org_number?.includes(search) ||
     c.contact_person?.toLowerCase().includes(search.toLowerCase())
-  );
+  ), [customers, search]);
 
-  const getMachineCount = (customerId) => machines.filter(m => m.customer_id === customerId).length;
-  const getContractCount = (customerId) => machines.filter(m => m.customer_id === customerId && m.service_contract && m.service_contract !== "none").length;
+  // Pre-compute machine/record counts per customer — avoids N+1 filter calls in render
+  const machineCountMap = useMemo(() => {
+    const map = {};
+    for (const m of machines) {
+      map[m.customer_id] = (map[m.customer_id] || 0) + 1;
+    }
+    return map;
+  }, [machines]);
+
+  const contractCountMap = useMemo(() => {
+    const map = {};
+    for (const m of machines) {
+      if (m.service_contract && m.service_contract !== "none") {
+        map[m.customer_id] = (map[m.customer_id] || 0) + 1;
+      }
+    }
+    return map;
+  }, [machines]);
+
+  // Pre-compute reports per customer from already-loaded records (eliminates CustomerReportsSummary N+1 API calls)
+  const reportsMap = useMemo(() => {
+    const map = {};
+    for (const r of serviceRecords) {
+      if (r.report_url && (r.status === "completed" || r.status === "invoiced")) {
+        if (!map[r.customer_id]) map[r.customer_id] = [];
+        map[r.customer_id].push(r);
+      }
+    }
+    return map;
+  }, [serviceRecords]);
+
+  const getMachineCount = (customerId) => machineCountMap[customerId] || 0;
+  const getContractCount = (customerId) => contractCountMap[customerId] || 0;
 
   const handleSave = async (data) => {
     if (!data.portal_token) {
