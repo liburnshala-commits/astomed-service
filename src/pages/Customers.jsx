@@ -256,7 +256,20 @@ export default function Customers() {
         <DeleteCustomerDialog
           customer={deletingCustomer}
           machineCount={getMachineCount(deletingCustomer.id)}
-          onDeleted={() => { setDeletingCustomer(null); load(); }}
+          onDeleted={async () => {
+            const currentUser = await base44.auth.me();
+            base44.functions.invoke('logAuditEntry', {
+              action: 'delete',
+              entity_type: 'Customer',
+              entity_id: deletingCustomer.id,
+              entity_label: deletingCustomer.company_name,
+              user_email: currentUser?.email || 'unknown',
+              user_name: currentUser?.full_name || currentUser?.email,
+              details: `Kund raderad (GDPR): ${deletingCustomer.company_name}`
+            });
+            setDeletingCustomer(null);
+            load();
+          }}
           onCancel={() => setDeletingCustomer(null)}
         />
       )}
