@@ -91,7 +91,7 @@ export default function Layout({ children, currentPageName }) {
     }).finally(() => setUserLoaded(true));
   }, []);
 
-  if (currentPageName === "CustomerPortal" || currentPageName === "PublicServiceRequest") {
+  if (currentPageName === "CustomerPortal") {
     return <>{children}</>;
   }
 
