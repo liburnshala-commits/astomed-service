@@ -68,7 +68,6 @@ const navSections = [
     title: "Automering",
     items: [
       { label: "Påminnelseinställningar", page: "ReminderSettings", icon: Clock, roles: ["admin"] },
-      { label: "Notifieringsinställningar", page: "NotificationSettings", icon: Bell, roles: ["admin", "technician", "customer"] },
     ]
   },
 ];

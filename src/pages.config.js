@@ -61,7 +61,6 @@ import Reports from './pages/Reports';
 import ServiceRecords from './pages/ServiceRecords';
 import Users from './pages/Users';
 import TechnicianMobile from './pages/TechnicianMobile';
-import NotificationSettings from './pages/NotificationSettings';
 import __Layout from './Layout.jsx';
 
 
@@ -80,7 +79,6 @@ export const PAGES = {
     "ServiceRecords": ServiceRecords,
     "Users": Users,
     "TechnicianMobile": TechnicianMobile,
-    "NotificationSettings": NotificationSettings,
 }
 
 export const pagesConfig = {

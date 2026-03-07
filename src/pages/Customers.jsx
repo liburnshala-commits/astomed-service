@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { createPageUrl } from "@/utils";
 import { Link } from "react-router-dom";
@@ -15,7 +15,6 @@ import CustomerReportsSummary from "@/components/customers/CustomerReportsSummar
 export default function Customers() {
   const [customers, setCustomers] = useState([]);
   const [machines, setMachines] = useState([]);
-  const [serviceRecords, setServiceRecords] = useState([]);
   const [search, setSearch] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [editing, setEditing] = useState(null);
@@ -25,78 +24,36 @@ export default function Customers() {
   const [deletingCustomer, setDeletingCustomer] = useState(null);
   const [userRole, setUserRole] = useState(null);
 
-  const load = async (currentUser) => {
-    const u = currentUser || await base44.auth.me();
-    if (!currentUser) setUserRole(u?.role || null);
-    if (u?.role === "customer") {
-      const ownCustomers = await base44.entities.Customer.filter({ email: u.email });
+  const load = async () => {
+    const currentUser = await base44.auth.me();
+    if (currentUser?.role === "customer") {
+      // Customers should not access this page at all
+      const ownCustomers = await base44.entities.Customer.filter({ email: currentUser.email });
       setCustomers(ownCustomers);
       if (ownCustomers[0]) {
-        const [m, r] = await Promise.all([
-          base44.entities.Machine.filter({ customer_id: ownCustomers[0].id }),
-          base44.entities.ServiceRecord.filter({ customer_id: ownCustomers[0].id }, "-service_date", 200)
-        ]);
+        const m = await base44.entities.Machine.filter({ customer_id: ownCustomers[0].id });
         setMachines(m);
-        setServiceRecords(r);
       }
     } else {
-      const [c, m, r] = await Promise.all([
+      const [c, m] = await Promise.all([
         base44.entities.Customer.list("-created_date"),
-        base44.entities.Machine.list(),
-        base44.entities.ServiceRecord.list("-service_date", 500)
+        base44.entities.Machine.list()
       ]);
       setCustomers(c);
       setMachines(m);
-      setServiceRecords(r);
     }
   };
 
-  useEffect(() => {
-    base44.auth.me().then(u => {
-      setUserRole(u?.role || null);
-      load(u);
-    });
-  }, []);
+  useEffect(() => { load(); }, []);
 
-  const filtered = useMemo(() => customers.filter(c =>
+  const filtered = customers.filter(c =>
     c.company_name?.toLowerCase().includes(search.toLowerCase()) ||
     c.org_number?.includes(search) ||
     c.contact_person?.toLowerCase().includes(search.toLowerCase())
-  ), [customers, search]);
+  );
 
-  // Pre-compute machine/record counts per customer — avoids N+1 filter calls in render
-  const machineCountMap = useMemo(() => {
-    const map = {};
-    for (const m of machines) {
-      map[m.customer_id] = (map[m.customer_id] || 0) + 1;
-    }
-    return map;
-  }, [machines]);
-
-  const contractCountMap = useMemo(() => {
-    const map = {};
-    for (const m of machines) {
-      if (m.service_contract && m.service_contract !== "none") {
-        map[m.customer_id] = (map[m.customer_id] || 0) + 1;
-      }
-    }
-    return map;
-  }, [machines]);
-
-  // Pre-compute reports per customer from already-loaded records (eliminates CustomerReportsSummary N+1 API calls)
-  const reportsMap = useMemo(() => {
-    const map = {};
-    for (const r of serviceRecords) {
-      if (r.report_url && (r.status === "completed" || r.status === "invoiced")) {
-        if (!map[r.customer_id]) map[r.customer_id] = [];
-        map[r.customer_id].push(r);
-      }
-    }
-    return map;
-  }, [serviceRecords]);
-
-  const getMachineCount = (customerId) => machineCountMap[customerId] || 0;
-  const getContractCount = (customerId) => contractCountMap[customerId] || 0;
+  const getMachineCount = (customerId) => machines.filter(m => m.customer_id === customerId).length;
+  const getContractCount = (customerId) => machines.filter(m => m.customer_id === customerId && m.service_contract && m.service_contract !== "none").length;
 
   const handleSave = async (data) => {
     if (!data.portal_token) {
