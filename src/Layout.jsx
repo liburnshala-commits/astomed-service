@@ -78,7 +78,6 @@ export default function Layout({ children, currentPageName }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [showUserInfo, setShowUserInfo] = useState(false);
   const [showPrivacyModal, setShowPrivacyModal] = useState(false);
-  const location = useLocation();
   const navigate = useNavigate();
 
   useEffect(() => {
