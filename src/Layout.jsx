@@ -81,10 +81,6 @@ export default function Layout({ children, currentPageName }) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (currentPageName === "PublicServiceRequest") {
-      setUserLoaded(true);
-      return;
-    }
     base44.auth.me().then(u => {
       setUser(u);
       if (u && !u.privacy_policy_accepted) {
@@ -93,7 +89,7 @@ export default function Layout({ children, currentPageName }) {
     }).catch(() => {
       base44.auth.redirectToLogin(window.location.href);
     }).finally(() => setUserLoaded(true));
-  }, [currentPageName]);
+  }, []);
 
   if (currentPageName === "CustomerPortal" || currentPageName === "PublicServiceRequest") {
     return <>{children}</>;
