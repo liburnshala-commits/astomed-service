@@ -34,8 +34,18 @@ export default function ServiceRecords() {
   const preselectedMachine = urlParams.get("machine");
 
   const [search, setSearch] = useState("");
-  const [filterStatus, setFilterStatus] = useState(urlParams.get("status") || "all");
-  const [filterType, setFilterType] = useState("all");
+  const [filters, setFilters] = useState({
+    status: urlParams.get("status") || "all",
+    type: "all",
+    customer: "all",
+    machine: "all",
+    technician: "all",
+    dateFrom: "",
+    dateTo: "",
+    minCost: "",
+    maxCost: "",
+    sortBy: "date_desc",
+  });
   const [showForm, setShowForm] = useState(false);
   const [editing, setEditing] = useState(null);
   const [viewing, setViewing] = useState(null);
