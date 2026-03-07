@@ -70,6 +70,19 @@ export default function ConvertLeadModal({ lead, onClose, onConverted }) {
         assigned_technician: technician || null
       });
 
+      // 5. Logga händelsen
+      const currentUser = await base44.auth.me();
+      const logUser = {
+        user_email: currentUser?.email || 'unknown',
+        user_name: currentUser?.full_name || currentUser?.email
+      };
+      await Promise.all([
+        base44.functions.invoke('logAuditEntry', { action: 'create', entity_type: 'Customer', entity_id: customer.id, entity_label: customer.company_name, ...logUser, details: `Kund skapad från serviceförfrågan` }),
+        base44.functions.invoke('logAuditEntry', { action: 'create', entity_type: 'Machine', entity_id: machine.id, entity_label: `${machine.model} – SN: ${machine.serial_number}`, ...logUser, details: `Maskin skapad från serviceförfrågan` }),
+        base44.functions.invoke('logAuditEntry', { action: 'create', entity_type: 'ServiceRecord', entity_id: serviceRecord.id, entity_label: `${machine.model} – ${customer.company_name}`, ...logUser, details: `Serviceärende skapad från lead` }),
+        base44.functions.invoke('logAuditEntry', { action: 'update', entity_type: 'PublicServiceLead', entity_id: lead.id, entity_label: lead.company_name, ...logUser, details: `Lead konverterad till kund` }),
+      ]);
+
       setDone(true);
       setTimeout(() => onConverted(), 2000);
     } finally {
