@@ -199,30 +199,23 @@ export default function ServiceRecords() {
         )}
       </div>
 
-      <div className="flex flex-col sm:flex-row gap-3">
-        <div className="relative flex-1">
+      <div className="space-y-3">
+        <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-          <Input placeholder="Sök maskin, kund, tekniker..." className="pl-9" value={search} onChange={e => setSearch(e.target.value)} />
+          <Input
+            placeholder="Sök maskin, serienummer, kund, kontakt, e-post, tekniker, beskrivning..."
+            className="pl-9"
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+          />
         </div>
-        <Select value={filterStatus} onValueChange={setFilterStatus}>
-          <SelectTrigger className="w-full sm:w-40"><SelectValue placeholder="Status" /></SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">Alla statuser</SelectItem>
-            <SelectItem value="pending">Väntar</SelectItem>
-            <SelectItem value="awaiting_approval">Inväntar godkännande</SelectItem>
-            <SelectItem value="in_progress">Pågående</SelectItem>
-            <SelectItem value="completed">Slutförd</SelectItem>
-            <SelectItem value="invoiced">Fakturerad</SelectItem>
-          </SelectContent>
-        </Select>
-        <Select value={filterType} onValueChange={setFilterType}>
-          <SelectTrigger className="w-full sm:w-40"><SelectValue placeholder="Typ" /></SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">Alla typer</SelectItem>
-            <SelectItem value="standard">Standard</SelectItem>
-            <SelectItem value="advanced">Avancerad</SelectItem>
-          </SelectContent>
-        </Select>
+        <AdvancedFilters
+          filters={filters}
+          onChange={setFilters}
+          customers={customers}
+          machines={machines}
+          technicians={technicians}
+        />
       </div>
 
       <div className="space-y-3">
