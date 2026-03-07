@@ -76,10 +76,30 @@ export default function Machines() {
   });
 
   const handleSave = async (data) => {
+    const currentUser = await base44.auth.me();
+    const customer = customers.find(c => c.id === data.customer_id);
     if (editing) {
       await base44.entities.Machine.update(editing.id, data);
+      base44.functions.invoke('logAuditEntry', {
+        action: 'update',
+        entity_type: 'Machine',
+        entity_id: editing.id,
+        entity_label: `${data.model} – SN: ${data.serial_number}`,
+        user_email: currentUser?.email || 'unknown',
+        user_name: currentUser?.full_name || currentUser?.email,
+        details: `Maskin uppdaterad${customer ? ` (${customer.company_name})` : ''}`
+      });
     } else {
-      await base44.entities.Machine.create(data);
+      const created = await base44.entities.Machine.create(data);
+      base44.functions.invoke('logAuditEntry', {
+        action: 'create',
+        entity_type: 'Machine',
+        entity_id: created.id,
+        entity_label: `${data.model} – SN: ${data.serial_number}`,
+        user_email: currentUser?.email || 'unknown',
+        user_name: currentUser?.full_name || currentUser?.email,
+        details: `Ny maskin registrerad${customer ? ` för ${customer.company_name}` : ''}`
+      });
     }
     setShowForm(false);
     setEditing(null);
