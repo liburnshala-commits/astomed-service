@@ -24,27 +24,38 @@ export default function Customers() {
   const [deletingCustomer, setDeletingCustomer] = useState(null);
   const [userRole, setUserRole] = useState(null);
 
-  const load = async () => {
-    const currentUser = await base44.auth.me();
-    if (currentUser?.role === "customer") {
-      // Customers should not access this page at all
-      const ownCustomers = await base44.entities.Customer.filter({ email: currentUser.email });
+  const load = async (currentUser) => {
+    const u = currentUser || await base44.auth.me();
+    if (!currentUser) setUserRole(u?.role || null);
+    if (u?.role === "customer") {
+      const ownCustomers = await base44.entities.Customer.filter({ email: u.email });
       setCustomers(ownCustomers);
       if (ownCustomers[0]) {
-        const m = await base44.entities.Machine.filter({ customer_id: ownCustomers[0].id });
+        const [m, r] = await Promise.all([
+          base44.entities.Machine.filter({ customer_id: ownCustomers[0].id }),
+          base44.entities.ServiceRecord.filter({ customer_id: ownCustomers[0].id }, "-service_date", 200)
+        ]);
         setMachines(m);
+        setServiceRecords(r);
       }
     } else {
-      const [c, m] = await Promise.all([
+      const [c, m, r] = await Promise.all([
         base44.entities.Customer.list("-created_date"),
-        base44.entities.Machine.list()
+        base44.entities.Machine.list(),
+        base44.entities.ServiceRecord.list("-service_date", 500)
       ]);
       setCustomers(c);
       setMachines(m);
+      setServiceRecords(r);
     }
   };
 
-  useEffect(() => { load(); }, []);
+  useEffect(() => {
+    base44.auth.me().then(u => {
+      setUserRole(u?.role || null);
+      load(u);
+    });
+  }, []);
 
   const filtered = customers.filter(c =>
     c.company_name?.toLowerCase().includes(search.toLowerCase()) ||
