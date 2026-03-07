@@ -86,19 +86,21 @@ Deno.serve(async (req) => {
         message = `Din offert för ${machine.model} väntar på ditt godkännande. Vänligen granska och svara på offerten.`;
       }
 
-      // Create notification in system
-      await base44.asServiceRole.entities.Notification.create({
-        user_email: customer.email,
-        title,
-        message,
-        type: 'info',
-        related_entity: 'ServiceRecord',
-        related_entity_id: reminder.record_id,
-        is_read: false
-      });
+      // Create in-app notification if enabled
+      if (sendInapp) {
+        await base44.asServiceRole.entities.Notification.create({
+          user_email: customer.email,
+          title,
+          message,
+          type: 'info',
+          related_entity: 'ServiceRecord',
+          related_entity_id: reminder.record_id,
+          is_read: false
+        });
+      }
 
       // Send email if enabled
-      if (config.send_email) {
+      if (sendEmail) {
         const emailHtml = `
 <!DOCTYPE html>
 <html>
