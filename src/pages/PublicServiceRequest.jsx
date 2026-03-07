@@ -32,7 +32,12 @@ export default function PublicServiceRequest() {
     e.preventDefault();
     setSubmitting(true);
     try {
-      await base44.functions.invoke("createPublicServiceLead", form);
+      const res = await fetch(`https://api.base44.com/api/apps/${import.meta.env.VITE_APP_ID}/functions/createPublicServiceLead`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form)
+      });
+      if (!res.ok) throw new Error("Fel vid skickning");
       setSuccess(true);
     } finally {
       setSubmitting(false);
