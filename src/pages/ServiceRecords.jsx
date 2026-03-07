@@ -101,14 +101,43 @@ export default function ServiceRecords() {
     e.stopPropagation();
     if (!window.confirm(`Radera serviceärendet för ${getMachine(record.machine_id)?.model || "maskinen"}? Detta kan inte ångras.`)) return;
     await base44.entities.ServiceRecord.delete(record.id);
+    const currentUser = await base44.auth.me();
+    base44.functions.invoke('logAuditEntry', {
+      action: 'delete',
+      entity_type: 'ServiceRecord',
+      entity_id: record.id,
+      entity_label: `${getMachine(record.machine_id)?.model || 'Okänd maskin'} – ${getCustomer(record.customer_id)?.company_name || ''}`,
+      user_email: currentUser?.email || 'unknown',
+      user_name: currentUser?.full_name || currentUser?.email,
+      details: `Serviceärende raderat`
+    });
     load();
   };
 
   const handleSave = async (data) => {
+    const currentUser = await base44.auth.me();
     if (editing) {
       await base44.entities.ServiceRecord.update(editing.id, data);
+      base44.functions.invoke('logAuditEntry', {
+        action: 'update',
+        entity_type: 'ServiceRecord',
+        entity_id: editing.id,
+        entity_label: `${getMachine(editing.machine_id)?.model || 'Okänd maskin'} – ${getCustomer(editing.customer_id)?.company_name || ''}`,
+        user_email: currentUser?.email || 'unknown',
+        user_name: currentUser?.full_name || currentUser?.email,
+        details: `Serviceärende uppdaterat, status: ${data.status}`
+      });
     } else {
-      await base44.entities.ServiceRecord.create(data);
+      const created = await base44.entities.ServiceRecord.create(data);
+      base44.functions.invoke('logAuditEntry', {
+        action: 'create',
+        entity_type: 'ServiceRecord',
+        entity_id: created.id,
+        entity_label: `${getMachine(data.machine_id)?.model || 'Okänd maskin'} – ${getCustomer(data.customer_id)?.company_name || ''}`,
+        user_email: currentUser?.email || 'unknown',
+        user_name: currentUser?.full_name || currentUser?.email,
+        details: `Nytt serviceärende skapat, typ: ${data.service_type}`
+      });
     }
     setShowForm(false);
     setEditing(null);
