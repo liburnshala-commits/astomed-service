@@ -429,6 +429,8 @@ export default function Reports() {
         )}
       </div>
 
+      </>)}
+
       {/* Single service record modal */}
       {selectedRecord && (
         <ServiceReportModal
