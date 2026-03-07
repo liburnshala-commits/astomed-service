@@ -89,22 +89,43 @@ export default function ServiceRecords() {
   const getMachine = (id) => machines.find(m => m.id === id);
   const getCustomer = (id) => customers.find(c => c.id === id);
 
+  const technicians = [...new Set(records.map(r => r.technician_name).filter(Boolean))].sort();
+
   const filtered = records.filter(r => {
-    // Customers only see their own records
-    if (user?.role === "customer" && userCustomer && r.customer_id !== userCustomer.id) {
-      return false;
-    }
-    
+    if (user?.role === "customer" && userCustomer && r.customer_id !== userCustomer.id) return false;
+
     const machine = getMachine(r.machine_id);
     const customer = getCustomer(r.customer_id);
-    const matchSearch = machine?.model?.toLowerCase().includes(search.toLowerCase()) ||
-      machine?.serial_number?.toLowerCase().includes(search.toLowerCase()) ||
-      customer?.company_name?.toLowerCase().includes(search.toLowerCase()) ||
-      r.technician_name?.toLowerCase().includes(search.toLowerCase());
-    const matchStatus = filterStatus === "all" || r.status === filterStatus;
-    const matchType = filterType === "all" || r.service_type === filterType;
-    const matchMachine = !preselectedMachine || r.machine_id === preselectedMachine;
-    return matchSearch && matchStatus && matchType && matchMachine;
+    const q = search.toLowerCase();
+
+    if (q && !(
+      machine?.model?.toLowerCase().includes(q) ||
+      machine?.serial_number?.toLowerCase().includes(q) ||
+      customer?.company_name?.toLowerCase().includes(q) ||
+      customer?.contact_person?.toLowerCase().includes(q) ||
+      customer?.email?.toLowerCase().includes(q) ||
+      customer?.phone?.toLowerCase().includes(q) ||
+      r.technician_name?.toLowerCase().includes(q) ||
+      r.description?.toLowerCase().includes(q)
+    )) return false;
+
+    if (filters.status !== "all" && r.status !== filters.status) return false;
+    if (filters.type !== "all" && r.service_type !== filters.type) return false;
+    if (filters.customer !== "all" && r.customer_id !== filters.customer) return false;
+    if (filters.machine !== "all" && r.machine_id !== filters.machine) return false;
+    if (filters.technician !== "all" && r.technician_name !== filters.technician) return false;
+    if (filters.dateFrom && r.service_date && r.service_date < filters.dateFrom) return false;
+    if (filters.dateTo && r.service_date && r.service_date > filters.dateTo) return false;
+    if (filters.minCost !== "" && (r.total_cost || 0) < parseFloat(filters.minCost)) return false;
+    if (filters.maxCost !== "" && (r.total_cost || 0) > parseFloat(filters.maxCost)) return false;
+    if (preselectedMachine && r.machine_id !== preselectedMachine) return false;
+
+    return true;
+  }).sort((a, b) => {
+    if (filters.sortBy === "date_asc") return (a.service_date || "").localeCompare(b.service_date || "");
+    if (filters.sortBy === "cost_desc") return (b.total_cost || 0) - (a.total_cost || 0);
+    if (filters.sortBy === "cost_asc") return (a.total_cost || 0) - (b.total_cost || 0);
+    return (b.service_date || "").localeCompare(a.service_date || ""); // date_desc default
   });
 
   const handleDelete = async (record, e) => {
