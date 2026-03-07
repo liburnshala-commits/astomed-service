@@ -207,9 +207,10 @@ export default function Reports() {
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-slate-900">Rapporter</h1>
-          <p className="text-slate-500 text-sm">Filtrera och generera sammanställningar av serviceärenden</p>
+          <p className="text-slate-500 text-sm">Filtrera, analysera och exportera servicedata</p>
         </div>
         <div className="flex gap-2 flex-wrap">
+          {activeTab === "list" && (<>
           <Button
             variant="outline"
             onClick={handleExportCSV}
