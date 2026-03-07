@@ -15,6 +15,7 @@ import CustomerReportsSummary from "@/components/customers/CustomerReportsSummar
 export default function Customers() {
   const [customers, setCustomers] = useState([]);
   const [machines, setMachines] = useState([]);
+  const [serviceRecords, setServiceRecords] = useState([]);
   const [search, setSearch] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [editing, setEditing] = useState(null);
