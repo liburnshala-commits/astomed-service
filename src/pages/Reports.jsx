@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
-import { FileText, Search, Eye, Mail, Filter, CalendarDays, Download } from "lucide-react";
+import { FileText, Search, Eye, Mail, Filter, CalendarDays, Download, BarChart2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
@@ -10,6 +10,7 @@ import { format } from "date-fns";
 import { sv } from "date-fns/locale";
 import ServiceReportModal from "@/components/service/ServiceReportModal.jsx";
 import SummaryReportModal from "@/components/reports/SummaryReportModal.jsx";
+import AnalyticsDashboard from "@/components/reports/AnalyticsDashboard.jsx";
 import { toast } from "sonner";
 
 const statusColor = {
