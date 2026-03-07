@@ -235,8 +235,33 @@ export default function Reports() {
             <Mail className="w-4 h-4 mr-1" />
             {sendingEmail ? "Skickar..." : "Skicka till kund"}
           </Button>
+          </>)}
         </div>
       </div>
+
+      {/* Tabs */}
+      <div className="flex gap-1 border-b border-slate-200">
+        <button
+          onClick={() => setActiveTab("list")}
+          className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${activeTab === "list" ? "border-teal-600 text-teal-700" : "border-transparent text-slate-500 hover:text-slate-700"}`}
+        >
+          <FileText className="w-4 h-4 inline mr-1.5 -mt-0.5" />
+          Serviceärenden
+        </button>
+        <button
+          onClick={() => setActiveTab("analytics")}
+          className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${activeTab === "analytics" ? "border-teal-600 text-teal-700" : "border-transparent text-slate-500 hover:text-slate-700"}`}
+        >
+          <BarChart2 className="w-4 h-4 inline mr-1.5 -mt-0.5" />
+          Analyser
+        </button>
+      </div>
+
+      {activeTab === "analytics" && (
+        <AnalyticsDashboard records={records} machines={machines} customers={customers} />
+      )}
+
+      {activeTab === "list" && (<>
 
       {/* Filters */}
       <Card>
