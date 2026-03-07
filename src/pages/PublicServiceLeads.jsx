@@ -7,8 +7,8 @@ import {
   UserPlus, Wrench, Archive, Eye, Search, RefreshCw,
   Building2, Phone, Mail, Cpu, ClipboardList
 } from "lucide-react";
-import LeadDetailModal from "@/components/leads/LeadDetailModal";
-import ConvertLeadModal from "@/components/leads/ConvertLeadModal";
+import LeadDetailModal from "@/components/leads/LeadDetailModal.jsx";
+import ConvertLeadModal from "@/components/leads/ConvertLeadModal.jsx";
 
 const statusConfig = {
   new: { label: "Ny", color: "bg-blue-100 text-blue-800" },
