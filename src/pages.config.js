@@ -59,6 +59,7 @@ import Reports from './pages/Reports';
 import ServiceRecords from './pages/ServiceRecords';
 import Users from './pages/Users';
 import PublicServiceLeads from './pages/PublicServiceLeads';
+import PublicServiceRequest from './pages/PublicServiceRequest';
 import __Layout from './Layout.jsx';
 
 
@@ -75,6 +76,7 @@ export const PAGES = {
     "ServiceRecords": ServiceRecords,
     "Users": Users,
     "PublicServiceLeads": PublicServiceLeads,
+    "PublicServiceRequest": PublicServiceRequest,
 }
 
 export const pagesConfig = {
