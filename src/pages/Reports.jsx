@@ -45,6 +45,7 @@ export default function Reports() {
   const [selectedRecord, setSelectedRecord] = useState(null);
   const [showSummary, setShowSummary] = useState(false);
   const [sendingEmail, setSendingEmail] = useState(false);
+  const [activeTab, setActiveTab] = useState("list");
 
   useEffect(() => {
     base44.auth.me().then(setUser).catch(() => {});
