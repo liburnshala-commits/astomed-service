@@ -1,10 +1,9 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { createPageUrl } from "@/utils";
-import { Plus, Search, Filter, Wrench, Trash2 } from "lucide-react";
+import { Plus, Search, Wrench, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { format } from "date-fns";
@@ -12,6 +11,7 @@ import { sv } from "date-fns/locale";
 import ServiceRecordForm from "@/components/service/ServiceRecordForm.jsx";
 import ServiceRecordDetail from "@/components/service/ServiceRecordDetail.jsx";
 import CustomerServiceRequestForm from "@/components/service/CustomerServiceRequestForm.jsx";
+import AdvancedFilters from "@/components/service/AdvancedFilters.jsx";
 
 const statusColor = {
   pending: "bg-yellow-100 text-yellow-800",
