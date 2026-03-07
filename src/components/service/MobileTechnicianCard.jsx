@@ -271,5 +271,6 @@ export default function MobileTechnicianCard({ record, machine, customer, onStat
         }}
       />
     )}
+    </>
   );
 }
