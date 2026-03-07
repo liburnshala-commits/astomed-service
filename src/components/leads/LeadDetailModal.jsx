@@ -12,7 +12,8 @@ const statusConfig = {
 export default function LeadDetailModal({ lead, onClose }) {
   const sc = statusConfig[lead.status] || statusConfig.new;
 
-  const Row = ({ icon: Icon, label, value }) => {
+  const Row = ({ icon: IconComp, label, value }) => {
+    const Icon = IconComp;
     if (!value) return null;
     return (
       <div className="flex items-start gap-3 py-2 border-b border-gray-50 last:border-0">
