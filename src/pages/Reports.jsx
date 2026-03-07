@@ -430,7 +430,7 @@ export default function Reports() {
         )}
       </div>
 
-      </>)}
+      </div>)}
 
       {/* Single service record modal */}
       {selectedRecord && (
