@@ -10,13 +10,15 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Forbidden: Admin access required' }, { status: 403 });
     }
 
-    // Get reminder settings (use first/default settings for the app)
+    // Get reminder settings
     const settings = await base44.entities.ReminderSettings.list();
     if (settings.length === 0 || !settings[0].enabled) {
       return Response.json({ message: 'Reminders are disabled', sent: 0 });
     }
 
     const config = settings[0];
+    const sendEmail = config.send_email !== false;
+    const sendInapp = config.send_inapp !== false; // default true if not set
     const daysBeforeString = config.days_before || 3;
     const reminderTime = config.reminder_time || '09:00';
 

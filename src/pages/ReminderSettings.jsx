@@ -164,16 +164,31 @@ export default function ReminderSettings() {
                 />
               </div>
 
-              {/* Send Email */}
-              <div className="flex items-center justify-between pt-4 border-t" style={{ borderColor: "#dce8e8" }}>
-                <div>
-                  <Label className="font-semibold astomed-title">Skicka via e-post</Label>
-                  <p className="text-xs astomed-muted mt-1">Skicka e-post för varje påminnelse</p>
+              {/* Notification channels */}
+              <div className="pt-4 border-t space-y-4" style={{ borderColor: "#dce8e8" }}>
+                <Label className="font-semibold astomed-title block">Notifieringskanaler</Label>
+
+                <div className="flex items-center justify-between">
+                  <div>
+                    <Label className="font-medium astomed-title">E-post</Label>
+                    <p className="text-xs astomed-muted mt-0.5">Skicka e-post till kunden</p>
+                  </div>
+                  <Switch
+                    checked={settings.send_email !== false}
+                    onCheckedChange={(checked) => setSettings({ ...settings, send_email: checked })}
+                  />
                 </div>
-                <Switch
-                  checked={settings.send_email}
-                  onCheckedChange={(checked) => setSettings({ ...settings, send_email: checked })}
-                />
+
+                <div className="flex items-center justify-between">
+                  <div>
+                    <Label className="font-medium astomed-title">In-app notis</Label>
+                    <p className="text-xs astomed-muted mt-0.5">Visas i klockikonen för inloggade kunder</p>
+                  </div>
+                  <Switch
+                    checked={settings.send_inapp !== false}
+                    onCheckedChange={(checked) => setSettings({ ...settings, send_inapp: checked })}
+                  />
+                </div>
               </div>
             </>
           )}
