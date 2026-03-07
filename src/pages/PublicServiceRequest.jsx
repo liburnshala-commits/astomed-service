@@ -31,7 +31,7 @@ export default function PublicServiceRequest() {
     e.preventDefault();
     setSubmitting(true);
     try {
-      const res = await fetch(`https://api.base44.com/api/apps/${import.meta.env.VITE_APP_ID}/functions/createPublicServiceLead`, {
+      const res = await fetch(`https://api.base44.com/api/apps/69a9446fcb1cd4ab529479ba/functions/createPublicServiceLead`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form)
