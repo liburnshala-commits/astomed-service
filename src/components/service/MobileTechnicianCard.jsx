@@ -125,21 +125,22 @@ export default function MobileTechnicianCard({ record, machine, customer, onStat
 
         {/* Quick actions always visible */}
         {actions.length > 0 && (
-          <div className="flex gap-2 mt-3" onClick={e => e.stopPropagation()}>
-            {actions.map(action => {
-              const Icon = action.icon;
-              return (
-                <button
-                  key={action.value}
-                  onClick={() => onStatusUpdate(record, action.value)}
-                  className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl text-xs font-semibold transition-all active:scale-95 ${action.color}`}
-                >
-                  <Icon className="w-3.5 h-3.5" />
-                  {action.label}
-                </button>
-              );
-            })}
-          </div>
+        <div className="flex gap-2 mt-3" onClick={e => e.stopPropagation()}>
+          {actions.map(action => {
+            const Icon = action.icon;
+            const isComplete = action.value === "completed";
+            return (
+              <button
+                key={action.value}
+                onClick={() => isComplete ? setShowSignatureModal(true) : onStatusUpdate(record, action.value)}
+                className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl text-xs font-semibold transition-all active:scale-95 ${action.color}`}
+              >
+                <Icon className="w-3.5 h-3.5" />
+                {action.label}
+              </button>
+            );
+          })}
+        </div>
         )}
       </div>
 
