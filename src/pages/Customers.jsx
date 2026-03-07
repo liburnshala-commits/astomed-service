@@ -59,10 +59,29 @@ export default function Customers() {
     if (!data.portal_token) {
       data.portal_token = Math.random().toString(36).substring(2, 18);
     }
+    const currentUser = await base44.auth.me();
     if (editing) {
       await base44.entities.Customer.update(editing.id, data);
+      base44.functions.invoke('logAuditEntry', {
+        action: 'update',
+        entity_type: 'Customer',
+        entity_id: editing.id,
+        entity_label: data.company_name,
+        user_email: currentUser?.email || 'unknown',
+        user_name: currentUser?.full_name || currentUser?.email,
+        details: `Kund uppdaterad: ${data.company_name}`
+      });
     } else {
-      await base44.entities.Customer.create(data);
+      const created = await base44.entities.Customer.create(data);
+      base44.functions.invoke('logAuditEntry', {
+        action: 'create',
+        entity_type: 'Customer',
+        entity_id: created.id,
+        entity_label: data.company_name,
+        user_email: currentUser?.email || 'unknown',
+        user_name: currentUser?.full_name || currentUser?.email,
+        details: `Ny kund skapad: ${data.company_name}`
+      });
     }
     setShowForm(false);
     setEditing(null);
