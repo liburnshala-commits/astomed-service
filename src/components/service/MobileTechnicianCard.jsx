@@ -83,6 +83,7 @@ export default function MobileTechnicianCard({ record, machine, customer, onStat
   const actions = nextStatuses[record.status] || [];
 
   return (
+    <>
     <div className={`bg-white rounded-2xl border shadow-sm overflow-hidden transition-all ${isOfflinePending ? "border-orange-300" : "border-slate-200"}`}>
       {/* Offline indicator */}
       {isOfflinePending && (
