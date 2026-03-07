@@ -258,5 +258,18 @@ export default function MobileTechnicianCard({ record, machine, customer, onStat
         </div>
       )}
     </div>
+
+    {showSignatureModal && (
+      <SignatureModal
+        record={record}
+        machine={machine}
+        customer={customer}
+        onClose={() => setShowSignatureModal(false)}
+        onComplete={() => {
+          setShowSignatureModal(false);
+          onReload?.();
+        }}
+      />
+    )}
   );
 }
