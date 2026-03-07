@@ -1,13 +1,14 @@
 import { useState, useRef } from "react";
 import { base44 } from "@/api/base44Client";
 import {
-  ChevronDown, ChevronUp, Camera, Upload, Check, Clock,
-  Play, Phone, MapPin, Monitor, User, Wrench, AlertCircle, X, FileText
+  ChevronDown, ChevronUp, Camera, Check, Clock,
+  Play, Phone, MapPin, User, Wrench, AlertCircle, X, FileText
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
 import { sv } from "date-fns/locale";
+import SignatureModal from "./SignatureModal";
 
 const statusColor = {
   pending: "bg-yellow-100 text-yellow-800 border-yellow-200",
