@@ -50,6 +50,7 @@
 import AuditLog from './pages/AuditLog';
 import Calendar from './pages/Calendar';
 import CustomerDashboard from './pages/CustomerDashboard';
+import CustomerPortal from './pages/CustomerPortal';
 import Customers from './pages/Customers';
 import Dashboard from './pages/Dashboard';
 import Machines from './pages/Machines';
@@ -57,7 +58,7 @@ import ReminderSettings from './pages/ReminderSettings';
 import Reports from './pages/Reports';
 import ServiceRecords from './pages/ServiceRecords';
 import Users from './pages/Users';
-import CustomerPortal from './pages/CustomerPortal';
+import PublicServiceLeads from './pages/PublicServiceLeads';
 import __Layout from './Layout.jsx';
 
 
@@ -65,6 +66,7 @@ export const PAGES = {
     "AuditLog": AuditLog,
     "Calendar": Calendar,
     "CustomerDashboard": CustomerDashboard,
+    "CustomerPortal": CustomerPortal,
     "Customers": Customers,
     "Dashboard": Dashboard,
     "Machines": Machines,
@@ -72,7 +74,7 @@ export const PAGES = {
     "Reports": Reports,
     "ServiceRecords": ServiceRecords,
     "Users": Users,
-    "CustomerPortal": CustomerPortal,
+    "PublicServiceLeads": PublicServiceLeads,
 }
 
 export const pagesConfig = {
