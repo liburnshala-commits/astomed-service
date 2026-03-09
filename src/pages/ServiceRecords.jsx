@@ -147,6 +147,13 @@ export default function ServiceRecords() {
 
   const handleSave = async (data) => {
     const currentUser = await base44.auth.me();
+    // Auto-update machine status when service is completed or invoiced
+    if (data.machine_id && (data.status === "completed" || data.status === "invoiced")) {
+      const machine = getMachine(data.machine_id);
+      if (machine?.status === "service") {
+        await base44.entities.Machine.update(data.machine_id, { status: "active" });
+      }
+    }
     if (editing) {
       await base44.entities.ServiceRecord.update(editing.id, data);
       base44.functions.invoke('logAuditEntry', {
