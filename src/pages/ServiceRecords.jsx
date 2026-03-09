@@ -120,6 +120,7 @@ export default function ServiceRecords() {
     if (filters.minCost !== "" && (r.total_cost || 0) < parseFloat(filters.minCost)) return false;
     if (filters.maxCost !== "" && (r.total_cost || 0) > parseFloat(filters.maxCost)) return false;
     if (preselectedMachine && r.machine_id !== preselectedMachine) return false;
+    if (preselectedModel && machine?.model !== preselectedModel) return false;
 
     return true;
   }).sort((a, b) => {
