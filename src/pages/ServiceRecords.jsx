@@ -194,7 +194,10 @@ export default function ServiceRecords() {
               Filtrerat: {getMachine(preselectedMachine)?.model} · {getMachine(preselectedMachine)?.serial_number}
             </p>
           )}
-          {!preselectedMachine && <p className="astomed-subtitle text-sm">{records.length} totalt</p>}
+          {preselectedModel && !preselectedMachine && (
+            <p className="text-slate-500 text-sm">Modell: {preselectedModel}</p>
+          )}
+          {!preselectedMachine && !preselectedModel && <p className="astomed-subtitle text-sm">{records.length} totalt</p>}
         </div>
         {user?.role !== "customer" && (
           <Button onClick={() => { setEditing(null); setShowForm(true); }} className="astomed-btn-primary">
