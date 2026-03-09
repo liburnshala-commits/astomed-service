@@ -153,7 +153,15 @@ export default function Machines() {
                   <div className="astomed-icon-box flex-shrink-0" style={{ width: 40, height: 40 }}>
                     <Monitor className="w-5 h-5" style={{ color: "#1b3a3a" }} />
                   </div>
-                  <Badge className={statusColor[machine.status || "active"]}>{statusLabel[machine.status || "active"]}</Badge>
+                  {machine.status === "service" ? (
+                    <Link to={createPageUrl(`ServiceRecords?machine=${machine.id}`)}>
+                      <Badge className={`${statusColor["service"]} cursor-pointer hover:opacity-80 underline-offset-2`}>
+                        {statusLabel["service"]}
+                      </Badge>
+                    </Link>
+                  ) : (
+                    <Badge className={statusColor[machine.status || "active"]}>{statusLabel[machine.status || "active"]}</Badge>
+                  )}
                 </div>
                 <h3 className="font-bold astomed-title mb-0.5">{machine.model}</h3>
                 <p className="text-xs astomed-muted mb-3 font-mono">SN: {machine.serial_number}</p>
