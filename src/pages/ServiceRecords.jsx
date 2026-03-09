@@ -88,6 +88,13 @@ export default function ServiceRecords() {
 
   useEffect(() => { load(); }, []);
 
+  useEffect(() => {
+    if (preselectedId && records.length > 0) {
+      const found = records.find(r => r.id === preselectedId);
+      if (found) setViewing(found);
+    }
+  }, [preselectedId, records]);
+
   const getMachine = (id) => machines.find(m => m.id === id);
   const getCustomer = (id) => customers.find(c => c.id === id);
 
