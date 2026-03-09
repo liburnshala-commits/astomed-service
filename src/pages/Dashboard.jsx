@@ -233,7 +233,7 @@ export default function Dashboard() {
                   ).sort((a,b) => b[1]-a[1]).map(([model, count]) => {
                     const billing = billingByModel[model] || { invoiced: 0, planned: 0 };
                     return (
-                      <Link key={model} to={createPageUrl(`Machines?model=${encodeURIComponent(model)}`)} className="flex items-center gap-3 p-2 rounded-lg transition-colors cursor-pointer" style={{ background: "#f4f9f9" }} onMouseEnter={e => e.currentTarget.style.background="#e8f2f2"} onMouseLeave={e => e.currentTarget.style.background="#f4f9f9"}>
+                      <Link key={model} to={createPageUrl(`ServiceRecords?model=${encodeURIComponent(model)}`)} className="flex items-center gap-3 p-2 rounded-lg transition-colors cursor-pointer" style={{ background: "#f4f9f9" }} onMouseEnter={e => e.currentTarget.style.background="#e8f2f2"} onMouseLeave={e => e.currentTarget.style.background="#f4f9f9"}>
                         <div className="flex-1 min-w-0">
                           <div className="text-sm astomed-label truncate">{model}</div>
                           <div className="flex gap-3 mt-0.5">
