@@ -32,6 +32,7 @@ export default function ServiceRecords() {
   const [userCustomer, setUserCustomer] = useState(null);
   const urlParams = new URLSearchParams(window.location.search);
   const preselectedMachine = urlParams.get("machine");
+  const preselectedModel = urlParams.get("model");
 
   const [search, setSearch] = useState("");
   const [filters, setFilters] = useState({
