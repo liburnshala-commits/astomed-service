@@ -28,6 +28,7 @@ export default function Machines() {
   const [filterCustomer, setFilterCustomer] = useState("all");
   const [showForm, setShowForm] = useState(false);
   const [editing, setEditing] = useState(null);
+  const [contractMachine, setContractMachine] = useState(null);
   const [userRole, setUserRole] = useState(null);
 
   const urlParams = new URLSearchParams(window.location.search);
