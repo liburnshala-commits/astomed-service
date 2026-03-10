@@ -222,6 +222,14 @@ export default function Machines() {
         )}
       </div>
 
+      {contractMachine && (
+        <ServiceContractModal
+          machine={contractMachine}
+          onSave={handleContractSave}
+          onClose={() => setContractMachine(null)}
+        />
+      )}
+
       {showForm && (
         <MachineForm
           machine={editing}
