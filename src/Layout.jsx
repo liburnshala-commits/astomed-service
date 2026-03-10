@@ -22,7 +22,8 @@ import {
   ChevronRight as ChevronRightIcon,
   Users as UsersIcon,
   CalendarDays,
-  ClipboardList
+  ClipboardList,
+  FileCheck
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
