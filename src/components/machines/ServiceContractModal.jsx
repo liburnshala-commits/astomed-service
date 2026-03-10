@@ -89,6 +89,26 @@ export default function ServiceContractModal({ machine, onSave, onClose }) {
             </div>
           )}
 
+          {form.service_contract !== "none" && (
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-1">
+                <Label>Avtalets startdatum</Label>
+                <Input type="date" value={form.contract_start_date} onChange={e => set("contract_start_date", e.target.value)} />
+              </div>
+              <div className="space-y-1">
+                <Label>Bindningstid</Label>
+                <Select value={String(form.contract_binding_months || "")} onValueChange={v => set("contract_binding_months", Number(v))}>
+                  <SelectTrigger><SelectValue placeholder="Välj..." /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="6">6 månader</SelectItem>
+                    <SelectItem value="12">12 månader</SelectItem>
+                    <SelectItem value="24">24 månader</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+          )}
+
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1">
               <Label>Senaste servicedatum</Label>
