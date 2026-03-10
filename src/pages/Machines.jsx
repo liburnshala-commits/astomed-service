@@ -200,6 +200,11 @@ export default function Machines() {
                      </Button>
                    </Link>
                    {userRole !== "customer" && (
+                     <Button size="sm" variant="outline" onClick={() => setContractMachine(machine)} title="Serviceavtal & datum">
+                       <FileCheck className="w-3 h-3" />
+                     </Button>
+                   )}
+                   {userRole !== "customer" && (
                      <Button size="sm" variant="ghost" onClick={() => { setEditing(machine); setShowForm(true); }}>
                        Redigera
                      </Button>
