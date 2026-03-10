@@ -104,6 +104,17 @@ export default function ServiceContracts() {
             ? <Badge className="bg-emerald-100 text-emerald-800 border-0">Aktivt</Badge>
             : <Badge className="bg-slate-100 text-slate-600 border-0">Utgånget</Badge>}
         </td>
+        <td className="py-3 px-4">
+          {status === "active" && (
+            <button
+              onClick={() => setEditingMachine(machine)}
+              className="p-1.5 rounded hover:bg-slate-100 text-slate-400 hover:text-slate-700 transition-colors"
+              title="Redigera avtal"
+            >
+              <Pencil className="w-4 h-4" />
+            </button>
+          )}
+        </td>
       </tr>
     );
   };
