@@ -196,12 +196,12 @@ export default function Machines() {
                 <div className="flex gap-2">
                    <Link to={createPageUrl(`ServiceRecords?machine=${machine.id}`)} className="flex-1">
                      <Button size="sm" variant="outline" className="w-full">
-                       <Wrench className="w-3 h-3 mr-1" /> Service
+                       <Wrench className="w-3 h-3 mr-1" /> Starta service
                      </Button>
                    </Link>
                    {userRole !== "customer" && (
-                     <Button size="sm" variant="outline" onClick={() => setContractMachine(machine)} title="Serviceavtal & datum">
-                       <FileCheck className="w-3 h-3" />
+                     <Button size="sm" variant="outline" onClick={() => setContractMachine(machine)} title="Aktivera serviceavtal">
+                       <FileCheck className="w-3 h-3 mr-1" /> Aktivera serviceavtal
                      </Button>
                    )}
                    {userRole !== "customer" && (
