@@ -70,6 +70,17 @@ export default function Machines() {
   const getServiceCount = (id) => records.filter(r => r.machine_id === id).length;
   const getLastService = (id) => records.filter(r => r.machine_id === id).sort((a,b) => new Date(b.service_date) - new Date(a.service_date))[0];
 
+  const getContractExpiry = (machine) => {
+    if (!machine.service_contract || machine.service_contract === 'none') return null;
+    if (!machine.contract_start_date || !machine.contract_binding_months) return null;
+    const d = new Date(machine.contract_start_date);
+    d.setMonth(d.getMonth() + Number(machine.contract_binding_months));
+    return d;
+  };
+
+  const contractLabel = { basic: "Basic" };
+  const contractBadgeColor = { basic: "bg-teal-100 text-teal-800" };
+
   const filtered = machines.filter(m => {
     const matchSearch = m.serial_number?.toLowerCase().includes(search.toLowerCase()) || m.model?.toLowerCase().includes(search.toLowerCase());
     const matchModel = filterModel === "all" || m.model === filterModel;
