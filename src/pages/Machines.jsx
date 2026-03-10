@@ -77,6 +77,22 @@ export default function Machines() {
     return matchSearch && matchModel && matchCustomer;
   });
 
+  const handleContractSave = async (data) => {
+    const currentUser = await base44.auth.me();
+    await base44.entities.Machine.update(contractMachine.id, data);
+    base44.functions.invoke('logAuditEntry', {
+      action: 'update',
+      entity_type: 'Machine',
+      entity_id: contractMachine.id,
+      entity_label: `${contractMachine.model} – SN: ${contractMachine.serial_number}`,
+      user_email: currentUser?.email || 'unknown',
+      user_name: currentUser?.full_name || currentUser?.email,
+      details: `Serviceavtal uppdaterat: ${data.service_contract}`
+    });
+    setContractMachine(null);
+    load();
+  };
+
   const handleSave = async (data) => {
     const currentUser = await base44.auth.me();
     const customer = customers.find(c => c.id === data.customer_id);
