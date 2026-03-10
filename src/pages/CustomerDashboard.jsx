@@ -172,7 +172,35 @@ export default function CustomerDashboard() {
                       </div>
                       <div className="flex-1 min-w-0">
                         <h3 className="text-sm font-semibold astomed-title">{machine.model}</h3>
-                        <p className="text-xs astomed-muted">SN: {machine.serial_number}</p>
+                        <p className="text-xs astomed-muted mb-2">SN: {machine.serial_number}</p>
+                        <div className="text-xs space-y-1">
+                          {(() => {
+                            const expiry = getContractExpiry(machine);
+                            if (!expiry) return (
+                              <p className="text-slate-400">Inget serviceavtal</p>
+                            );
+                            const expired = expiry < new Date();
+                            return (
+                              <p>
+                                Avtal: <span className={`font-semibold px-1.5 py-0.5 rounded ${expired ? "bg-red-100 text-red-700" : "bg-teal-100 text-teal-800"}`}>
+                                  {machine.service_contract === 'basic' ? 'Basic' : machine.service_contract}
+                                </span>
+                                {" "}<span className={expired ? "text-red-600 font-medium" : "astomed-muted"}>
+                                  {expired ? "– Utgånget " : "– Giltigt t.o.m. "}{expiry.toLocaleDateString("sv-SE")}
+                                </span>
+                              </p>
+                            );
+                          })()}
+                          {(() => {
+                            const last = getLastService(machine.id);
+                            if (!last) return <p className="text-slate-400">Inga servicetillfällen</p>;
+                            return (
+                              <p className="astomed-muted">
+                                Senaste service: <span className="font-medium">{format(new Date(last.service_date), "d MMM yyyy", { locale: sv })}</span>
+                              </p>
+                            );
+                          })()}
+                        </div>
                       </div>
                     </div>
                   </CardContent>
