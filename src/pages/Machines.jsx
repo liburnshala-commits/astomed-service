@@ -200,9 +200,30 @@ export default function Machines() {
                     {customer.company_name}
                   </div>
                 )}
-                <div className="flex items-center justify-between text-xs astomed-muted mb-4 pt-3 border-t" style={{ borderColor: "#dce8e8" }}>
-                  <span>{serviceCount} servicetillfällen</span>
-                  {lastService && <span>Senast: {lastService.service_date}</span>}
+                <div className="text-xs astomed-muted mb-4 pt-3 border-t space-y-1" style={{ borderColor: "#dce8e8" }}>
+                  <div className="flex items-center justify-between">
+                    <span>{serviceCount} servicetillfällen</span>
+                    {lastService && <span>Senast: {lastService.service_date}</span>}
+                  </div>
+                  {(() => {
+                    const expiry = getContractExpiry(machine);
+                    if (!expiry) return (
+                      <div className="flex items-center justify-between">
+                        <span className="text-slate-400">Inget serviceavtal</span>
+                      </div>
+                    );
+                    const expired = expiry < new Date();
+                    return (
+                      <div className="flex items-center justify-between">
+                        <span>
+                          Avtal: <span className={`font-semibold px-1.5 py-0.5 rounded ${expired ? "bg-red-100 text-red-700" : contractBadgeColor[machine.service_contract]}`}>{contractLabel[machine.service_contract] || machine.service_contract}</span>
+                        </span>
+                        <span className={expired ? "text-red-600 font-medium" : ""}>
+                          {expired ? "Utgånget " : "Giltigt t.o.m. "}{expiry.toLocaleDateString("sv-SE")}
+                        </span>
+                      </div>
+                    );
+                  })()}
                 </div>
                 <div className="flex gap-2">
                    <Link to={createPageUrl(`ServiceRecords?machine=${machine.id}`)} className="flex-1">
