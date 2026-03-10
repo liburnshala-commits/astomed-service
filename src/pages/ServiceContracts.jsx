@@ -189,6 +189,14 @@ export default function ServiceContracts() {
       </div>
 
       {/* Expired contracts table */}
+      {editingMachine && (
+        <ServiceContractModal
+          machine={editingMachine}
+          onSave={handleContractSave}
+          onClose={() => setEditingMachine(null)}
+        />
+      )}
+
       {expired.length > 0 && (
         <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
           <div className="px-5 py-3 border-b bg-slate-50 flex items-center gap-2">
