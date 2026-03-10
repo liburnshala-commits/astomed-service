@@ -177,6 +177,7 @@ export default function ServiceContracts() {
                   <th className="py-2 px-4 text-left font-medium">Bindningstid</th>
                   <th className="py-2 px-4 text-left font-medium">Slutdatum</th>
                   <th className="py-2 px-4 text-left font-medium">Status</th>
+                  <th className="py-2 px-4 text-left font-medium"></th>
                 </tr>
               </thead>
               <tbody>
