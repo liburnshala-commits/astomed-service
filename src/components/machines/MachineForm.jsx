@@ -112,6 +112,7 @@ export default function MachineForm({ machine, customers, preselectedCustomerId,
                 <SelectContent>
                   <SelectItem value="none">Inget Serviceavtal</SelectItem>
                   <SelectItem value="basic">BAS – Astomed 3.0</SelectItem>
+                  {/* standard och premium borttagna */}
                 </SelectContent>
               </Select>
             </div>
