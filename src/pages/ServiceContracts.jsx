@@ -4,7 +4,8 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { addMonths, format, isPast, parseISO } from "date-fns";
 import { sv } from "date-fns/locale";
-import { FileCheck, Search, Building2, Monitor } from "lucide-react";
+import { FileCheck, Search, Building2, Monitor, Pencil } from "lucide-react";
+import ServiceContractModal from "@/components/machines/ServiceContractModal";
 
 const bindingLabel = { 6: "6 mån", 12: "12 mån", 24: "24 mån" };
 
