@@ -46,6 +46,17 @@ export default function CustomerDashboard() {
     load();
   }, []);
 
+  const getLastService = (machineId) =>
+    records.filter(r => r.machine_id === machineId).sort((a, b) => new Date(b.service_date) - new Date(a.service_date))[0];
+
+  const getContractExpiry = (machine) => {
+    if (!machine.service_contract || machine.service_contract === 'none') return null;
+    if (!machine.contract_start_date || !machine.contract_binding_months) return null;
+    const d = new Date(machine.contract_start_date);
+    d.setMonth(d.getMonth() + Number(machine.contract_binding_months));
+    return d;
+  };
+
   const awaitingQuoteApproval = records.filter(r => r.quote_sent && r.quote_approved === "pending");
   const pending = records.filter(r => r.status === "pending").length;
   const inProgress = records.filter(r => r.status === "in_progress").length;
