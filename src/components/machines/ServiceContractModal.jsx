@@ -33,29 +33,6 @@ const SERVICE_CONTRACTS = [
       "Kontakt: 08-410 77 900 | kontakt@astomed.se | www.astomed.se/service"
     ]
   },
-  {
-    value: "standard",
-    label: "Standard",
-    description: "Standardserviceavtal med utökad täckning.",
-    features: [
-      "Inkluderar allt i BAS-avtalet.",
-      "Kortare svarstider vid serviceärenden.",
-      "Rabatterade reservdelar.",
-      "Kontakt: 08-410 77 900 | kontakt@astomed.se"
-    ]
-  },
-  {
-    value: "premium",
-    label: "Premium",
-    description: "Premiumavtal med fullständig täckning.",
-    features: [
-      "Inkluderar allt i Standard-avtalet.",
-      "Prioriterad support dygnet runt.",
-      "Reservdelar ingår i avtalet.",
-      "Dedikerad tekniker.",
-      "Kontakt: 08-410 77 900 | kontakt@astomed.se"
-    ]
-  }
 ];
 
 export default function ServiceContractModal({ machine, onSave, onClose }) {
