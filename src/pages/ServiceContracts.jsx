@@ -39,6 +39,12 @@ export default function ServiceContracts() {
 
   const customerMap = Object.fromEntries(customers.map(c => [c.id, c]));
 
+  const handleContractSave = async (form) => {
+    await base44.entities.Machine.update(editingMachine.id, form);
+    setMachines(prev => prev.map(m => m.id === editingMachine.id ? { ...m, ...form } : m));
+    setEditingMachine(null);
+  };
+
   const contracted = machines
     .filter(m => m.service_contract && m.service_contract !== "none")
     .filter(m => {
