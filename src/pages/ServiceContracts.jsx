@@ -25,6 +25,7 @@ export default function ServiceContracts() {
   const [machines, setMachines] = useState([]);
   const [customers, setCustomers] = useState([]);
   const [search, setSearch] = useState("");
+  const [editingMachine, setEditingMachine] = useState(null);
 
   useEffect(() => {
     Promise.all([
