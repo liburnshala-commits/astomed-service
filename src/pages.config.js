@@ -61,6 +61,7 @@ import Reports from './pages/Reports';
 import ServiceRecords from './pages/ServiceRecords';
 import TechnicianMobile from './pages/TechnicianMobile';
 import Users from './pages/Users';
+import ServiceContracts from './pages/ServiceContracts';
 import __Layout from './Layout.jsx';
 
 
@@ -79,6 +80,7 @@ export const PAGES = {
     "ServiceRecords": ServiceRecords,
     "TechnicianMobile": TechnicianMobile,
     "Users": Users,
+    "ServiceContracts": ServiceContracts,
 }
 
 export const pagesConfig = {

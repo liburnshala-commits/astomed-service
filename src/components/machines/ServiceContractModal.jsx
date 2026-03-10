@@ -38,6 +38,8 @@ const SERVICE_CONTRACTS = [
 export default function ServiceContractModal({ machine, onSave, onClose }) {
   const [form, setForm] = useState({
     service_contract: machine?.service_contract || "none",
+    contract_start_date: machine?.contract_start_date || "",
+    contract_binding_months: machine?.contract_binding_months || "",
     service_date: machine?.service_date || "",
     next_service_date: machine?.next_service_date || ""
   });
