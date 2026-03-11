@@ -63,6 +63,7 @@ import ServiceRecords from './pages/ServiceRecords';
 import TechnicianMobile from './pages/TechnicianMobile';
 import Users from './pages/Users';
 import PublicRegister from './pages/PublicRegister';
+import Register from './pages/Register';
 import __Layout from './Layout.jsx';
 
 
@@ -83,6 +84,7 @@ export const PAGES = {
     "TechnicianMobile": TechnicianMobile,
     "Users": Users,
     "PublicRegister": PublicRegister,
+    "Register": Register,
 }
 
 export const pagesConfig = {
