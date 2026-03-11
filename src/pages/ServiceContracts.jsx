@@ -4,8 +4,9 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { addMonths, format, isPast, parseISO } from "date-fns";
 import { sv } from "date-fns/locale";
-import { FileCheck, Search, Building2, Monitor, Pencil } from "lucide-react";
+import { FileCheck, Search, Building2, Monitor, Pencil, Clock } from "lucide-react";
 import ServiceContractModal from "@/components/machines/ServiceContractModal";
+import PendingContractApproval from "@/components/contracts/PendingContractApproval";
 
 const bindingLabel = { 6: "6 mån", 12: "12 mån", 24: "24 mån" };
 
@@ -45,6 +46,29 @@ export default function ServiceContracts() {
     setEditingMachine(null);
   };
 
+  const handleApproveRequest = async (machine) => {
+    const updateData = {
+      service_contract: machine.requested_service_contract,
+      service_contract_status: "approved",
+      contract_start_date: new Date().toISOString().split("T")[0],
+      contract_binding_months: machine.contract_binding_months
+    };
+    await base44.entities.Machine.update(machine.id, updateData);
+    setMachines(prev => prev.map(m => m.id === machine.id ? { ...m, ...updateData } : m));
+  };
+
+  const handleRejectRequest = async (machine) => {
+    await base44.entities.Machine.update(machine.id, {
+      service_contract_status: "rejected",
+      requested_service_contract: "none"
+    });
+    setMachines(prev => prev.map(m =>
+      m.id === machine.id
+        ? { ...m, service_contract_status: "rejected", requested_service_contract: "none" }
+        : m
+    ));
+  };
+
   const contracted = machines
     .filter(m => m.service_contract && m.service_contract !== "none")
     .filter(m => {
@@ -60,6 +84,19 @@ export default function ServiceContracts() {
 
   const active = contracted.filter(m => contractStatus(m) !== "expired");
   const expired = contracted.filter(m => contractStatus(m) === "expired");
+
+  const pendingRequests = machines
+    .filter(m => m.service_contract_status === "pending")
+    .filter(m => {
+      if (!search) return true;
+      const cust = customerMap[m.customer_id];
+      const q = search.toLowerCase();
+      return (
+        m.model?.toLowerCase().includes(q) ||
+        m.serial_number?.toLowerCase().includes(q) ||
+        cust?.company_name?.toLowerCase().includes(q)
+      );
+    });
 
   const renderRow = (machine) => {
     const cust = customerMap[machine.customer_id];
@@ -148,14 +185,36 @@ export default function ServiceContracts() {
           { label: "Totalt tecknade", value: contracted.length },
           { label: "Aktiva avtal", value: active.length },
           { label: "Utgångna avtal", value: expired.length },
-          { label: "Bindningstid 24 mån", value: contracted.filter(m => m.contract_binding_months === 24).length },
+          { label: "Väntar på godkännande", value: pendingRequests.length, highlight: pendingRequests.length > 0 },
         ].map(stat => (
-          <div key={stat.label} className="astomed-card p-4 rounded-xl border bg-white">
-            <div className="text-2xl font-bold astomed-title">{stat.value}</div>
-            <div className="text-xs astomed-muted mt-0.5">{stat.label}</div>
+          <div key={stat.label} className={`astomed-card p-4 rounded-xl border ${stat.highlight ? "border-amber-300 bg-amber-50" : "bg-white"}`}>
+            <div className={`text-2xl font-bold ${stat.highlight ? "text-amber-800" : "astomed-title"}`}>{stat.value}</div>
+            <div className={`text-xs mt-0.5 ${stat.highlight ? "text-amber-700 font-semibold" : "astomed-muted"}`}>{stat.label}</div>
           </div>
         ))}
       </div>
+
+      {/* Pending requests section */}
+      {pendingRequests.length > 0 && (
+        <div className="mb-8">
+          <div className="flex items-center gap-2 mb-4">
+            <Clock className="w-5 h-5 text-amber-600" />
+            <h2 className="text-lg font-bold astomed-title">Väntande förfrågningar</h2>
+            <Badge className="bg-amber-100 text-amber-800 border-0">{pendingRequests.length}</Badge>
+          </div>
+          <div className="space-y-4">
+            {pendingRequests.map(machine => (
+              <PendingContractApproval
+                key={machine.id}
+                machine={machine}
+                customer={customerMap[machine.customer_id]}
+                onApprove={handleApproveRequest}
+                onReject={handleRejectRequest}
+              />
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Active contracts table */}
       <div className="bg-white rounded-xl border border-slate-200 mb-6 overflow-hidden">

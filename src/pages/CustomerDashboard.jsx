@@ -2,9 +2,10 @@ import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { createPageUrl } from "@/utils";
 import { Link } from "react-router-dom";
-import { Monitor, Wrench, CheckCircle, Clock, Building2, Mail, Phone, MapPin, User, AlertTriangle, Plus } from "lucide-react";
+import { Monitor, Wrench, CheckCircle, Clock, Building2, Mail, Phone, MapPin, User, AlertTriangle, Plus, FileCheck } from "lucide-react";
 import QuoteApprovalCard from "@/components/portal/QuoteApprovalCard";
 import OtherMachineServiceForm from "@/components/portal/OtherMachineServiceForm";
+import RequestContractModal from "@/components/portal/RequestContractModal";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -25,6 +26,7 @@ export default function CustomerDashboard() {
   const [records, setRecords] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showOtherMachineForm, setShowOtherMachineForm] = useState(false);
+  const [requestingContractFor, setRequestingContractFor] = useState(null);
 
   useEffect(() => {
     const load = async () => {
@@ -175,9 +177,28 @@ export default function CustomerDashboard() {
                         <p className="text-xs astomed-muted mb-2">SN: {machine.serial_number}</p>
                         <div className="text-xs space-y-1">
                           {(() => {
+                            if (machine.service_contract_status === "pending") {
+                              return (
+                                <p className="text-amber-600 font-medium flex items-center gap-1">
+                                  <Clock className="w-3 h-3" />
+                                  Avtalsförfrågan väntar på godkännande
+                                </p>
+                              );
+                            }
                             const expiry = getContractExpiry(machine);
                             if (!expiry) return (
-                              <p className="text-slate-400">Inget serviceavtal</p>
+                              <div className="flex items-center gap-2">
+                                <p className="text-slate-400">Inget serviceavtal</p>
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  onClick={() => setRequestingContractFor(machine)}
+                                  className="text-xs h-6 px-2"
+                                >
+                                  <FileCheck className="w-3 h-3 mr-1" />
+                                  Begär avtal
+                                </Button>
+                              </div>
                             );
                             const expired = expiry < new Date();
                             return (
@@ -304,16 +325,28 @@ export default function CustomerDashboard() {
           </Card>
           </div>
 
-          {showOtherMachineForm && (
-          <OtherMachineServiceForm
+      {showOtherMachineForm && (
+        <OtherMachineServiceForm
           customerId={customer.id}
           onClose={() => setShowOtherMachineForm(false)}
           onSubmitted={async () => {
-           const updated = await base44.entities.ServiceRecord.filter({ customer_id: customer.id }, "-service_date", 50);
-           setRecords(updated);
+            const updated = await base44.entities.ServiceRecord.filter({ customer_id: customer.id }, "-service_date", 50);
+            setRecords(updated);
           }}
-          />
-          )}
-          </div>
-          );
-          }
+        />
+      )}
+
+      {requestingContractFor && (
+        <RequestContractModal
+          machine={requestingContractFor}
+          onClose={() => setRequestingContractFor(null)}
+          onSubmit={async (contractData) => {
+            await base44.entities.Machine.update(requestingContractFor.id, contractData);
+            const updated = await base44.entities.Machine.filter({ customer_id: customer.id });
+            setMachines(updated);
+          }}
+        />
+      )}
+    </div>
+  );
+}
