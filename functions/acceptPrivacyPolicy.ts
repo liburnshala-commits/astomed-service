@@ -9,9 +9,8 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // Update user via service role to set role and privacy policy acceptance
-    await base44.asServiceRole.entities.User.update(user.id, {
-      role: 'customer',
+    // Update user to mark privacy policy as accepted
+    await base44.auth.updateMe({
       privacy_policy_accepted: true
     });
 
