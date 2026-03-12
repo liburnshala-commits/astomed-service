@@ -15,8 +15,22 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Email and role are required' }, { status: 400 });
     }
 
+    // Map custom roles to Base44 allowed roles (only "user" or "admin")
+    const base44Role = role === 'admin' ? 'admin' : 'user';
+    
     // Invite user through Base44
-    await base44.users.inviteUser(email, role);
+    await base44.users.inviteUser(email, base44Role);
+    
+    // If the intended role is custom (technician/customer), update it immediately
+    if (role !== 'admin' && role !== 'user') {
+      // Find the newly invited user and update their role
+      const allUsers = await base44.asServiceRole.entities.User.list();
+      const invitedUser = allUsers.find(u => u.email === email);
+      
+      if (invitedUser) {
+        await base44.asServiceRole.entities.User.update(invitedUser.id, { role });
+      }
+    }
 
     // Determine role name in Swedish
     const roleNameSv = role === 'technician' ? 'Service Tekniker' : 
