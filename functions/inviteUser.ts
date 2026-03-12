@@ -63,7 +63,7 @@ Deno.serve(async (req) => {
       <p>Hej,</p>
       
       <div class="welcome-box">
-        <h2>Välkommen till Astomed Service! 🎉</h2>
+        <h2>Välkommen till Astomed Service 🎉</h2>
         <p><strong>${inviterDisplayName}</strong> har bjudit in dig att gå med i Astomed Service som <span class="role-badge">${roleNameSv}</span>.</p>
       </div>
 
