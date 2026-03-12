@@ -103,13 +103,18 @@ Deno.serve(async (req) => {
         });
       }
 
-      // Email
+      // Email - only send to registered users
       if (sendEmail) {
-        const accentColor = reminder.type === 'upcoming_service' ? '#22c55e' : '#f59e0b';
-        const bgColor = reminder.type === 'upcoming_service' ? '#e8f7ee' : '#fffbeb';
-        const textColor = reminder.type === 'upcoming_service' ? '#166534' : '#92400e';
+        try {
+          // Check if customer email is a registered user
+          const users = await base44.asServiceRole.entities.User.filter({ email: customer.email });
+          
+          if (users.length > 0) {
+            const accentColor = reminder.type === 'upcoming_service' ? '#22c55e' : '#f59e0b';
+            const bgColor = reminder.type === 'upcoming_service' ? '#e8f7ee' : '#fffbeb';
+            const textColor = reminder.type === 'upcoming_service' ? '#166534' : '#92400e';
 
-        const emailHtml = `<!DOCTYPE html>
+            const emailHtml = `<!DOCTYPE html>
 <html>
 <head>
   <meta charset="UTF-8">
@@ -150,12 +155,17 @@ Deno.serve(async (req) => {
 </body>
 </html>`;
 
-        await base44.integrations.Core.SendEmail({
-          to: customer.email,
-          subject: title,
-          body: emailHtml,
-          from_name: "Astomed Service"
-        });
+            await base44.integrations.Core.SendEmail({
+              to: customer.email,
+              subject: title,
+              body: emailHtml,
+              from_name: "Astomed Service"
+            });
+          }
+        } catch (emailError) {
+          // Ignore email errors for non-registered users, in-app notification was already sent
+          console.log(`Email skipped for ${customer.email}: ${emailError.message}`);
+        }
       }
 
       sentRecordIds.add(reminder.record_id + '_' + reminder.type);
