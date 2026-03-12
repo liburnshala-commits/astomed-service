@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { X, Plus, Trash2, Upload, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -39,15 +39,14 @@ const SERVICE_CONTRACTS = [
   }
 ];
 
-const TECHNICIANS = [
-  "Anders Karlsson",
-  "Erik Lindström",
-  "Maria Johansson",
-  "Peter Svensson",
-  "Sara Nilsson",
-];
-
 export default function ServiceRecordForm({ record, machines, customers, preselectedMachineId, onSave, onClose }) {
+  const [technicians, setTechnicians] = useState([]);
+
+  useEffect(() => {
+    base44.entities.User.filter({ role: "technician" }).then(users => {
+      setTechnicians(users.map(u => u.full_name || u.email));
+    });
+  }, []);
   const preselectedMachine = machines.find(m => m.id === preselectedMachineId);
 
   const [form, setForm] = useState({
@@ -259,7 +258,7 @@ export default function ServiceRecordForm({ record, machines, customers, presele
               <Select value={form.technician_name} onValueChange={v => set("technician_name", v)}>
                 <SelectTrigger><SelectValue placeholder="Välj tekniker" /></SelectTrigger>
                 <SelectContent>
-                  {TECHNICIANS.map(t => <SelectItem key={t} value={t}>{t}</SelectItem>)}
+                  {technicians.map(t => <SelectItem key={t} value={t}>{t}</SelectItem>)}
                 </SelectContent>
               </Select>
             </div>

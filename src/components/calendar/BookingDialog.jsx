@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { X, Wrench, CalendarDays, User, Clock, Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,10 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
 import { sv } from "date-fns/locale";
 import { cn } from "@/lib/utils";
-
-const TECHNICIANS = [
-  "Anders Karlsson", "Erik Lindström", "Maria Johansson", "Peter Svensson", "Sara Nilsson",
-];
+import { base44 } from "@/api/base44Client";
 
 const statusColor = {
   pending: "bg-yellow-100 text-yellow-800",
@@ -31,6 +28,13 @@ export default function BookingDialog({ date, record, records, machines, custome
   const [selectedDate, setSelectedDate] = useState(date || record?.service_date || "");
   const [selectedTechnician, setSelectedTechnician] = useState(record?.technician_name || "");
   const [loading, setLoading] = useState(false);
+  const [technicians, setTechnicians] = useState([]);
+
+  useEffect(() => {
+    base44.entities.User.filter({ role: "technician" }).then(users => {
+      setTechnicians(users.map(u => u.full_name || u.email));
+    });
+  }, []);
 
   // If no specific record, show what's already on this date
   const dayRecords = date
@@ -102,7 +106,7 @@ export default function BookingDialog({ date, record, records, machines, custome
               <Select value={selectedTechnician} onValueChange={setSelectedTechnician}>
                 <SelectTrigger><SelectValue placeholder="Välj tekniker" /></SelectTrigger>
                 <SelectContent>
-                  {TECHNICIANS.map(t => <SelectItem key={t} value={t}>{t}</SelectItem>)}
+                  {technicians.map(t => <SelectItem key={t} value={t}>{t}</SelectItem>)}
                 </SelectContent>
               </Select>
             </div>
