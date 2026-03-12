@@ -21,6 +21,9 @@ Deno.serve(async (req) => {
     // Invite user through Base44
     await base44.users.inviteUser(email, base44Role);
     
+    // Wait a moment for the user to be created in the system
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
     // If the intended role is custom (technician/customer), update it immediately
     if (role !== 'admin' && role !== 'user') {
       // Find the newly invited user and update their role
