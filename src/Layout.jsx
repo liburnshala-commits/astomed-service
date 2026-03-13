@@ -39,14 +39,19 @@ const navSections = [
     ]
   },
   {
-    title: "Hantering",
+    title: "Service",
     items: [
+      { label: "Serviceförfrågningar", page: "PublicServiceLeads", icon: ClipboardList, roles: ["admin", "technician"] },
       { label: "Serviceärenden", page: "ServiceRecords", icon: Wrench, roles: ["admin", "technician", "customer"] },
       { label: "Servicekalender", page: "Calendar", icon: CalendarDays, roles: ["admin", "technician"] },
-      { label: "Maskiner", page: "Machines", icon: Monitor, roles: ["admin", "technician", "customer"] },
-      { label: "Kunder", page: "Customers", icon: Users, roles: ["admin", "technician"] },
-      { label: "Serviceförfrågningar", page: "PublicServiceLeads", icon: ClipboardList, roles: ["admin", "technician"] },
       { label: "Serviceavtal", page: "ServiceContracts", icon: FileCheck, roles: ["admin", "technician"] },
+    ]
+  },
+  {
+    title: "Hantering",
+    items: [
+      { label: "Kunder", page: "Customers", icon: Users, roles: ["admin", "technician"] },
+      { label: "Maskiner", page: "Machines", icon: Monitor, roles: ["admin", "technician", "customer"] },
       { label: "Rapporter", page: "Reports", icon: FileText, roles: ["admin", "technician"] },
       { label: "Teknikervy (mobil)", page: "TechnicianMobile", icon: Wrench, roles: ["admin", "technician"] },
     ]
