@@ -72,8 +72,11 @@ export default function ServiceRecordForm({ record, machines, customers, presele
     if (v === "completed" || v === "invoiced") {
       const missing = [];
       if (!form.technician_name) missing.push("Tekniker");
-      if (!form.labor_hours && form.labor_hours !== 0) missing.push("Arbetstimmar");
-      if (!form.labor_cost && form.labor_cost !== 0) missing.push("Arbetskostnad");
+      // Only require labor hours and cost if no service contract
+      if (form.service_contract === "none" || !form.service_contract) {
+        if (!form.labor_hours && form.labor_hours !== 0) missing.push("Arbetstimmar");
+        if (!form.labor_cost && form.labor_cost !== 0) missing.push("Arbetskostnad");
+      }
       if (missing.length > 0) {
         setInvoiceError(`Fakturaunderlag saknas: ${missing.join(", ")}`);
         return;
@@ -291,12 +294,18 @@ export default function ServiceRecordForm({ record, machines, customers, presele
           {/* Costs */}
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1">
-              <Label>Arbetstimmar</Label>
+              <Label>Arbetstimmar{(form.service_contract === "none" || !form.service_contract) && " *"}</Label>
               <Input type="number" value={form.labor_hours} onChange={e => set("labor_hours", e.target.value === "" ? "" : parseFloat(e.target.value))} placeholder="0" />
+              {(form.service_contract === "none" || !form.service_contract) && (
+                <p className="text-xs text-slate-500">Obligatoriskt för service utan avtal</p>
+              )}
             </div>
             <div className="space-y-1">
-              <Label>Arbetskostnad (kr)</Label>
+              <Label>Arbetskostnad (kr){(form.service_contract === "none" || !form.service_contract) && " *"}</Label>
               <Input type="number" value={form.labor_cost} onChange={e => set("labor_cost", e.target.value === "" ? "" : parseFloat(e.target.value))} placeholder="0" />
+              {(form.service_contract === "none" || !form.service_contract) && (
+                <p className="text-xs text-slate-500">Obligatoriskt för service utan avtal</p>
+              )}
             </div>
             <div className="col-span-2 p-3 bg-slate-50 rounded-lg flex items-center justify-between">
               <span className="text-sm text-slate-600">Beräknad totalkostnad</span>
