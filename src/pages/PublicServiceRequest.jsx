@@ -44,7 +44,8 @@ export default function PublicServiceRequest() {
         preferred_date: form.preferred_date ? format(form.preferred_date, "yyyy-MM-dd") : null,
         service_description: form.notes || `Serviceförfrågan för ${form.machine_name}. Föredragen tid: ${form.preferred_time_slot || 'ej vald'}.`
       };
-      const res = await fetch(`https://api.base44.com/api/apps/69a9446fcb1cd4ab529479ba/functions/createPublicServiceLead`, {
+      const appUrl = window.location.origin;
+      const res = await fetch(`${appUrl}/api/functions/createPublicServiceLead`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(submitData)
