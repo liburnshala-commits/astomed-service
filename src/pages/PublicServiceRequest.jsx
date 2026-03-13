@@ -9,7 +9,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { format } from "date-fns";
 import { sv } from "date-fns/locale";
-import { machineServiceDetails } from "@/components/MachineServiceDetails";
+import { machineServiceDetails } from "../components/MachineServiceDetails";
 
 export default function PublicServiceRequest() {
   const [form, setForm] = useState({
