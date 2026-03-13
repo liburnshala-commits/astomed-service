@@ -1,15 +1,11 @@
 import { useState } from "react";
-import { Send, Wrench, CalendarIcon } from "lucide-react";
+import { Send, Wrench } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Calendar } from "@/components/ui/calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { format } from "date-fns";
-import { sv } from "date-fns/locale";
 import { machineServiceDetails } from "../components/MachineServiceDetails";
 import PrivacyPolicyContent from "../components/PrivacyPolicyContent";
 
@@ -24,8 +20,6 @@ export default function PublicServiceRequest() {
     postal_code: "",
     city: "",
     machine_name: "",
-    preferred_date: null,
-    preferred_time_slot: "",
     notes: ""
   });
   const [submitting, setSubmitting] = useState(false);
@@ -41,8 +35,7 @@ export default function PublicServiceRequest() {
     try {
       const submitData = {
         ...form,
-        preferred_date: form.preferred_date ? format(form.preferred_date, "yyyy-MM-dd") : null,
-        service_description: form.notes || `Serviceförfrågan för ${form.machine_name}. Föredragen tid: ${form.preferred_time_slot || 'ej vald'}.`
+        service_description: form.notes || `Serviceförfrågan för ${form.machine_name}.`
       };
       const appUrl = window.location.origin;
       const res = await fetch(`${appUrl}/api/functions/createPublicServiceLead`, {
@@ -166,43 +159,6 @@ export default function PublicServiceRequest() {
                   </ul>
                 </div>
               )}
-
-              <div className="space-y-1">
-                <Label>Föredragen dag för genomgång</Label>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant="outline"
-                      className="w-full justify-start text-left font-normal"
-                    >
-                      <CalendarIcon className="mr-2 h-4 w-4" />
-                      {form.preferred_date ? format(form.preferred_date, "PPP", { locale: sv }) : "Välj ett datum"}
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0">
-                    <Calendar
-                      mode="single"
-                      selected={form.preferred_date}
-                      onSelect={(date) => set("preferred_date", date)}
-                      disabled={(date) => date < new Date()}
-                      locale={sv}
-                    />
-                  </PopoverContent>
-                </Popover>
-                <p className="text-xs text-gray-500 mt-1">
-                  Detta är ett preliminärt datum. Vi bekräftar den exakta tiden via telefonkontakt.
-                </p>
-              </div>
-              <div className="space-y-1">
-                <Label>Föredragen tid</Label>
-                <Select value={form.preferred_time_slot} onValueChange={v => set("preferred_time_slot", v)}>
-                  <SelectTrigger><SelectValue placeholder="Välj tid" /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="förmiddag">Förmiddag</SelectItem>
-                    <SelectItem value="eftermiddag">Eftermiddag</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
               <div className="sm:col-span-2 space-y-3 bg-blue-50 border border-blue-200 rounded-lg p-4">
                 <h3 className="font-semibold text-lg text-blue-900">Vi kommer också ha möjlighet att diskutera nedan:</h3>
                 
