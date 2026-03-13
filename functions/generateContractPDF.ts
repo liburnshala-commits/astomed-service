@@ -98,7 +98,7 @@ Deno.serve(async (req) => {
             '4. Omfattning\nAvtalet omfattar ordinarie underhåll enligt specifikation för respektive maskin. Reparationer utöver standardservice samt reservdelar debiteras enligt gällande prislista med avtalad rabatt om 20 % för reservdelar och 20% på resekostnader.'
         ];
         
-        let yOffset = 138;
+        let yOffset = 133;
         for (let i = 0; i < terms.length; i++) {
             const lines = doc.splitTextToSize(terms[i], 170);
             doc.text(lines, 20, yOffset);
@@ -106,21 +106,24 @@ Deno.serve(async (req) => {
         }
         
         // Service description from Machine if available
-        yOffset += 5;
+        yOffset += 3;
         if (machine.standard_service_description) {
-            doc.setFontSize(12);
+            doc.setFontSize(11);
             doc.setFont('helvetica', 'bold');
-            doc.text('Standardservice och underhåll:', 20, yOffset);
+            doc.setTextColor(27, 58, 58);
+            doc.text('STANDARDSERVICE OCH UNDERHÅLL', 20, yOffset);
             
             doc.setFont('helvetica', 'normal');
-            doc.setFontSize(9);
-            yOffset += 7;
+            doc.setFontSize(8.5);
+            doc.setTextColor(0, 0, 0);
+            yOffset += 6;
             
             const descLines = doc.splitTextToSize(machine.standard_service_description, 170);
             doc.text(descLines, 20, yOffset);
-            yOffset += (descLines.length * 5) + 3;
+            yOffset += (descLines.length * 5) + 2;
             
             if (machine.standard_service_price) {
+                doc.setFont('helvetica', 'bold');
                 doc.text('Pris: ' + machine.standard_service_price + ' SEK', 20, yOffset);
             }
         }
