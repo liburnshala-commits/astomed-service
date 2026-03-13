@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { createPageUrl } from "@/utils";
 import { Link } from "react-router-dom";
-import { Plus, Search, Building2, Phone, Mail, ExternalLink, Trash2, UserPlus, Check, Copy, Loader2 } from "lucide-react";
+import { Plus, Search, Building2, Phone, Mail, ExternalLink, Trash2, UserPlus, Check, Copy, Loader2, Database } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -23,9 +23,11 @@ export default function Customers() {
   const [copiedId, setCopiedId] = useState(null);
   const [deletingCustomer, setDeletingCustomer] = useState(null);
   const [userRole, setUserRole] = useState(null);
+  const [cleaningData, setCleaningData] = useState(false);
 
   const load = async () => {
     const currentUser = await base44.auth.me();
+    setUserRole(currentUser?.role);
     if (currentUser?.role === "customer") {
       // Customers should not access this page at all
       const ownCustomers = await base44.entities.Customer.filter({ email: currentUser.email });
@@ -137,6 +139,22 @@ export default function Customers() {
    setInviting(null);
   };
 
+  const cleanDeletedCustomers = async () => {
+    if (!confirm("Är du säker på att du vill radera alla markerade kunder och deras data? Detta går inte att ångra.")) {
+      return;
+    }
+    setCleaningData(true);
+    try {
+      const response = await base44.functions.invoke("deleteMarkedCustomers", {});
+      toast.success(response.data.message);
+      load();
+    } catch (error) {
+      toast.error("Fel vid rensning: " + error.message);
+    } finally {
+      setCleaningData(false);
+    }
+  };
+
   return (
     <div className="p-6 space-y-6">
       <div className="flex items-center justify-between">
@@ -144,9 +162,25 @@ export default function Customers() {
           <h1 className="text-2xl font-bold astomed-title">Kunder</h1>
           <p className="astomed-subtitle text-sm">{customers.length} kunder registrerade</p>
         </div>
-        <Button onClick={() => { setEditing(null); setShowForm(true); }} className="astomed-btn-primary">
-          <Plus className="w-4 h-4 mr-2" /> Ny kund
-        </Button>
+        <div className="flex gap-2">
+          {userRole === "admin" && (
+            <Button 
+              onClick={cleanDeletedCustomers} 
+              variant="destructive"
+              disabled={cleaningData}
+            >
+              {cleaningData ? (
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+              ) : (
+                <Database className="w-4 h-4 mr-2" />
+              )}
+              Rensa raderade kunder
+            </Button>
+          )}
+          <Button onClick={() => { setEditing(null); setShowForm(true); }} className="astomed-btn-primary">
+            <Plus className="w-4 h-4 mr-2" /> Ny kund
+          </Button>
+        </div>
       </div>
 
       <div className="relative">
