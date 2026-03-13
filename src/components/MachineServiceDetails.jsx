@@ -41,12 +41,13 @@ export const machineServiceDetails = {
     ]
   },
   "Soprano Titanium": {
-    title: "Standardservice och underhåll",
+    title: "Standardservice och underhåll för Soprano Titanium",
     details: [
       "<strong>Vattenbehandling:</strong> Byte av Deionization Filter och påfyllning av nytt destillerat vatten för att förhindra partikelansamlingar.",
       "<strong>Partikelskydd:</strong> Installation av nytt 15 Micron meshfilter för optimalt flöde.",
       "<strong>UV-sterilisering:</strong> Byte av lampa och kablage för UV-rengöring av kylvattnet.",
-      "<strong>Kopplingskontroll:</strong> Byte av CPC-snabbkopplingar på DI-filter för att säkerställa läckagefria anslutningar."
+      "<strong>Kopplingskontroll:</strong> Byte av CPC-snabbkopplingar på DI-filter för att säkerställa läckagefria anslutningar.",
+      "Pris: 600 kr/mån"
     ]
   },
   "Aldix Smart Laser": {
