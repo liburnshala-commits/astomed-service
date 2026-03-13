@@ -88,28 +88,23 @@ Deno.serve(async (req) => {
             yOffset += (lines.length * 5) + 4;
         }
         
-        // Service description from ServiceRecord if available
+        // Service description from Machine if available
         yOffset += 5;
-        const serviceRecords = await base44.asServiceRole.entities.ServiceRecord.filter({ machine_id: machineId });
-        if (serviceRecords && serviceRecords.length > 0) {
-            const latestService = serviceRecords[serviceRecords.length - 1];
-            
+        if (machine.standard_service_description) {
             doc.setFontSize(12);
             doc.setFont('helvetica', 'bold');
-            doc.text('Servicebeskrivning:', 20, yOffset);
+            doc.text('Standardservice och underhåll:', 20, yOffset);
             
             doc.setFont('helvetica', 'normal');
             doc.setFontSize(9);
             yOffset += 7;
             
-            if (latestService.description) {
-                const descLines = doc.splitTextToSize(latestService.description, 170);
-                doc.text(descLines, 20, yOffset);
-                yOffset += (descLines.length * 5) + 3;
-            }
+            const descLines = doc.splitTextToSize(machine.standard_service_description, 170);
+            doc.text(descLines, 20, yOffset);
+            yOffset += (descLines.length * 5) + 3;
             
-            if (latestService.total_cost) {
-                doc.text('Kostnad: ' + latestService.total_cost + ' SEK', 20, yOffset);
+            if (machine.standard_service_price) {
+                doc.text('Pris: ' + machine.standard_service_price + ' SEK', 20, yOffset);
             }
         }
 
