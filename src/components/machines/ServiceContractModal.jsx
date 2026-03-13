@@ -39,7 +39,7 @@ export default function ServiceContractModal({ machine, onSave, onClose }) {
   const [form, setForm] = useState({
     service_contract: machine?.service_contract || "none",
     contract_start_date: machine?.contract_start_date || "",
-    contract_binding_months: machine?.contract_binding_months || "",
+    contract_binding_months: 12,
     service_date: machine?.service_date || "",
     next_service_date: machine?.next_service_date || ""
   });
@@ -90,22 +90,9 @@ export default function ServiceContractModal({ machine, onSave, onClose }) {
           )}
 
           {form.service_contract !== "none" && (
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-1">
-                <Label>Avtalets startdatum</Label>
-                <Input type="date" value={form.contract_start_date} onChange={e => set("contract_start_date", e.target.value)} />
-              </div>
-              <div className="space-y-1">
-                <Label>Bindningstid</Label>
-                <Select value={String(form.contract_binding_months || "")} onValueChange={v => set("contract_binding_months", Number(v))}>
-                  <SelectTrigger><SelectValue placeholder="Välj..." /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="6">6 månader</SelectItem>
-                    <SelectItem value="12">12 månader</SelectItem>
-                    <SelectItem value="24">24 månader</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
+            <div className="space-y-1">
+              <Label>Avtalets startdatum</Label>
+              <Input type="date" value={form.contract_start_date} onChange={e => set("contract_start_date", e.target.value)} />
             </div>
           )}
 
