@@ -56,7 +56,7 @@ export default function PublicServiceRequest() {
     }
   };
 
-  const isValid = form.company_name && form.contact_person && form.email && form.phone && form.machine_name && privacyAccepted;
+  const isValid = form.company_name && form.contact_person && form.email && form.phone && form.machine_name && privacyAccepted && (form.machine_name !== "Annan" || form.other_machine_name);
 
   if (success) {
     return (
@@ -144,6 +144,19 @@ export default function PublicServiceRequest() {
                 </Select>
               </div>
               
+              {form.machine_name === "Annan" && (
+                <>
+                  <div className="space-y-1">
+                    <Label>Maskinnamn *</Label>
+                    <Input value={form.other_machine_name || ""} onChange={e => set("other_machine_name", e.target.value)} placeholder="Ange maskinens namn" required />
+                  </div>
+                  <div className="space-y-1">
+                    <Label>Serienummer</Label>
+                    <Input value={form.other_serial_number || ""} onChange={e => set("other_serial_number", e.target.value)} placeholder="Ange serienummer" />
+                  </div>
+                </>
+              )}
+
               {form.machine_name && machineServiceDetails[form.machine_name] && (
                 <div className="sm:col-span-2 p-4 bg-blue-50 rounded-lg border border-blue-200">
                   <h3 className="font-semibold text-blue-900 mb-2">
