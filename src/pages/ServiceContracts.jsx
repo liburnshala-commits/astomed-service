@@ -72,15 +72,11 @@ export default function ServiceContracts() {
 
   const handleDownloadContract = async (machine) => {
     try {
-      const response = await fetch(`${window.location.origin}/api/functions/generateContractPDF`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ machineId: machine.id })
-      });
+      const response = await base44.functions.invoke('generateContractPDF', { machineId: machine.id }, { responseType: 'blob' });
 
-      if (!response.ok) throw new Error('Failed to download');
+      if (!response || !response.data) throw new Error('Failed to download');
 
-      const blob = await response.blob();
+      const blob = response.data;
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
