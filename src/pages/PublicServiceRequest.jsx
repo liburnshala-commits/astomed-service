@@ -20,7 +20,9 @@ export default function PublicServiceRequest() {
     manufacturer: "",
     serial_number: "",
     service_description: "",
-    service_type: "standard"
+    service_type: "standard",
+    preferred_time_slot: "",
+    notes: ""
   });
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -147,6 +149,25 @@ export default function PublicServiceRequest() {
                   placeholder="Beskriv vad som behöver åtgärdas, eventuella fel eller symtom..."
                   rows={5}
                   required
+                />
+              </div>
+              <div className="space-y-1">
+                <Label>Föredragen tid för genomgång</Label>
+                <Select value={form.preferred_time_slot} onValueChange={v => set("preferred_time_slot", v)}>
+                  <SelectTrigger><SelectValue placeholder="Välj tid" /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="förmiddag">Förmiddag</SelectItem>
+                    <SelectItem value="eftermiddag">Eftermiddag</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="sm:col-span-2 space-y-1">
+                <Label>Övriga anteckningar</Label>
+                <Textarea
+                  value={form.notes}
+                  onChange={e => set("notes", e.target.value)}
+                  placeholder="Eventuella ytterligare kommentarer eller önskemål..."
+                  rows={3}
                 />
               </div>
             </div>
