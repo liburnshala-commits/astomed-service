@@ -23,6 +23,7 @@ export default function PublicServiceRequest() {
     city: "",
     machine_name: "",
     preferred_date: null,
+    preferred_time_slot: "",
     notes: ""
   });
   const [submitting, setSubmitting] = useState(false);
@@ -179,6 +180,16 @@ export default function PublicServiceRequest() {
                 <p className="text-xs text-gray-500 mt-1">
                   Detta är ett preliminärt datum. Vi bekräftar den exakta tiden via telefonkontakt.
                 </p>
+              </div>
+              <div className="space-y-1">
+                <Label>Föredragen tid</Label>
+                <Select value={form.preferred_time_slot} onValueChange={v => set("preferred_time_slot", v)}>
+                  <SelectTrigger><SelectValue placeholder="Välj tid" /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="förmiddag">Förmiddag</SelectItem>
+                    <SelectItem value="eftermiddag">Eftermiddag</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
               <div className="sm:col-span-2 space-y-1">
                 <Label>Övriga anteckningar</Label>
