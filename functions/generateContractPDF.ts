@@ -22,17 +22,26 @@ Deno.serve(async (req) => {
 
         const doc = new jsPDF();
 
+        // Header background
+        doc.setFillColor(27, 58, 58);
+        doc.rect(0, 0, 210, 45, 'F');
+
+        // Logo
+        doc.addImage('https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69a9446fcb1cd4ab529479ba/0060a5b35_channels4_profile-2.jpg', 'JPEG', 15, 8, 25, 25);
+
         // Title
-        doc.setFontSize(22);
+        doc.setFontSize(24);
         doc.setFont('helvetica', 'bold');
-        doc.text('Serviceavtal', 20, 20);
+        doc.setTextColor(255, 255, 255);
+        doc.text('Serviceavtal', 50, 22);
 
         // Astomed details
-        doc.setFontSize(10);
+        doc.setFontSize(9);
         doc.setFont('helvetica', 'normal');
-        doc.text('Astomed AB', 150, 20);
-        doc.text('Jägerhorns väg 5', 150, 25);
-        doc.text('141 75 Kungens kurva', 150, 30);
+        doc.text('Astomed AB | Jägerhorns väg 5 | 141 75 Kungens kurva', 50, 30);
+
+        // Reset color to black
+        doc.setTextColor(0, 0, 0);
 
         // Customer details
         doc.setFontSize(12);
