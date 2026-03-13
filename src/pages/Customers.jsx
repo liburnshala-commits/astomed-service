@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Switch } from "@/components/ui/switch";
 import CustomerForm from "@/components/customers/CustomerForm.jsx";
 import DeleteCustomerDialog from "@/components/gdpr/DeleteCustomerDialog.jsx";
 import CustomerReportsSummary from "@/components/customers/CustomerReportsSummary.jsx";
@@ -139,6 +140,22 @@ export default function Customers() {
    setInviting(null);
   };
 
+  const handleToggleDelete = async (customer, newIsDeleted) => {
+    try {
+      const updateData = { is_deleted: newIsDeleted };
+      if (newIsDeleted) {
+        updateData.deleted_date = new Date().toISOString();
+      } else {
+        updateData.deleted_date = null;
+      }
+      await base44.entities.Customer.update(customer.id, updateData);
+      toast.success(`Kund ${customer.company_name} markerad som ${newIsDeleted ? 'raderad' : 'aktiv'}.`);
+      load();
+    } catch (error) {
+      toast.error("Kunde inte uppdatera kundens status: " + error.message);
+    }
+  };
+
   const cleanDeletedCustomers = async () => {
     if (!confirm("Är du säker på att du vill radera alla markerade kunder och deras data? Detta går inte att ångra.")) {
       return;
@@ -198,6 +215,22 @@ export default function Customers() {
                     <Building2 className="w-4 h-4 astomed-muted flex-shrink-0" />
                     <h3 className="font-semibold astomed-title truncate">{customer.company_name}</h3>
                   </div>
+                  {userRole === "admin" && (
+                    <div className="flex items-center gap-2 ml-6 mb-2">
+                      <Switch
+                        checked={customer.is_deleted || false}
+                        onCheckedChange={(checked) => handleToggleDelete(customer, checked)}
+                        id={`delete-toggle-${customer.id}`}
+                      />
+                      <label htmlFor={`delete-toggle-${customer.id}`} className="text-xs cursor-pointer">
+                        {customer.is_deleted ? (
+                          <span className="text-red-600 font-medium">Markerad för radering</span>
+                        ) : (
+                          <span className="text-slate-600">Aktiv kund</span>
+                        )}
+                      </label>
+                    </div>
+                  )}
                   {customer.org_number && <p className="text-xs astomed-muted ml-6 mb-2">Org.nr: {customer.org_number}</p>}
                   <div className="grid sm:grid-cols-3 gap-2 ml-6">
                     {customer.contact_person && <div className="text-sm astomed-subtitle">👤 {customer.contact_person}</div>}
