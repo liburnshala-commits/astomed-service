@@ -79,7 +79,7 @@ export default function PublicServiceRequest() {
           <div className="w-14 h-14 rounded-xl flex items-center justify-center mx-auto mb-4" style={{ background: "#1b3a3a" }}>
             <Wrench className="w-7 h-7 text-white" />
           </div>
-          <h1 className="text-3xl font-bold mb-2" style={{ color: "#1b3a3a" }}>Kostnadsfri konsultation med Astomed</h1>
+          <h1 className="text-3xl font-bold mb-2" style={{ color: "#1b3a3a" }}>Astomed Serviceavtal - kostnadsfri konsultation</h1>
           <p className="text-gray-500">Fyll i formuläret nedan så kontaktar vi dig för kostnadsfri konsultation av serviceavtal för din/dina maskiner.</p>
         </div>
 
