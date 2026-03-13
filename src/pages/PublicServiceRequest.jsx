@@ -60,7 +60,7 @@ export default function PublicServiceRequest() {
 
   if (success) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-6" style={{ background: "#f4f6f4" }}>
+      <div className="min-h-screen flex items-center justify-center p-6" style={{ background: "#002B3C" }}>
         <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-10 text-center">
           <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-5" style={{ background: "#e8f2f2" }}>
             <Send className="w-8 h-8" style={{ color: "#3a9e9e" }} />
@@ -73,7 +73,7 @@ export default function PublicServiceRequest() {
   }
 
   return (
-    <div className="min-h-screen py-10 px-4" style={{ background: "#f4f6f4" }}>
+    <div className="min-h-screen py-10 px-4" style={{ background: "#002B3C" }}>
       <div className="max-w-2xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8">
