@@ -75,7 +75,8 @@ Deno.serve(async (req) => {
                     <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 20px 0;">
                         <p style="margin: 0; color: #6b8f8f; font-size: 14px;">
                             <strong>Har du frågor redan nu?</strong><br/>
-                            Ring oss på 08-410 438 50 eller svara på detta mail.
+                            Ring oss på (+46) 08-410 77 900 (växeln har öppet 9.30-16 med lunchstängt 12-13)<br/>
+                            E-post: kontakt@astomed.se
                         </p>
                     </div>
                     
@@ -90,8 +91,8 @@ Deno.serve(async (req) => {
                 </div>
                 
                 <div style="text-align: center; padding: 20px; color: #8aabab; font-size: 12px;">
-                    <p>Astomed AB | Isafjordsgatan 39B | 164 40 Kista</p>
-                    <p>Tel: 08-410 438 50 | service@astomed.se</p>
+                    <p>Astomed AB | Jägerhorns väg 5 | 141 75 Kungens kurva</p>
+                    <p>Tel: (+46) 08-410 77 900 | kontakt@astomed.se</p>
                 </div>
             </div>
         `;
