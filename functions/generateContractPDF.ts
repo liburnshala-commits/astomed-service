@@ -43,17 +43,22 @@ Deno.serve(async (req) => {
         // Reset color to black
         doc.setTextColor(0, 0, 0);
 
+        // Divider line
+        doc.setDrawColor(58, 158, 158);
+        doc.line(20, 48, 190, 48);
+
         // Customer details
-        doc.setFontSize(12);
+        doc.setFontSize(11);
         doc.setFont('helvetica', 'bold');
-        doc.text('Kunduppgifter:', 20, 50);
+        doc.setTextColor(27, 58, 58);
+        doc.text('KUNDUPPGIFTER', 20, 55);
         
         doc.setFont('helvetica', 'normal');
-        doc.setFontSize(10);
-        doc.text('Företag: ' + (customer.company_name || ''), 20, 57);
-        doc.text('Org.nr: ' + (customer.org_number || ''), 20, 62);
-        doc.text('Tel: ' + (customer.phone || ''), 20, 67);
-        doc.text('E-post: ' + (customer.email || ''), 20, 72);
+        doc.setFontSize(9);
+        doc.text('Företag: ' + (customer.company_name || ''), 20, 62);
+        doc.text('Organisationsnummer: ' + (customer.org_number || ''), 20, 67);
+        doc.text('Telefon: ' + (customer.phone || ''), 20, 72);
+        doc.text('E-post: ' + (customer.email || ''), 20, 77);
 
         // Machine details
         doc.setFontSize(12);
