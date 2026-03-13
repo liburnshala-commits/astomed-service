@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Switch } from "@/components/ui/switch";
+import { Checkbox } from "@/components/ui/checkbox";
 import CustomerForm from "@/components/customers/CustomerForm.jsx";
 import DeleteCustomerDialog from "@/components/gdpr/DeleteCustomerDialog.jsx";
 import CustomerReportsSummary from "@/components/customers/CustomerReportsSummary.jsx";
@@ -217,12 +217,9 @@ export default function Customers() {
                   </div>
                   {userRole === "admin" && (
                     <div className="flex items-center gap-2 ml-6 mb-2">
-                      <Switch
+                      <Checkbox
                         checked={!!customer.is_deleted}
-                        onCheckedChange={(checked) => {
-                          console.log('Switch toggled:', customer.company_name, 'to', checked);
-                          handleToggleDelete(customer, checked);
-                        }}
+                        onCheckedChange={(checked) => handleToggleDelete(customer, checked)}
                         id={`delete-toggle-${customer.id}`}
                       />
                       <label htmlFor={`delete-toggle-${customer.id}`} className="text-xs cursor-pointer">
