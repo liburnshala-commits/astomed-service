@@ -2,9 +2,10 @@ import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { addMonths, format, isPast, parseISO } from "date-fns";
 import { sv } from "date-fns/locale";
-import { FileCheck, Search, Building2, Monitor, Pencil, Clock } from "lucide-react";
+import { FileCheck, Search, Building2, Monitor, Pencil, Clock, Download } from "lucide-react";
 import ServiceContractModal from "@/components/machines/ServiceContractModal";
 import PendingContractApproval from "@/components/contracts/PendingContractApproval";
 
@@ -67,6 +68,25 @@ export default function ServiceContracts() {
         ? { ...m, service_contract_status: "rejected", requested_service_contract: "none" }
         : m
     ));
+  };
+
+  const handleDownloadContract = async (machine) => {
+    try {
+      const response = await base44.functions.invoke('generateContractPDF', { machineId: machine.id });
+      const blob = new Blob([response.data], { type: 'application/pdf' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      const cust = customerMap[machine.customer_id];
+      a.download = `Serviceavtal_${cust?.company_name.replace(/\s/g, '_') || ''}_${machine.serial_number || ''}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+    } catch (error) {
+      console.error('Error downloading contract:', error);
+      alert('Det gick inte att ladda ner avtalet. Försök igen.');
+    }
   };
 
   const contracted = machines
@@ -142,15 +162,24 @@ export default function ServiceContracts() {
             : <Badge className="bg-slate-100 text-slate-600 border-0">Utgånget</Badge>}
         </td>
         <td className="py-3 px-4">
-          {status === "active" && (
+          <div className="flex items-center gap-2">
             <button
-              onClick={() => setEditingMachine(machine)}
+              onClick={() => handleDownloadContract(machine)}
               className="p-1.5 rounded hover:bg-slate-100 text-slate-400 hover:text-slate-700 transition-colors"
-              title="Redigera avtal"
+              title="Ladda ner avtal"
             >
-              <Pencil className="w-4 h-4" />
+              <Download className="w-4 h-4" />
             </button>
-          )}
+            {status === "active" && (
+              <button
+                onClick={() => setEditingMachine(machine)}
+                className="p-1.5 rounded hover:bg-slate-100 text-slate-400 hover:text-slate-700 transition-colors"
+                title="Redigera avtal"
+              >
+                <Pencil className="w-4 h-4" />
+              </button>
+            )}
+          </div>
         </td>
       </tr>
     );
