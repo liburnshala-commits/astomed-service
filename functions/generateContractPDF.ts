@@ -33,32 +33,32 @@ Deno.serve(async (req) => {
         // Add Astomed details
         doc.setFontSize(10);
         doc.setFont('helvetica', 'normal');
-        doc.text(decodeURIComponent(escape('Astomed AB')), 150, 20);
-        doc.text(decodeURIComponent(escape('Jägerhorns väg 5')), 150, 25);
-        doc.text(decodeURIComponent(escape('141 75 Kungens kurva')), 150, 30);
-        doc.text(decodeURIComponent(escape('Tel: (+46) 08-410 77 900')), 150, 35);
-        doc.text(decodeURIComponent(escape('E-post: kontakt@astomed.se')), 150, 40);
+        doc.text('Astomed AB', 150, 20);
+        doc.text('Jägerhorns väg 5', 150, 25);
+        doc.text('141 75 Kungens kurva', 150, 30);
+        doc.text('Tel: (+46) 08-410 77 900', 150, 35);
+        doc.text('E-post: kontakt@astomed.se', 150, 40);
 
         // Add customer details
         doc.setFontSize(12);
         doc.setFont('helvetica', 'bold');
-        doc.text(decodeURIComponent(escape('Kunduppgifter:')), 20, 50);
+        doc.text('Kunduppgifter:', 20, 50);
         doc.setFont('helvetica', 'normal');
-        doc.text(decodeURIComponent(escape(`Företagsnamn: ${customer.company_name || ''}`)), 20, 57);
-        doc.text(decodeURIComponent(escape(`Organisationsnummer: ${customer.org_number || ''}`)), 20, 62);
-        doc.text(decodeURIComponent(escape(`Telefon: ${customer.phone || ''}`)), 20, 67);
-        doc.text(decodeURIComponent(escape(`E-post: ${customer.email || ''}`)), 20, 72);
-        doc.text(decodeURIComponent(escape(`Adress: ${customer.address || ''}, ${customer.postal_code || ''} ${customer.city || ''}`)), 20, 77);
+        doc.text(`Företagsnamn: ${customer.company_name || ''}`, 20, 57);
+        doc.text(`Organisationsnummer: ${customer.org_number || ''}`, 20, 62);
+        doc.text(`Telefon: ${customer.phone || ''}`, 20, 67);
+        doc.text(`E-post: ${customer.email || ''}`, 20, 72);
+        doc.text(`Adress: ${customer.address || ''}, ${customer.postal_code || ''} ${customer.city || ''}`, 20, 77);
 
         // Add machine details
         doc.setFont('helvetica', 'bold');
-        doc.text(decodeURIComponent(escape('Maskininformation:')), 20, 87);
+        doc.text('Maskininformation:', 20, 87);
         doc.setFont('helvetica', 'normal');
-        doc.text(decodeURIComponent(escape(`Maskintyp: ${machine.model || ''}`)), 20, 94);
-        doc.text(decodeURIComponent(escape(`Serienummer: ${machine.serial_number || ''}`)), 20, 99);
-        doc.text(decodeURIComponent(escape(`Serviceavtal: ${machine.service_contract === "basic" ? "BAS – Astomed 3.0" : machine.service_contract || ''}`)), 20, 104);
-        doc.text(decodeURIComponent(escape(`Avtalstid: ${machine.contract_binding_months ? machine.contract_binding_months + " månader" : ''}`)), 20, 109);
-        doc.text(decodeURIComponent(escape(`Startdatum: ${machine.contract_start_date ? new Date(machine.contract_start_date).toLocaleDateString('sv-SE') : ''}`)), 20, 114);
+        doc.text(`Maskintyp: ${machine.model || ''}`, 20, 94);
+        doc.text(`Serienummer: ${machine.serial_number || ''}`, 20, 99);
+        doc.text(`Serviceavtal: ${machine.service_contract === "basic" ? "BAS – Astomed 3.0" : machine.service_contract || ''}`, 20, 104);
+        doc.text(`Avtalstid: ${machine.contract_binding_months ? machine.contract_binding_months + " månader" : ''}`, 20, 109);
+        doc.text(`Startdatum: ${machine.contract_start_date ? new Date(machine.contract_start_date).toLocaleDateString('sv-SE') : ''}`, 20, 114);
 
         // Contract terms
         const terms = [
@@ -79,8 +79,7 @@ Deno.serve(async (req) => {
         doc.setFontSize(10);
         doc.setFont('helvetica', 'normal');
         terms.forEach(term => {
-            const encodedTerm = decodeURIComponent(escape(term));
-            const splitText = doc.splitTextToSize(encodedTerm, 170);
+            const splitText = doc.splitTextToSize(term, 170);
             doc.text(splitText, 20, yOffset);
             yOffset += (splitText.length * 4) + 2;
         });
@@ -93,16 +92,16 @@ Deno.serve(async (req) => {
         }
         doc.setFontSize(12);
         doc.setFont('helvetica', 'bold');
-        doc.text(decodeURIComponent(escape('Underskrifter:')), 20, yOffset);
+        doc.text('Underskrifter:', 20, yOffset);
         yOffset += 10;
         doc.setFont('helvetica', 'normal');
         doc.text('____________________________', 20, yOffset);
-        doc.text(decodeURIComponent(escape('Datum')), 20, yOffset + 5);
+        doc.text('Datum', 20, yOffset + 5);
         doc.text('____________________________', 120, yOffset);
-        doc.text(decodeURIComponent(escape('Astomed AB')), 120, yOffset + 5);
+        doc.text('Astomed AB', 120, yOffset + 5);
         yOffset += 20;
         doc.text('____________________________', 20, yOffset);
-        doc.text(decodeURIComponent(escape('Kundens underskrift')), 20, yOffset + 5);
+        doc.text('Kundens underskrift', 20, yOffset + 5);
 
         const pdfBytes = doc.output('arraybuffer');
 
