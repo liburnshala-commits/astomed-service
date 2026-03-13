@@ -200,5 +200,12 @@ export const machineServiceDetails = {
       "20 % på resekostnader"
     ],
     additionalInfo: "Pris: 709 kr/månad"
+  },
+  "Annan": {
+    title: "Maskin som ej finns i listan",
+    details: [
+      "Vi återkommer till dig angående om vi kan serva just din maskin"
+    ],
+    additionalInfo: ""
   }
 };
