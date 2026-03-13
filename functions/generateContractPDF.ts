@@ -105,16 +105,12 @@ Deno.serve(async (req) => {
         doc.text(decodeURIComponent(escape('Kundens underskrift')), 20, yOffset + 5);
 
         const pdfBytes = doc.output('arraybuffer');
-        
-        const sanitizedCompanyName = (customer.company_name || 'Avtal').replace(/[^a-zA-Z0-9]/g, '_').substring(0, 50);
-        const sanitizedSerialNumber = (machine.serial_number || '').replace(/[^a-zA-Z0-9]/g, '_').substring(0, 30);
-        const filename = `Serviceavtal_${sanitizedCompanyName}_${sanitizedSerialNumber}.pdf`;
 
         return new Response(pdfBytes, {
             status: 200,
             headers: {
                 'Content-Type': 'application/pdf',
-                'Content-Disposition': `attachment; filename="${filename}"`
+                'Content-Disposition': 'attachment; filename="serviceavtal.pdf"'
             }
         });
     } catch (error) {
