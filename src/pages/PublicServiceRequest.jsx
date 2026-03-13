@@ -22,10 +22,6 @@ export default function PublicServiceRequest() {
     postal_code: "",
     city: "",
     machine_name: "",
-    manufacturer: "",
-    serial_number: "",
-    service_description: "",
-    service_type: "standard",
     preferred_date: null,
     notes: ""
   });
@@ -54,7 +50,7 @@ export default function PublicServiceRequest() {
     }
   };
 
-  const isValid = form.company_name && form.contact_person && form.email && form.phone && form.machine_name && form.service_description;
+  const isValid = form.company_name && form.contact_person && form.email && form.phone && form.machine_name;
 
   if (success) {
     return (
@@ -157,35 +153,7 @@ export default function PublicServiceRequest() {
                   </ul>
                 </div>
               )}
-              
-              <div className="space-y-1">
-                <Label>Tillverkare</Label>
-                <Input value={form.manufacturer} onChange={e => set("manufacturer", e.target.value)} placeholder="T.ex. Candela, Syneron..." />
-              </div>
-              <div className="space-y-1">
-                <Label>Serienummer</Label>
-                <Input value={form.serial_number} onChange={e => set("serial_number", e.target.value)} placeholder="Maskinens serienummer" />
-              </div>
-              <div className="space-y-1">
-                <Label>Servicetyp</Label>
-                <Select value={form.service_type} onValueChange={v => set("service_type", v)}>
-                  <SelectTrigger><SelectValue /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="standard">Standard service</SelectItem>
-                    <SelectItem value="advanced">Avancerad service</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="sm:col-span-2 space-y-1">
-                <Label>Beskriv servicebehovet *</Label>
-                <Textarea
-                  value={form.service_description}
-                  onChange={e => set("service_description", e.target.value)}
-                  placeholder="Beskriv vad som behöver åtgärdas, eventuella fel eller symtom..."
-                  rows={5}
-                  required
-                />
-              </div>
+
               <div className="space-y-1">
                 <Label>Föredragen dag för genomgång</Label>
                 <Popover>
