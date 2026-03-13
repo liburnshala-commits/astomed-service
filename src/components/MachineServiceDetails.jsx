@@ -423,6 +423,245 @@ export const machineServiceDetails = {
     ],
     additionalInfo: "Pris: 600 kr/månad"
   },
+  "Clearlight IPL": {
+    title: "Standardservice och underhåll – Clearlight IPL",
+    details: [
+      "Service och underhåll enligt tillverkarens specifikationer",
+      "Kontroll av optiska linser",
+      "Funktionskontroll av alla system",
+      "Upprättande av serviceprotokoll",
+      "20 % på arbetstid för övriga reparationer",
+      "20 % på resekostnader"
+    ],
+    additionalInfo: "Kontakta oss för prisuppgift"
+  },
+  "Fraction CO2": {
+    title: "Standardservice och underhåll – Fraction CO2",
+    details: [
+      "Service och underhåll enligt tillverkarens specifikationer",
+      "Kontroll av optiska linser",
+      "Funktionskontroll av alla system",
+      "Upprättande av serviceprotokoll",
+      "20 % på arbetstid för övriga reparationer",
+      "20 % på resekostnader"
+    ],
+    additionalInfo: "Kontakta oss för prisuppgift"
+  },
+  "Mezotix": {
+    title: "Standardservice och underhåll – Mezotix",
+    details: [
+      "Service och underhåll enligt tillverkarens specifikationer",
+      "Funktionskontroll av alla system",
+      "Upprättande av serviceprotokoll",
+      "20 % på arbetstid för övriga reparationer",
+      "20 % på resekostnader"
+    ],
+    additionalInfo: "Kontakta oss för prisuppgift"
+  },
+  "IOXO Laser": {
+    title: "Standardservice och underhåll – IOXO Laser",
+    details: [
+      "Service och underhåll enligt tillverkarens specifikationer",
+      "Lasereffektmätning",
+      "Funktionskontroll av alla system",
+      "Upprättande av serviceprotokoll",
+      "20 % på arbetstid för övriga reparationer",
+      "20 % på resekostnader"
+    ],
+    additionalInfo: "Kontakta oss för prisuppgift"
+  },
+  "IOXO Microneedling": {
+    title: "Standardservice och underhåll – IOXO Microneedling",
+    details: [
+      "Service och underhåll enligt tillverkarens specifikationer",
+      "Funktionskontroll av alla system",
+      "Upprättande av serviceprotokoll",
+      "20 % på arbetstid för övriga reparationer",
+      "20 % på resekostnader"
+    ],
+    additionalInfo: "Kontakta oss för prisuppgift"
+  },
+  "Focus Dual": {
+    title: "Standardservice och underhåll – Focus Dual",
+    details: [
+      "Service och underhåll enligt tillverkarens specifikationer",
+      "Funktionskontroll av alla system",
+      "Upprättande av serviceprotokoll",
+      "20 % på arbetstid för övriga reparationer",
+      "20 % på resekostnader"
+    ],
+    additionalInfo: "Kontakta oss för prisuppgift"
+  },
+  "Ultraformer III": {
+    title: "Standardservice och underhåll – Ultraformer III",
+    details: [
+      "Service och underhåll enligt tillverkarens specifikationer",
+      "Funktionskontroll av alla system",
+      "Upprättande av serviceprotokoll",
+      "20 % på arbetstid för övriga reparationer",
+      "20 % på resekostnader"
+    ],
+    additionalInfo: "Kontakta oss för prisuppgift"
+  },
+  "Powershape 2": {
+    title: "Standardservice och underhåll – Powershape 2",
+    details: [
+      "Service och underhåll enligt tillverkarens specifikationer",
+      "Funktionskontroll av alla system",
+      "Upprättande av serviceprotokoll",
+      "20 % på arbetstid för övriga reparationer",
+      "20 % på resekostnader"
+    ],
+    additionalInfo: "Kontakta oss för prisuppgift"
+  },
+  "Indiba": {
+    title: "Standardservice och underhåll – Indiba",
+    details: [
+      "Service och underhåll enligt tillverkarens specifikationer",
+      "Funktionskontroll av alla system",
+      "Upprättande av serviceprotokoll",
+      "20 % på arbetstid för övriga reparationer",
+      "20 % på resekostnader"
+    ],
+    additionalInfo: "Kontakta oss för prisuppgift"
+  },
+  "CMSlim": {
+    title: "Standardservice och underhåll – CMSlim",
+    details: [
+      "Service och underhåll enligt tillverkarens specifikationer",
+      "Funktionskontroll av alla system",
+      "Upprättande av serviceprotokoll",
+      "20 % på arbetstid för övriga reparationer",
+      "20 % på resekostnader"
+    ],
+    additionalInfo: "Kontakta oss för prisuppgift"
+  },
+  "Coolshaping 2": {
+    title: "Standardservice och underhåll – Coolshaping 2",
+    details: [
+      "Service och underhåll enligt tillverkarens specifikationer",
+      "Kylsystemkontroll",
+      "Funktionskontroll av alla system",
+      "Upprättande av serviceprotokoll",
+      "20 % på arbetstid för övriga reparationer",
+      "20 % på resekostnader"
+    ],
+    additionalInfo: "Kontakta oss för prisuppgift"
+  },
+  "Hydra Beauty 2": {
+    title: "Standardservice och underhåll – Hydra Beauty 2",
+    details: [
+      "Service och underhåll enligt tillverkarens specifikationer",
+      "Funktionskontroll av alla system",
+      "Upprättande av serviceprotokoll",
+      "20 % på arbetstid för övriga reparationer",
+      "20 % på resekostnader"
+    ],
+    additionalInfo: "Kontakta oss för prisuppgift"
+  },
+  "Dermadrop": {
+    title: "Standardservice och underhåll – Dermadrop",
+    details: [
+      "Service och underhåll enligt tillverkarens specifikationer",
+      "Funktionskontroll av alla system",
+      "Upprättande av serviceprotokoll",
+      "20 % på arbetstid för övriga reparationer",
+      "20 % på resekostnader"
+    ],
+    additionalInfo: "Kontakta oss för prisuppgift"
+  },
+  "Carbomed": {
+    title: "Standardservice och underhåll – Carbomed",
+    details: [
+      "Service och underhåll enligt tillverkarens specifikationer",
+      "Funktionskontroll av alla system",
+      "Upprättande av serviceprotokoll",
+      "20 % på arbetstid för övriga reparationer",
+      "20 % på resekostnader"
+    ],
+    additionalInfo: "Kontakta oss för prisuppgift"
+  },
+  "Cryopen": {
+    title: "Standardservice och underhåll – Cryopen",
+    details: [
+      "Service och underhåll enligt tillverkarens specifikationer",
+      "Funktionskontroll av kylsystem",
+      "Upprättande av serviceprotokoll",
+      "20 % på arbetstid för övriga reparationer",
+      "20 % på resekostnader"
+    ],
+    additionalInfo: "Kontakta oss för prisuppgift"
+  },
+  "CryoIQ": {
+    title: "Standardservice och underhåll – CryoIQ",
+    details: [
+      "Service och underhåll enligt tillverkarens specifikationer",
+      "Funktionskontroll av kylsystem",
+      "Upprättande av serviceprotokoll",
+      "20 % på arbetstid för övriga reparationer",
+      "20 % på resekostnader"
+    ],
+    additionalInfo: "Kontakta oss för prisuppgift"
+  },
+  "Reoxy": {
+    title: "Standardservice och underhåll – Reoxy",
+    details: [
+      "Service och underhåll enligt tillverkarens specifikationer",
+      "Funktionskontroll av alla system",
+      "Upprättande av serviceprotokoll",
+      "20 % på arbetstid för övriga reparationer",
+      "20 % på resekostnader"
+    ],
+    additionalInfo: "Kontakta oss för prisuppgift"
+  },
+  "Oxyhelp": {
+    title: "Standardservice och underhåll – Oxyhelp",
+    details: [
+      "Service och underhåll enligt tillverkarens specifikationer",
+      "Funktionskontroll av alla system",
+      "Upprättande av serviceprotokoll",
+      "20 % på arbetstid för övriga reparationer",
+      "20 % på resekostnader"
+    ],
+    additionalInfo: "Kontakta oss för prisuppgift"
+  },
+  "Omega PDT": {
+    title: "Standardservice och underhåll – Omega PDT",
+    details: [
+      "Service och underhåll enligt tillverkarens specifikationer",
+      "Funktionskontroll av alla system",
+      "Upprättande av serviceprotokoll",
+      "20 % på arbetstid för övriga reparationer",
+      "20 % på resekostnader"
+    ],
+    additionalInfo: "Kontakta oss för prisuppgift"
+  },
+  "Eskimo Luftkylare": {
+    title: "Standardservice och underhåll – Eskimo Luftkylare",
+    details: [
+      "Service och underhåll enligt tillverkarens specifikationer",
+      "Rengöring av värmeväxlare",
+      "Kontroll av luftintagsfilter",
+      "Funktionskontroll av kylsystem",
+      "Upprättande av serviceprotokoll",
+      "20 % på arbetstid för övriga reparationer",
+      "20 % på resekostnader"
+    ],
+    additionalInfo: "Kontakta oss för prisuppgift"
+  },
+  "TBH Röksug": {
+    title: "Standardservice och underhåll – TBH Röksug",
+    details: [
+      "Service och underhåll enligt tillverkarens specifikationer",
+      "Byte av filter",
+      "Kontroll av luftintagsfilter",
+      "Funktionskontroll av utsugssystem",
+      "Upprättande av serviceprotokoll",
+      "20 % på arbetstid för övriga reparationer",
+      "20 % på resekostnader"
+    ],
+    additionalInfo: "Kontakta oss för prisuppgift"
+  },
   "Annan": {
     title: "Maskin som ej finns i listan",
     details: [
