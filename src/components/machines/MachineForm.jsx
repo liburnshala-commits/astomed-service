@@ -5,10 +5,28 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { machineServiceDetails } from "../MachineServiceDetails";
 
 const MODELS = [
-  "Soprano Platinum", "Soprano Titanium", "Aldix (Triodus)",
-  "PrimeLase", "Elysion", "PicoLo", "Helius", "Splendor X", "Pento"
+  "Soprano ICE Platinum",
+  "Soprano Titanium",
+  "Helios III",
+  "Picolo",
+  "Cocoon Elysion",
+  "Aldix Smart Laser",
+  "Pento 9900",
+  "PrimeLase HR",
+  "PrimeLase Excel",
+  "PrimeLase Excel HR",
+  "Soprano Platinum",
+  "Soprano Titanium Special Edition",
+  "Aldix (Triodus)",
+  "PrimeLase",
+  "Elysion",
+  "PicoLo",
+  "Helius",
+  "Splendor X",
+  "Pento"
 ];
 
 const isCustomModel = (model) => model && !MODELS.includes(model);
@@ -70,6 +88,28 @@ export default function MachineForm({ machine, customers, preselectedCustomerId,
                   <Input value={form.manufacturer} onChange={e => set("manufacturer", e.target.value)} placeholder="Ange tillverkare" />
                 </div>
               </>
+            )}
+            {form.model && form.model !== "Annan" && machineServiceDetails[form.model] && (
+              <div className="col-span-2 p-4 bg-blue-50 rounded-lg border border-blue-200">
+                <h3 className="font-semibold text-blue-900 mb-2">
+                  {machineServiceDetails[form.model].title}
+                </h3>
+                <ul className="space-y-2 text-sm text-blue-800">
+                  {machineServiceDetails[form.model].details.map((detail, idx) => (
+                    <li key={idx} className="flex gap-2">
+                      <span className="text-blue-600">•</span>
+                      <span dangerouslySetInnerHTML={{ __html: detail }} />
+                    </li>
+                  ))}
+                </ul>
+                {machineServiceDetails[form.model].additionalInfo && (
+                  <div className="mt-3 pt-3 border-t border-blue-300">
+                    <p className="text-sm font-semibold text-blue-900">
+                      {machineServiceDetails[form.model].additionalInfo}
+                    </p>
+                  </div>
+                )}
+              </div>
             )}
             <div className="col-span-2 space-y-1">
               <Label>Serienummer *</Label>
