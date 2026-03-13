@@ -7,9 +7,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { format } from "date-fns";
 import { sv } from "date-fns/locale";
 import { machineServiceDetails } from "../components/MachineServiceDetails";
+import PrivacyPolicyContent from "../components/PrivacyPolicyContent";
 
 export default function PublicServiceRequest() {
   const [form, setForm] = useState({
@@ -28,6 +30,8 @@ export default function PublicServiceRequest() {
   });
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [privacyAccepted, setPrivacyAccepted] = useState(false);
+  const [showPrivacyDialog, setShowPrivacyDialog] = useState(false);
 
   const set = (field, value) => setForm(prev => ({ ...prev, [field]: value }));
 
@@ -51,7 +55,7 @@ export default function PublicServiceRequest() {
     }
   };
 
-  const isValid = form.company_name && form.contact_person && form.email && form.phone && form.machine_name;
+  const isValid = form.company_name && form.contact_person && form.email && form.phone && form.machine_name && privacyAccepted;
 
   if (success) {
     return (
@@ -219,6 +223,28 @@ export default function PublicServiceRequest() {
             </div>
           </div>
 
+          <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
+            <label className="flex items-start gap-3 cursor-pointer select-none">
+              <input
+                type="checkbox"
+                checked={privacyAccepted}
+                onChange={e => setPrivacyAccepted(e.target.checked)}
+                className="mt-0.5 w-4 h-4 accent-teal-700 flex-shrink-0"
+              />
+              <span className="text-sm text-gray-700">
+                Jag har läst och godkänner{" "}
+                <button
+                  type="button"
+                  onClick={() => setShowPrivacyDialog(true)}
+                  className="text-blue-600 hover:underline font-medium"
+                >
+                  integritetspolicyn
+                </button>
+                .
+              </span>
+            </label>
+          </div>
+
           <Button
             type="submit"
             className="w-full h-12 text-base"
@@ -243,6 +269,21 @@ export default function PublicServiceRequest() {
           </p>
         </div>
       </div>
+
+      {/* Privacy Policy Dialog */}
+      <Dialog open={showPrivacyDialog} onOpenChange={setShowPrivacyDialog}>
+        <DialogContent className="max-w-2xl max-h-[90vh] flex flex-col p-0">
+          <PrivacyPolicyContent />
+          <div className="p-6 border-t border-slate-100 flex-shrink-0">
+            <Button
+              className="w-full astomed-btn-primary"
+              onClick={() => setShowPrivacyDialog(false)}
+            >
+              Stäng
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
