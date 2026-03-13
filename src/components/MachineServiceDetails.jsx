@@ -375,7 +375,7 @@ export const machineServiceDetails = {
       "20 % på arbetstid för övriga reparationer",
       "20 % på resekostnader"
     ],
-    additionalInfo: "Pris: 679 kr/månad"
+    additionalInfo: "Pris: 679 kr/månad <span style='color: white; font-size: 0.85em;'>(exkl. moms 25%)</span>"
   },
   "Soprano Platinum": {
     title: "Standardservice och underhåll – Soprano Platinum",
@@ -421,7 +421,7 @@ export const machineServiceDetails = {
       "20 % på arbetstid för övriga reparationer",
       "20 % på resekostnader"
     ],
-    additionalInfo: "Pris: 600 kr/månad"
+    additionalInfo: "Pris: 600 kr/månad <span style='color: white; font-size: 0.85em;'>(exkl. moms 25%)</span>"
   },
   "Clearlight IPL": {
     title: "Standardservice och underhåll – Clearlight IPL",
