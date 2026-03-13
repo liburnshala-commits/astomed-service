@@ -216,19 +216,14 @@ export default function Customers() {
                     <h3 className="font-semibold astomed-title truncate">{customer.company_name}</h3>
                   </div>
                   {userRole === "admin" && (
-                    <div className="flex items-center gap-2 ml-6 mb-2">
-                      <Checkbox
-                        checked={!!customer.is_deleted}
-                        onCheckedChange={(checked) => handleToggleDelete(customer, checked === true)}
-                        id={`delete-toggle-${customer.id}`}
-                      />
-                      <label htmlFor={`delete-toggle-${customer.id}`} className="text-xs cursor-pointer">
-                        {customer.is_deleted ? (
-                          <span className="text-red-600 font-medium">Markerad för radering</span>
-                        ) : (
-                          <span className="text-slate-600">Aktiv kund</span>
-                        )}
-                      </label>
+                    <div className="ml-6 mb-2">
+                      <Button
+                        size="sm"
+                        variant={customer.is_deleted ? "destructive" : "outline"}
+                        onClick={() => handleToggleDelete(customer, !customer.is_deleted)}
+                      >
+                        {customer.is_deleted ? "🗑️ Markerad för radering" : "Aktiv kund"}
+                      </Button>
                     </div>
                   )}
                   {customer.org_number && <p className="text-xs astomed-muted ml-6 mb-2">Org.nr: {customer.org_number}</p>}
