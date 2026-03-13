@@ -72,17 +72,21 @@ export default function ServiceContracts() {
 
   const handleDownloadContract = async (machine) => {
     try {
-      const response = await base44.functions.invoke('generateContractPDF', { machineId: machine.id });
+      const response = await fetch(`${window.location.origin}/api/functions/generateContractPDF`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ machineId: machine.id })
+      });
       
-      const blob = new Blob([response.data], { type: 'application/pdf' });
+      if (!response.ok) throw new Error('Failed to generate PDF');
+      
+      const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
       a.download = 'serviceavtal.pdf';
-      document.body.appendChild(a);
       a.click();
       window.URL.revokeObjectURL(url);
-      document.body.removeChild(a);
     } catch (error) {
       console.error('Error downloading contract:', error);
       alert('Det gick inte att ladda ner avtalet. Försök igen.');
