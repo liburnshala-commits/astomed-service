@@ -25,7 +25,7 @@ Deno.serve(async (req) => {
             manufacturer: data.manufacturer || null,
             serial_number: data.serial_number || null,
             service_description: data.service_description,
-            service_type: data.service_type || "standard",
+            service_type: data.service_type || "BAS - Astomed 3.0",
             status: "new"
         });
 
