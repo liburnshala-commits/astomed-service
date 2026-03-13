@@ -219,7 +219,7 @@ export default function Customers() {
                     <div className="flex items-center gap-2 ml-6 mb-2">
                       <Checkbox
                         checked={!!customer.is_deleted}
-                        onCheckedChange={(checked) => handleToggleDelete(customer, checked)}
+                        onCheckedChange={(checked) => handleToggleDelete(customer, checked === true)}
                         id={`delete-toggle-${customer.id}`}
                       />
                       <label htmlFor={`delete-toggle-${customer.id}`} className="text-xs cursor-pointer">
