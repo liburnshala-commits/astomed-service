@@ -82,12 +82,14 @@ Deno.serve(async (req) => {
         }
 
         // Terms
-        doc.setFontSize(12);
+        doc.setFontSize(11);
         doc.setFont('helvetica', 'bold');
-        doc.text('Avtalsvillkor:', 20, 130);
+        doc.setTextColor(27, 58, 58);
+        doc.text('AVTALSVILLKOR', 20, 125);
         
         doc.setFont('helvetica', 'normal');
-        doc.setFontSize(9);
+        doc.setFontSize(8.5);
+        doc.setTextColor(0, 0, 0);
         
         const terms = [
             '1. Avtalstid och Uppsägning\nServiceavtalet löper med en initial bindningstid om 12 månader från avtalets tecknande. Om uppsägning ej sker förlängs avtalet automatiskt med tolv (12) månader i taget.',
