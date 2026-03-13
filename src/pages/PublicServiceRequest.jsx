@@ -41,15 +41,22 @@ export default function PublicServiceRequest() {
     try {
       const submitData = {
         ...form,
-        preferred_date: form.preferred_date ? format(form.preferred_date, "yyyy-MM-dd") : null
+        preferred_date: form.preferred_date ? format(form.preferred_date, "yyyy-MM-dd") : null,
+        service_description: form.notes || `Serviceförfrågan för ${form.machine_name}. Föredragen tid: ${form.preferred_time_slot || 'ej vald'}.`
       };
       const res = await fetch(`https://api.base44.com/api/apps/69a9446fcb1cd4ab529479ba/functions/createPublicServiceLead`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(submitData)
       });
-      if (!res.ok) throw new Error("Fel vid skickning");
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.error || "Fel vid skickning");
+      }
       setSuccess(true);
+    } catch (error) {
+      console.error("Submission error:", error);
+      alert(`Ett fel uppstod: ${error.message}`);
     } finally {
       setSubmitting(false);
     }
