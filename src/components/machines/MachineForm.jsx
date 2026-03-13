@@ -25,7 +25,6 @@ export default function MachineForm({ machine, customers, preselectedCustomerId,
     installation_date: machine?.installation_date || "",
     warranty_expiry: machine?.warranty_expiry || "",
     status: machine?.status || "active",
-    service_interval: machine?.service_interval || "",
     service_contract: machine?.service_contract || "none",
     notes: machine?.notes || ""
   });
@@ -89,23 +88,11 @@ export default function MachineForm({ machine, customers, preselectedCustomerId,
               <Label>Installationsdatum</Label>
               <Input type="date" value={form.installation_date} onChange={e => set("installation_date", e.target.value)} />
             </div>
-            <div className="space-y-1">
+            <div className="col-span-2 space-y-1">
               <Label>Garanti till</Label>
               <Input type="date" value={form.warranty_expiry} onChange={e => set("warranty_expiry", e.target.value)} />
             </div>
-            <div className="space-y-1">
-              <Label>Serviceintervall (månader)</Label>
-              <Select value={form.service_interval?.toString() || ""} onValueChange={v => set("service_interval", Number(v))}>
-                <SelectTrigger><SelectValue placeholder="Välj intervall" /></SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="3">Var 3:e månad</SelectItem>
-                  <SelectItem value="6">Var 6:e månad</SelectItem>
-                  <SelectItem value="12">Varje år</SelectItem>
-                  <SelectItem value="24">Vartannat år</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="space-y-1">
+            <div className="col-span-2 space-y-1">
               <Label>Serviceavtal</Label>
               <Select value={form.service_contract} onValueChange={v => set("service_contract", v)}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
