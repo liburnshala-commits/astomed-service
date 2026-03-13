@@ -84,8 +84,8 @@ export default function PublicServiceRequest() {
       <div className="max-w-2xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8">
-          <div className="w-14 h-14 rounded-xl flex items-center justify-center mx-auto mb-4" style={{ background: "#1b3a3a" }}>
-            <Wrench className="w-7 h-7 text-white" />
+          <div className="w-20 h-20 rounded-xl overflow-hidden mx-auto mb-4" style={{ background: "#1b3a3a" }}>
+            <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69a9446fcb1cd4ab529479ba/bc2852de1_channels4_profile-2.jpg" alt="Astomed" className="w-full h-full object-cover" />
           </div>
           <h1 className="text-3xl font-bold mb-2" style={{ color: "#1b3a3a" }}>Astomed Serviceavtal - kostnadsfri konsultation</h1>
           <p className="text-gray-500">Fyll i formuläret nedan så kontaktar vi dig för kostnadsfri konsultation av serviceavtal för din/dina maskiner.</p>
