@@ -143,6 +143,28 @@ export default function MachineForm({ machine, customers, preselectedCustomerId,
                 </SelectContent>
               </Select>
             </div>
+            {form.service_contract === "basic" && form.model && form.model !== "Annan" && machineServiceDetails[form.model] && (
+              <div className="col-span-2 p-4 bg-green-50 rounded-lg border border-green-200">
+                <h3 className="font-semibold text-green-900 mb-2">
+                  Standardservice och underhåll för {form.model}
+                </h3>
+                <ul className="space-y-2 text-sm text-green-800">
+                  {machineServiceDetails[form.model].details.map((detail, idx) => (
+                    <li key={idx} className="flex gap-2">
+                      <span className="text-green-600">•</span>
+                      <span dangerouslySetInnerHTML={{ __html: detail }} />
+                    </li>
+                  ))}
+                </ul>
+                {machineServiceDetails[form.model].additionalInfo && (
+                  <div className="mt-3 pt-3 border-t border-green-300">
+                    <p className="text-sm font-semibold text-green-900">
+                      {machineServiceDetails[form.model].additionalInfo}
+                    </p>
+                  </div>
+                )}
+              </div>
+            )}
             <div className="col-span-2 space-y-1">
               <Label>Status</Label>
               <Select value={form.status} onValueChange={v => set("status", v)}>
