@@ -75,17 +75,42 @@ Deno.serve(async (req) => {
         doc.setFontSize(9);
         
         const terms = [
-            '1. Serviceavtalet omfattar ordinär underhåll enligt specifikation för maskinen.',
-            '2. Avtalets längd är enligt bindningstid från startdatum.',
-            '3. Reparationer utöver standardservice debiteras enligt gällande prislista.',
-            '4. Avtalet förnyas automatiskt om det inte sägs upp minst 30 dagar före utgång.'
+            '1. Avtalstid och Uppsägning\nServiceavtalet löper med en initial bindningstid om 12 månader från avtalets tecknande. Om uppsägning ej sker förlängs avtalet automatiskt med tolv (12) månader i taget.',
+            '2. Betalningsvillkor\nBetalning sker månadsvis eller kvartalsvis i förskott via autogiro. Vid utebliven betalning förbehåller sig Astomed rätten att pausa servicetjänster samt debitera dröjsmålsränta enligt lag.',
+            '3. Prisjusteringar\nAstomed äger rätt att årligen justera avgiften i enlighet med konsumentprisindex (KPI) eller vid betydande kostnadsökningar för reservdelar och logistik. Kunden ska meddelas om prisjustering senast 30 dagar innan de träder i kraft.',
+            '4. Omfattning\nAvtalet omfattar ordinarie underhåll enligt specifikation för respektive maskin. Reparationer utöver standardservice samt reservdelar debiteras enligt gällande prislista med avtalad rabatt om 20 % för reservdelar och 20% på resekostnader.'
         ];
         
         let yOffset = 138;
         for (let i = 0; i < terms.length; i++) {
             const lines = doc.splitTextToSize(terms[i], 170);
             doc.text(lines, 20, yOffset);
-            yOffset += (lines.length * 5) + 3;
+            yOffset += (lines.length * 5) + 4;
+        }
+        
+        // Service description from ServiceRecord if available
+        yOffset += 5;
+        const serviceRecords = await base44.asServiceRole.entities.ServiceRecord.filter({ machine_id: machineId });
+        if (serviceRecords && serviceRecords.length > 0) {
+            const latestService = serviceRecords[serviceRecords.length - 1];
+            
+            doc.setFontSize(12);
+            doc.setFont('helvetica', 'bold');
+            doc.text('Servicebeskrivning:', 20, yOffset);
+            
+            doc.setFont('helvetica', 'normal');
+            doc.setFontSize(9);
+            yOffset += 7;
+            
+            if (latestService.description) {
+                const descLines = doc.splitTextToSize(latestService.description, 170);
+                doc.text(descLines, 20, yOffset);
+                yOffset += (descLines.length * 5) + 3;
+            }
+            
+            if (latestService.total_cost) {
+                doc.text('Kostnad: ' + latestService.total_cost + ' SEK', 20, yOffset);
+            }
         }
 
         // Generate PDF
