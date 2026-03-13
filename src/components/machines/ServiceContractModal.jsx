@@ -23,15 +23,7 @@ const SERVICE_CONTRACTS = [
     label: "BAS – Astomed 3.0",
     interval: "Var 12:e månad",
     description: "Serviceavtal & Framtidssäkring: Astomed 3.0\n\nDin partner för teknisk drift, juridisk trygghet och klinisk kompetens sedan 2005.",
-    features: [
-      "STANDARD: Drift & Trygghet – Säkerställer hög drifttid och att personalen är med tekniken.",
-      "Intervall: Var 12:e månad.",
-      "Prestandakontroll: Mätning av uteffekt och kalibrering.",
-      "Lokalanalys: Rådgivning kring rummets lasersäkerhet.",
-      "Support: Fri teknisk rådgivning via telefon och fjärrsupport under avtalstiden.",
-      "Juridiskt stöd: Dokumentation som krävs för anmälan till SSM.",
-      "Kontakt: 08-410 77 900 | kontakt@astomed.se | www.astomed.se/service"
-    ]
+    features: []
   },
 ];
 
