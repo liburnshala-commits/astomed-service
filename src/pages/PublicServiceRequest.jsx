@@ -196,7 +196,7 @@ export default function PublicServiceRequest() {
                 </Select>
               </div>
               <div className="sm:col-span-2 space-y-3 bg-blue-50 border border-blue-200 rounded-lg p-4">
-                <h3 className="font-semibold text-lg text-blue-900">Vi kommer tillsammans att diskutera:</h3>
+                <h3 className="font-semibold text-lg text-blue-900">Vi kommer också ha möjlighet att diskutera nedan:</h3>
                 
                 <div className="space-y-4 text-sm text-gray-700">
                   <div>
