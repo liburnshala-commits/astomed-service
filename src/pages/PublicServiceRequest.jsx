@@ -70,16 +70,6 @@ export default function PublicServiceRequest() {
   return (
     <div className="min-h-screen py-10 px-4" style={{ background: "#f4f6f4" }}>
       <div className="max-w-2xl mx-auto">
-        {/* Login link top */}
-        <div className="text-center mb-6 p-4 bg-white rounded-lg border border-gray-200">
-          <p className="text-sm text-gray-600">
-            Har du redan ett konto hos Astomed och vill beställa service,{" "}
-            <a href="/login" className="text-blue-600 hover:underline font-medium">
-              klicka på denna länk för att logga in på ditt konto
-            </a>.
-          </p>
-        </div>
-
         {/* Header */}
         <div className="text-center mb-8">
           <div className="w-14 h-14 rounded-xl flex items-center justify-center mx-auto mb-4" style={{ background: "#1b3a3a" }}>
