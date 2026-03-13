@@ -77,7 +77,6 @@ export default function ServiceContractModal({ machine, onSave, onClose }) {
                   <span className="text-xs astomed-muted ml-auto">{selectedContract.interval}</span>
                 )}
               </div>
-              <p className="text-xs astomed-subtitle mb-2">{selectedContract.description}</p>
               <ul className="space-y-1">
                 {selectedContract.features.map((f, i) => (
                   <li key={i} className="flex items-start gap-1.5 text-xs astomed-subtitle">
