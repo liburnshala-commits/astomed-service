@@ -218,8 +218,11 @@ export default function Customers() {
                   {userRole === "admin" && (
                     <div className="flex items-center gap-2 ml-6 mb-2">
                       <Switch
-                        checked={customer.is_deleted || false}
-                        onCheckedChange={(checked) => handleToggleDelete(customer, checked)}
+                        checked={!!customer.is_deleted}
+                        onCheckedChange={(checked) => {
+                          console.log('Switch toggled:', customer.company_name, 'to', checked);
+                          handleToggleDelete(customer, checked);
+                        }}
                         id={`delete-toggle-${customer.id}`}
                       />
                       <label htmlFor={`delete-toggle-${customer.id}`} className="text-xs cursor-pointer">
