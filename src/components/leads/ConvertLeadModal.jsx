@@ -6,8 +6,52 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { base44 } from "@/api/base44Client";
+import { machineServiceDetails } from "../MachineServiceDetails";
 
 const TECHNICIANS = ["Erik Lindström", "Anna Karlsson", "Johan Bergström", "Maria Svensson"];
+
+const MODELS = [
+  "Soprano ICE Platinum",
+  "Soprano Titanium",
+  "Helios III",
+  "Picolo",
+  "Cocoon Elysion",
+  "Aldix Smart Laser",
+  "Pento 9900",
+  "PrimeLase HR",
+  "PrimeLase Excel",
+  "PrimeLase Excel HR",
+  "Soprano Platinum",
+  "Soprano Titanium Special Edition",
+  "Aldix (Triodus)",
+  "PrimeLase",
+  "Elysion",
+  "PicoLo",
+  "Helius",
+  "Splendor X",
+  "Pento",
+  "Clearlight IPL",
+  "Fraction CO2",
+  "Mezotix",
+  "IOXO Laser",
+  "IOXO Microneedling",
+  "Focus Dual",
+  "Ultraformer III",
+  "Powershape 2",
+  "Indiba",
+  "CMSlim",
+  "Coolshaping 2",
+  "Hydra Beauty 2",
+  "Dermadrop",
+  "Carbomed",
+  "Cryopen",
+  "CryoIQ",
+  "Reoxy",
+  "Oxyhelp",
+  "Omega PDT",
+  "Eskimo Luftkylare",
+  "TBH Röksug"
+];
 
 export default function ConvertLeadModal({ lead, onClose, onConverted }) {
   const [form, setForm] = useState({
@@ -21,6 +65,8 @@ export default function ConvertLeadModal({ lead, onClose, onConverted }) {
     city: lead.city || "",
     notes: ""
   });
+  const [machineModel, setMachineModel] = useState("Soprano Platinum");
+  const [customModel, setCustomModel] = useState("");
   const [technician, setTechnician] = useState("");
   const [saving, setSaving] = useState(false);
   const [done, setDone] = useState(false);
@@ -43,9 +89,10 @@ export default function ConvertLeadModal({ lead, onClose, onConverted }) {
         notes: form.notes
       });
 
-      // 2. Create a machine placeholder
+      // 2. Create a machine
+      const finalModel = machineModel === "Annan" ? customModel : machineModel;
       const machine = await base44.entities.Machine.create({
-        model: "Soprano Platinum", // placeholder - can be updated later
+        model: finalModel,
         serial_number: lead.serial_number || "OKÄND",
         customer_id: customer.id,
         notes: `Maskin från serviceförfrågan: ${lead.machine_name}${lead.manufacturer ? ` (${lead.manufacturer})` : ""}`
@@ -160,6 +207,50 @@ export default function ConvertLeadModal({ lead, onClose, onConverted }) {
           </div>
 
           <div>
+            <h3 className="text-xs font-semibold uppercase tracking-wide text-gray-400 mb-3">Maskinuppgifter</h3>
+            <div className="space-y-3">
+              <div className="space-y-1">
+                <Label>Maskinmodell</Label>
+                <Select value={machineModel} onValueChange={setMachineModel}>
+                  <SelectTrigger><SelectValue placeholder="Välj modell" /></SelectTrigger>
+                  <SelectContent>
+                    {MODELS.map(m => <SelectItem key={m} value={m}>{m}</SelectItem>)}
+                    <SelectItem value="Annan">Annan</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              {machineModel === "Annan" && (
+                <div className="space-y-1">
+                  <Label>Maskinnamn *</Label>
+                  <Input value={customModel} onChange={e => setCustomModel(e.target.value)} placeholder="Ange maskinens namn" />
+                </div>
+              )}
+              {machineModel && machineModel !== "Annan" && machineServiceDetails[machineModel] && (
+                <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
+                  <h3 className="font-semibold text-blue-900 mb-2">
+                    {machineServiceDetails[machineModel].title}
+                  </h3>
+                  <ul className="space-y-2 text-sm text-blue-800">
+                    {machineServiceDetails[machineModel].details.map((detail, idx) => (
+                      <li key={idx} className="flex gap-2">
+                        <span className="text-blue-600">•</span>
+                        <span dangerouslySetInnerHTML={{ __html: detail }} />
+                      </li>
+                    ))}
+                  </ul>
+                  {machineServiceDetails[machineModel].additionalInfo && (
+                    <div className="mt-3 pt-3 border-t border-blue-300">
+                      <p className="text-sm font-semibold text-blue-900">
+                        {machineServiceDetails[machineModel].additionalInfo}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div>
             <h3 className="text-xs font-semibold uppercase tracking-wide text-gray-400 mb-3">Tilldela tekniker (valfritt)</h3>
             <Select value={technician} onValueChange={setTechnician}>
               <SelectTrigger><SelectValue placeholder="Välj tekniker..." /></SelectTrigger>
@@ -174,7 +265,7 @@ export default function ConvertLeadModal({ lead, onClose, onConverted }) {
 
         <div className="flex justify-end gap-3 p-6 border-t bg-slate-50 rounded-b-2xl">
           <Button variant="outline" onClick={onClose}>Avbryt</Button>
-          <Button className="astomed-btn-primary" onClick={handleConvert} disabled={saving}>
+          <Button className="astomed-btn-primary" onClick={handleConvert} disabled={saving || (machineModel === "Annan" && !customModel)}>
             {saving ? "Skapar..." : "Skapa kund & serviceärende"}
           </Button>
         </div>
