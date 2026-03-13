@@ -265,7 +265,7 @@ export const machineServiceDetails = {
       "20 % på arbetstid för övriga reparationer",
       "20 % på resekostnader"
     ],
-    additionalInfo: "Pris: 419 kr/månad"
+    additionalInfo: "Pris: 600 kr/månad"
   },
   "Aldix Smart Laser": {
     title: "Standardservice och underhåll – Aldix Smart Laser",
