@@ -141,6 +141,7 @@ export default function Customers() {
   };
 
   const handleToggleDelete = async (customer, newIsDeleted) => {
+    console.log('handleToggleDelete called:', customer.company_name, newIsDeleted);
     try {
       const updateData = { is_deleted: newIsDeleted };
       if (newIsDeleted) {
@@ -148,10 +149,13 @@ export default function Customers() {
       } else {
         updateData.deleted_date = null;
       }
+      console.log('Updating customer:', customer.id, updateData);
       await base44.entities.Customer.update(customer.id, updateData);
+      console.log('Update successful');
       toast.success(`Kund ${customer.company_name} markerad som ${newIsDeleted ? 'raderad' : 'aktiv'}.`);
-      load();
+      await load();
     } catch (error) {
+      console.error('Error updating customer:', error);
       toast.error("Kunde inte uppdatera kundens status: " + error.message);
     }
   };
