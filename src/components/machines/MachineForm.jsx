@@ -26,7 +26,28 @@ const MODELS = [
   "PicoLo",
   "Helius",
   "Splendor X",
-  "Pento"
+  "Pento",
+  "Clearlight IPL",
+  "Fraction CO2",
+  "Mezotix",
+  "IOXO Laser",
+  "IOXO Microneedling",
+  "Focus Dual",
+  "Ultraformer III",
+  "Powershape 2",
+  "Indiba",
+  "CMSlim",
+  "Coolshaping 2",
+  "Hydra Beauty 2",
+  "Dermadrop",
+  "Carbomed",
+  "Cryopen",
+  "CryoIQ",
+  "Reoxy",
+  "Oxyhelp",
+  "Omega PDT",
+  "Eskimo Luftkylare",
+  "TBH Röksug"
 ];
 
 const isCustomModel = (model) => model && !MODELS.includes(model);
