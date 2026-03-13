@@ -61,23 +61,24 @@ Deno.serve(async (req) => {
         doc.text('E-post: ' + (customer.email || ''), 20, 77);
 
         // Machine details
-        doc.setFontSize(12);
+        doc.setFontSize(11);
         doc.setFont('helvetica', 'bold');
-        doc.text('Maskininformation:', 20, 87);
+        doc.setTextColor(27, 58, 58);
+        doc.text('MASKININFORMATION', 20, 88);
         
         doc.setFont('helvetica', 'normal');
-        doc.setFontSize(10);
-        doc.text('Maskin: ' + (machine.model || ''), 20, 94);
-        doc.text('Serienummer: ' + (machine.serial_number || ''), 20, 99);
-        doc.text('Avtal: ' + (machine.service_contract === 'basic' ? 'BAS - Astomed 3.0' : machine.service_contract || ''), 20, 104);
+        doc.setFontSize(9);
+        doc.text('Maskinmodell: ' + (machine.model || ''), 20, 95);
+        doc.text('Serienummer: ' + (machine.serial_number || ''), 20, 100);
+        doc.text('Serviceavtal: ' + (machine.service_contract === 'basic' ? 'BAS - Astomed 3.0' : machine.service_contract || ''), 20, 105);
         
         if (machine.contract_start_date) {
             const startDate = new Date(machine.contract_start_date).toLocaleDateString('sv-SE');
-            doc.text('Startdatum: ' + startDate, 20, 109);
+            doc.text('Startdatum: ' + startDate, 20, 110);
         }
         
         if (machine.contract_binding_months) {
-            doc.text('Bindningstid: ' + machine.contract_binding_months + ' månader', 20, 114);
+            doc.text('Bindningstid: ' + machine.contract_binding_months + ' månader', 20, 115);
         }
 
         // Terms
