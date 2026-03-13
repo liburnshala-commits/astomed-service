@@ -5,8 +5,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
   UserPlus, Wrench, Archive, Eye, Search, RefreshCw,
-  Building2, Phone, Mail, Cpu, ClipboardList
+  Building2, Phone, Mail, Cpu, ClipboardList, Trash2
 } from "lucide-react";
+import { toast } from "sonner";
 import LeadDetailModal from "@/components/leads/LeadDetailModal.jsx";
 import ConvertLeadModal from "@/components/leads/ConvertLeadModal.jsx";
 
@@ -54,6 +55,19 @@ export default function PublicServiceLeads() {
   const handleArchive = async (lead) => {
     await base44.entities.PublicServiceLead.update(lead.id, { status: "archived" });
     loadLeads();
+  };
+
+  const handleDelete = async (lead) => {
+    if (!confirm(`Vill du verkligen radera förfrågan från ${lead.company_name}? Detta går inte att ångra.`)) {
+      return;
+    }
+    try {
+      await base44.entities.PublicServiceLead.delete(lead.id);
+      toast.success("Förfrågan raderad");
+      loadLeads();
+    } catch (error) {
+      toast.error("Kunde inte radera förfrågan: " + error.message);
+    }
   };
 
   return (
@@ -167,6 +181,9 @@ export default function PublicServiceLeads() {
                         <Archive className="w-3.5 h-3.5" /> Arkivera
                       </Button>
                     )}
+                    <Button size="sm" variant="ghost" className="gap-1.5 text-xs text-red-400 hover:text-red-600 hover:bg-red-50" onClick={() => handleDelete(lead)}>
+                      <Trash2 className="w-3.5 h-3.5" /> Radera
+                    </Button>
                   </div>
                 </div>
               </div>
