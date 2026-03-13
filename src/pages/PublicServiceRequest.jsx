@@ -157,6 +157,13 @@ export default function PublicServiceRequest() {
                      </li>
                     ))}
                   </ul>
+                  {machineServiceDetails[form.machine_name].additionalInfo && (
+                    <div className="mt-3 pt-3 border-t border-blue-300">
+                      <p className="text-sm font-semibold text-blue-900">
+                        {machineServiceDetails[form.machine_name].additionalInfo}
+                      </p>
+                    </div>
+                  )}
                 </div>
               )}
               <div className="sm:col-span-2 space-y-3 bg-blue-50 border border-blue-200 rounded-lg p-4">
