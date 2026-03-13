@@ -9,7 +9,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { format } from "date-fns";
 import { sv } from "date-fns/locale";
-import { machineServiceDetails } from "@/utils/machineServiceDetails";
+import { machineServiceDetails } from "@/components/MachineServiceDetails";
 
 export default function PublicServiceRequest() {
   const [form, setForm] = useState({
@@ -128,10 +128,36 @@ export default function PublicServiceRequest() {
           <div>
             <h2 className="text-sm font-semibold uppercase tracking-wide mb-4" style={{ color: "#254f4f" }}>Maskinuppgifter</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="space-y-1">
+              <div className="sm:col-span-2 space-y-1">
                 <Label>Maskintyp *</Label>
-                <Input value={form.machine_name} onChange={e => set("machine_name", e.target.value)} placeholder="T.ex. Laser, IPL, Ultraljud..." required />
+                <Select value={form.machine_name} onValueChange={v => set("machine_name", v)} required>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Välj maskintyp" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {Object.keys(machineServiceDetails).map(machine => (
+                      <SelectItem key={machine} value={machine}>{machine}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
+              
+              {form.machine_name && machineServiceDetails[form.machine_name] && (
+                <div className="sm:col-span-2 p-4 bg-blue-50 rounded-lg border border-blue-200">
+                  <h3 className="font-semibold text-blue-900 mb-2">
+                    {machineServiceDetails[form.machine_name].title}
+                  </h3>
+                  <ul className="space-y-2 text-sm text-blue-800">
+                    {machineServiceDetails[form.machine_name].details.map((detail, idx) => (
+                      <li key={idx} className="flex gap-2">
+                        <span className="text-blue-600">•</span>
+                        <span>{detail}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              
               <div className="space-y-1">
                 <Label>Tillverkare</Label>
                 <Input value={form.manufacturer} onChange={e => set("manufacturer", e.target.value)} placeholder="T.ex. Candela, Syneron..." />
