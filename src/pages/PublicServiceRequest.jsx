@@ -179,31 +179,7 @@ export default function PublicServiceRequest() {
                   )}
                 </div>
               )}
-              <div className="sm:col-span-2 space-y-3 bg-blue-50 border border-blue-200 rounded-lg p-4">
-                <h3 className="font-semibold text-lg text-blue-900">Vi kommer också ha möjlighet att diskutera nedan:</h3>
-                
-                <div className="space-y-4 text-sm text-gray-700">
-                  <div>
-                    <h4 className="font-semibold text-blue-800 mb-1">Lokalsäkring: Vi framtidssäkrar ditt behandlingsrum</h4>
-                    <ul className="space-y-1 ml-4 list-disc">
-                      <li><strong>Analys av reflekterande ytor:</strong> Vi identifierar speglar, blanka metaller eller glaspartier som måste täckas eller flyttas för att förhindra oavsiktliga laserreflexer.</li>
-                      <li><strong>Kontroll av strålskyddszoner:</strong> Vi ser över att rummet är korrekt avskärmat så att ingen strålning kan lämna lokalen genom fönster eller dörrar under pågående behandling.</li>
-                      <li><strong>Varningsskyltning & Tillträde:</strong> Vi kontrollerar att lagstadgad varningsskyltning finns på plats och att rutiner för att förhindra obehörigt tillträde följs.</li>
-                      <li><strong>Skyddsutrustning:</strong> Vi verifierar att rätt skyddsglasögon finns tillgängliga och är i gott skick.</li>
-                    </ul>
-                  </div>
 
-                  <div>
-                    <h4 className="font-semibold text-blue-800 mb-1">Astomed Partnerförmåner - Din tillväxt är vår framgång</h4>
-                    <ul className="space-y-1 ml-4 list-disc">
-                      <li><strong>Ekonomisk trygghet:</strong> Som avtalskund erhåller du 20% rabatt på alla reservdelar samt vid större reparationer utanför det ordinarie underhållet.</li>
-                      <li><strong>Prioriterad support:</strong> Du har fri tillgång till teknisk support via både telefon och chatt för snabb felavhjälpning och assistans i vardagen.</li>
-                      <li><strong>Strategisk konsultation:</strong> Vi delar med oss av vår samlade erfarenhet från branschen sedan 2005 för att hjälpa dig att optimera din verksamhet. Vi erbjuder tips och råd kring hur du kan utöka din maskinpark och utveckla ditt behandlingsutbud.</li>
-                      <li><strong>Affärsutveckling:</strong> Ta del av insikter om hur framgångsrika kliniker i Norden har skalat upp sin verksamhet. Vi hjälper dig med allt från att välja rätt nästa investering till att skräddarsy finansieringslösningar.</li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
 
