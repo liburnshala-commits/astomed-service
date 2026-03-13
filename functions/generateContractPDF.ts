@@ -26,8 +26,15 @@ Deno.serve(async (req) => {
         doc.setFillColor(27, 58, 58);
         doc.rect(0, 0, 210, 45, 'F');
 
-        // Logo
-        doc.addImage('https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69a9446fcb1cd4ab529479ba/0060a5b35_channels4_profile-2.jpg', 'JPEG', 15, 8, 25, 25);
+        // Fetch and add logo as base64
+        try {
+            const logoResponse = await fetch('https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69a9446fcb1cd4ab529479ba/0060a5b35_channels4_profile-2.jpg');
+            const logoBlob = await logoResponse.arrayBuffer();
+            const logoBase64 = btoa(String.fromCharCode(...new Uint8Array(logoBlob)));
+            doc.addImage('data:image/jpeg;base64,' + logoBase64, 'JPEG', 15, 8, 25, 25);
+        } catch (logoError) {
+            console.log('Logo loading skipped');
+        }
 
         // Title
         doc.setFontSize(24);
