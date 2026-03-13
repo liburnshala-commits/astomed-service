@@ -150,10 +150,10 @@ export default function PublicServiceRequest() {
                   </h3>
                   <ul className="space-y-2 text-sm text-blue-800">
                     {machineServiceDetails[form.machine_name].details.map((detail, idx) => (
-                      <li key={idx} className="flex gap-2">
-                        <span className="text-blue-600">•</span>
-                        <span>{detail}</span>
-                      </li>
+                     <li key={idx} className="flex gap-2">
+                       <span className="text-blue-600">•</span>
+                       <span dangerouslySetInnerHTML={{ __html: detail }} />
+                     </li>
                     ))}
                   </ul>
                 </div>
