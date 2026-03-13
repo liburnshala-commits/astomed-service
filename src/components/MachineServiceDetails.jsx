@@ -65,7 +65,7 @@ export const machineServiceDetails = {
       "20 % på arbetstid för övriga reparationer",
       "20 % på resekostnader"
     ],
-    additionalInfo: "Pris: 549 kr/månad"
+    additionalInfo: "Pris: 600 kr/månad"
   },
   "PrimeLase": {
     title: "Standardservice och underhåll – PrimeLase",
@@ -107,7 +107,7 @@ export const machineServiceDetails = {
       "20 % på arbetstid för övriga reparationer",
       "20 % på resekostnader"
     ],
-    additionalInfo: "Pris: 419 kr/månad"
+    additionalInfo: "Pris: 600 kr/månad"
   },
   "PicoLo": {
     title: "Standardservice och underhåll – PicoLo",
@@ -130,7 +130,7 @@ export const machineServiceDetails = {
       "20 % på arbetstid för övriga reparationer",
       "20 % på resekostnader"
     ],
-    additionalInfo: "Pris: 419 kr/månad"
+    additionalInfo: "Pris: 600 kr/månad"
   },
   "Helios": {
     title: "Standardservice och underhåll – Helios",
@@ -153,7 +153,7 @@ export const machineServiceDetails = {
       "20 % på arbetstid för övriga reparationer",
       "20 % på resekostnader"
     ],
-    additionalInfo: "Pris: 419 kr/månad"
+    additionalInfo: "Pris: 600 kr/månad"
   },
   "Splendor X": {
     title: "Standardservice och underhåll – Splendor X",
@@ -222,7 +222,7 @@ export const machineServiceDetails = {
       "20 % på arbetstid för övriga reparationer",
       "20 % på resekostnader"
     ],
-    additionalInfo: "Pris: 419 kr/månad"
+    additionalInfo: "Pris: 600 kr/månad"
   },
   "Picolo": {
     title: "Standardservice och underhåll – Picolo",
@@ -245,7 +245,7 @@ export const machineServiceDetails = {
       "20 % på arbetstid för övriga reparationer",
       "20 % på resekostnader"
     ],
-    additionalInfo: "Pris: 419 kr/månad"
+    additionalInfo: "Pris: 600 kr/månad"
   },
   "Cocoon Elysion": {
     title: "Standardservice och underhåll – Cocoon Elysion",
@@ -287,7 +287,7 @@ export const machineServiceDetails = {
       "20 % på arbetstid för övriga reparationer",
       "20 % på resekostnader"
     ],
-    additionalInfo: "Pris: 549 kr/månad"
+    additionalInfo: "Pris: 600 kr/månad"
   },
   "Pento 9900": {
     title: "Standardservice och underhåll – Pento 9900",
