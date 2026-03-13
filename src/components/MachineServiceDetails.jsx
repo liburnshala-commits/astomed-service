@@ -1,12 +1,205 @@
 export const machineServiceDetails = {
-  "Splendor X": {
-    title: "Standardservice och underhåll",
+  "Soprano ICE Platinum": {
+    title: "Standardservice och underhåll – Soprano ICE Platinum / Titanium",
     details: [
-      "<strong>Optisk förnyelse:</strong> Byte av dubbla resonatorlampor (2 st) för att garantera full kraft i Alexandrit- och Nd:YAG-lasern.",
-      "<strong>Kylsystem:</strong> Installation av nytt dejoniseringsfilter och byte av 20L destillerat vatten för det stora kylsystemet.",
-      "<strong>Luftrening:</strong> Byte av filter till det inbyggda rökutsuget (Smoke Evacuator Filter) för att skydda hälsa.",
-      "<strong>Resurskontroll:</strong> Fullständig teknisk översyn av maskinens hybridsystem på plats."
-    ]
+      "Byte av Avjoniseringsfilter",
+      "Byte av mekaniskpartikelfilter",
+      "Byte av steriliserande UV-lampa",
+      "Byte av CPC-kopplingar till filter",
+      "Påfyllning av destillerat avjoniserat kylvätska",
+      "Spolning av pneumatisk krets",
+      "Läckagekontroll",
+      "Kontroll av luftintagsfilter",
+      "Lasereffektmätning",
+      "Rengöring av värmeväxlare",
+      "Rengörning av Switchade nätaggret",
+      "Kontroll av nödstopp och interlock",
+      "Upprättande av serviceprotokoll",
+      "Serviceuppmärkning av utrustning",
+      "Kontroll av säkerhetsrem",
+      "20 % på arbetstid för övriga reparationer",
+      "20 % på resekostnader"
+    ],
+    additionalInfo: "Pris: 600 kr/månad"
+  },
+  "Soprano Titanium": {
+    title: "Standardservice och underhåll – Soprano ICE Platinum / Titanium",
+    details: [
+      "Byte av Avjoniseringsfilter",
+      "Byte av mekaniskpartikelfilter",
+      "Byte av steriliserande UV-lampa",
+      "Byte av CPC-kopplingar till filter",
+      "Påfyllning av destillerat avjoniserat kylvätska",
+      "Spolning av pneumatisk krets",
+      "Läckagekontroll",
+      "Kontroll av luftintagsfilter",
+      "Lasereffektmätning",
+      "Rengöring av värmeväxlare",
+      "Rengörning av Switchade nätaggret",
+      "Kontroll av nödstopp och interlock",
+      "Upprättande av serviceprotokoll",
+      "Serviceuppmärkning av utrustning",
+      "Kontroll av säkerhetsrem",
+      "20 % på arbetstid för övriga reparationer",
+      "20 % på resekostnader"
+    ],
+    additionalInfo: "Pris: 600 kr/månad"
+  },
+  "Aldix (Triodus)": {
+    title: "Standardservice och underhåll – Aldix (Triodus)",
+    details: [
+      "Byte av pneumatisk avjoniseringsfilter A",
+      "Byte av pneumatisk avjoniseringsfilter B",
+      "Byte av snabbkopplingar till filter",
+      "Påfyllning av destillerat avjoniserat kylvätska",
+      "Spolning av pneumatisk krets",
+      "Läckagekontroll",
+      "Kontroll av luftintagsfilter",
+      "Lasereffektmätning",
+      "Rengöring av värmeväxlare",
+      "Rengörning av Switchade nätaggret",
+      "Kontroll av nödstopp och interlock",
+      "Upprättande av serviceprotokoll",
+      "Serviceuppmärkning av utrustning",
+      "Kontroll av säkerhetsrem",
+      "20 % på arbetstid för övriga reparationer",
+      "20 % på resekostnader"
+    ],
+    additionalInfo: "Pris: 549 kr/månad"
+  },
+  "PrimeLase": {
+    title: "Standardservice och underhåll – PrimeLase",
+    details: [
+      "Byte av vattenfilter för intern vattenkrets",
+      "Byte av vattenfilter för tip-kylningssystem",
+      "Byte av vattenfilter för diodkylningssystem",
+      "Påfyllning av destillerat avjoniserat kylvätska med glykolblandning",
+      "Spolning av pneumatisk krets",
+      "Läckagekontroll",
+      "Kontroll av luftintagsfilter",
+      "Lasereffektmätning",
+      "Rengöring av värmeväxlare",
+      "Rengörning av Switchade nätaggret",
+      "Kontroll av nödstopp och interlock",
+      "Upprättande av serviceprotokoll",
+      "Serviceuppmärkning av utrustning",
+      "Kontroll av säkerhetsrem",
+      "20 % på arbetstid för övriga reparationer",
+      "20 % på resekostnader"
+    ],
+    additionalInfo: "Pris: 679 kr/månad"
+  },
+  "Elysion": {
+    title: "Standardservice och underhåll – Elysion",
+    details: [
+      "Byte av mekanisk vattenfilter",
+      "Påfyllning av destillerat avjoniserat kylvätska med glykolblandning",
+      "Spolning av pneumatisk krets",
+      "Läckagekontroll",
+      "Kontroll av luftintagsfilter",
+      "Lasereffektmätning",
+      "Rengöring av värmeväxlare",
+      "Rengörning av Switchade nätaggret",
+      "Kontroll av nödstopp och interlock",
+      "Upprättande av serviceprotokoll",
+      "Serviceuppmärkning av utrustning",
+      "Kontroll av säkerhetsrem",
+      "20 % på arbetstid för övriga reparationer",
+      "20 % på resekostnader"
+    ],
+    additionalInfo: "Pris: 419 kr/månad"
+  },
+  "PicoLo": {
+    title: "Standardservice och underhåll – PicoLo",
+    details: [
+      "Byte av vattenfiltersystem",
+      "Påfyllning av destillerat avjoniserat kylvätska",
+      "Spolning av pneumatisk krets",
+      "Läckagekontroll",
+      "Kontroll av luftintagsfilter",
+      "Lasereffektmätning",
+      "Rengöring av värmeväxlare",
+      "Rengörning av Switchade nätaggret",
+      "Kontroll av nödstopp och interlock",
+      "Upprättande av serviceprotokoll",
+      "Serviceuppmärkning av utrustning",
+      "Kontroll av säkerhetsrem",
+      "Kontroll av possitionering av ledljus",
+      "Kontroll av träffbildsmönster",
+      "Kontroll av alla handneheters linser",
+      "20 % på arbetstid för övriga reparationer",
+      "20 % på resekostnader"
+    ],
+    additionalInfo: "Pris: 419 kr/månad"
+  },
+  "Helios": {
+    title: "Standardservice och underhåll – Helios",
+    details: [
+      "Byte av vattenfiltersystem",
+      "Påfyllning av destillerat avjoniserat kylvätska",
+      "Spolning av pneumatisk krets",
+      "Läckagekontroll",
+      "Kontroll av luftintagsfilter",
+      "Lasereffektmätning",
+      "Rengöring av värmeväxlare",
+      "Rengörning av Switchade nätaggret",
+      "Kontroll av nödstopp och interlock",
+      "Upprättande av serviceprotokoll",
+      "Serviceuppmärkning av utrustning",
+      "Kontroll av säkerhetsrem",
+      "Kontroll av possitionering av ledljus",
+      "Kontroll av träffbildsmönster",
+      "Kontroll av alla handneheters linser",
+      "20 % på arbetstid för övriga reparationer",
+      "20 % på resekostnader"
+    ],
+    additionalInfo: "Pris: 419 kr/månad"
+  },
+  "Splendor X": {
+    title: "Standardservice och underhåll – Splendor X",
+    details: [
+      "Byte av avjoniserande DI-filter",
+      "Byte av Smoke Evacuation-filter",
+      "Rengöring av värmeväxlare i kylsystemet",
+      "Rengöring av värmeväxlare i Splendor X",
+      "Kontroll av optiska linser",
+      "Påfyllning av destillerat avjoniserat kylvätska",
+      "Spolning av pneumatisk krets",
+      "Läckagekontroll",
+      "Lasereffektmätning",
+      "Rengörning av Switchade nätaggret",
+      "Kontroll av nödstopp och interlock",
+      "Upprättande av serviceprotokoll",
+      "Serviceuppmärkning av utrustning",
+      "Kontroll av säkerhetsrem",
+      "Kontroll av träffbildsmönster",
+      "Kontroll av alla handneheters linser",
+      "20 % på arbetstid för övriga reparationer",
+      "20 % på resekostnader"
+    ],
+    additionalInfo: "Pris: 709 kr/månad"
+  },
+  "Pento": {
+    title: "Standardservice och underhåll – Pento",
+    details: [
+      "Byte av avjoniserande DI-filter",
+      "Rengöring av värmeväxlare",
+      "Kontroll av optiska linser",
+      "Påfyllning av destillerat avjoniserat kylvätska",
+      "Spolning av pneumatisk krets",
+      "Läckagekontroll",
+      "Lasereffektmätning",
+      "Rengörning av Switchade nätaggret",
+      "Kontroll av nödstopp och interlock",
+      "Upprättande av serviceprotokoll",
+      "Serviceuppmärkning av utrustning",
+      "Kontroll av säkerhetsrem",
+      "Kontroll av träffbildsmönster",
+      "Kontroll av alla handneheters linser",
+      "20 % på arbetstid för övriga reparationer",
+      "20 % på resekostnader"
+    ],
+    additionalInfo: "Pris: 709 kr/månad"
   },
   "Helios III": {
     title: "Standardservice och underhåll",
@@ -16,7 +209,7 @@ export const machineServiceDetails = {
       "<strong>Prestandakontroll:</strong> Verifiering av den patenterade dubbelpulstekniken för att säkerställa jämn energi vid tatueringsborttagning och Hollywood-peel."
     ]
   },
-  "PicoLo": {
+  "Picolo": {
     title: "Standardservice och underhåll",
     details: [
       "<strong>Byte av filterkit:</strong> Installation av nytt, modellanpassat filterset för att säkerställa att kylsystemet fungerar optimalt och skyddar laserkällan.",
@@ -30,24 +223,6 @@ export const machineServiceDetails = {
       "<strong>Elysion filterkit:</strong> Byte av samtliga filter i maskinens interna system för att förebygga igensättning.",
       "<strong>Funktionstesting:</strong> Test av laserpulsens stabilitet och frekvens.",
       "<strong>Säkerhetsprotokoll:</strong> Utfärdande av serviceprotokoll som visar att maskinen genomgått regelbunden kontroll enligt SSM:s riktlinjer."
-    ]
-  },
-  "PrimeLase": {
-    title: "Standardservice och underhåll",
-    details: [
-      "<strong>Byte av filtersystem:</strong> Installation av komplett hydrauliskt filterset (SP) för att optimera kylning och skydda maskinens laserkomponenter.",
-      "<strong>Systemoptimering:</strong> Teknisk genomgång av maskinens hydraulik och energiflöden.",
-      "<strong>Säkerhetskontroll:</strong> Verifiering av samtliga säkerhetsfunktioner enligt gällande krav."
-    ]
-  },
-  "Soprano Titanium": {
-    title: "Standardservice och underhåll för Soprano Titanium",
-    details: [
-      "<strong>Vattenbehandling:</strong> Byte av Deionization Filter och påfyllning av nytt destillerat vatten för att förhindra partikelansamlingar.",
-      "<strong>Partikelskydd:</strong> Installation av nytt 15 Micron meshfilter för optimalt flöde.",
-      "<strong>UV-sterilisering:</strong> Byte av lampa och kablage för UV-rengöring av kylvattnet.",
-      "<strong>Kopplingskontroll:</strong> Byte av CPC-snabbkopplingar på DI-filter för att säkerställa läckagefria anslutningar.",
-      "Pris: 600 kr/mån"
     ]
   },
   "Aldix Smart Laser": {
