@@ -20,7 +20,7 @@ export const machineServiceDetails = {
       "20 % på arbetstid för övriga reparationer",
       "20 % på resekostnader"
     ],
-    additionalInfo: "Pris: 600 kr/månad <span style='color: white; font-size: 0.85em;'>(exkl. moms 25%)</span>"
+    additionalInfo: "Pris: 600 kr/månad"
   },
   "Soprano Titanium": {
     title: "Standardservice och underhåll – Soprano ICE Platinum / Titanium",
@@ -43,7 +43,7 @@ export const machineServiceDetails = {
       "20 % på arbetstid för övriga reparationer",
       "20 % på resekostnader"
     ],
-    additionalInfo: "Pris: 600 kr/månad <span style='color: white; font-size: 0.85em;'>(exkl. moms 25%)</span>"
+    additionalInfo: "Pris: 600 kr/månad"
   },
   "Aldix (Triodus)": {
     title: "Standardservice och underhåll – Aldix (Triodus)",
@@ -87,7 +87,7 @@ export const machineServiceDetails = {
       "20 % på arbetstid för övriga reparationer",
       "20 % på resekostnader"
     ],
-    additionalInfo: "Pris: 679 kr/månad <span style='color: white; font-size: 0.85em;'>(exkl. moms 25%)</span>"
+    additionalInfo: "Pris: 679 kr/månad"
   },
   "Elysion": {
     title: "Standardservice och underhåll – Elysion",
@@ -107,7 +107,7 @@ export const machineServiceDetails = {
       "20 % på arbetstid för övriga reparationer",
       "20 % på resekostnader"
     ],
-    additionalInfo: "Pris: 600 kr/månad <span style='color: white; font-size: 0.85em;'>(exkl. moms 25%)</span>"
+    additionalInfo: "Pris: 600 kr/månad"
   },
   "PicoLo": {
     title: "Standardservice och underhåll – PicoLo",
@@ -130,7 +130,7 @@ export const machineServiceDetails = {
       "20 % på arbetstid för övriga reparationer",
       "20 % på resekostnader"
     ],
-    additionalInfo: "Pris: 600 kr/månad <span style='color: white; font-size: 0.85em;'>(exkl. moms 25%)</span>"
+    additionalInfo: "Pris: 600 kr/månad"
   },
   "Helios": {
     title: "Standardservice och underhåll – Helios",
@@ -177,7 +177,7 @@ export const machineServiceDetails = {
       "20 % på arbetstid för övriga reparationer",
       "20 % på resekostnader"
     ],
-    additionalInfo: "Pris: 709 kr/månad <span style='color: white; font-size: 0.85em;'>(exkl. moms 25%)</span>"
+    additionalInfo: "Pris: 709 kr/månad"
   },
   "Pento": {
     title: "Standardservice och underhåll – Pento",
@@ -199,7 +199,7 @@ export const machineServiceDetails = {
       "20 % på arbetstid för övriga reparationer",
       "20 % på resekostnader"
     ],
-    additionalInfo: "Pris: 709 kr/månad <span style='color: white; font-size: 0.85em;'>(exkl. moms 25%)</span>"
+    additionalInfo: "Pris: 709 kr/månad"
   },
   "Helios III": {
     title: "Standardservice och underhåll – Helios III",
@@ -222,7 +222,7 @@ export const machineServiceDetails = {
       "20 % på arbetstid för övriga reparationer",
       "20 % på resekostnader"
     ],
-    additionalInfo: "Pris: 600 kr/månad <span style='color: white; font-size: 0.85em;'>(exkl. moms 25%)</span>"
+    additionalInfo: "Pris: 600 kr/månad"
   },
   "Picolo": {
     title: "Standardservice och underhåll – Picolo",
@@ -245,7 +245,7 @@ export const machineServiceDetails = {
       "20 % på arbetstid för övriga reparationer",
       "20 % på resekostnader"
     ],
-    additionalInfo: "Pris: 600 kr/månad <span style='color: white; font-size: 0.85em;'>(exkl. moms 25%)</span>"
+    additionalInfo: "Pris: 600 kr/månad"
   },
   "Cocoon Elysion": {
     title: "Standardservice och underhåll – Cocoon Elysion",
@@ -287,7 +287,7 @@ export const machineServiceDetails = {
       "20 % på arbetstid för övriga reparationer",
       "20 % på resekostnader"
     ],
-    additionalInfo: "Pris: 600 kr/månad <span style='color: white; font-size: 0.85em;'>(exkl. moms 25%)</span>"
+    additionalInfo: "Pris: 600 kr/månad"
   },
   "Pento 9900": {
     title: "Standardservice och underhåll – Pento 9900",
@@ -331,7 +331,7 @@ export const machineServiceDetails = {
       "20 % på arbetstid för övriga reparationer",
       "20 % på resekostnader"
     ],
-    additionalInfo: "Pris: 679 kr/månad <span style='color: white; font-size: 0.85em;'>(exkl. moms 25%)</span>"
+    additionalInfo: "Pris: 679 kr/månad"
   },
   "PrimeLase Excel": {
     title: "Standardservice och underhåll – PrimeLase Excel",
@@ -353,7 +353,7 @@ export const machineServiceDetails = {
       "20 % på arbetstid för övriga reparationer",
       "20 % på resekostnader"
     ],
-    additionalInfo: "Pris: 679 kr/månad <span style='color: white; font-size: 0.85em;'>(exkl. moms 25%)</span>"
+    additionalInfo: "Pris: 679 kr/månad"
   },
   "PrimeLase Excel HR": {
     title: "Standardservice och underhåll – PrimeLase Excel HR",
@@ -375,7 +375,7 @@ export const machineServiceDetails = {
       "20 % på arbetstid för övriga reparationer",
       "20 % på resekostnader"
     ],
-    additionalInfo: "Pris: 679 kr/månad <span style='color: white; font-size: 0.85em;'>(exkl. moms 25%)</span>"
+    additionalInfo: "Pris: 679 kr/månad"
   },
   "Soprano Platinum": {
     title: "Standardservice och underhåll – Soprano Platinum",
@@ -398,7 +398,7 @@ export const machineServiceDetails = {
       "20 % på arbetstid för övriga reparationer",
       "20 % på resekostnader"
     ],
-    additionalInfo: "Pris: 600 kr/månad <span style='color: white; font-size: 0.85em;'>(exkl. moms 25%)</span>"
+    additionalInfo: "Pris: 600 kr/månad"
   },
   "Soprano Titanium Special Edition": {
     title: "Standardservice och underhåll – Soprano Titanium Special Edition",
@@ -421,7 +421,7 @@ export const machineServiceDetails = {
       "20 % på arbetstid för övriga reparationer",
       "20 % på resekostnader"
     ],
-    additionalInfo: "Pris: 600 kr/månad <span style='color: white; font-size: 0.85em;'>(exkl. moms 25%)</span>"
+    additionalInfo: "Pris: 600 kr/månad"
   },
   "Clearlight IPL": {
     title: "Standardservice och underhåll – Clearlight IPL",
