@@ -1,5 +1,6 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.20';
 import { jsPDF } from 'npm:jspdf@4.0.0';
+import { machineServiceDetails } from '../components/MachineServiceDetails.js';
 
 Deno.serve(async (req) => {
     try {
