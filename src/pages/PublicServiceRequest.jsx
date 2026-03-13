@@ -212,7 +212,7 @@ export default function PublicServiceRequest() {
                   <div>
                     <h4 className="font-semibold text-blue-800 mb-1">Astomed Partnerförmåner - Din tillväxt är vår framgång</h4>
                     <ul className="space-y-1 ml-4 list-disc">
-                      <li><strong>Ekonomisk trygghet:</strong> Som avtalskund erhåller du X % rabatt på alla reservdelar samt vid större reparationer utanför det ordinarie underhållet.</li>
+                      <li><strong>Ekonomisk trygghet:</strong> Som avtalskund erhåller du 20% rabatt på alla reservdelar samt vid större reparationer utanför det ordinarie underhållet.</li>
                       <li><strong>Prioriterad support:</strong> Du har fri tillgång till teknisk support via både telefon och chatt för snabb felavhjälpning och assistans i vardagen.</li>
                       <li><strong>Strategisk konsultation:</strong> Vi delar med oss av vår samlade erfarenhet från branschen sedan 2005 för att hjälpa dig att optimera din verksamhet. Vi erbjuder tips och råd kring hur du kan utöka din maskinpark och utveckla ditt behandlingsutbud.</li>
                       <li><strong>Affärsutveckling:</strong> Ta del av insikter om hur framgångsrika kliniker i Norden har skalat upp sin verksamhet. Vi hjälper dig med allt från att välja rätt nästa investering till att skräddarsy finansieringslösningar.</li>
