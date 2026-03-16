@@ -58,7 +58,7 @@ export default function PublicServiceRequest() {
     }
   };
 
-  const isValid = form.company_name && form.contact_person && form.email && form.phone && form.machine_name && privacyAccepted && isAuthorizedSignatory && (form.machine_name !== "Annan" || form.other_machine_name);
+  const isValid = form.company_name && form.contact_person && form.email && form.phone && form.machine_name && form.serial_number && privacyAccepted && isAuthorizedSignatory && (form.machine_name !== "Annan" || form.other_machine_name);
 
   if (success) {
     return (
