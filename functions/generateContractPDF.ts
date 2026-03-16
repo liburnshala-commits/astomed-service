@@ -82,10 +82,14 @@ Deno.serve(async (req) => {
         if (machine.contract_start_date) {
             const startDate = new Date(machine.contract_start_date).toLocaleDateString('sv-SE');
             doc.text('Startdatum: ' + startDate, 20, 110);
+
+            const renewalDate = new Date(machine.contract_start_date);
+            renewalDate.setMonth(renewalDate.getMonth() + 12);
+            doc.text('Förnyelsedatum: ' + renewalDate.toLocaleDateString('sv-SE'), 20, 115);
         }
         
         if (machine.contract_binding_months) {
-            doc.text('Bindningstid: ' + machine.contract_binding_months + ' månader', 20, 115);
+            doc.text('Bindningstid: ' + machine.contract_binding_months + ' månader', 20, 120);
         }
 
         let yOffset = 125;
