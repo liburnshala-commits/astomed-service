@@ -76,7 +76,6 @@ const navSections = [
     title: "Automering",
     items: [
       { label: "Påminnelseinställningar", page: "ReminderSettings", icon: Clock, roles: ["admin"] },
-      { label: "Serviceavtalsmallar", page: "ServiceAgreementTemplates", icon: FileCheck, roles: ["admin"] },
     ]
   },
 ];
