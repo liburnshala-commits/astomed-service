@@ -30,15 +30,19 @@ Deno.serve(async (req) => {
         });
 
         // Logga händelsen
-        await base44.asServiceRole.functions.invoke('logAuditEntry', {
-            action: 'create',
-            entity_type: 'PublicServiceLead',
-            entity_id: lead.id,
-            entity_label: lead.company_name,
-            user_email: data.email,
-            user_name: data.contact_person,
-            details: `Ny serviceförfrågan via publikt formulär för maskin: ${data.machine_name}`
-        });
+        try {
+            await base44.asServiceRole.functions.invoke('logAuditEntry', {
+                action: 'create',
+                entity_type: 'PublicServiceLead',
+                entity_id: lead.id,
+                entity_label: lead.company_name,
+                user_email: data.email,
+                user_name: data.contact_person,
+                details: `Ny serviceförfrågan via publikt formulär för maskin: ${data.machine_name}`
+            });
+        } catch (e) {
+            console.error('Kunde inte logga audit entry:', e);
+        }
 
         // Skicka bekräftelsemejl till kunden
         try {
