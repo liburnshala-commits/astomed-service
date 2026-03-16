@@ -130,7 +130,14 @@ export default function ServiceContracts() {
     const end = endDate(machine);
 
     return (
-      <tr key={machine.id} className="border-b last:border-0 hover:bg-slate-50 transition-colors">
+      <tr 
+        key={machine.id} 
+        className={`border-b last:border-0 transition-colors ${
+          status === "active" 
+            ? "bg-emerald-50/30 hover:bg-emerald-50/80" 
+            : "bg-red-50/30 hover:bg-red-50/80"
+        }`}
+      >
         <td className="py-3 px-4">
           <div className="flex items-center gap-2">
             <Building2 className="w-4 h-4 text-slate-400 flex-shrink-0" />
