@@ -132,10 +132,10 @@ export default function ServiceContracts() {
     return (
       <tr 
         key={machine.id} 
-        className={`border-b last:border-0 transition-colors ${
+        className={`border-b border-slate-200 last:border-0 transition-colors ${
           status === "active" 
-            ? "bg-emerald-50/30 hover:bg-emerald-50/80" 
-            : "bg-red-50/30 hover:bg-red-50/80"
+            ? "bg-green-100 hover:bg-green-200" 
+            : "bg-red-100 hover:bg-red-200"
         }`}
       >
         <td className="py-3 px-4">
