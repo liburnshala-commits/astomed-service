@@ -40,7 +40,30 @@ Deno.serve(async (req) => {
             details: `Ny serviceförfrågan via publikt formulär för maskin: ${data.machine_name}`
         });
 
-        // Email-skickning skipped för externa användare - formulärets lyckatmeddelande fungerar som bekräftelse
+        // Skicka bekräftelsemejl till kunden
+        try {
+            await base44.asServiceRole.integrations.Core.SendEmail({
+                to: data.email,
+                from_name: "Astomed Service",
+                subject: "Bekräftelse: Vi har mottagit din serviceförfrågan",
+                body: `Hej ${data.contact_person},
+
+Tack för din serviceförfrågan angående din maskin (${data.machine_name}). Vi har nu tagit emot ditt ärende och kommer att återkoppla till dig så snart som möjligt för att boka in en tid eller ge dig mer information.
+
+Här är en sammanfattning av ditt ärende:
+Maskin: ${data.machine_name}
+Serienummer: ${data.serial_number || 'Ej angivet'}
+Beskrivning: ${data.service_description}
+
+Har du några kompletterande uppgifter kan du höra av dig till oss.
+
+Vänliga hälsningar,
+Astomed Service Team`
+            });
+        } catch (emailError) {
+            console.error("Kunde inte skicka bekräftelsemejl:", emailError);
+            // Vi fortsätter ändå, leadet är skapat
+        }
 
         return Response.json({ success: true, id: lead.id });
 
