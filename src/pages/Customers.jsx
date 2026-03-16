@@ -217,7 +217,9 @@ export default function Customers() {
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1">
                     <Building2 className="w-4 h-4 astomed-muted flex-shrink-0" />
-                    <h3 className="font-semibold astomed-title truncate">{customer.company_name}</h3>
+                    <Link to={createPageUrl(`CustomerDetails?id=${customer.id}`)} className="font-semibold astomed-title truncate hover:text-[#3a9e9e] hover:underline">
+                      {customer.company_name}
+                    </Link>
                   </div>
                   {userRole === "admin" && (
                     <div className="ml-6 mb-2">

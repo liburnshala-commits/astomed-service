@@ -8,6 +8,7 @@ import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import PublicServiceRequest from './pages/PublicServiceRequest';
 import ServiceAgreementTemplates from './pages/ServiceAgreementTemplates';
+import CustomerDetails from './pages/CustomerDetails';
 
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
@@ -50,6 +51,7 @@ const AuthenticatedApp = () => {
       <Route path="/" element={<PublicServiceRequest />} />
       <Route path="/PublicServiceRequest" element={<PublicServiceRequest />} />
       <Route path="/ServiceAgreementTemplates" element={<LayoutWrapper currentPageName="ServiceAgreementTemplates"><ServiceAgreementTemplates /></LayoutWrapper>} />
+      <Route path="/CustomerDetails" element={<LayoutWrapper currentPageName="CustomerDetails"><CustomerDetails /></LayoutWrapper>} />
       {Object.entries(Pages).map(([path, Page]) => (
         <Route
           key={path}
