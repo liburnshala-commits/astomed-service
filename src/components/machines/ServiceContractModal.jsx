@@ -1,44 +1,29 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { X, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-
-const SERVICE_CONTRACTS = [
-  {
-    value: "none",
-    label: "Inget Serviceavtal",
-    description: "Service utan avtal – ordinarie priser tillämpas.",
-    features: [
-      "Reservdelar debiteras enligt Astomeds ordinarie prislista.",
-      "Restid debiteras enligt ordinarie taxa baserat på avstånd och tidsåtgång.",
-      "Timpris för service och arbete utgår enligt gällande standardpris.",
-      "Ingen prioritering vid akuta serviceärenden.",
-      "Kontakt: 08-410 77 900 | kontakt@astomed.se | www.astomed.se/service"
-    ]
-  },
-  {
-    value: "basic",
-    label: "BAS – Astomed 3.0",
-    interval: "Var 12:e månad",
-    description: "Serviceavtal & Framtidssäkring: Astomed 3.0\n\nDin partner för teknisk drift, juridisk trygghet och klinisk kompetens sedan 2005.",
-    features: []
-  },
-];
+import { base44 } from "@/api/base44Client";
 
 export default function ServiceContractModal({ machine, onSave, onClose }) {
+  const [templates, setTemplates] = useState([]);
   const [form, setForm] = useState({
     service_contract: machine?.service_contract || "none",
     contract_start_date: machine?.contract_start_date || "",
     contract_binding_months: 12,
     service_date: machine?.service_date || "",
-    next_service_date: machine?.next_service_date || ""
+    next_service_date: machine?.next_service_date || "",
+    service_agreement_template_id: machine?.service_agreement_template_id || ""
   });
+
+  useEffect(() => {
+    base44.entities.ServiceAgreementTemplate.list().then(setTemplates);
+  }, []);
 
   const set = (field, value) => setForm(prev => ({ ...prev, [field]: value }));
 
-  const selectedContract = SERVICE_CONTRACTS.find(c => c.value === form.service_contract);
+  const selectedTemplate = templates.find(t => t.id === form.service_agreement_template_id);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
