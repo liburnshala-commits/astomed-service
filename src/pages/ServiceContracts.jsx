@@ -134,7 +134,12 @@ export default function ServiceContracts() {
         <td className="py-3 px-4">
           <div className="flex items-center gap-2">
             <Building2 className="w-4 h-4 text-slate-400 flex-shrink-0" />
-            <span className="font-medium text-slate-800">{cust?.company_name || "–"}</span>
+            <div>
+              <div className="font-medium text-slate-800">{cust?.company_name || "–"}</div>
+              {cust?.contact_person && (
+                <div className="text-xs text-slate-500">{cust.contact_person}</div>
+              )}
+            </div>
           </div>
         </td>
         <td className="py-3 px-4">
