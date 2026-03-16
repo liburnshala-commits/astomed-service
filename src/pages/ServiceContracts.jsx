@@ -13,6 +13,7 @@ const bindingLabel = { 6: "6 mån", 12: "12 mån", 24: "24 mån" };
 
 function contractStatus(machine) {
   if (!machine.service_contract || machine.service_contract === "none") return null;
+  if (machine.contract_status === "inactive") return "inactive";
   if (!machine.contract_start_date || !machine.contract_binding_months) return "active";
   const end = addMonths(parseISO(machine.contract_start_date), machine.contract_binding_months);
   return isPast(end) ? "expired" : "active";
@@ -107,8 +108,8 @@ export default function ServiceContracts() {
       );
     });
 
-  const active = contracted.filter(m => contractStatus(m) !== "expired");
-  const expired = contracted.filter(m => contractStatus(m) === "expired");
+  const active = contracted.filter(m => contractStatus(m) === "active");
+  const expired = contracted.filter(m => contractStatus(m) === "expired" || contractStatus(m) === "inactive");
 
   const pendingRequests = machines
     .filter(m => m.service_contract_status === "pending")
@@ -177,7 +178,7 @@ export default function ServiceContracts() {
         <td className="py-3 px-4">
           {status === "active"
             ? <Badge className="bg-emerald-100 text-emerald-800 border-0">Aktivt</Badge>
-            : <Badge className="bg-slate-100 text-slate-600 border-0">Utgånget</Badge>}
+            : <Badge className="bg-slate-100 text-slate-600 border-0">{status === "inactive" ? "Inaktivt" : "Utgånget"}</Badge>}
         </td>
         <td className="py-3 px-4">
           <div className="flex items-center gap-2">
