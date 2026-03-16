@@ -4,6 +4,8 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Link } from "react-router-dom";
+import { createPageUrl } from "@/utils";
 import { addMonths, format, isPast, parseISO } from "date-fns";
 import { sv } from "date-fns/locale";
 import { FileCheck, Search, Building2, Monitor, Pencil, Clock, Download } from "lucide-react";
@@ -149,7 +151,13 @@ export default function ServiceContracts() {
           <div className="flex items-center gap-2">
             <Building2 className="w-4 h-4 text-slate-400 flex-shrink-0" />
             <div>
-              <div className="font-medium text-slate-800">{cust?.company_name || "–"}</div>
+              {cust ? (
+                <Link to={createPageUrl(`Machines?customer=${cust.id}`)} className="font-medium text-slate-800 hover:text-[#3a9e9e] hover:underline">
+                  {cust.company_name || "–"}
+                </Link>
+              ) : (
+                <div className="font-medium text-slate-800">–</div>
+              )}
               {cust?.contact_person && (
                 <div className="text-xs text-slate-500">{cust.contact_person}</div>
               )}
