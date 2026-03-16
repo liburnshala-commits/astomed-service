@@ -39,23 +39,42 @@ export default function ServiceContractModal({ machine, onSave, onClose }) {
             <Select value={form.service_contract} onValueChange={v => set("service_contract", v)}>
               <SelectTrigger><SelectValue /></SelectTrigger>
               <SelectContent>
-                {SERVICE_CONTRACTS.map(c => (
-                  <SelectItem key={c.value} value={c.value}>{c.label}</SelectItem>
-                ))}
+                <SelectItem value="none">Inget Serviceavtal</SelectItem>
+                <SelectItem value="basic">BAS – Astomed 3.0</SelectItem>
               </SelectContent>
             </Select>
           </div>
 
-          {selectedContract && form.service_contract !== "none" && (
+          {form.service_contract === "basic" && (
+            <div className="space-y-1">
+              <Label>Välj avtalsmall</Label>
+              <Select
+                value={form.service_agreement_template_id}
+                onValueChange={v => set("service_agreement_template_id", v)}
+              >
+                <SelectTrigger><SelectValue placeholder="Välj en avtalsmall..." /></SelectTrigger>
+                <SelectContent>
+                  {templates.map(t => (
+                    <SelectItem key={t.id} value={t.id}>
+                      {t.name} {t.price_per_month ? `– ${t.price_per_month} kr/mån` : ""}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          )}
+
+          {selectedTemplate && (
             <div className="p-3 rounded-xl border" style={{ background: "#f4fafa", borderColor: "#dce8e8" }}>
-              <div className="flex items-center gap-2 mb-1">
-                <span className="text-xs font-semibold astomed-label">{selectedContract.label}</span>
-                {selectedContract.interval && (
-                  <span className="text-xs astomed-muted ml-auto">{selectedContract.interval}</span>
-                )}
+              <div className="flex items-center gap-2 mb-2">
+                <span className="text-xs font-semibold astomed-label">{selectedTemplate.name}</span>
+                <span className="text-xs astomed-muted ml-auto">Bindningstid: {selectedTemplate.binding_months} mån</span>
               </div>
+              {selectedTemplate.description && (
+                <p className="text-xs text-gray-500 mb-2">{selectedTemplate.description}</p>
+              )}
               <ul className="space-y-1">
-                {selectedContract.features.map((f, i) => (
+                {(selectedTemplate.included_services || []).map((f, i) => (
                   <li key={i} className="flex items-start gap-1.5 text-xs astomed-subtitle">
                     <CheckCircle2 className="w-3 h-3 mt-0.5 flex-shrink-0" style={{ color: "#3a9e9e" }} />
                     {f}
