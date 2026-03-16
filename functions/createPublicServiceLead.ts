@@ -49,6 +49,9 @@ Deno.serve(async (req) => {
             const emailHtml = `
             <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f4f6f4;">
                 <div style="background: white; padding: 30px; border-radius: 12px; border-top: 4px solid #3a9e9e; box-shadow: 0 4px 16px rgba(27,58,58,0.05);">
+                    <div style="text-align: center; margin-bottom: 25px;">
+                        <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69a9446fcb1cd4ab529479ba/bc2852de1_channels4_profile-2.jpg" alt="Astomed Logo" style="height: 60px; border-radius: 8px;">
+                    </div>
                     <h1 style="color: #1b3a3a; margin-top: 0; font-size: 24px;">Vi har mottagit din serviceförfrågan</h1>
                     <p style="color: #254f4f; font-size: 16px; line-height: 1.6;">
                         Hej ${data.contact_person},
