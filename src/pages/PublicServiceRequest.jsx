@@ -20,6 +20,7 @@ export default function PublicServiceRequest() {
     postal_code: "",
     city: "",
     machine_name: "",
+    serial_number: "",
     notes: ""
   });
   const [submitting, setSubmitting] = useState(false);
