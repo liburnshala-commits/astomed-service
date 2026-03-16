@@ -232,10 +232,10 @@ export default function PublicServiceRequest() {
         {/* Login link bottom */}
         <div className="text-center mt-6 p-4 bg-white rounded-lg border border-gray-200">
           <p className="text-sm text-gray-600">
-            Har du redan ett konto hos Astomed och vill beställa service,{" "}
+            Har du redan ett konto hos Astomed Service och vill beställa service,{" "}
             <a href="/login" className="text-blue-600 hover:underline font-medium">
               klicka på denna länk för att logga in på ditt konto
-            </a>.
+            </a>. (För att få ett konto måste du ha ett aktivt serviceavtal hos oss.)
           </p>
         </div>
       </div>
