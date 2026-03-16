@@ -46,23 +46,41 @@ Deno.serve(async (req) => {
 
         // Skicka bekräftelsemejl till kunden
         try {
+            const emailHtml = `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f4f6f4;">
+                <div style="background: white; padding: 30px; border-radius: 12px; border-top: 4px solid #3a9e9e; box-shadow: 0 4px 16px rgba(27,58,58,0.05);">
+                    <h1 style="color: #1b3a3a; margin-top: 0; font-size: 24px;">Vi har mottagit din serviceförfrågan</h1>
+                    <p style="color: #254f4f; font-size: 16px; line-height: 1.6;">
+                        Hej ${data.contact_person},
+                    </p>
+                    <p style="color: #254f4f; font-size: 16px; line-height: 1.6;">
+                        Tack för din serviceförfrågan angående din maskin <strong>${data.machine_name}</strong>. Vi har nu tagit emot ditt ärende och kommer att återkoppla till dig så snart som möjligt för att boka in en tid eller ge dig mer information.
+                    </p>
+                    
+                    <div style="background: #e8f2f2; padding: 20px; border-radius: 8px; margin: 25px 0; border-left: 4px solid #3a9e9e;">
+                        <h3 style="color: #1b3a3a; margin-top: 0; margin-bottom: 15px; font-size: 18px;">Sammanfattning av ditt ärende</h3>
+                        <p style="margin: 8px 0; color: #254f4f;"><strong>Maskin:</strong> ${data.machine_name}</p>
+                        <p style="margin: 8px 0; color: #254f4f;"><strong>Serienummer:</strong> ${data.serial_number || 'Ej angivet'}</p>
+                        <p style="margin: 8px 0; color: #254f4f;"><strong>Beskrivning:</strong><br/> ${data.service_description}</p>
+                    </div>
+
+                    <p style="color: #254f4f; font-size: 16px; line-height: 1.6;">
+                        Har du några kompletterande uppgifter kan du svara direkt på detta mejl eller kontakta oss.
+                    </p>
+                    
+                    <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #dce8e8;">
+                        <p style="color: #1b3a3a; font-weight: bold; margin: 0;">Vänliga hälsningar,</p>
+                        <p style="color: #3a9e9e; margin: 5px 0 0 0;">Astomed Service Team</p>
+                    </div>
+                </div>
+            </div>
+            `;
+
             await base44.asServiceRole.integrations.Core.SendEmail({
                 to: data.email,
                 from_name: "Astomed Service",
                 subject: "Bekräftelse: Vi har mottagit din serviceförfrågan",
-                body: `Hej ${data.contact_person},
-
-Tack för din serviceförfrågan angående din maskin (${data.machine_name}). Vi har nu tagit emot ditt ärende och kommer att återkoppla till dig så snart som möjligt för att boka in en tid eller ge dig mer information.
-
-Här är en sammanfattning av ditt ärende:
-Maskin: ${data.machine_name}
-Serienummer: ${data.serial_number || 'Ej angivet'}
-Beskrivning: ${data.service_description}
-
-Har du några kompletterande uppgifter kan du höra av dig till oss.
-
-Vänliga hälsningar,
-Astomed Service Team`
+                body: emailHtml
             });
         } catch (emailError) {
             console.error("Kunde inte skicka bekräftelsemejl:", emailError);
