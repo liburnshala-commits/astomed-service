@@ -126,7 +126,61 @@ Deno.serve(async (req) => {
                 if (yOffset > 270) { doc.addPage(); yOffset = 20; }
                 doc.setFont('helvetica', 'bold');
                 doc.text('Pris: ' + templatePrice, 20, yOffset);
+                yOffset += 8;
             }
+        }
+
+        // New page for terms with header
+        doc.addPage();
+
+        // Header background on terms page
+        doc.setFillColor(27, 58, 58);
+        doc.rect(0, 0, 210, 45, 'F');
+
+        try {
+            const logoResponse2 = await fetch('https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69a9446fcb1cd4ab529479ba/0060a5b35_channels4_profile-2.jpg');
+            const logoBlob2 = await logoResponse2.arrayBuffer();
+            const logoBase642 = btoa(String.fromCharCode(...new Uint8Array(logoBlob2)));
+            doc.addImage('data:image/jpeg;base64,' + logoBase642, 'JPEG', 15, 8, 25, 25);
+        } catch (e) {
+            console.log('Logo loading skipped on page 2');
+        }
+
+        doc.setFontSize(24);
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(255, 255, 255);
+        doc.text('Avtalsvillkor', 50, 22);
+
+        doc.setFontSize(9);
+        doc.setFont('helvetica', 'normal');
+        doc.text('Astomed AB | Jägerhorns väg 5 | 141 75 Kungens kurva', 50, 30);
+
+        doc.setTextColor(0, 0, 0);
+        doc.setDrawColor(58, 158, 158);
+        doc.line(20, 48, 190, 48);
+
+        // Terms
+        doc.setFontSize(11);
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(27, 58, 58);
+        doc.text('AVTALSVILLKOR', 20, 58);
+
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(8.5);
+        doc.setTextColor(0, 0, 0);
+
+        const terms = [
+            '1. Avtalstid och Uppsägning\nServiceavtalet löper med en initial bindningstid om 12 månader från avtalets tecknande. Om uppsägning ej sker förlängs avtalet automatiskt med tolv (12) månader i taget.',
+            '2. Betalningsvillkor\nBetalning sker månadsvis eller kvartalsvis i förskott via autogiro. Vid utebliven betalning förbehåller sig Astomed rätten att pausa servicetjänster samt debitera dröjsmålsränta enligt lag.',
+            '3. Prisjusteringar\nAstomed äger rätt att årligen justera avgiften i enlighet med konsumentprisindex (KPI) eller vid betydande kostnadsökningar för reservdelar och logistik. Kunden ska meddelas om prisjustering senast 30 dagar innan de träder i kraft.',
+            '4. Omfattning\nAvtalet omfattar ordinarie underhåll enligt specifikation för respektive maskin. Reparationer utöver standardservice samt reservdelar debiteras enligt gällande prislista med avtalad rabatt om 20 % för reservdelar och 20% på resekostnader.'
+        ];
+
+        let termsY = 66;
+        for (let i = 0; i < terms.length; i++) {
+            const lines = doc.splitTextToSize(terms[i], 170);
+            doc.text(lines, 20, termsY);
+            termsY += (lines.length * 5) + 4;
         }
 
         // Generate PDF
