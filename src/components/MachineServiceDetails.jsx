@@ -1,26 +1,4 @@
 export const machineServiceDetails = {
-  "Aldix (Triodus)": {
-    title: "Standardservice och underhåll – Aldix (Triodus)",
-    details: [
-      "Byte av pneumatisk avjoniseringsfilter A",
-      "Byte av pneumatisk avjoniseringsfilter B",
-      "Byte av snabbkopplingar till filter",
-      "Påfyllning av destillerat avjoniserat kylvätska",
-      "Spolning av pneumatisk krets",
-      "Läckagekontroll",
-      "Kontroll av luftintagsfilter",
-      "Lasereffektmätning",
-      "Rengöring av värmeväxlare",
-      "Rengörning av Switchade nätaggret",
-      "Kontroll av nödstopp och interlock",
-      "Upprättande av serviceprotokoll",
-      "Serviceuppmärkning av utrustning",
-      "Kontroll av säkerhetsrem",
-      "20 % på arbetstid för övriga reparationer",
-      "20 % på resekostnader"
-    ],
-    additionalInfo: "Pris: 600 kr/månad"
-  },
   "Aldix Smart Laser": {
     title: "Standardservice och underhåll – Aldix Smart Laser",
     details: [
@@ -28,26 +6,6 @@ export const machineServiceDetails = {
       "Byte av pneumatisk avjoniseringsfilter B",
       "Byte av snabbkopplingar till filter",
       "Påfyllning av destillerat avjoniserat kylvätska",
-      "Spolning av pneumatisk krets",
-      "Läckagekontroll",
-      "Kontroll av luftintagsfilter",
-      "Lasereffektmätning",
-      "Rengöring av värmeväxlare",
-      "Rengörning av Switchade nätaggret",
-      "Kontroll av nödstopp och interlock",
-      "Upprättande av serviceprotokoll",
-      "Serviceuppmärkning av utrustning",
-      "Kontroll av säkerhetsrem",
-      "20 % på arbetstid för övriga reparationer",
-      "20 % på resekostnader"
-    ],
-    additionalInfo: "Pris: 600 kr/månad"
-  },
-  "Cocoon Elysion": {
-    title: "Standardservice och underhåll – Cocoon Elysion",
-    details: [
-      "Byte av mekanisk vattenfilter",
-      "Påfyllning av destillerat avjoniserat kylvätska med glykolblandning",
       "Spolning av pneumatisk krets",
       "Läckagekontroll",
       "Kontroll av luftintagsfilter",
@@ -265,6 +223,28 @@ export const machineServiceDetails = {
       "20 % på resekostnader"
     ],
     additionalInfo: "Pris: 709 kr/månad"
+  },
+  "Triodus": {
+    title: "Standardservice och underhåll – Triodus",
+    details: [
+      "Byte av pneumatisk avjoniseringsfilter A",
+      "Byte av pneumatisk avjoniseringsfilter B",
+      "Byte av snabbkopplingar till filter",
+      "Påfyllning av destillerat avjoniserat kylvätska",
+      "Spolning av pneumatisk krets",
+      "Läckagekontroll",
+      "Kontroll av luftintagsfilter",
+      "Lasereffektmätning",
+      "Rengöring av värmeväxlare",
+      "Rengörning av Switchade nätaggret",
+      "Kontroll av nödstopp och interlock",
+      "Upprättande av serviceprotokoll",
+      "Serviceuppmärkning av utrustning",
+      "Kontroll av säkerhetsrem",
+      "20 % på arbetstid för övriga reparationer",
+      "20 % på resekostnader"
+    ],
+    additionalInfo: "Pris: 600 kr/månad"
   },
   "Annan": {
     title: "Maskin som ej finns i listan",
