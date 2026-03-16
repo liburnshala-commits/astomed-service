@@ -11,7 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import CustomerForm from "@/components/customers/CustomerForm.jsx";
 import DeleteCustomerDialog from "@/components/gdpr/DeleteCustomerDialog.jsx";
-import CustomerReportsSummary from "@/components/customers/CustomerReportsSummary.jsx";
+import CustomerLatestInteraction from "@/components/customers/CustomerLatestInteraction.jsx";
 
 export default function Customers() {
   const [customers, setCustomers] = useState([]);
@@ -241,7 +241,7 @@ export default function Customers() {
                   {(customer.address || customer.city) && (
                     <div className="text-xs astomed-muted ml-6 mt-1">{customer.address}{customer.city ? `, ${customer.city}` : ""}</div>
                   )}
-                  <CustomerReportsSummary customerId={customer.id} />
+                  <CustomerLatestInteraction customerId={customer.id} />
                 </div>
                 <div className="flex flex-col items-end gap-2 flex-shrink-0">
                   <div className="flex gap-2 flex-wrap justify-end">

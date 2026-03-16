@@ -54,16 +54,18 @@ import CustomerPortal from './pages/CustomerPortal';
 import Customers from './pages/Customers';
 import Dashboard from './pages/Dashboard';
 import Machines from './pages/Machines';
+import PublicRegister from './pages/PublicRegister';
 import PublicServiceLeads from './pages/PublicServiceLeads';
 import PublicServiceRequest from './pages/PublicServiceRequest';
+import Register from './pages/Register';
 import ReminderSettings from './pages/ReminderSettings';
 import Reports from './pages/Reports';
+import ServiceAgreementTemplates from './pages/ServiceAgreementTemplates';
 import ServiceContracts from './pages/ServiceContracts';
 import ServiceRecords from './pages/ServiceRecords';
 import TechnicianMobile from './pages/TechnicianMobile';
 import Users from './pages/Users';
-import PublicRegister from './pages/PublicRegister';
-import Register from './pages/Register';
+import CustomerDetails from './pages/CustomerDetails';
 import __Layout from './Layout.jsx';
 
 
@@ -75,16 +77,18 @@ export const PAGES = {
     "Customers": Customers,
     "Dashboard": Dashboard,
     "Machines": Machines,
+    "PublicRegister": PublicRegister,
     "PublicServiceLeads": PublicServiceLeads,
     "PublicServiceRequest": PublicServiceRequest,
+    "Register": Register,
     "ReminderSettings": ReminderSettings,
     "Reports": Reports,
+    "ServiceAgreementTemplates": ServiceAgreementTemplates,
     "ServiceContracts": ServiceContracts,
     "ServiceRecords": ServiceRecords,
     "TechnicianMobile": TechnicianMobile,
     "Users": Users,
-    "PublicRegister": PublicRegister,
-    "Register": Register,
+    "CustomerDetails": CustomerDetails,
 }
 
 export const pagesConfig = {
