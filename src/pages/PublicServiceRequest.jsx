@@ -25,6 +25,7 @@ export default function PublicServiceRequest() {
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
   const [privacyAccepted, setPrivacyAccepted] = useState(false);
+  const [isAuthorizedSignatory, setIsAuthorizedSignatory] = useState(false);
   const [showPrivacyDialog, setShowPrivacyDialog] = useState(false);
 
   const set = (field, value) => setForm(prev => ({ ...prev, [field]: value }));
