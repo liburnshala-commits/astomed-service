@@ -112,40 +112,43 @@ Deno.serve(async (req) => {
             yOffset += (lines.length * 5) + 4;
         }
         
-        // Service description lookup
-        const serviceDetails = {
-            "Soprano ICE Platinum": { title: "Standardservice och underhåll – Soprano ICE Platinum / Titanium", details: ["Byte av Avjoniseringsfilter", "Byte av mekaniskpartikelfilter", "Byte av steriliserande UV-lampa", "Byte av CPC-kopplingar till filter", "Påfyllning av destillerat avjoniserat kylvätska", "Spolning av pneumatisk krets", "Läckagekontroll", "Kontroll av luftintagsfilter", "Lasereffektmätning", "Rengöring av värmeväxlare", "Rengörning av Switchade nätaggret", "Kontroll av nödstopp och interlock", "Upprättande av serviceprotokoll", "Serviceuppmärkning av utrustning", "Kontroll av säkerhetsrem", "20 % på arbetstid för övriga reparationer", "20 % på resekostnader"], price: "600 kr/månad" },
-            "Soprano Titanium": { title: "Standardservice och underhåll – Soprano ICE Platinum / Titanium", details: ["Byte av Avjoniseringsfilter", "Byte av mekaniskpartikelfilter", "Byte av steriliserande UV-lampa", "Byte av CPC-kopplingar till filter", "Påfyllning av destillerat avjoniserat kylvätska", "Spolning av pneumatisk krets", "Läckagekontroll", "Kontroll av luftintagsfilter", "Lasereffektmätning", "Rengöring av värmeväxlare", "Rengörning av Switchade nätaggret", "Kontroll av nödstopp och interlock", "Upprättande av serviceprotokoll", "Serviceuppmärkning av utrustning", "Kontroll av säkerhetsrem", "20 % på arbetstid för övriga reparationer", "20 % på resekostnader"], price: "600 kr/månad" },
-            "PrimeLase": { title: "Standardservice och underhåll – PrimeLase", details: ["Byte av vattenfilter för intern vattenkrets", "Byte av vattenfilter för tip-kylningssystem", "Byte av vattenfilter för diodkylningssystem", "Påfyllning av destillerat avjoniserat kylvätska med glykolblandning", "Spolning av pneumatisk krets", "Läckagekontroll", "Kontroll av luftintagsfilter", "Lasereffektmätning", "Rengöring av värmeväxlare", "Rengörning av Switchade nätaggret", "Kontroll av nödstopp och interlock", "Upprättande av serviceprotokoll", "Serviceuppmärkning av utrustning", "Kontroll av säkerhetsrem", "20 % på arbetstid för övriga reparationer", "20 % på resekostnader"], price: "679 kr/månad" },
-            "PrimeLase HR": { title: "Standardservice och underhåll – PrimeLase HR", details: ["Byte av vattenfilter för intern vattenkrets", "Byte av vattenfilter för tip-kylningssystem", "Byte av vattenfilter för diodkylningssystem", "Påfyllning av destillerat avjoniserat kylvätska med glykolblandning", "Spolning av pneumatisk krets", "Läckagekontroll", "Kontroll av luftintagsfilter", "Lasereffektmätning", "Rengöring av värmeväxlare", "Rengörning av Switchade nätaggret", "Kontroll av nödstopp och interlock", "Upprättande av serviceprotokoll", "Serviceuppmärkning av utrustning", "Kontroll av säkerhetsrem", "20 % på arbetstid för övriga reparationer", "20 % på resekostnader"], price: "679 kr/månad" },
-            "PrimeLase Excel": { title: "Standardservice och underhåll – PrimeLase Excel", details: ["Byte av vattenfilter för intern vattenkrets", "Byte av vattenfilter för tip-kylningssystem", "Byte av vattenfilter för diodkylningssystem", "Påfyllning av destillerat avjoniserat kylvätska med glykolblandning", "Spolning av pneumatisk krets", "Läckagekontroll", "Kontroll av luftintagsfilter", "Lasereffektmätning", "Rengöring av värmeväxlare", "Rengörning av Switchade nätaggret", "Kontroll av nödstopp och interlock", "Upprättande av serviceprotokoll", "Serviceuppmärkning av utrustning", "Kontroll av säkerhetsrem", "20 % på arbetstid för övriga reparationer", "20 % på resekostnader"], price: "679 kr/månad" },
-            "PrimeLase Excel HR": { title: "Standardservice och underhåll – PrimeLase Excel HR", details: ["Byte av vattenfilter för intern vattenkrets", "Byte av vattenfilter för tip-kylningssystem", "Byte av vattenfilter för diodkylningssystem", "Påfyllning av destillerat avjoniserat kylvätska med glykolblandning", "Spolning av pneumatisk krets", "Läckagekontroll", "Kontroll av luftintagsfilter", "Lasereffektmätning", "Rengöring av värmeväxlare", "Rengörning av Switchade nätaggret", "Kontroll av nödstopp och interlock", "Upprättande av serviceprotokoll", "Serviceuppmärkning av utrustning", "Kontroll av säkerhetsrem", "20 % på arbetstid för övriga reparationer", "20 % på resekostnader"], price: "679 kr/månad" },
-            "Soprano Platinum": { title: "Standardservice och underhåll – Soprano Platinum", details: ["Byte av Avjoniseringsfilter", "Byte av mekaniskpartikelfilter", "Byte av steriliserande UV-lampa", "Byte av CPC-kopplingar till filter", "Påfyllning av destillerat avjoniserat kylvätska", "Spolning av pneumatisk krets", "Läckagekontroll", "Kontroll av luftintagsfilter", "Lasereffektmätning", "Rengöring av värmeväxlare", "Rengörning av Switchade nätaggret", "Kontroll av nödstopp och interlock", "Upprättande av serviceprotokoll", "Serviceuppmärkning av utrustning", "Kontroll av säkerhetsrem", "20 % på arbetstid för övriga reparationer", "20 % på resekostnader"], price: "600 kr/månad" },
-            "Soprano Titanium Special Edition": { title: "Standardservice och underhåll – Soprano Titanium Special Edition", details: ["Byte av Avjoniseringsfilter", "Byte av mekaniskpartikelfilter", "Byte av steriliserande UV-lampa", "Byte av CPC-kopplingar till filter", "Påfyllning av destillerat avjoniserat kylvätska", "Spolning av pneumatisk krets", "Läckagekontroll", "Kontroll av luftintagsfilter", "Lasereffektmätning", "Rengöring av värmeväxlare", "Rengörning av Switchade nätaggret", "Kontroll av nödstopp och interlock", "Upprättande av serviceprotokoll", "Serviceuppmärkning av utrustning", "Kontroll av säkerhetsrem", "20 % på arbetstid för övriga reparationer", "20 % på resekostnader"], price: "600 kr/månad" },
-        };
+        // Fetch service agreement template if linked
+        let template = null;
+        if (machine.service_agreement_template_id) {
+            template = await base44.asServiceRole.entities.ServiceAgreementTemplate.get(machine.service_agreement_template_id);
+        }
 
-        const serviceInfo = serviceDetails[machine.model];
-        
+        const includedServices = template?.included_services || [];
+        const templateName = template?.name || (machine.model || '');
+        const templatePrice = template?.price_per_month ? template.price_per_month + ' kr/månad' : null;
+
         yOffset += 3;
-        if (serviceInfo) {
+        if (includedServices.length > 0) {
             doc.setFontSize(11);
             doc.setFont('helvetica', 'bold');
             doc.setTextColor(27, 58, 58);
-            doc.text('STANDARDSERVICE OCH UNDERHÅLL', 20, yOffset);
+            doc.text('STANDARDSERVICE OCH UNDERHÅLL – ' + templateName.toUpperCase(), 20, yOffset);
             
             doc.setFont('helvetica', 'normal');
             doc.setFontSize(8.5);
             doc.setTextColor(0, 0, 0);
             yOffset += 6;
             
-            for (let i = 0; i < serviceInfo.details.length; i++) {
-                const lines = doc.splitTextToSize('• ' + serviceInfo.details[i], 170);
+            for (let i = 0; i < includedServices.length; i++) {
+                if (yOffset > 270) {
+                    doc.addPage();
+                    yOffset = 20;
+                }
+                const lines = doc.splitTextToSize('• ' + includedServices[i], 170);
                 doc.text(lines, 20, yOffset);
                 yOffset += (lines.length * 4) + 1;
             }
             
-            doc.setFont('helvetica', 'bold');
-            doc.text('Pris: ' + serviceInfo.price, 20, yOffset);
+            if (templatePrice) {
+                if (yOffset > 270) { doc.addPage(); yOffset = 20; }
+                doc.setFont('helvetica', 'bold');
+                doc.text('Pris: ' + templatePrice, 20, yOffset);
+            }
         }
 
         // Generate PDF
