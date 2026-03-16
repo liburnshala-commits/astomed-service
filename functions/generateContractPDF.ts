@@ -88,29 +88,7 @@ Deno.serve(async (req) => {
             doc.text('Bindningstid: ' + machine.contract_binding_months + ' månader', 20, 115);
         }
 
-        // Terms
-        doc.setFontSize(11);
-        doc.setFont('helvetica', 'bold');
-        doc.setTextColor(27, 58, 58);
-        doc.text('AVTALSVILLKOR', 20, 125);
-        
-        doc.setFont('helvetica', 'normal');
-        doc.setFontSize(8.5);
-        doc.setTextColor(0, 0, 0);
-        
-        const terms = [
-            '1. Avtalstid och Uppsägning\nServiceavtalet löper med en initial bindningstid om 12 månader från avtalets tecknande. Om uppsägning ej sker förlängs avtalet automatiskt med tolv (12) månader i taget.',
-            '2. Betalningsvillkor\nBetalning sker månadsvis eller kvartalsvis i förskott via autogiro. Vid utebliven betalning förbehåller sig Astomed rätten att pausa servicetjänster samt debitera dröjsmålsränta enligt lag.',
-            '3. Prisjusteringar\nAstomed äger rätt att årligen justera avgiften i enlighet med konsumentprisindex (KPI) eller vid betydande kostnadsökningar för reservdelar och logistik. Kunden ska meddelas om prisjustering senast 30 dagar innan de träder i kraft.',
-            '4. Omfattning\nAvtalet omfattar ordinarie underhåll enligt specifikation för respektive maskin. Reparationer utöver standardservice samt reservdelar debiteras enligt gällande prislista med avtalad rabatt om 20 % för reservdelar och 20% på resekostnader.'
-        ];
-        
-        let yOffset = 133;
-        for (let i = 0; i < terms.length; i++) {
-            const lines = doc.splitTextToSize(terms[i], 170);
-            doc.text(lines, 20, yOffset);
-            yOffset += (lines.length * 5) + 4;
-        }
+        let yOffset = 125;
         
         // Fetch service agreement template if linked
         let template = null;
