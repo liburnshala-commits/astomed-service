@@ -3,6 +3,7 @@ import { base44 } from "@/api/base44Client";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { addMonths, format, isPast, parseISO } from "date-fns";
 import { sv } from "date-fns/locale";
 import { FileCheck, Search, Building2, Monitor, Pencil, Clock, Download } from "lucide-react";
@@ -46,6 +47,11 @@ export default function ServiceContracts() {
     await base44.entities.Machine.update(editingMachine.id, form);
     setMachines(prev => prev.map(m => m.id === editingMachine.id ? { ...m, ...form } : m));
     setEditingMachine(null);
+  };
+
+  const handleStatusChange = async (machine, newStatus) => {
+    await base44.entities.Machine.update(machine.id, { contract_status: newStatus });
+    setMachines(prev => prev.map(m => m.id === machine.id ? { ...m, contract_status: newStatus } : m));
   };
 
   const handleApproveRequest = async (machine) => {
@@ -176,9 +182,21 @@ export default function ServiceContracts() {
           {end ? format(end, "d MMM yyyy", { locale: sv }) : "–"}
         </td>
         <td className="py-3 px-4">
-          {status === "active"
-            ? <Badge className="bg-emerald-100 text-emerald-800 border-0">Aktivt</Badge>
-            : <Badge className="bg-slate-100 text-slate-600 border-0">{status === "inactive" ? "Inaktivt" : "Utgånget"}</Badge>}
+          <Select 
+            value={machine.contract_status || "active"} 
+            onValueChange={(val) => handleStatusChange(machine, val)}
+          >
+            <SelectTrigger className={`h-8 w-28 text-xs font-semibold border-0 ${status === "active" ? "bg-emerald-100 text-emerald-800" : "bg-slate-100 text-slate-600"}`}>
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="active">Aktivt</SelectItem>
+              <SelectItem value="inactive">Inaktivt</SelectItem>
+            </SelectContent>
+          </Select>
+          {status === "expired" && (
+            <div className="text-[10px] text-red-500 mt-1 font-medium">Utgånget</div>
+          )}
         </td>
         <td className="py-3 px-4">
           <div className="flex items-center gap-2">
