@@ -185,6 +185,15 @@ export default function PublicServiceRequest() {
           </div>
 
           <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
+            <label className="flex items-start gap-3 cursor-pointer select-none mb-3">
+              <input
+                type="checkbox"
+                checked={isAuthorizedSignatory}
+                onChange={e => setIsAuthorizedSignatory(e.target.checked)}
+                className="mt-0.5 w-4 h-4 accent-teal-700 flex-shrink-0"
+              />
+              <span className="text-sm text-gray-700">Jag bekräftar att jag är firmatecknare.</span>
+            </label>
             <label className="flex items-start gap-3 cursor-pointer select-none">
               <input
                 type="checkbox"
