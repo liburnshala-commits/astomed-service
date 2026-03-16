@@ -132,7 +132,7 @@ export default function PublicServiceRequest() {
           <div>
             <h2 className="text-sm font-semibold uppercase tracking-wide mb-4" style={{ color: "#254f4f" }}>Maskinuppgifter</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="sm:col-span-2 space-y-1">
+              <div className="space-y-1">
                 <Label>Maskintyp *</Label>
                 <Select value={form.machine_name} onValueChange={v => set("machine_name", v)} required>
                   <SelectTrigger>
@@ -145,18 +145,17 @@ export default function PublicServiceRequest() {
                   </SelectContent>
                 </Select>
               </div>
+
+              <div className="space-y-1">
+                <Label>Serienummer *</Label>
+                <Input value={form.serial_number || ""} onChange={e => set("serial_number", e.target.value)} placeholder="Ange serienummer" required />
+              </div>
               
               {form.machine_name === "Annan" && (
-                <>
-                  <div className="space-y-1">
-                    <Label>Maskinnamn *</Label>
-                    <Input value={form.other_machine_name || ""} onChange={e => set("other_machine_name", e.target.value)} placeholder="Ange maskinens namn" required />
-                  </div>
-                  <div className="space-y-1">
-                    <Label>Serienummer</Label>
-                    <Input value={form.other_serial_number || ""} onChange={e => set("other_serial_number", e.target.value)} placeholder="Ange serienummer" />
-                  </div>
-                </>
+                <div className="sm:col-span-2 space-y-1">
+                  <Label>Maskinnamn *</Label>
+                  <Input value={form.other_machine_name || ""} onChange={e => set("other_machine_name", e.target.value)} placeholder="Ange maskinens namn" required />
+                </div>
               )}
 
               {form.machine_name && machineServiceDetails[form.machine_name] && (
