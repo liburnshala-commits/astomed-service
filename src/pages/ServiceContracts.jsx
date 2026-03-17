@@ -16,8 +16,10 @@ import MultiMachineContractModal from "@/components/contracts/MultiMachineContra
 const bindingLabel = { 6: "6 mån", 12: "12 mån", 24: "24 mån" };
 
 function contractStatus(machine) {
-  if (!machine.service_contract || machine.service_contract === "none") return null;
+  if (!machine.service_contract || machine.service_contract === "none") return "inactive";
   if (machine.contract_status === "inactive") return "inactive";
+  if (machine.contract_status === "pending_signature") return "pending_signature";
+  if (machine.contract_status === "rejected") return "rejected";
   if (!machine.contract_start_date || !machine.contract_binding_months) return "active";
   const end = addMonths(parseISO(machine.contract_start_date), machine.contract_binding_months);
   return isPast(end) ? "expired" : "active";
@@ -135,7 +137,7 @@ export default function ServiceContracts() {
     });
 
   const active = contracted.filter(m => contractStatus(m) === "active");
-  const expired = contracted.filter(m => contractStatus(m) === "expired" || contractStatus(m) === "inactive");
+  const expired = contracted.filter(m => contractStatus(m) !== "active");
 
   const pendingRequests = machines
     .filter(m => m.service_contract_status === "pending")
@@ -212,12 +214,19 @@ export default function ServiceContracts() {
             value={machine.contract_status || "active"} 
             onValueChange={(val) => handleStatusChange(machine, val)}
           >
-            <SelectTrigger className={`h-8 w-28 text-xs font-semibold border-0 ${status === "active" ? "bg-emerald-100 text-emerald-800" : "bg-slate-100 text-slate-600"}`}>
+            <SelectTrigger className={`h-8 w-32 text-xs font-semibold border-0 ${
+              status === "active" ? "bg-emerald-100 text-emerald-800" : 
+              status === "pending_signature" ? "bg-amber-100 text-amber-800" : 
+              status === "rejected" ? "bg-red-100 text-red-800" : 
+              "bg-slate-100 text-slate-600"
+            }`}>
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="active">Aktivt</SelectItem>
               <SelectItem value="inactive">Inaktivt</SelectItem>
+              <SelectItem value="pending_signature">Under signering</SelectItem>
+              <SelectItem value="rejected">Nekat signering</SelectItem>
             </SelectContent>
           </Select>
           {status === "expired" && (
@@ -284,7 +293,7 @@ export default function ServiceContracts() {
         {[
           { label: "Totalt tecknade", value: contracted.length },
           { label: "Aktiva avtal", value: active.length },
-          { label: "Utgångna avtal", value: expired.length },
+          { label: "Övriga / Inaktiva", value: expired.length },
           { label: "Väntar på godkännande", value: pendingRequests.length, highlight: pendingRequests.length > 0 },
         ].map(stat => (
           <div key={stat.label} className={`astomed-card p-4 rounded-xl border ${stat.highlight ? "border-amber-300 bg-amber-50" : "bg-white"}`}>
@@ -369,7 +378,7 @@ export default function ServiceContracts() {
       {expired.length > 0 && (
         <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
           <div className="px-5 py-3 border-b bg-slate-50 flex items-center gap-2">
-            <span className="font-semibold text-slate-700 text-sm">Utgångna serviceavtal</span>
+            <span className="font-semibold text-slate-700 text-sm">Övriga / Inaktiva serviceavtal</span>
             <Badge className="bg-slate-100 text-slate-600 border-0 ml-1">{expired.length}</Badge>
           </div>
           <div className="overflow-x-auto">

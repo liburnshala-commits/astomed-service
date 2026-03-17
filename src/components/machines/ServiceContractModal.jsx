@@ -96,6 +96,8 @@ export default function ServiceContractModal({ machine, onSave, onClose }) {
                   <SelectContent>
                     <SelectItem value="active">Aktivt</SelectItem>
                     <SelectItem value="inactive">Inaktivt</SelectItem>
+                    <SelectItem value="pending_signature">Under signering</SelectItem>
+                    <SelectItem value="rejected">Nekat signering</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
