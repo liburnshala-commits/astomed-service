@@ -72,6 +72,25 @@ export default function MobileTechnicianCard({ record, machine, customer, onStat
     onReload?.();
   }
 
+  async function handleAddPart() {
+    if (!partName.trim()) return;
+    setSavingPart(true);
+    const newPart = { part_name: partName.trim(), quantity: parseInt(partQty) || 1, part_number: "", unit_price: 0 };
+    const updatedParts = [...(record.parts_used || []), newPart];
+    await base44.entities.ServiceRecord.update(record.id, { parts_used: updatedParts });
+    setPartName("");
+    setPartQty(1);
+    setSavingPart(false);
+    onReload?.();
+  }
+
+  async function handleRemovePart(index) {
+    const updatedParts = [...(record.parts_used || [])];
+    updatedParts.splice(index, 1);
+    await base44.entities.ServiceRecord.update(record.id, { parts_used: updatedParts });
+    onReload?.();
+  }
+
   const nextStatuses = {
     pending: [{ value: "in_progress", label: "Starta ärende", icon: Play, color: "bg-blue-600 text-white" }],
     in_progress: [
