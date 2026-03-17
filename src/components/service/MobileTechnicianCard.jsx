@@ -32,6 +32,9 @@ export default function MobileTechnicianCard({ record, machine, customer, onStat
   const [savingNote, setSavingNote] = useState(false);
   const [noteSaved, setNoteSaved] = useState(false);
   const [showSignatureModal, setShowSignatureModal] = useState(false);
+  const [partName, setPartName] = useState("");
+  const [partQty, setPartQty] = useState(1);
+  const [savingPart, setSavingPart] = useState(false);
   const fileInputRef = useRef(null);
 
   async function handleImageUpload(e) {
