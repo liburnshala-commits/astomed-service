@@ -66,6 +66,9 @@ export default function Dashboard() {
     invoiced: "Fakturerad"
   };
 
+  const activeContractsCount = machines.filter(m => m.service_contract && m.service_contract !== 'none').length;
+  const estimatedContractRevenue = activeContractsCount * 600;
+
   return (
     <div className="p-6 space-y-6">
       <div>
@@ -159,6 +162,39 @@ export default function Dashboard() {
                 </div>
                 <div className="w-10 h-10 astomed-icon-box" style={{ width: 40, height: 40 }}>
                   <CheckCircle className="w-5 h-5" style={{ color: "#3a9e9e" }} />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </Link>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <Link to={createPageUrl("ServiceContracts")} className="block">
+          <Card className="astomed-card cursor-pointer" style={{ background: "#f4f9f9" }}>
+            <CardContent className="p-5">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-xs astomed-muted font-medium uppercase tracking-wide">Aktiva serviceavtal</p>
+                  <p className="text-3xl font-bold astomed-title mt-1">{activeContractsCount}</p>
+                </div>
+                <div className="w-10 h-10 astomed-icon-box" style={{ width: 40, height: 40 }}>
+                  <Monitor className="w-5 h-5" style={{ color: "#1b3a3a" }} />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </Link>
+        <Link to={createPageUrl("ServiceContracts")} className="block">
+          <Card className="astomed-card cursor-pointer" style={{ background: "#f4f9f9" }}>
+            <CardContent className="p-5">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-xs astomed-muted font-medium uppercase tracking-wide">Uppskattad avtalsintäkt (mån)</p>
+                  <p className="text-3xl font-bold astomed-title mt-1">{estimatedContractRevenue.toLocaleString("sv-SE")} kr</p>
+                </div>
+                <div className="w-10 h-10 astomed-icon-box" style={{ width: 40, height: 40 }}>
+                  <Clock className="w-5 h-5" style={{ color: "#1b3a3a" }} />
                 </div>
               </div>
             </CardContent>
