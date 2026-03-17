@@ -104,15 +104,19 @@ Deno.serve(async (req) => {
         const templateName = template?.name || (machine.model || '');
         const templatePrice = template?.price_per_month ? template.price_per_month + ' kr/månad' : null;
 
-        yOffset += 3;
+        yOffset += 6;
         if (includedServices.length > 0) {
-            doc.setFontSize(11);
+            doc.setFontSize(12);
             doc.setFont('helvetica', 'bold');
             doc.setTextColor(27, 58, 58);
+            doc.text('AVTALSINNEHÅLL OCH PRIS', 20, yOffset);
+            yOffset += 8;
+
+            doc.setFontSize(10);
             doc.text('STANDARDSERVICE OCH UNDERHÅLL – ' + templateName.toUpperCase(), 20, yOffset);
             
             doc.setFont('helvetica', 'normal');
-            doc.setFontSize(8.5);
+            doc.setFontSize(9);
             doc.setTextColor(0, 0, 0);
             yOffset += 6;
             
@@ -123,14 +127,29 @@ Deno.serve(async (req) => {
                 }
                 const lines = doc.splitTextToSize('• ' + includedServices[i], 170);
                 doc.text(lines, 20, yOffset);
-                yOffset += (lines.length * 4) + 1;
+                yOffset += (lines.length * 5);
             }
             
             if (templatePrice) {
-                if (yOffset > 270) { doc.addPage(); yOffset = 20; }
+                yOffset += 5;
+                if (yOffset > 250) { doc.addPage(); yOffset = 20; }
+                
+                // Add a highlighted box for the price
+                doc.setDrawColor(220, 232, 232);
+                doc.setFillColor(244, 246, 244);
+                doc.roundedRect(20, yOffset, 170, 20, 2, 2, 'FD');
+                
                 doc.setFont('helvetica', 'bold');
-                doc.text('Pris: ' + templatePrice, 20, yOffset);
-                yOffset += 8;
+                doc.setFontSize(11);
+                doc.setTextColor(27, 58, 58);
+                doc.text('Pris: ' + templatePrice, 25, yOffset + 8);
+                
+                doc.setFont('helvetica', 'italic');
+                doc.setFontSize(8);
+                doc.setTextColor(100, 100, 100);
+                doc.text('* Alla priser anges exklusive moms (25%).', 25, yOffset + 15);
+                
+                yOffset += 28;
             }
         }
 
