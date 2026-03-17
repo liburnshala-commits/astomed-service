@@ -11,6 +11,7 @@ import { sv } from "date-fns/locale";
 import { FileCheck, Search, Building2, Monitor, Pencil, Clock, Download } from "lucide-react";
 import ServiceContractModal from "@/components/machines/ServiceContractModal";
 import PendingContractApproval from "@/components/contracts/PendingContractApproval";
+import MultiMachineContractModal from "@/components/contracts/MultiMachineContractModal";
 
 const bindingLabel = { 6: "6 mån", 12: "12 mån", 24: "24 mån" };
 
@@ -32,6 +33,7 @@ export default function ServiceContracts() {
   const [customers, setCustomers] = useState([]);
   const [search, setSearch] = useState("");
   const [editingMachine, setEditingMachine] = useState(null);
+  const [showMultiContract, setShowMultiContract] = useState(false);
 
   useEffect(() => {
     Promise.all([
@@ -250,6 +252,7 @@ export default function ServiceContracts() {
               onChange={e => setSearch(e.target.value)}
             />
           </div>
+          <Button onClick={() => setShowMultiContract(true)} className="astomed-btn-primary">Nytt Serviceavtal</Button>
         </div>
       </div>
 
@@ -327,6 +330,16 @@ export default function ServiceContracts() {
           machine={editingMachine}
           onSave={handleContractSave}
           onClose={() => setEditingMachine(null)}
+        />
+      )}
+
+      {showMultiContract && (
+        <MultiMachineContractModal 
+          onClose={() => setShowMultiContract(false)}
+          onSave={() => {
+            setShowMultiContract(false);
+            base44.entities.Machine.list().then(setMachines);
+          }}
         />
       )}
 

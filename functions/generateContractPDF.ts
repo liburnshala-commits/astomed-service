@@ -67,42 +67,76 @@ Deno.serve(async (req) => {
         doc.text('Telefon: ' + (customer.phone || ''), 20, 72);
         doc.text('E-post: ' + (customer.email || ''), 20, 77);
 
+        let instance = null;
+        let allMachines = [machine];
+        if (machine.service_agreement_instance_id) {
+            instance = await base44.asServiceRole.entities.ServiceAgreementInstance.get(machine.service_agreement_instance_id);
+            if (instance && instance.machine_ids) {
+                const fetchedMachines = await Promise.all(instance.machine_ids.map(id => base44.asServiceRole.entities.Machine.get(id).catch(()=>null)));
+                allMachines = fetchedMachines.filter(m => m);
+            }
+        }
+
         // Machine details
         doc.setFontSize(11);
         doc.setFont('helvetica', 'bold');
         doc.setTextColor(27, 58, 58);
-        doc.text('MASKININFORMATION', 20, 88);
+        doc.text('MASKININFORMATION (' + allMachines.length + ' maskiner)', 20, 88);
         
         doc.setFont('helvetica', 'normal');
         doc.setFontSize(9);
-        doc.text('Maskinmodell: ' + (machine.model || ''), 20, 95);
-        doc.text('Serienummer: ' + (machine.serial_number || ''), 20, 100);
-        doc.text('Serviceavtal: ' + (machine.service_contract === 'basic' ? 'BAS - Astomed 3.0' : machine.service_contract || ''), 20, 105);
         
-        if (machine.contract_start_date) {
-            const startDate = new Date(machine.contract_start_date).toLocaleDateString('sv-SE');
-            doc.text('Startdatum: ' + startDate, 20, 110);
-
-            const renewalDate = new Date(machine.contract_start_date);
-            renewalDate.setMonth(renewalDate.getMonth() + 12);
-            doc.text('Förnyelsedatum: ' + renewalDate.toLocaleDateString('sv-SE'), 20, 115);
-        }
-        
-        if (machine.contract_binding_months) {
-            doc.text('Bindningstid: ' + machine.contract_binding_months + ' månader', 20, 120);
+        let mY = 95;
+        for (const m of allMachines) {
+            doc.text(`- ${m.model || 'Okänd modell'} (SN: ${m.serial_number || 'Okänt'})`, 20, mY);
+            mY += 5;
         }
 
-        let yOffset = 125;
+        const effectiveStartDate = instance?.start_date || machine.contract_start_date;
+        const effectiveBinding = instance?.binding_months || machine.contract_binding_months;
+
+        mY += 2;
+        doc.text('Serviceavtal: ' + (machine.service_contract === 'basic' ? 'BAS - Astomed 3.0' : machine.service_contract || ''), 20, mY);
+        mY += 5;
         
-        // Fetch service agreement template if linked
+        if (effectiveStartDate) {
+            const startDateObj = new Date(effectiveStartDate);
+            doc.text('Startdatum: ' + startDateObj.toLocaleDateString('sv-SE'), 20, mY);
+
+            const renewalDate = new Date(startDateObj);
+            renewalDate.setMonth(renewalDate.getMonth() + (effectiveBinding || 12));
+            doc.text('Förnyelsedatum: ' + renewalDate.toLocaleDateString('sv-SE'), 20, mY + 5);
+        }
+        
+        if (effectiveBinding) {
+            doc.text('Bindningstid: ' + effectiveBinding + ' månader', 20, mY + 10);
+        }
+
+        let yOffset = mY + 15;
+        
+        const templateId = instance?.service_agreement_template_id || machine.service_agreement_template_id;
         let template = null;
-        if (machine.service_agreement_template_id) {
-            template = await base44.asServiceRole.entities.ServiceAgreementTemplate.get(machine.service_agreement_template_id);
+        if (templateId) {
+            template = await base44.asServiceRole.entities.ServiceAgreementTemplate.get(templateId);
         }
 
         const includedServices = template?.included_services || [];
         const templateName = template?.name || (machine.model || '');
-        const templatePrice = template?.price_per_month ? template.price_per_month + ' kr/månad' : null;
+        
+        let basePrice = template?.price_per_month ? Number(template.price_per_month) : 0;
+        let totalPrice = basePrice * allMachines.length;
+        
+        let discountInfo = "";
+        if (instance && instance.discount) {
+            if (instance.discount_type === 'percent') {
+                discountInfo = ` (Inkl. ${instance.discount}% rabatt)`;
+                totalPrice = totalPrice * (1 - (instance.discount / 100));
+            } else {
+                discountInfo = ` (Inkl. ${instance.discount} kr rabatt)`;
+                totalPrice = totalPrice - instance.discount;
+            }
+        }
+        totalPrice = Math.max(0, totalPrice);
 
         yOffset += 6;
         if (includedServices.length > 0) {
@@ -130,11 +164,10 @@ Deno.serve(async (req) => {
                 yOffset += (lines.length * 5);
             }
             
-            if (templatePrice) {
+            if (basePrice > 0) {
                 yOffset += 5;
                 if (yOffset > 250) { doc.addPage(); yOffset = 20; }
                 
-                // Add a highlighted box for the price
                 doc.setDrawColor(220, 232, 232);
                 doc.setFillColor(244, 246, 244);
                 doc.roundedRect(20, yOffset, 170, 20, 2, 2, 'FD');
@@ -142,7 +175,7 @@ Deno.serve(async (req) => {
                 doc.setFont('helvetica', 'bold');
                 doc.setFontSize(11);
                 doc.setTextColor(27, 58, 58);
-                doc.text('Pris: ' + templatePrice, 25, yOffset + 8);
+                doc.text(`Pris: ${Math.round(totalPrice)} kr/månad${discountInfo}`, 25, yOffset + 8);
                 
                 doc.setFont('helvetica', 'italic');
                 doc.setFontSize(8);

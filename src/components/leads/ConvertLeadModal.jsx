@@ -65,8 +65,15 @@ export default function ConvertLeadModal({ lead, onClose, onConverted }) {
     city: lead.city || "",
     notes: ""
   });
-  const [machineModel, setMachineModel] = useState("Soprano Platinum");
-  const [customModel, setCustomModel] = useState("");
+  const [machineModel, setMachineModel] = useState(() => {
+    if (lead.machine_name && MODELS.includes(lead.machine_name)) return lead.machine_name;
+    if (lead.machine_name) return "Annan";
+    return "Soprano Platinum";
+  });
+  const [customModel, setCustomModel] = useState(() => {
+    if (lead.machine_name && !MODELS.includes(lead.machine_name)) return lead.machine_name;
+    return "";
+  });
   const [technician, setTechnician] = useState("");
   const [saving, setSaving] = useState(false);
   const [done, setDone] = useState(false);
@@ -76,18 +83,28 @@ export default function ConvertLeadModal({ lead, onClose, onConverted }) {
   const handleConvert = async () => {
     setSaving(true);
     try {
-      // 1. Create customer
-      const customer = await base44.entities.Customer.create({
-        company_name: form.company_name,
-        contact_person: form.contact_person,
-        email: form.email,
-        phone: form.phone,
-        org_number: form.org_number,
-        address: form.address,
-        postal_code: form.postal_code,
-        city: form.city,
-        notes: form.notes
-      });
+      // 1. Create or find customer
+      let customer;
+      if (form.org_number && form.org_number.trim() !== "") {
+        const existing = await base44.entities.Customer.filter({ org_number: form.org_number.trim() });
+        if (existing && existing.length > 0) {
+          customer = existing[0];
+        }
+      }
+      
+      if (!customer) {
+        customer = await base44.entities.Customer.create({
+          company_name: form.company_name,
+          contact_person: form.contact_person,
+          email: form.email,
+          phone: form.phone,
+          org_number: form.org_number,
+          address: form.address,
+          postal_code: form.postal_code,
+          city: form.city,
+          notes: form.notes
+        });
+      }
 
       // 2. Create a machine
       const finalModel = machineModel === "Annan" ? customModel : machineModel;

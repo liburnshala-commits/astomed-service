@@ -1,0 +1,221 @@
+import { useState, useEffect } from "react";
+import { X } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
+import { base44 } from "@/api/base44Client";
+
+export default function MultiMachineContractModal({ onClose, onSave }) {
+  const [customers, setCustomers] = useState([]);
+  const [machines, setMachines] = useState([]);
+  const [templates, setTemplates] = useState([]);
+  
+  const [selectedCustomer, setSelectedCustomer] = useState("");
+  const [selectedMachines, setSelectedMachines] = useState([]);
+  const [selectedTemplate, setSelectedTemplate] = useState("");
+  
+  const [discount, setDiscount] = useState(0);
+  const [discountType, setDiscountType] = useState("amount");
+  const [startDate, setStartDate] = useState(new Date().toISOString().split("T")[0]);
+  const [bindingMonths, setBindingMonths] = useState("12");
+  
+  const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    base44.entities.Customer.list().then(setCustomers);
+    base44.entities.ServiceAgreementTemplate.list().then(setTemplates);
+  }, []);
+
+  useEffect(() => {
+    if (selectedCustomer) {
+      base44.entities.Machine.filter({ customer_id: selectedCustomer }).then(m => {
+        setMachines(m);
+      });
+      setSelectedMachines([]);
+    } else {
+      setMachines([]);
+    }
+  }, [selectedCustomer]);
+
+  const handleSave = async () => {
+    if (!selectedCustomer || selectedMachines.length === 0 || !selectedTemplate) return;
+    
+    setSaving(true);
+    try {
+      const instance = await base44.entities.ServiceAgreementInstance.create({
+        customer_id: selectedCustomer,
+        service_agreement_template_id: selectedTemplate,
+        machine_ids: selectedMachines,
+        discount: Number(discount),
+        discount_type: discountType,
+        start_date: startDate,
+        binding_months: Number(bindingMonths),
+        status: "active"
+      });
+
+      for (const machineId of selectedMachines) {
+        await base44.entities.Machine.update(machineId, {
+          service_contract: "basic",
+          contract_status: "active",
+          service_agreement_template_id: selectedTemplate,
+          service_agreement_instance_id: instance.id,
+          contract_start_date: startDate,
+          contract_binding_months: Number(bindingMonths)
+        });
+      }
+
+      onSave();
+    } finally {
+      setSaving(false);
+    }
+  };
+  
+  const toggleMachine = (id) => {
+    setSelectedMachines(prev => prev.includes(id) ? prev.filter(m => m !== id) : [...prev, id]);
+  };
+
+  const templateObj = templates.find(t => t.id === selectedTemplate);
+  let basePrice = templateObj?.price_per_month ? Number(templateObj.price_per_month) : 0;
+  let totalPrice = basePrice * selectedMachines.length;
+  if (discountType === 'percent') {
+      totalPrice = totalPrice * (1 - (Number(discount) / 100));
+  } else {
+      totalPrice = totalPrice - Number(discount);
+  }
+  totalPrice = Math.max(0, totalPrice);
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+        <div className="flex items-center justify-between p-6 border-b sticky top-0 bg-white z-10">
+          <div>
+            <h2 className="text-lg font-bold text-slate-900">Nytt Serviceavtal (Flera maskiner)</h2>
+            <p className="text-sm text-slate-500">Skapa ett avtal för en eller flera maskiner med eventuell rabatt.</p>
+          </div>
+          <Button variant="ghost" size="icon" onClick={onClose}><X className="w-4 h-4" /></Button>
+        </div>
+
+        <div className="p-6 space-y-6">
+          <div className="space-y-2">
+            <Label>Välj Kund</Label>
+            <Select value={selectedCustomer} onValueChange={setSelectedCustomer}>
+              <SelectTrigger><SelectValue placeholder="Välj kund..." /></SelectTrigger>
+              <SelectContent>
+                {customers.map(c => (
+                  <SelectItem key={c.id} value={c.id}>{c.company_name}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          {selectedCustomer && machines.length > 0 && (
+            <div className="space-y-2">
+              <Label>Välj Maskiner att inkludera i avtalet</Label>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-2">
+                {machines.map(m => (
+                  <label key={m.id} className="flex items-start gap-3 p-3 border rounded-lg cursor-pointer hover:bg-slate-50">
+                    <Checkbox 
+                      checked={selectedMachines.includes(m.id)} 
+                      onCheckedChange={() => toggleMachine(m.id)} 
+                      className="mt-1"
+                    />
+                    <div>
+                      <div className="font-semibold text-sm">{m.model}</div>
+                      <div className="text-xs text-slate-500">SN: {m.serial_number}</div>
+                    </div>
+                  </label>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {selectedCustomer && machines.length === 0 && (
+            <div className="p-4 bg-amber-50 text-amber-800 rounded-lg text-sm">
+              Kunden har inga registrerade maskiner.
+            </div>
+          )}
+
+          {selectedMachines.length > 0 && (
+            <>
+              <div className="space-y-2">
+                <Label>Välj avtalsmall</Label>
+                <Select value={selectedTemplate} onValueChange={setSelectedTemplate}>
+                  <SelectTrigger><SelectValue placeholder="Välj en avtalsmall..." /></SelectTrigger>
+                  <SelectContent>
+                    {templates.map(t => (
+                      <SelectItem key={t.id} value={t.id}>
+                        {t.name} {t.price_per_month ? `– ${t.price_per_month} kr/mån per maskin` : ""}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label>Startdatum</Label>
+                  <Input type="date" value={startDate} onChange={e => setStartDate(e.target.value)} />
+                </div>
+                <div className="space-y-2">
+                  <Label>Bindningstid (månader)</Label>
+                  <Select value={bindingMonths.toString()} onValueChange={setBindingMonths}>
+                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="6">6 månader</SelectItem>
+                      <SelectItem value="12">12 månader</SelectItem>
+                      <SelectItem value="24">24 månader</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-4">
+                <h3 className="font-semibold text-sm text-slate-700">Rabatt & Prisberäkning</h3>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label>Rabatt</Label>
+                    <Input type="number" min="0" value={discount} onChange={e => setDiscount(e.target.value)} />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Typ av rabatt</Label>
+                    <Select value={discountType} onValueChange={setDiscountType}>
+                      <SelectTrigger><SelectValue /></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="amount">Kronor (Totalt)</SelectItem>
+                        <SelectItem value="percent">Procent (%)</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+                
+                {templateObj && (
+                  <div className="pt-3 border-t border-slate-200 flex justify-between items-center">
+                    <span className="text-sm text-slate-600">
+                      Grundpris: {basePrice} kr x {selectedMachines.length} maskiner
+                    </span>
+                    <span className="font-bold text-lg text-emerald-700">
+                      Totalpris: {Math.round(totalPrice)} kr/mån
+                    </span>
+                  </div>
+                )}
+              </div>
+            </>
+          )}
+        </div>
+
+        <div className="flex justify-end gap-3 p-6 border-t bg-slate-50 rounded-b-2xl">
+          <Button variant="outline" onClick={onClose} disabled={saving}>Avbryt</Button>
+          <Button 
+            className="astomed-btn-primary" 
+            onClick={handleSave} 
+            disabled={saving || !selectedCustomer || selectedMachines.length === 0 || !selectedTemplate}
+          >
+            {saving ? "Sparar..." : "Spara Avtal"}
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+}
