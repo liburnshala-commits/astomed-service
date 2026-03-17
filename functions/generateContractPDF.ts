@@ -45,7 +45,7 @@ Deno.serve(async (req) => {
         // Astomed details
         doc.setFontSize(9);
         doc.setFont('helvetica', 'normal');
-        doc.text('Astomed AB | Jägerhorns väg 5 | 141 75 Kungens kurva', 50, 30);
+        doc.text('Astomed AB | Org.nr: 556709-9964 | Jägerhorns väg 5 | 141 75 Kungens kurva', 50, 30);
 
         // Reset color to black
         doc.setTextColor(0, 0, 0);
@@ -176,7 +176,7 @@ Deno.serve(async (req) => {
 
         doc.setFontSize(9);
         doc.setFont('helvetica', 'normal');
-        doc.text('Astomed AB | Jägerhorns väg 5 | 141 75 Kungens kurva', 50, 30);
+        doc.text('Astomed AB | Org.nr: 556709-9964 | Jägerhorns väg 5 | 141 75 Kungens kurva', 50, 30);
 
         doc.setTextColor(0, 0, 0);
         doc.setDrawColor(58, 158, 158);

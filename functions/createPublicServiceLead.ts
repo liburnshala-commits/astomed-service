@@ -74,6 +74,7 @@ Deno.serve(async (req) => {
                     <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #dce8e8;">
                         <p style="color: #1b3a3a; font-weight: bold; margin: 0;">Vänliga hälsningar,</p>
                         <p style="color: #3a9e9e; margin: 5px 0 0 0;">Astomed Service Team</p>
+                        <p style="color: #8aabab; font-size: 12px; margin: 15px 0 0 0;">Astomed AB | Org.nr: 556709-9964 | Jägerhorns väg 5, 141 75 Kungens kurva</p>
                     </div>
                 </div>
             </div>
