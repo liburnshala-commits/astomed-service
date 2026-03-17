@@ -205,6 +205,48 @@ export default function MobileTechnicianCard({ record, machine, customer, onStat
             </div>
           )}
 
+          {/* Replaced Parts */}
+          <div className="bg-white rounded-xl p-3 border border-slate-100 space-y-3">
+            <div className="text-xs font-semibold text-slate-400 uppercase tracking-wide">Bytta reservdelar</div>
+            
+            {record.parts_used?.length > 0 && (
+              <div className="space-y-2 mb-3">
+                {record.parts_used.map((part, i) => (
+                  <div key={i} className="flex items-center justify-between bg-slate-50 p-2 rounded-lg border border-slate-100 text-sm">
+                    <span className="text-slate-700 font-medium">{part.part_name} <span className="text-slate-400 font-normal">x{part.quantity}</span></span>
+                    <button onClick={() => handleRemovePart(i)} className="text-red-400 hover:text-red-600 p-1">
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            <div className="flex gap-2">
+              <input
+                type="text"
+                placeholder="Reservdelens namn..."
+                className="flex-1 text-sm border border-slate-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-slate-50"
+                value={partName}
+                onChange={e => setPartName(e.target.value)}
+              />
+              <input
+                type="number"
+                min="1"
+                className="w-16 text-sm border border-slate-200 rounded-lg px-2 py-2 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-slate-50 text-center"
+                value={partQty}
+                onChange={e => setPartQty(e.target.value)}
+              />
+              <button
+                onClick={handleAddPart}
+                disabled={!partName.trim() || savingPart}
+                className="bg-teal-700 text-white px-3 py-2 rounded-lg text-sm font-semibold hover:bg-teal-800 disabled:opacity-50"
+              >
+                Lägg till
+              </button>
+            </div>
+          </div>
+
           {/* Add note */}
           <div className="bg-white rounded-xl p-3 border border-slate-100 space-y-2">
             <div className="text-xs font-semibold text-slate-400 uppercase tracking-wide">Lägg till notering</div>
