@@ -13,8 +13,6 @@ export default function ServiceContractModal({ machine, onSave, onClose }) {
     contract_status: machine?.contract_status || "active",
     contract_start_date: machine?.contract_start_date || "",
     contract_binding_months: 12,
-    service_date: machine?.service_date || "",
-    next_service_date: machine?.next_service_date || "",
     service_agreement_template_id: machine?.service_agreement_template_id || ""
   });
 
@@ -30,7 +28,7 @@ export default function ServiceContractModal({ machine, onSave, onClose }) {
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between p-6 border-b sticky top-0 bg-white">
-          <h2 className="text-lg font-bold text-slate-900">Serviceavtal & Servicedatum</h2>
+          <h2 className="text-lg font-bold text-slate-900">Serviceavtal</h2>
           <Button variant="ghost" size="icon" onClick={onClose}><X className="w-4 h-4" /></Button>
         </div>
 
@@ -103,17 +101,6 @@ export default function ServiceContractModal({ machine, onSave, onClose }) {
               </div>
             </div>
           )}
-
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-1">
-              <Label>Senaste servicedatum</Label>
-              <Input type="date" value={form.service_date} onChange={e => set("service_date", e.target.value)} />
-            </div>
-            <div className="space-y-1">
-              <Label>Nästa servicedatum</Label>
-              <Input type="date" value={form.next_service_date} onChange={e => set("next_service_date", e.target.value)} />
-            </div>
-          </div>
         </div>
 
         <div className="flex justify-end gap-3 p-6 border-t bg-slate-50 rounded-b-2xl">
