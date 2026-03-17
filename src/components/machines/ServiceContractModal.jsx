@@ -103,11 +103,34 @@ export default function ServiceContractModal({ machine, onSave, onClose }) {
           )}
         </div>
 
-        <div className="flex justify-end gap-3 p-6 border-t bg-slate-50 rounded-b-2xl">
-          <Button variant="outline" onClick={onClose}>Avbryt</Button>
-          <Button onClick={() => onSave(form)} className="astomed-btn-primary">
-            Spara
-          </Button>
+        <div className="flex justify-between items-center p-6 border-t bg-slate-50 rounded-b-2xl">
+          {machine?.service_contract && machine.service_contract !== "none" ? (
+            <Button 
+              type="button"
+              variant="outline" 
+              className="text-red-600 border-red-200 hover:bg-red-50 hover:text-red-700" 
+              onClick={() => {
+                if(window.confirm("Är du säker på att du vill ta bort serviceavtalet?")) {
+                  onSave({
+                    ...form,
+                    service_contract: "none",
+                    contract_status: "inactive",
+                    contract_start_date: null,
+                    contract_binding_months: null,
+                    service_agreement_template_id: null
+                  });
+                }
+              }}
+            >
+              Ta bort avtal
+            </Button>
+          ) : <div />}
+          <div className="flex gap-3">
+            <Button variant="outline" onClick={onClose}>Avbryt</Button>
+            <Button onClick={() => onSave(form)} className="astomed-btn-primary">
+              Spara
+            </Button>
+          </div>
         </div>
       </div>
     </div>

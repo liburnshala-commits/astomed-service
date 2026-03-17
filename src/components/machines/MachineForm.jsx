@@ -155,14 +155,33 @@ export default function MachineForm({ machine, customers, preselectedCustomerId,
             </div>
             <div className="col-span-2 space-y-1">
               <Label>Serviceavtal</Label>
-              <Select value={form.service_contract} onValueChange={v => set("service_contract", v)}>
-                <SelectTrigger><SelectValue /></SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="none">Inget Serviceavtal</SelectItem>
-                  <SelectItem value="basic">BAS – Astomed 3.0</SelectItem>
-                  {/* standard och premium borttagna */}
-                </SelectContent>
-              </Select>
+              <div className="flex gap-2">
+                <Select value={form.service_contract} onValueChange={v => set("service_contract", v)}>
+                  <SelectTrigger className="flex-1"><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="none">Inget Serviceavtal</SelectItem>
+                    <SelectItem value="basic">BAS – Astomed 3.0</SelectItem>
+                  </SelectContent>
+                </Select>
+                {form.service_contract !== "none" && (
+                  <Button 
+                    type="button"
+                    variant="outline" 
+                    className="text-red-600 border-red-200 hover:bg-red-50 hover:text-red-700" 
+                    onClick={() => {
+                      if(window.confirm("Är du säker på att du vill ta bort serviceavtalet?")) {
+                        set("service_contract", "none");
+                        set("contract_start_date", null);
+                        set("contract_binding_months", null);
+                        set("service_agreement_template_id", null);
+                        set("contract_status", "inactive");
+                      }
+                    }}
+                  >
+                    Ta bort
+                  </Button>
+                )}
+              </div>
             </div>
             {form.service_contract === "basic" && form.model && form.model !== "Annan" && (
               <div className="col-span-2 p-4 bg-green-50 rounded-lg border border-green-200">

@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { addMonths, format, isPast, parseISO } from "date-fns";
 import { sv } from "date-fns/locale";
-import { FileCheck, Search, Building2, Monitor, Pencil, Clock, Download } from "lucide-react";
+import { FileCheck, Search, Building2, Monitor, Pencil, Clock, Download, Trash2 } from "lucide-react";
 import ServiceContractModal from "@/components/machines/ServiceContractModal";
 import PendingContractApproval from "@/components/contracts/PendingContractApproval";
 import MultiMachineContractModal from "@/components/contracts/MultiMachineContractModal";
@@ -56,6 +56,22 @@ export default function ServiceContracts() {
   const handleStatusChange = async (machine, newStatus) => {
     await base44.entities.Machine.update(machine.id, { contract_status: newStatus });
     setMachines(prev => prev.map(m => m.id === machine.id ? { ...m, contract_status: newStatus } : m));
+  };
+
+  const handleRemoveContract = async (machine) => {
+    if (!window.confirm("Är du säker på att du vill ta bort serviceavtalet för denna maskin?")) return;
+    
+    const updateData = {
+      service_contract: "none",
+      service_contract_status: null,
+      contract_start_date: null,
+      contract_binding_months: null,
+      service_agreement_template_id: null,
+      contract_status: "inactive"
+    };
+    
+    await base44.entities.Machine.update(machine.id, updateData);
+    setMachines(prev => prev.map(m => m.id === machine.id ? { ...m, ...updateData } : m));
   };
 
   const handleApproveRequest = async (machine) => {
@@ -226,6 +242,13 @@ export default function ServiceContracts() {
                 <Pencil className="w-4 h-4" />
               </button>
             )}
+            <button
+              onClick={() => handleRemoveContract(machine)}
+              className="p-1.5 rounded hover:bg-red-100 text-red-400 hover:text-red-700 transition-colors"
+              title="Ta bort avtal"
+            >
+              <Trash2 className="w-4 h-4" />
+            </button>
           </div>
         </td>
       </tr>
