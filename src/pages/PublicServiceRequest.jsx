@@ -35,9 +35,14 @@ export default function PublicServiceRequest() {
     e.preventDefault();
     setSubmitting(true);
     try {
+      const finalMachineName = form.machine_name === "Annan" && form.other_machine_name 
+        ? `Annan (${form.other_machine_name})` 
+        : form.machine_name;
+
       const submitData = {
         ...form,
-        service_description: form.notes || `Serviceförfrågan för ${form.machine_name}.`
+        machine_name: finalMachineName,
+        service_description: form.notes || `Serviceförfrågan för ${finalMachineName}.`
       };
       const appUrl = window.location.origin;
       const res = await fetch(`${appUrl}/api/functions/createPublicServiceLead`, {
