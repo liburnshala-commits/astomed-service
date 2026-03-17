@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { createPageUrl } from "@/utils";
 import { Link } from "react-router-dom";
-import { Plus, Search, Monitor, Wrench, Building2, FileCheck } from "lucide-react";
+import { Plus, Search, Monitor, Wrench, Building2, FileCheck, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
@@ -87,6 +87,29 @@ export default function Machines() {
     const matchCustomer = filterCustomer === "all" || m.customer_id === filterCustomer;
     return matchSearch && matchModel && matchCustomer;
   });
+
+  const handleDownloadContract = async (machine) => {
+    try {
+      const response = await fetch(`${window.location.origin}/api/functions/generateContractPDF`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ machineId: machine.id })
+      });
+      
+      if (!response.ok) throw new Error('Failed to generate PDF');
+      
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'serviceavtal.pdf';
+      a.click();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Error downloading contract:', error);
+      alert('Det gick inte att ladda ner avtalet. Försök igen.');
+    }
+  };
 
   const handleContractSave = async (data) => {
     const currentUser = await base44.auth.me();
@@ -232,8 +255,13 @@ export default function Machines() {
                      </Button>
                    </Link>
                    {userRole !== "customer" && (
-                     <Button size="sm" variant="outline" onClick={() => setContractMachine(machine)} title="Aktivera serviceavtal">
-                       <FileCheck className="w-3 h-3 mr-1" /> Aktivera serviceavtal
+                     <Button size="sm" variant="outline" onClick={() => setContractMachine(machine)} title="Hantera serviceavtal">
+                       <FileCheck className="w-3 h-3 mr-1" /> Avtal
+                     </Button>
+                   )}
+                   {userRole !== "customer" && machine.service_contract && machine.service_contract !== "none" && (
+                     <Button size="sm" variant="outline" onClick={() => handleDownloadContract(machine)} title="Ladda ner serviceavtal">
+                       <Download className="w-3 h-3" />
                      </Button>
                    )}
                    {userRole !== "customer" && (
