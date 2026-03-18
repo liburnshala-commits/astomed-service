@@ -160,6 +160,7 @@ export default function ServiceContractLeads() {
               <thead className="bg-slate-50 text-slate-500 font-medium">
                 <tr>
                   <th className="px-4 py-3">Namn</th>
+                  <th className="px-4 py-3">Kontakt</th>
                   <th className="px-4 py-3">Typ</th>
                   <th className="px-4 py-3">Status</th>
                   <th className="px-4 py-3">Uppföljning</th>
@@ -167,9 +168,16 @@ export default function ServiceContractLeads() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
-                {filteredLeads.map(lead => (
+                {filteredLeads.map(lead => {
+                  const contact = getLeadContact(lead);
+                  return (
                   <tr key={lead.id} className="hover:bg-slate-50">
                     <td className="px-4 py-3 font-medium text-slate-900">{getLeadName(lead)}</td>
+                    <td className="px-4 py-3 text-xs text-slate-600">
+                      {contact.phone && <div className="flex items-center gap-1"><Phone className="w-3 h-3" /> {contact.phone}</div>}
+                      {contact.email && <div className="flex items-center gap-1 mt-1"><Mail className="w-3 h-3" /> {contact.email}</div>}
+                      {!contact.phone && !contact.email && <span className="text-slate-400">-</span>}
+                    </td>
                     <td className="px-4 py-3">
                       {lead.customer_id ? (
                         <span className="flex items-center gap-1 text-slate-500 text-xs"><User className="w-3 h-3" /> Befintlig kund</span>
