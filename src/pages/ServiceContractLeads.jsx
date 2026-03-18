@@ -13,9 +13,11 @@ import EditLeadModal from "@/components/leads/EditLeadModal";
 const statusMap = {
   new: { label: "Nytt", color: "bg-blue-100 text-blue-800" },
   contacted: { label: "Kontaktad", color: "bg-amber-100 text-amber-800" },
+  called: { label: "Ringt", color: "bg-cyan-100 text-cyan-800" },
   proposal_sent: { label: "Offert skickad", color: "bg-purple-100 text-purple-800" },
   accepted: { label: "Accepterad", color: "bg-emerald-100 text-emerald-800" },
   rejected: { label: "Avvisad", color: "bg-red-100 text-red-800" },
+  no_contract_wanted: { label: "Vill ej ha avtal", color: "bg-gray-100 text-gray-800" },
 };
 
 export default function ServiceContractLeads() {

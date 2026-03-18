@@ -9,9 +9,11 @@ import { X } from "lucide-react";
 const statusMap = {
   new: "Nytt",
   contacted: "Kontaktad",
+  called: "Ringt",
   proposal_sent: "Offert skickad",
   accepted: "Accepterad",
   rejected: "Avvisad",
+  no_contract_wanted: "Vill ej ha avtal",
 };
 
 export default function NewLeadModal({ customers, onClose, onSave }) {
