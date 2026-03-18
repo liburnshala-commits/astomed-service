@@ -115,6 +115,14 @@ export default function ServiceContractLeads() {
     return lead.company_name || "Namnlöst prospekt";
   };
 
+  const getLeadContact = (lead) => {
+    if (lead.customer_id) {
+      const customer = customers.find(c => c.id === lead.customer_id);
+      return { phone: customer?.phone, email: customer?.email };
+    }
+    return { phone: lead.phone, email: lead.email };
+  };
+
   const filteredLeads = leads.filter(l =>
     getLeadName(l).toLowerCase().includes(searchTerm.toLowerCase())
   );
