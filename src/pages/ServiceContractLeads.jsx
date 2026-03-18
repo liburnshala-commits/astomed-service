@@ -146,7 +146,17 @@ export default function ServiceContractLeads() {
 
   const filteredLeads = leads.filter(l =>
     getLeadName(l).toLowerCase().includes(searchTerm.toLowerCase())
-  ).sort((a, b) => getStatusWeight(a.status) - getStatusWeight(b.status));
+  ).sort((a, b) => {
+    if (a.status === 'interested' && b.status !== 'interested') return -1;
+    if (a.status !== 'interested' && b.status === 'interested') return 1;
+    
+    const aHasPhone = !!getLeadContact(a).phone;
+    const bHasPhone = !!getLeadContact(b).phone;
+    if (aHasPhone && !bHasPhone) return -1;
+    if (!aHasPhone && bHasPhone) return 1;
+    
+    return getStatusWeight(a.status) - getStatusWeight(b.status);
+  });
 
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-6">
