@@ -10,10 +10,13 @@ const statusMap = {
   new: "Nytt",
   contacted: "Kontaktad",
   called: "Ringt",
+  interested: "Intresserad",
   proposal_sent: "Offert skickad",
   accepted: "Accepterad",
   rejected: "Avvisad",
   no_contract_wanted: "Vill ej ha avtal",
+  not_interested: "Ej intresserad",
+  other_service_contract: "Annat Serviceavtal",
 };
 
 export default function NewLeadModal({ customers, onClose, onSave }) {
