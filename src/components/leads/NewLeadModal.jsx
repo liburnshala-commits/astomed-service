@@ -95,7 +95,7 @@ export default function NewLeadModal({ customers, onClose, onSave }) {
                   <Input value={form.company_name} onChange={e => set("company_name", e.target.value)} placeholder="AB Företaget" />
                 </div>
                 <div className="space-y-2">
-                  <Label>Org.nummer</Label>
+                  <Label>Org.nummer (frivilligt)</Label>
                   <Input value={form.org_number} onChange={e => set("org_number", e.target.value)} placeholder="556XXX-XXXX" />
                 </div>
                 <div className="space-y-2">
