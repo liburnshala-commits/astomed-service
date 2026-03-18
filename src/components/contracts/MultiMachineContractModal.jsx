@@ -7,12 +7,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Checkbox } from "@/components/ui/checkbox";
 import { base44 } from "@/api/base44Client";
 
-export default function MultiMachineContractModal({ onClose, onSave }) {
+export default function MultiMachineContractModal({ onClose, onSave, initialCustomerId }) {
   const [customers, setCustomers] = useState([]);
   const [machines, setMachines] = useState([]);
   const [templates, setTemplates] = useState([]);
   
-  const [selectedCustomer, setSelectedCustomer] = useState("");
+  const [selectedCustomer, setSelectedCustomer] = useState(initialCustomerId || "");
   const [selectedMachines, setSelectedMachines] = useState([]);
   const [selectedTemplate, setSelectedTemplate] = useState("");
   

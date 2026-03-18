@@ -45,6 +45,7 @@ const navSections = [
       { label: "Serviceärenden", page: "ServiceRecords", icon: Wrench, roles: ["admin", "technician", "customer"] },
       { label: "Servicekalender", page: "Calendar", icon: CalendarDays, roles: ["admin", "technician"] },
       { label: "Serviceavtal", page: "ServiceContracts", icon: FileCheck, roles: ["admin", "technician"] },
+      { label: "Avtalsprospekt", page: "ServiceContractLeads", icon: UsersIcon, roles: ["admin", "technician"] },
       { label: "Serviceavtalsmallar", page: "ServiceAgreementTemplates", icon: FileCheck, roles: ["admin"] },
     ]
   },
