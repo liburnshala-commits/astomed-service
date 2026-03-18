@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
-import { Plus, Search, Calendar as CalendarIcon, Trash2, ArrowRight, User, Building2, Phone, Mail, Copy } from "lucide-react";
+import { Plus, Search, Calendar as CalendarIcon, Trash2, ArrowRight, User, Building2, Phone, Mail, Copy, Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { Input } from "@/components/ui/input";
@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { format } from "date-fns";
 import MultiMachineContractModal from "@/components/contracts/MultiMachineContractModal";
 import NewLeadModal from "@/components/leads/NewLeadModal";
+import EditLeadModal from "@/components/leads/EditLeadModal";
 
 const statusMap = {
   new: { label: "Nytt", color: "bg-blue-100 text-blue-800" },
@@ -26,6 +27,7 @@ export default function ServiceContractLeads() {
   const [searchTerm, setSearchTerm] = useState("");
   const [convertingLead, setConvertingLead] = useState(null);
   const [convertingCustomerId, setConvertingCustomerId] = useState(null);
+  const [editingLead, setEditingLead] = useState(null);
 
   useEffect(() => {
     fetchData();
@@ -50,6 +52,12 @@ export default function ServiceContractLeads() {
 
   const handleUpdateStatus = async (id, newStatus) => {
     await base44.entities.ServiceContractLead.update(id, { status: newStatus });
+    fetchData();
+  };
+
+  const handleEditLead = async (id, updatedData) => {
+    await base44.entities.ServiceContractLead.update(id, updatedData);
+    setEditingLead(null);
     fetchData();
   };
 
@@ -236,6 +244,9 @@ export default function ServiceContractLeads() {
                           <ArrowRight className="w-4 h-4 mr-1" /> Konvertera
                         </Button>
                       )}
+                      <Button size="icon" variant="ghost" className="text-blue-500 hover:bg-blue-50" onClick={() => setEditingLead(lead)}>
+                        <Pencil className="w-4 h-4" />
+                      </Button>
                       <Button size="icon" variant="ghost" className="text-red-500 hover:bg-red-50" onClick={() => handleDelete(lead.id)}>
                         <Trash2 className="w-4 h-4" />
                       </Button>
@@ -262,6 +273,14 @@ export default function ServiceContractLeads() {
           initialCustomerId={convertingCustomerId}
           onClose={() => { setConvertingLead(null); setConvertingCustomerId(null); }}
           onSave={handleConversionComplete}
+        />
+      )}
+
+      {editingLead && (
+        <EditLeadModal
+          lead={editingLead}
+          onClose={() => setEditingLead(null)}
+          onSave={handleEditLead}
         />
       )}
     </div>
