@@ -138,9 +138,15 @@ export default function ServiceContractLeads() {
     return { phone: lead.phone, email: lead.email };
   };
 
+  const getStatusWeight = (status) => {
+    if (status === 'interested') return 0;
+    const index = Object.keys(statusMap).indexOf(status);
+    return index !== -1 ? index + 1 : 99;
+  };
+
   const filteredLeads = leads.filter(l =>
     getLeadName(l).toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  ).sort((a, b) => getStatusWeight(a.status) - getStatusWeight(b.status));
 
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-6">
