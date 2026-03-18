@@ -221,7 +221,8 @@ export default function ServiceContractLeads() {
                       </Button>
                     </td>
                   </tr>
-                );})}
+                );
+                })}
               </tbody>
             </table>
           </div>
