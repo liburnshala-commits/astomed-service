@@ -203,7 +203,14 @@ export default function ServiceContractLeads() {
                   const contact = getLeadContact(lead);
                   return (
                   <tr key={lead.id} className="hover:bg-slate-50">
-                    <td className="px-4 py-3 font-medium text-slate-900">{getLeadName(lead)}</td>
+                    <td className="px-4 py-3">
+                      <div className="font-medium text-slate-900">{getLeadName(lead)}</div>
+                      {lead.notes && (
+                        <div className="text-xs text-slate-500 mt-1 max-w-xs truncate" title={lead.notes}>
+                          {lead.notes}
+                        </div>
+                      )}
+                    </td>
                     <td className="px-4 py-3 text-xs text-slate-600">
                       {contact.phone && <div className="flex items-center gap-1"><Phone className="w-3 h-3" /> {contact.phone}</div>}
                       {contact.email && (
