@@ -35,7 +35,7 @@ export default function CustomerForm({ customer, onSave, onClose }) {
               <Input value={form.company_name} onChange={e => set("company_name", e.target.value)} placeholder="AB Exempelföretag" />
             </div>
             <div className="space-y-1">
-              <Label>Organisationsnummer (frivilligt)</Label>
+              <Label>Organisationsnummer</Label>
               <Input value={form.org_number} onChange={e => set("org_number", e.target.value)} placeholder="556XXX-XXXX" />
             </div>
             <div className="space-y-1">

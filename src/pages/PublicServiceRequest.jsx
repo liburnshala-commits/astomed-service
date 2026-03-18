@@ -113,7 +113,7 @@ export default function PublicServiceRequest() {
                 <Input type="email" value={form.email} onChange={e => set("email", e.target.value)} placeholder="din@email.se" required />
               </div>
               <div className="space-y-1">
-                <Label>Organisationsnummer (frivilligt)</Label>
+                <Label>Organisationsnummer</Label>
                 <Input value={form.org_number} onChange={e => set("org_number", e.target.value)} placeholder="XXXXXX-XXXX" />
               </div>
               <div className="space-y-1">

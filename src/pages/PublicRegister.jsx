@@ -132,7 +132,7 @@ export default function PublicRegister() {
                   />
                 </div>
                 <div>
-                  <Label className="astomed-label">Organisationsnummer (frivilligt)</Label>
+                  <Label className="astomed-label">Organisationsnummer</Label>
                   <Input
                     value={formData.org_number}
                     onChange={(e) => setFormData({...formData, org_number: e.target.value})}
