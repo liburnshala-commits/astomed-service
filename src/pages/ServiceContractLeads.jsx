@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
-import { Plus, Search, Calendar as CalendarIcon, Trash2, ArrowRight, User, Building2, Phone, Mail } from "lucide-react";
+import { Plus, Search, Calendar as CalendarIcon, Trash2, ArrowRight, User, Building2, Phone, Mail, Copy } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/use-toast";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { format } from "date-fns";
@@ -17,6 +18,7 @@ const statusMap = {
 };
 
 export default function ServiceContractLeads() {
+  const { toast } = useToast();
   const [leads, setLeads] = useState([]);
   const [customers, setCustomers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -175,7 +177,25 @@ export default function ServiceContractLeads() {
                     <td className="px-4 py-3 font-medium text-slate-900">{getLeadName(lead)}</td>
                     <td className="px-4 py-3 text-xs text-slate-600">
                       {contact.phone && <div className="flex items-center gap-1"><Phone className="w-3 h-3" /> {contact.phone}</div>}
-                      {contact.email && <div className="flex items-center gap-1 mt-1"><Mail className="w-3 h-3" /> {contact.email}</div>}
+                      {contact.email && (
+                        <div className="flex items-center gap-1 mt-1 group">
+                          <Mail className="w-3 h-3" /> 
+                          {contact.email}
+                          <button 
+                            onClick={() => {
+                              navigator.clipboard.writeText(contact.email);
+                              toast({
+                                title: "Kopierad!",
+                                description: "E-postadressen har kopierats till urklipp.",
+                              });
+                            }}
+                            className="ml-1 text-slate-400 hover:text-slate-700 opacity-0 group-hover:opacity-100 transition-opacity"
+                            title="Kopiera e-post"
+                          >
+                            <Copy className="w-3 h-3" />
+                          </button>
+                        </div>
+                      )}
                       {!contact.phone && !contact.email && <span className="text-slate-400">-</span>}
                     </td>
                     <td className="px-4 py-3">
