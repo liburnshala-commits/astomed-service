@@ -59,24 +59,44 @@ export default function ServiceContractLeads() {
   };
 
   const handleConvert = async (lead) => {
-    // If linked to existing customer, open contract modal directly
-    if (lead.customer_id) {
-      setConvertingLead(lead);
-      setConvertingCustomerId(lead.customer_id);
-      return;
+    let customerId = lead.customer_id;
+
+    if (!customerId) {
+      const newCustomer = await base44.entities.Customer.create({
+        company_name: lead.company_name,
+        org_number: lead.org_number || "",
+        contact_person: lead.contact_person || "",
+        email: lead.email || "",
+        phone: lead.phone || "",
+      });
+      customerId = newCustomer.id;
+      await base44.entities.ServiceContractLead.update(lead.id, { customer_id: customerId });
     }
-    // If new prospect, create customer first
-    const newCustomer = await base44.entities.Customer.create({
-      company_name: lead.company_name,
-      org_number: lead.org_number || "",
-      contact_person: lead.contact_person || "",
-      email: lead.email || "",
-      phone: lead.phone || "",
-    });
-    // Update lead with the new customer id
-    await base44.entities.ServiceContractLead.update(lead.id, { customer_id: newCustomer.id });
-    setConvertingLead({ ...lead, customer_id: newCustomer.id });
-    setConvertingCustomerId(newCustomer.id);
+
+    let createdMachineIds = [...(lead.machine_ids || [])];
+    
+    if (lead.proposed_machines && lead.proposed_machines.length > 0) {
+      const machinePromises = lead.proposed_machines.map(async (machine) => {
+        return await base44.entities.Machine.create({
+          model: machine.model,
+          serial_number: machine.serial_number,
+          customer_id: customerId,
+          installation_date: machine.installation_date || undefined,
+          notes: machine.notes || "Skapad från prospekt",
+          status: "active",
+          service_contract: "none"
+        });
+      });
+      
+      const newMachines = await Promise.all(machinePromises);
+      const newMachineIds = newMachines.map(m => m.id);
+      
+      createdMachineIds = [...createdMachineIds, ...newMachineIds];
+      await base44.entities.ServiceContractLead.update(lead.id, { machine_ids: createdMachineIds });
+    }
+
+    setConvertingLead({ ...lead, customer_id: customerId, machine_ids: createdMachineIds });
+    setConvertingCustomerId(customerId);
   };
 
   const handleConversionComplete = async () => {
