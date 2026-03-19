@@ -14,7 +14,7 @@ export default function MultiMachineContractModal({ onClose, onSave, initialCust
   
   const [selectedCustomer, setSelectedCustomer] = useState(initialCustomerId || "");
   const [selectedMachines, setSelectedMachines] = useState([]);
-  const [selectedTemplate, setSelectedTemplate] = useState("");
+  const [selectedTemplates, setSelectedTemplates] = useState([]);
   
   const [discount, setDiscount] = useState(0);
   const [discountType, setDiscountType] = useState("amount");
@@ -40,30 +40,32 @@ export default function MultiMachineContractModal({ onClose, onSave, initialCust
   }, [selectedCustomer]);
 
   const handleSave = async () => {
-    if (!selectedCustomer || selectedMachines.length === 0 || !selectedTemplate) return;
+    if (!selectedCustomer || selectedMachines.length === 0 || selectedTemplates.length === 0) return;
     
     setSaving(true);
     try {
-      const instance = await base44.entities.ServiceAgreementInstance.create({
-        customer_id: selectedCustomer,
-        service_agreement_template_id: selectedTemplate,
-        machine_ids: selectedMachines,
-        discount: Number(discount),
-        discount_type: discountType,
-        start_date: startDate,
-        binding_months: Number(bindingMonths),
-        status: "active"
-      });
-
-      for (const machineId of selectedMachines) {
-        await base44.entities.Machine.update(machineId, {
-          service_contract: "basic",
-          contract_status: "active",
-          service_agreement_template_id: selectedTemplate,
-          service_agreement_instance_id: instance.id,
-          contract_start_date: startDate,
-          contract_binding_months: Number(bindingMonths)
+      for (const templateId of selectedTemplates) {
+        const instance = await base44.entities.ServiceAgreementInstance.create({
+          customer_id: selectedCustomer,
+          service_agreement_template_id: templateId,
+          machine_ids: selectedMachines,
+          discount: Number(discount),
+          discount_type: discountType,
+          start_date: startDate,
+          binding_months: Number(bindingMonths),
+          status: "active"
         });
+
+        for (const machineId of selectedMachines) {
+          await base44.entities.Machine.update(machineId, {
+            service_contract: "basic",
+            contract_status: "active",
+            service_agreement_template_id: templateId,
+            service_agreement_instance_id: instance.id,
+            contract_start_date: startDate,
+            contract_binding_months: Number(bindingMonths)
+          });
+        }
       }
 
       onSave();
@@ -76,8 +78,14 @@ export default function MultiMachineContractModal({ onClose, onSave, initialCust
     setSelectedMachines(prev => prev.includes(id) ? prev.filter(m => m !== id) : [...prev, id]);
   };
 
-  const templateObj = templates.find(t => t.id === selectedTemplate);
-  let basePrice = templateObj?.price_per_month ? Number(templateObj.price_per_month) : 0;
+  const toggleTemplate = (id) => {
+    setSelectedTemplates(prev => prev.includes(id) ? prev.filter(t => t !== id) : [...prev, id]);
+  };
+
+  let basePrice = selectedTemplates.reduce((sum, templateId) => {
+    const t = templates.find(temp => temp.id === templateId);
+    return sum + (t?.price_per_month ? Number(t.price_per_month) : 0);
+  }, 0);
   let totalPrice = basePrice * selectedMachines.length;
   if (discountType === 'percent') {
       totalPrice = totalPrice * (1 - (Number(discount) / 100));
@@ -140,17 +148,22 @@ export default function MultiMachineContractModal({ onClose, onSave, initialCust
           {selectedMachines.length > 0 && (
             <>
               <div className="space-y-2">
-                <Label>Välj avtalsmall</Label>
-                <Select value={selectedTemplate} onValueChange={setSelectedTemplate}>
-                  <SelectTrigger><SelectValue placeholder="Välj en avtalsmall..." /></SelectTrigger>
-                  <SelectContent>
-                    {templates.map(t => (
-                      <SelectItem key={t.id} value={t.id}>
-                        {t.name} {t.price_per_month ? `– ${t.price_per_month} kr/mån per maskin` : ""}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <Label>Välj avtalsmallar</Label>
+                <div className="grid grid-cols-1 gap-2 mt-2">
+                  {templates.map(t => (
+                    <label key={t.id} className="flex items-start gap-3 p-3 border rounded-lg cursor-pointer hover:bg-slate-50">
+                      <Checkbox 
+                        checked={selectedTemplates.includes(t.id)} 
+                        onCheckedChange={() => toggleTemplate(t.id)} 
+                        className="mt-1"
+                      />
+                      <div>
+                        <div className="font-semibold text-sm">{t.name}</div>
+                        {t.price_per_month && <div className="text-xs text-slate-500">{t.price_per_month} kr/mån per maskin</div>}
+                      </div>
+                    </label>
+                  ))}
+                </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
@@ -190,7 +203,7 @@ export default function MultiMachineContractModal({ onClose, onSave, initialCust
                   </div>
                 </div>
                 
-                {templateObj && (
+                {selectedTemplates.length > 0 && (
                   <div className="pt-3 border-t border-slate-200 flex justify-between items-center">
                     <span className="text-sm text-slate-600">
                       Grundpris: {basePrice} kr x {selectedMachines.length} maskiner
@@ -210,7 +223,7 @@ export default function MultiMachineContractModal({ onClose, onSave, initialCust
           <Button 
             className="astomed-btn-primary" 
             onClick={handleSave} 
-            disabled={saving || !selectedCustomer || selectedMachines.length === 0 || !selectedTemplate}
+            disabled={saving || !selectedCustomer || selectedMachines.length === 0 || selectedTemplates.length === 0}
           >
             {saving ? "Sparar..." : "Spara Avtal"}
           </Button>
