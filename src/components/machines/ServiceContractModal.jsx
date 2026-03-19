@@ -13,7 +13,8 @@ export default function ServiceContractModal({ machine, onSave, onClose }) {
     contract_status: machine?.contract_status || "active",
     contract_start_date: machine?.contract_start_date || "",
     contract_binding_months: 12,
-    service_agreement_template_id: machine?.service_agreement_template_id || ""
+    service_agreement_template_id: machine?.service_agreement_template_id || "",
+    contract_discount_percent: machine?.contract_discount_percent || 0
   });
 
   useEffect(() => {
@@ -100,6 +101,10 @@ export default function ServiceContractModal({ machine, onSave, onClose }) {
                     <SelectItem value="rejected">Nekat signering</SelectItem>
                   </SelectContent>
                 </Select>
+              </div>
+              <div className="space-y-1 col-span-2">
+                <Label>Rabatt (%)</Label>
+                <Input type="number" min="0" max="100" value={form.contract_discount_percent} onChange={e => set("contract_discount_percent", Number(e.target.value))} />
               </div>
             </div>
           )}
