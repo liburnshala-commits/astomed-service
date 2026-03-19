@@ -154,58 +154,7 @@ export default function MachineForm({ machine, customers, preselectedCustomerId,
               <Label>Garanti till</Label>
               <Input type="date" value={form.warranty_expiry} onChange={e => set("warranty_expiry", e.target.value)} />
             </div>
-            <div className="col-span-2 space-y-1">
-              <Label>Serviceavtal</Label>
-              <div className="flex gap-2">
-                <Select value={form.service_contract} onValueChange={v => set("service_contract", v)}>
-                  <SelectTrigger className="flex-1"><SelectValue /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="none">Inget Serviceavtal</SelectItem>
-                    <SelectItem value="basic">BAS – Astomed 3.0</SelectItem>
-                  </SelectContent>
-                </Select>
-                {form.service_contract !== "none" && (
-                  <Button 
-                    type="button"
-                    variant="outline" 
-                    className="text-red-600 border-red-200 hover:bg-red-50 hover:text-red-700" 
-                    onClick={() => {
-                      if(window.confirm("Är du säker på att du vill ta bort serviceavtalet?")) {
-                        set("service_contract", "none");
-                        set("contract_start_date", null);
-                        set("contract_binding_months", null);
-                        set("service_agreement_template_id", null);
-                        set("contract_status", "inactive");
-                      }
-                    }}
-                  >
-                    Ta bort
-                  </Button>
-                )}
-              </div>
-            </div>
-            {form.service_contract === "basic" && form.model && form.model !== "Annan" && (
-              <div className="col-span-2 p-4 bg-green-50 rounded-lg border border-green-200">
-                <h3 className="font-semibold text-green-900 mb-2">
-                  Standardservice och underhåll för {form.model}
-                </h3>
-                <ul className="space-y-2 text-sm text-green-800">
-                  {(machineServiceDetails[form.model]?.details || ["Service och underhåll enligt tillverkarens specifikationer", "Kontakta oss för mer information"]).map((detail, idx) => (
-                    <li key={idx} className="flex gap-2">
-                      <span className="text-green-600">•</span>
-                      <span dangerouslySetInnerHTML={{ __html: detail }} />
-                    </li>
-                  ))}
-                </ul>
-                {machineServiceDetails[form.model]?.additionalInfo && (
-                  <div className="mt-3 pt-3 border-t border-green-300">
-                    <p className="text-sm font-semibold text-green-900">
-                      {machineServiceDetails[form.model].additionalInfo}
-                    </p>
-                  </div>
-                )}
-              </div>
-            )}
+            {/* Service contract management moved to dedicated flow */}
             <div className="col-span-2 space-y-1">
               <Label>Status</Label>
               <Select value={form.status} onValueChange={v => set("status", v)}>
