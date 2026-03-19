@@ -10,6 +10,7 @@ import { machineServiceDetails } from "../MachineServiceDetails";
 const MODELS = [
   "Soprano ICE Platinum",
   "Soprano Titanium",
+  "Alma Harmony",
   "Helios III",
   "Picolo",
   "Cocoon Elysion",

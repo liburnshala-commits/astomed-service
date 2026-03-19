@@ -223,6 +223,28 @@ export const machineServiceDetails = {
     ],
     additionalInfo: "Pris: 600 kr/månad"
   },
+  "Alma Harmony": {
+    title: "Standardservice och underhåll – Alma Harmony",
+    details: [
+      "Byte av Avjoniseringsfilter",
+      "Byte av mekaniskpartikelfilter",
+      "Byte av CPC-kopplingar till filter",
+      "Påfyllning av destillerat avjoniserat kylvätska",
+      "Spolning av pneumatisk krets",
+      "Läckagekontroll",
+      "Kontroll av luftintagsfilter",
+      "Lasereffektmätning",
+      "Rengöring av värmeväxlare",
+      "Rengörning av Switchade nätaggret",
+      "Kontroll av nödstopp och interlock",
+      "Upprättande av serviceprotokoll",
+      "Serviceuppmärkning av utrustning",
+      "Kontroll av säkerhetsrem",
+      "20 % på arbetstid för övriga reparationer",
+      "20 % på resekostnader"
+    ],
+    additionalInfo: "Pris: 600 kr/månad"
+  },
   "Annan": {
     title: "Maskin som ej finns i listan",
     details: [

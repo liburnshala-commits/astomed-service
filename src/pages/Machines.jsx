@@ -12,7 +12,7 @@ import MachineForm from "@/components/machines/MachineForm.jsx";
 import ServiceContractModal from "@/components/machines/ServiceContractModal.jsx";
 
 const MODELS = [
-  "Soprano Platinum", "Soprano Titanium", "Aldix (Triodus)",
+  "Soprano Platinum", "Soprano Titanium", "Alma Harmony", "Aldix (Triodus)",
   "PrimeLase", "Elysion", "PicoLo", "Helius", "Splendor X", "Pento"
 ];
 
