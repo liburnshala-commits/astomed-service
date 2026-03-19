@@ -86,7 +86,8 @@ export default function MultiMachineContractModal({ onClose, onSave, initialCust
     const t = templates.find(temp => temp.id === templateId);
     return sum + (t?.price_per_month ? Number(t.price_per_month) : 0);
   }, 0);
-  let totalPrice = basePrice * selectedMachines.length;
+  // Total price is just the sum of template prices, not multiplied by machines
+  let totalPrice = basePrice;
   if (discountType === 'percent') {
       totalPrice = totalPrice * (1 - (Number(discount) / 100));
   } else {
@@ -159,7 +160,7 @@ export default function MultiMachineContractModal({ onClose, onSave, initialCust
                       />
                       <div>
                         <div className="font-semibold text-sm">{t.name}</div>
-                        {t.price_per_month && <div className="text-xs text-slate-500">{t.price_per_month} kr/mån per maskin</div>}
+                        {t.price_per_month && <div className="text-xs text-slate-500">{t.price_per_month} kr/mån</div>}
                       </div>
                     </label>
                   ))}
@@ -206,7 +207,7 @@ export default function MultiMachineContractModal({ onClose, onSave, initialCust
                 {selectedTemplates.length > 0 && (
                   <div className="pt-3 border-t border-slate-200 flex justify-between items-center">
                     <span className="text-sm text-slate-600">
-                      Grundpris: {basePrice} kr x {selectedMachines.length} maskiner
+                      Grundpris: {basePrice} kr/mån
                     </span>
                     <span className="font-bold text-lg text-emerald-700">
                       Totalpris: {Math.round(totalPrice)} kr/mån
