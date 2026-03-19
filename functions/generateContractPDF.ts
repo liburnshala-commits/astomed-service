@@ -114,17 +114,38 @@ Deno.serve(async (req) => {
 
         let yOffset = mY + 15;
         
-        const templateId = instance?.service_agreement_template_id || machine.service_agreement_template_id;
-        let template = null;
-        if (templateId) {
-            template = await base44.asServiceRole.entities.ServiceAgreementTemplate.get(templateId);
+        // Fetch all templates linked to this instance/machine
+        // An instance may be linked to multiple ServiceAgreementInstances (one per template)
+        // so we find all instances for this customer + same machine set and collect all templates
+        let templates = [];
+        if (instance) {
+            // Find all instances for this customer with the same machine_ids
+            const allInstances = await base44.asServiceRole.entities.ServiceAgreementInstance.filter({ customer_id: machine.customer_id });
+            const sameMachineInstances = allInstances.filter(inst => {
+                if (!inst.machine_ids || !instance.machine_ids) return false;
+                const a = [...inst.machine_ids].sort();
+                const b = [...instance.machine_ids].sort();
+                return JSON.stringify(a) === JSON.stringify(b);
+            });
+            templates = await Promise.all(
+                sameMachineInstances
+                    .filter(inst => inst.service_agreement_template_id)
+                    .map(inst => base44.asServiceRole.entities.ServiceAgreementTemplate.get(inst.service_agreement_template_id).catch(() => null))
+            );
+            templates = templates.filter(Boolean);
         }
 
-        const includedServices = template?.included_services || [];
-        const templateName = template?.name || (machine.model || '');
-        
-        let basePrice = template?.price_per_month ? Number(template.price_per_month) : 0;
-        let totalPrice = basePrice * allMachines.length;
+        // Fallback: single template from machine
+        if (templates.length === 0) {
+            const templateId = machine.service_agreement_template_id;
+            if (templateId) {
+                const t = await base44.asServiceRole.entities.ServiceAgreementTemplate.get(templateId).catch(() => null);
+                if (t) templates = [t];
+            }
+        }
+
+        let totalBasePrice = templates.reduce((sum, t) => sum + (t?.price_per_month ? Number(t.price_per_month) : 0), 0);
+        let totalPrice = totalBasePrice;
         
         let discountInfo = "";
         if (instance && instance.discount) {
@@ -139,32 +160,43 @@ Deno.serve(async (req) => {
         totalPrice = Math.max(0, totalPrice);
 
         yOffset += 6;
-        if (includedServices.length > 0) {
+        if (templates.length > 0) {
             doc.setFontSize(12);
             doc.setFont('helvetica', 'bold');
             doc.setTextColor(27, 58, 58);
             doc.text('AVTALSINNEHÅLL OCH PRIS', 20, yOffset);
             yOffset += 8;
 
-            doc.setFontSize(10);
-            doc.text('STANDARDSERVICE OCH UNDERHÅLL – ' + templateName.toUpperCase(), 20, yOffset);
-            
-            doc.setFont('helvetica', 'normal');
-            doc.setFontSize(9);
-            doc.setTextColor(0, 0, 0);
-            yOffset += 6;
-            
-            for (let i = 0; i < includedServices.length; i++) {
-                if (yOffset > 270) {
-                    doc.addPage();
-                    yOffset = 20;
+            for (const template of templates) {
+                const includedServices = template?.included_services || [];
+                const templateName = template?.name || '';
+
+                if (yOffset > 250) { doc.addPage(); yOffset = 20; }
+
+                doc.setFontSize(10);
+                doc.setFont('helvetica', 'bold');
+                doc.setTextColor(27, 58, 58);
+                doc.text('STANDARDSERVICE OCH UNDERHÅLL – ' + templateName.toUpperCase(), 20, yOffset);
+                
+                doc.setFont('helvetica', 'normal');
+                doc.setFontSize(9);
+                doc.setTextColor(0, 0, 0);
+                yOffset += 6;
+                
+                for (let i = 0; i < includedServices.length; i++) {
+                    if (yOffset > 270) {
+                        doc.addPage();
+                        yOffset = 20;
+                    }
+                    const lines = doc.splitTextToSize('• ' + includedServices[i], 170);
+                    doc.text(lines, 20, yOffset);
+                    yOffset += (lines.length * 5);
                 }
-                const lines = doc.splitTextToSize('• ' + includedServices[i], 170);
-                doc.text(lines, 20, yOffset);
-                yOffset += (lines.length * 5);
+
+                yOffset += 4;
             }
             
-            if (basePrice > 0) {
+            if (totalBasePrice > 0) {
                 yOffset += 5;
                 if (yOffset > 250) { doc.addPage(); yOffset = 20; }
                 
