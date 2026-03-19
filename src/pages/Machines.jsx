@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { createPageUrl } from "@/utils";
 import { Link } from "react-router-dom";
-import { Plus, Search, Monitor, Wrench, Building2, FileCheck, Download } from "lucide-react";
+import { Plus, Search, Monitor, Wrench, Building2, FileCheck, Download, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
@@ -158,6 +158,27 @@ export default function Machines() {
     load();
   };
 
+  const handleDelete = async (machine) => {
+    if (window.confirm(`Är du säker på att du vill ta bort maskinen ${machine.model} (SN: ${machine.serial_number})? Detta går inte att ångra.`)) {
+      const currentUser = await base44.auth.me();
+      const customer = customers.find(c => c.id === machine.customer_id);
+      
+      await base44.entities.Machine.delete(machine.id);
+      
+      base44.functions.invoke('logAuditEntry', {
+        action: 'delete',
+        entity_type: 'Machine',
+        entity_id: machine.id,
+        entity_label: `${machine.model} – SN: ${machine.serial_number}`,
+        user_email: currentUser?.email || 'unknown',
+        user_name: currentUser?.full_name || currentUser?.email,
+        details: `Maskin borttagen${customer ? ` (tillhörde ${customer.company_name})` : ''}`
+      });
+      
+      load();
+    }
+  };
+
   return (
     <div className="p-6 space-y-6">
       <div className="flex items-center justify-between">
@@ -265,9 +286,14 @@ export default function Machines() {
                      </Button>
                    )}
                    {userRole !== "customer" && (
-                     <Button size="sm" variant="ghost" onClick={() => { setEditing(machine); setShowForm(true); }}>
-                       Redigera
-                     </Button>
+                     <>
+                       <Button size="sm" variant="ghost" onClick={() => { setEditing(machine); setShowForm(true); }}>
+                         Redigera
+                       </Button>
+                       <Button size="icon" variant="ghost" className="text-red-500 hover:text-red-700 hover:bg-red-50 flex-shrink-0" onClick={() => handleDelete(machine)} title="Ta bort maskin">
+                         <Trash2 className="w-4 h-4" />
+                       </Button>
+                     </>
                    )}
                  </div>
               </CardContent>
