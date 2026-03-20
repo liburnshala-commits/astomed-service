@@ -118,7 +118,7 @@ export default function PublicServiceRequest() {
                 <li>Byte av snabbkopplingar till filter.</li>
                 <li>Läckagekontroll.</li>
               </ul>
-              <ul className="space-y-4 list-disc pl-5 marker:text-black">
+              <ul className="space-y-3 list-disc pl-5 marker:text-black">
                 <li>Kontroll av luftintagsfilter.</li>
                 <li>Lasereffektmätning.</li>
                 <li>Rengöring av värmeväxlare.</li>
