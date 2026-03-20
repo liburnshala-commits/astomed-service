@@ -269,8 +269,8 @@ export default function Machines() {
                     );
                   })()}
                 </div>
-                <div className="flex gap-2">
-                   <Link to={createPageUrl(`ServiceRecords?machine=${machine.id}`)} className="flex-1">
+                <div className="flex gap-2 flex-wrap">
+                   <Link to={createPageUrl(`ServiceRecords?machine=${machine.id}`)}>
                      <Button size="sm" variant="outline" className="w-full">
                        <Wrench className="w-3 h-3 mr-1" /> Starta service
                      </Button>
