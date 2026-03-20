@@ -107,8 +107,8 @@ export default function PublicServiceRequest() {
                 <div className="flex-grow border-t border-black/20"></div>
             </div>
             
-            <div className="grid md:grid-cols-2 gap-x-12 gap-y-4 text-[15px] leading-relaxed">
-              <ul className="space-y-4 list-disc pl-5 marker:text-black">
+            <div className="grid md:grid-cols-2 gap-x-12 gap-y-4 text-base leading-relaxed">
+              <ul className="space-y-3 list-disc pl-5 marker:text-black">
                 <li>Fri teknisk rådgivning via telefon och fjärrsupport under avtalstiden.</li>
                 <li>Årlig service på 12 månader.</li>
                 <li>Prestandakontroll. Mätning av uteffekt och kalibrering för att minimera risk för skador.</li>
