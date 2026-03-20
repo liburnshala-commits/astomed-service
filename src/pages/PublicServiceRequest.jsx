@@ -82,13 +82,53 @@ export default function PublicServiceRequest() {
   return (
     <div className="min-h-screen py-10 px-4" style={{ background: "#002B3C" }}>
       <div className="max-w-2xl mx-auto">
+        
+        <a href="https://astomed.se/service/" className="inline-flex items-center text-sm mb-8 text-slate-300 hover:text-white transition-colors">
+          <ArrowLeft className="w-4 h-4 mr-2" /> Tillbaka till astomed.se/service
+        </a>
+
         {/* Header */}
-        <div className="text-center mb-8">
-          <div className="w-20 h-20 rounded-xl overflow-hidden mx-auto mb-4" style={{ background: "#1b3a3a" }}>
+        <div className="text-center mb-10">
+          <div className="w-20 h-20 rounded-xl overflow-hidden mx-auto mb-6 shadow-lg border-2 border-white/10" style={{ background: "#1b3a3a" }}>
             <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69a9446fcb1cd4ab529479ba/bc2852de1_channels4_profile-2.jpg" alt="Astomed" className="w-full h-full object-cover" />
           </div>
-          <h1 className="text-3xl font-bold mb-2" style={{ color: "#ffffff" }}>Astomed Serviceavtal - kostnadsfri konsultation</h1>
-          <p style={{ color: "#ffffff" }}>Fyll i formuläret nedan så kontaktar vi dig för kostnadsfri konsultation av serviceavtal för din/dina maskiner.</p>
+          <h1 className="text-3xl font-bold mb-4" style={{ color: "#ffffff" }}>Astomed Serviceavtal - kostnadsfri konsultation</h1>
+          <p className="text-lg text-slate-200 mb-8">Fyll i formuläret nedan så kontaktar vi dig för kostnadsfri konsultation av serviceavtal för din/dina maskiner.</p>
+        </div>
+
+        <div className="mb-10 text-white space-y-6">
+          <div className="bg-white/5 p-6 md:p-8 rounded-2xl border border-white/10 backdrop-blur-sm">
+            <h2 className="text-xl font-bold mb-3 text-[#3a9e9e]">Serva din maskin hos oss på Astomed</h2>
+            <p className="text-sm md:text-base leading-relaxed mb-6 text-slate-200">
+              Med de nya föreskrifterna från <strong>Strålsäkerhetsmyndigheten (SSM)</strong> som träder i kraft 2026, blir regelbunden service och dokumentation avgörande för att få driva din klinik vidare. Astomed erbjuder serviceavtal eller service utan avtal för att säkerställa att du uppfyller kraven.
+            </p>
+            
+            <h3 className="font-semibold mb-3 text-slate-100">Serviceavtal - Vad ingår när du väljer oss?</h3>
+            <div className="grid md:grid-cols-2 gap-x-6 gap-y-2 text-sm text-slate-300">
+              <ul className="space-y-2 list-disc pl-5">
+                <li>Fri teknisk rådgivning via telefon och fjärrsupport.</li>
+                <li>Årlig service på 12 månader.</li>
+                <li>Prestandakontroll, mätning av uteffekt och kalibrering.</li>
+                <li>Rådgivning kring lokalens lasersäkerhet.</li>
+                <li>20% rabatt på resekostnader och övriga maskinreparationer.</li>
+              </ul>
+              <ul className="space-y-2 list-disc pl-5">
+                <li>Byte av pneumatisk avjoniseringsfilter A och B.</li>
+                <li>Läckagekontroll och kontroll av luftintagsfilter.</li>
+                <li>Rengöring av värmeväxlare och nätaggregat.</li>
+                <li>Kontroll av nödstopp och interlock.</li>
+                <li>Upprättande av serviceprotokoll.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="bg-white/5 p-6 md:p-8 rounded-2xl border border-white/10 backdrop-blur-sm">
+            <h2 className="text-xl font-bold mb-3 text-[#3a9e9e]">Nya regler stärker säkerheten vid estetiska behandlingar</h2>
+            <p className="text-sm md:text-base leading-relaxed text-slate-200 space-y-4 flex flex-col">
+              <span><strong>4 Maj 2026</strong> kommer nya föreskrifter från Strålsäkerhetsmyndigheten träda i kraft för att stärka skyddet vid behandlingar med icke-joniserande strålning.</span>
+              <span><strong>Obligatorisk anmälningsplikt:</strong> Senast den 4 Juli 2026 måste alla verksamheter som erbjuder estetiska behandlingar med strålning anmäla sin verksamhet till Strålsäkerhetsmyndigheten. Anmälan ska innehålla information om vilken teknisk utrustning som används i verksamheten. Syftet är att myndigheten ska få bättre översyn och kunna bedriva effektiv tillsyn.</span>
+            </p>
+          </div>
         </div>
 
         <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-lg p-8 space-y-6">
