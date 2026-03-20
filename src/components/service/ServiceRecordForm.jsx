@@ -62,12 +62,15 @@ export default function ServiceRecordForm({ record, machines, customers, presele
 
   const [invoiceError, setInvoiceError] = useState(null);
 
+  const currentMachine = machines.find(m => m.id === form.machine_id);
+  const currentContract = currentMachine?.service_contract || "none";
+
   const handleStatusChange = (v) => {
     if (v === "completed" || v === "invoiced") {
       const missing = [];
       if (!form.technician_name) missing.push("Tekniker");
       // Only require labor hours and cost if no service contract
-      if (form.service_contract === "none" || !form.service_contract) {
+      if (currentContract === "none") {
         if (!form.labor_hours && form.labor_hours !== 0) missing.push("Arbetstimmar");
         if (!form.labor_cost && form.labor_cost !== 0) missing.push("Arbetskostnad");
       }
