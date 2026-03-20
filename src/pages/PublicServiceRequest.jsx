@@ -148,11 +148,7 @@ export default function PublicServiceRequest() {
               </ul>
             </div>
             
-            <div className="mt-12 text-center">
-              <a href="/login" className="inline-block px-8 py-4 rounded-full text-white font-medium tracking-wide text-sm transition-colors hover:opacity-90" style={{ background: "#002b3c" }}>
-                SKAPA ETT SERVICEKONTO
-              </a>
-            </div>
+
           </div>
         </div>
 
