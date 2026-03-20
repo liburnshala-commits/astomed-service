@@ -66,8 +66,13 @@ export default function Dashboard() {
     invoiced: "Fakturerad"
   };
 
-  const activeContractsCount = machines.filter(m => m.service_contract && m.service_contract !== 'none').length;
-  const estimatedContractRevenue = activeContractsCount * 600;
+  const activeContractsCount = machines.filter(m => m.service_contract && m.service_contract !== 'none' && (!m.contract_status || m.contract_status === 'active')).length;
+  const pendingContractsCount = machines.filter(m => m.service_contract && m.service_contract !== 'none' && m.contract_status === 'pending_signature').length;
+  const inactiveContractsCount = machines.filter(m => m.service_contract && m.service_contract !== 'none' && m.contract_status === 'inactive').length;
+  const rejectedContractsCount = machines.filter(m => m.service_contract && m.service_contract !== 'none' && m.contract_status === 'rejected').length;
+
+  const estimatedActiveRevenue = activeContractsCount * 600;
+  const estimatedPendingRevenue = pendingContractsCount * 600;
 
   return (
     <div className="p-6 space-y-6">
