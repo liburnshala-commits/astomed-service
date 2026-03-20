@@ -287,7 +287,7 @@ export default function Machines() {
                    )}
                    {userRole !== "customer" && (
                      <>
-                       <Button size="sm" variant="ghost" onClick={() => { setEditing(machine); setShowForm(true); }}>
+                       <Button size="sm" variant="ghost" className="flex-shrink-0" onClick={() => { setEditing(machine); setShowForm(true); }}>
                          Redigera
                        </Button>
                        <Button size="icon" variant="ghost" className="text-red-500 hover:text-red-700 hover:bg-red-50 flex-shrink-0" onClick={() => handleDelete(machine)} title="Ta bort maskin">
