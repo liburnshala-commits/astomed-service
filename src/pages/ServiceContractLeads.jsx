@@ -56,8 +56,8 @@ export default function ServiceContractLeads() {
   };
 
   const handleUpdateStatus = async (id, newStatus) => {
+    setLeads(prev => prev.map(l => l.id === id ? { ...l, status: newStatus } : l));
     await base44.entities.ServiceContractLead.update(id, { status: newStatus });
-    fetchData();
   };
 
   const handleEditLead = async (id, updatedData) => {
