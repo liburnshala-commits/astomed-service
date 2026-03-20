@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
-import { Plus, Search, Calendar as CalendarIcon, Trash2, ArrowRight, User, Building2, Phone, Mail, Copy, Pencil } from "lucide-react";
+import { Plus, Search, Calendar as CalendarIcon, Trash2, ArrowRight, User, Building2, Phone, Mail, Copy, Pencil, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { Input } from "@/components/ui/input";
@@ -144,6 +144,34 @@ export default function ServiceContractLeads() {
     return index !== -1 ? index + 1 : 99;
   };
 
+  const handleSendProposal = async (lead) => {
+    const contact = getLeadContact(lead);
+    if (!contact.email) {
+      toast({
+        title: "Kunde inte skicka",
+        description: "Prospektet saknar e-postadress.",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    try {
+      await base44.functions.invoke('sendServiceContractProposalEmail', { to: contact.email });
+      await base44.entities.ServiceContractLead.update(lead.id, { status: 'proposal_sent' });
+      toast({
+        title: "Offert skickad!",
+        description: `E-post skickades till ${contact.email}`,
+      });
+      fetchData();
+    } catch (error) {
+      toast({
+        title: "Ett fel uppstod",
+        description: error.message,
+        variant: "destructive"
+      });
+    }
+  };
+
   const filteredLeads = leads.filter(l =>
     getLeadName(l).toLowerCase().includes(searchTerm.toLowerCase())
   ).sort((a, b) => {
@@ -261,7 +289,7 @@ export default function ServiceContractLeads() {
                         </div>
                       ) : "-"}
                     </td>
-                    <td className="px-4 py-3 text-right space-x-2">
+                    <td className="px-4 py-3 text-right space-x-1">
                       {lead.status !== "accepted" && (
                         <Button
                           size="sm"
@@ -272,10 +300,13 @@ export default function ServiceContractLeads() {
                           <ArrowRight className="w-4 h-4 mr-1" /> Konvertera
                         </Button>
                       )}
-                      <Button size="icon" variant="ghost" className="text-blue-500 hover:bg-blue-50" onClick={() => setEditingLead(lead)}>
+                      <Button size="icon" variant="ghost" className="text-purple-500 hover:bg-purple-50" onClick={() => handleSendProposal(lead)} title="Skicka offert">
+                        <Send className="w-4 h-4" />
+                      </Button>
+                      <Button size="icon" variant="ghost" className="text-blue-500 hover:bg-blue-50" onClick={() => setEditingLead(lead)} title="Redigera">
                         <Pencil className="w-4 h-4" />
                       </Button>
-                      <Button size="icon" variant="ghost" className="text-red-500 hover:bg-red-50" onClick={() => handleDelete(lead.id)}>
+                      <Button size="icon" variant="ghost" className="text-red-500 hover:bg-red-50" onClick={() => handleDelete(lead.id)} title="Ta bort">
                         <Trash2 className="w-4 h-4" />
                       </Button>
                     </td>
