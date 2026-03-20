@@ -81,7 +81,24 @@ export default function MultiMachineContractModal({ onClose, onSave, initialCust
   };
 
   const toggleTemplate = (id) => {
-    setSelectedTemplates(prev => prev.includes(id) ? prev.filter(t => t !== id) : [...prev, id]);
+    setSelectedTemplates(prev => {
+      const isSelected = prev.includes(id);
+      if (isSelected) {
+        setTemplateQuantities(q => {
+          const newQ = { ...q };
+          delete newQ[id];
+          return newQ;
+        });
+        return prev.filter(t => t !== id);
+      } else {
+        setTemplateQuantities(q => ({ ...q, [id]: 1 }));
+        return [...prev, id];
+      }
+    });
+  };
+
+  const updateTemplateQuantity = (id, qty) => {
+    setTemplateQuantities(prev => ({ ...prev, [id]: qty }));
   };
 
   let basePrice = selectedTemplates.reduce((sum, templateId) => {
