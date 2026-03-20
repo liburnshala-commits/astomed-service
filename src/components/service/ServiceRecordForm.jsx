@@ -162,6 +162,19 @@ export default function ServiceRecordForm({ record, machines, customers, presele
           <Button variant="ghost" size="icon" onClick={onClose}><X className="w-4 h-4" /></Button>
         </div>
         <div className="p-6 space-y-6">
+          {currentContract && currentContract !== "none" && (() => {
+            const contractInfo = SERVICE_CONTRACTS.find(c => c.value === currentContract);
+            if (!contractInfo) return null;
+            return (
+              <div className="p-4 rounded-xl border" style={{ background: "#f4fafa", borderColor: "#dce8e8" }}>
+                <div className="flex items-center gap-2 mb-1">
+                  <CheckCircle2 className="w-5 h-5" style={{ color: "#3a9e9e" }} />
+                  <span className="font-semibold" style={{ color: "#1b3a3a" }}>Aktivt serviceavtal: {contractInfo.label}</span>
+                </div>
+                <p className="text-sm text-slate-600 ml-7">Denna maskin omfattas av ett serviceavtal. Arbetskostnad och arbetstimmar behöver inte anges för fakturering.</p>
+              </div>
+            );
+          })()}
           {/* Basic info */}
           <div className="grid grid-cols-2 gap-4">
             {/* Serial number lookup */}
@@ -219,39 +232,6 @@ export default function ServiceRecordForm({ record, machines, customers, presele
             <div className="space-y-1">
               <Label>Nästa servicedatum</Label>
               <Input type="date" value={form.next_service_date} onChange={e => set("next_service_date", e.target.value)} />
-            </div>
-            <div className="col-span-2 space-y-1">
-              <Label>Serviceavtal</Label>
-              <Select value={form.service_contract} onValueChange={v => set("service_contract", v)}>
-                <SelectTrigger><SelectValue placeholder="Välj serviceavtal" /></SelectTrigger>
-                <SelectContent>
-                  {SERVICE_CONTRACTS.map(c => (
-                    <SelectItem key={c.value} value={c.value}>{c.label}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              {form.service_contract && form.service_contract !== "none" && (() => {
-                const contract = SERVICE_CONTRACTS.find(c => c.value === form.service_contract);
-                if (!contract) return null;
-                return (
-                  <div className="mt-2 p-3 rounded-xl border" style={{ background: "#f4fafa", borderColor: "#dce8e8" }}>
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="text-xs font-semibold astomed-label">{contract.label}</span>
-                      {contract.badge && <span className="text-xs px-1.5 py-0.5 rounded-full font-semibold" style={{ background: "#3a9e9e", color: "#fff" }}>{contract.badge}</span>}
-                      {contract.interval && <span className="text-xs astomed-muted ml-auto">{contract.interval}</span>}
-                    </div>
-                    <p className="text-xs astomed-subtitle mb-2">{contract.description}</p>
-                    <ul className="space-y-1">
-                      {contract.features.map((f, i) => (
-                        <li key={i} className="flex items-start gap-1.5 text-xs astomed-subtitle">
-                          <CheckCircle2 className="w-3 h-3 mt-0.5 flex-shrink-0" style={{ color: "#3a9e9e" }} />
-                          {f}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                );
-              })()}
             </div>
             <div className="col-span-2 space-y-1">
               <Label>Tekniker</Label>
