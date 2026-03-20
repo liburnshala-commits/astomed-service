@@ -271,16 +271,16 @@ export default function ServiceRecordForm({ record, machines, customers, presele
           {/* Costs */}
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1">
-              <Label>Arbetstimmar{(form.service_contract === "none" || !form.service_contract) && " *"}</Label>
+              <Label>Arbetstimmar{currentContract === "none" && " *"}</Label>
               <Input type="number" value={form.labor_hours} onChange={e => set("labor_hours", e.target.value === "" ? "" : parseFloat(e.target.value))} placeholder="0" />
-              {(form.service_contract === "none" || !form.service_contract) && (
+              {currentContract === "none" && (
                 <p className="text-xs text-slate-500">Obligatoriskt för service utan avtal</p>
               )}
             </div>
             <div className="space-y-1">
-              <Label>Arbetskostnad (kr){(form.service_contract === "none" || !form.service_contract) && " *"}</Label>
+              <Label>Arbetskostnad (kr){currentContract === "none" && " *"}</Label>
               <Input type="number" value={form.labor_cost} onChange={e => set("labor_cost", e.target.value === "" ? "" : parseFloat(e.target.value))} placeholder="0" />
-              {(form.service_contract === "none" || !form.service_contract) && (
+              {currentContract === "none" && (
                 <p className="text-xs text-slate-500">Obligatoriskt för service utan avtal</p>
               )}
             </div>
