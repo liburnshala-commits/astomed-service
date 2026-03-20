@@ -98,6 +98,22 @@ export default function PublicServiceRequest() {
 
         <div className="mb-10 space-y-6">
           <div className="p-8 md:p-12 rounded-2xl" style={{ background: "#fcf8f2", color: "#1b3a3a" }}>
+            <h2 className="text-3xl font-light mb-4">Nya regler stärker säkerheten vid estetiska behandlingar</h2>
+            <div className="space-y-6 text-[15px] leading-relaxed">
+              <p>
+                <strong>4 Maj 2026</strong> kommer nya föreskrifter från Strålsäkerhetsmyndigheten träda i kraft för att stärka skyddet vid behandlingar med icke-joniserande strålning.
+              </p>
+              
+              <div>
+                <h3 className="font-bold text-lg mb-2">Obligatorisk anmälningsplikt</h3>
+                <p>
+                  Senast den 4 Juli 2026 måste alla verksamheter som erbjuder estetiska behandlingar med strålning anmäla sin verksamhet till Strålsäkerhetsmyndigheten. Anmälan ska innehålla information om vilken teknisk utrustning som används i verksamheten. Syftet är att myndigheten ska få bättre översyn och kunna bedriva effektiv tillsyn.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="p-8 md:p-12 rounded-2xl" style={{ background: "#fcf8f2", color: "#1b3a3a" }}>
             <h2 className="text-4xl font-light mb-4">Serviceavtal</h2>
             <p className="font-bold mb-8 text-lg">Vad ingår när du väljer oss?</p>
             
@@ -136,22 +152,6 @@ export default function PublicServiceRequest() {
               <a href="/login" className="inline-block px-8 py-4 rounded-full text-white font-medium tracking-wide text-sm transition-colors hover:opacity-90" style={{ background: "#002b3c" }}>
                 SKAPA ETT SERVICEKONTO
               </a>
-            </div>
-          </div>
-
-          <div className="p-8 md:p-12 rounded-2xl" style={{ background: "#fcf8f2", color: "#1b3a3a" }}>
-            <h2 className="text-3xl font-light mb-4">Nya regler stärker säkerheten vid estetiska behandlingar</h2>
-            <div className="space-y-6 text-[15px] leading-relaxed">
-              <p>
-                <strong>4 Maj 2026</strong> kommer nya föreskrifter från Strålsäkerhetsmyndigheten träda i kraft för att stärka skyddet vid behandlingar med icke-joniserande strålning.
-              </p>
-              
-              <div>
-                <h3 className="font-bold text-lg mb-2">Obligatorisk anmälningsplikt</h3>
-                <p>
-                  Senast den 4 Juli 2026 måste alla verksamheter som erbjuder estetiska behandlingar med strålning anmäla sin verksamhet till Strålsäkerhetsmyndigheten. Anmälan ska innehålla information om vilken teknisk utrustning som används i verksamheten. Syftet är att myndigheten ska få bättre översyn och kunna bedriva effektiv tillsyn.
-                </p>
-              </div>
             </div>
           </div>
         </div>
