@@ -30,6 +30,7 @@ export default function ServiceContractLeads() {
   const [loading, setLoading] = useState(true);
   const [showNewLeadModal, setShowNewLeadModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
   const [convertingLead, setConvertingLead] = useState(null);
   const [convertingCustomerId, setConvertingCustomerId] = useState(null);
   const [editingLead, setEditingLead] = useState(null);
@@ -139,7 +140,6 @@ export default function ServiceContractLeads() {
   };
 
   const getStatusWeight = (status) => {
-    if (status === 'interested') return 0;
     const index = Object.keys(statusMap).indexOf(status);
     return index !== -1 ? index + 1 : 99;
   };
@@ -194,12 +194,11 @@ export default function ServiceContractLeads() {
     }
   };
 
-  const filteredLeads = leads.filter(l =>
-    getLeadName(l).toLowerCase().includes(searchTerm.toLowerCase())
-  ).sort((a, b) => {
-    if (a.status === 'interested' && b.status !== 'interested') return -1;
-    if (a.status !== 'interested' && b.status === 'interested') return 1;
-    
+  const filteredLeads = leads.filter(l => {
+    const matchesSearch = getLeadName(l).toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesStatus = statusFilter === "all" || l.status === statusFilter;
+    return matchesSearch && matchesStatus;
+  }).sort((a, b) => {
     const aHasPhone = !!getLeadContact(a).phone;
     const bHasPhone = !!getLeadContact(b).phone;
     if (aHasPhone && !bHasPhone) return -1;
@@ -221,14 +220,27 @@ export default function ServiceContractLeads() {
       </div>
 
       <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-        <div className="p-4 border-b border-slate-200 flex items-center gap-2">
-          <Search className="w-5 h-5 text-slate-400" />
-          <Input
-            placeholder="Sök på namn..."
-            className="border-none shadow-none focus-visible:ring-0 px-0"
-            value={searchTerm}
-            onChange={e => setSearchTerm(e.target.value)}
-          />
+        <div className="p-4 border-b border-slate-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="flex items-center gap-2 flex-1 w-full">
+            <Search className="w-5 h-5 text-slate-400" />
+            <Input
+              placeholder="Sök på namn..."
+              className="border-none shadow-none focus-visible:ring-0 px-0"
+              value={searchTerm}
+              onChange={e => setSearchTerm(e.target.value)}
+            />
+          </div>
+          <Select value={statusFilter} onValueChange={setStatusFilter}>
+            <SelectTrigger className="w-full sm:w-48 h-9 text-sm">
+              <SelectValue placeholder="Filtrera på status" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">Alla statusar</SelectItem>
+              {Object.entries(statusMap).map(([k, v]) => (
+                <SelectItem key={k} value={k}>{v.label}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
 
         {loading ? (
