@@ -130,7 +130,11 @@ Deno.serve(async (req) => {
             templates = await Promise.all(
                 sameMachineInstances
                     .filter(inst => inst.service_agreement_template_id)
-                    .map(inst => base44.asServiceRole.entities.ServiceAgreementTemplate.get(inst.service_agreement_template_id).catch(() => null))
+                    .map(async inst => {
+                        const t = await base44.asServiceRole.entities.ServiceAgreementTemplate.get(inst.service_agreement_template_id).catch(() => null);
+                        if (t) t.quantity = inst.quantity || 1;
+                        return t;
+                    })
             );
             templates = templates.filter(Boolean);
         }
@@ -144,7 +148,7 @@ Deno.serve(async (req) => {
             }
         }
 
-        let totalBasePrice = templates.reduce((sum, t) => sum + (t?.price_per_month ? Number(t.price_per_month) : 0), 0);
+        let totalBasePrice = templates.reduce((sum, t) => sum + (t?.price_per_month ? Number(t.price_per_month) * (t.quantity || 1) : 0), 0);
         let totalPrice = totalBasePrice;
         
         let discountInfo = "";
@@ -176,7 +180,7 @@ Deno.serve(async (req) => {
                 doc.setFontSize(10);
                 doc.setFont('helvetica', 'bold');
                 doc.setTextColor(27, 58, 58);
-                doc.text('STANDARDSERVICE OCH UNDERHÅLL – ' + templateName.toUpperCase(), 20, yOffset);
+                doc.text('STANDARDSERVICE OCH UNDERHÅLL – ' + templateName.toUpperCase() + (template.quantity > 1 ? ` (${template.quantity} st)` : ''), 20, yOffset);
                 
                 doc.setFont('helvetica', 'normal');
                 doc.setFontSize(9);

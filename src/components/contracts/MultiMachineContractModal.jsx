@@ -15,6 +15,7 @@ export default function MultiMachineContractModal({ onClose, onSave, initialCust
   const [selectedCustomer, setSelectedCustomer] = useState(initialCustomerId || "");
   const [selectedMachines, setSelectedMachines] = useState([]);
   const [selectedTemplates, setSelectedTemplates] = useState([]);
+  const [templateQuantities, setTemplateQuantities] = useState({});
   
   const [discount, setDiscount] = useState(0);
   const [discountType, setDiscountType] = useState("amount");
@@ -49,6 +50,7 @@ export default function MultiMachineContractModal({ onClose, onSave, initialCust
           customer_id: selectedCustomer,
           service_agreement_template_id: templateId,
           machine_ids: selectedMachines,
+          quantity: templateQuantities[templateId] || 1,
           discount: Number(discount),
           discount_type: discountType,
           start_date: startDate,
@@ -84,7 +86,8 @@ export default function MultiMachineContractModal({ onClose, onSave, initialCust
 
   let basePrice = selectedTemplates.reduce((sum, templateId) => {
     const t = templates.find(temp => temp.id === templateId);
-    return sum + (t?.price_per_month ? Number(t.price_per_month) : 0);
+    const qty = templateQuantities[templateId] || 1;
+    return sum + (t?.price_per_month ? Number(t.price_per_month) * qty : 0);
   }, 0);
   // Total price is just the sum of template prices, not multiplied by machines
   let totalPrice = basePrice;
@@ -151,19 +154,41 @@ export default function MultiMachineContractModal({ onClose, onSave, initialCust
               <div className="space-y-2">
                 <Label>Välj avtalsmallar</Label>
                 <div className="grid grid-cols-1 gap-2 mt-2">
-                  {templates.map(t => (
-                    <label key={t.id} className="flex items-start gap-3 p-3 border rounded-lg cursor-pointer hover:bg-slate-50">
-                      <Checkbox 
-                        checked={selectedTemplates.includes(t.id)} 
-                        onCheckedChange={() => toggleTemplate(t.id)} 
-                        className="mt-1"
-                      />
-                      <div>
-                        <div className="font-semibold text-sm">{t.name}</div>
-                        {t.price_per_month && <div className="text-xs text-slate-500">{t.price_per_month} kr/mån</div>}
-                      </div>
-                    </label>
-                  ))}
+                  {templates.map(t => {
+                    const isSelected = selectedTemplates.includes(t.id);
+                    return (
+                    <div key={t.id} className="flex items-center justify-between p-3 border rounded-lg hover:bg-slate-50">
+                      <label className="flex items-start gap-3 cursor-pointer flex-1">
+                        <Checkbox 
+                          checked={isSelected} 
+                          onCheckedChange={() => toggleTemplate(t.id)} 
+                          className="mt-1"
+                        />
+                        <div>
+                          <div className="font-semibold text-sm">{t.name}</div>
+                          {t.price_per_month && <div className="text-xs text-slate-500">{t.price_per_month} kr/mån</div>}
+                        </div>
+                      </label>
+                      {isSelected && (
+                        <div className="ml-4 flex items-center gap-2" onClick={e => e.stopPropagation()}>
+                          <span className="text-xs text-slate-500">Antal:</span>
+                          <Select 
+                            value={(templateQuantities[t.id] || 1).toString()} 
+                            onValueChange={(val) => updateTemplateQuantity(t.id, parseInt(val))}
+                          >
+                            <SelectTrigger className="w-20 h-8 text-xs">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20].map(n => (
+                                <SelectItem key={n} value={n.toString()}>{n} st</SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      )}
+                    </div>
+                  )})}
                 </div>
               </div>
 
