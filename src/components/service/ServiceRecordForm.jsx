@@ -40,13 +40,7 @@ const SERVICE_CONTRACTS = [
 ];
 
 export default function ServiceRecordForm({ record, machines, customers, preselectedMachineId, onSave, onClose }) {
-  const [technicians, setTechnicians] = useState([]);
-
-  useEffect(() => {
-    base44.entities.User.filter({ role: "technician" }).then(users => {
-      setTechnicians(users.map(u => u.full_name || u.email));
-    });
-  }, []);
+  const [technicians, setTechnicians] = useState(["elman@astomed.se", "liburn@astomed.se"]);
   const preselectedMachine = machines.find(m => m.id === preselectedMachineId);
 
   const [form, setForm] = useState({

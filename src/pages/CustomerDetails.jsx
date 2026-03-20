@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { createPageUrl } from "@/utils";
 import { Link, useNavigate } from "react-router-dom";
-import { Building2, Phone, Mail, Monitor, ArrowLeft, ExternalLink, Shield } from "lucide-react";
+import { Building2, Phone, Mail, Monitor, ArrowLeft, ExternalLink, Shield, Trash2 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -16,6 +16,13 @@ export default function CustomerDetails() {
 
   const urlParams = new URLSearchParams(window.location.search);
   const customerId = urlParams.get("id");
+
+  const handleDeleteMachine = async (machine) => {
+    if (window.confirm(`Är du säker på att du vill ta bort maskinen ${machine.model} (SN: ${machine.serial_number})?`)) {
+      await base44.entities.Machine.delete(machine.id);
+      setMachines(prev => prev.filter(m => m.id !== machine.id));
+    }
+  };
 
   useEffect(() => {
     if (!customerId) return;
@@ -110,11 +117,22 @@ export default function CustomerDetails() {
                 ) : (
                   machines.map(m => (
                     <div key={m.id} className="p-3 border rounded-lg bg-slate-50/50 flex flex-col gap-1">
-                      <div className="flex justify-between items-start">
-                        <div className="font-medium text-sm text-slate-800">{m.model}</div>
-                        <Badge className={`text-[10px] px-1.5 py-0 border-0 ${m.status === 'service' ? 'bg-orange-100 text-orange-800' : 'bg-green-100 text-green-800'}`}>
+                      <div className="flex justify-between items-start gap-2">
+                        <div className="flex-1">
+                          <div className="font-medium text-sm text-slate-800">{m.model}</div>
+                        </div>
+                        <Badge className={`text-[10px] px-1.5 py-0 border-0 shrink-0 ${m.status === 'service' ? 'bg-orange-100 text-orange-800' : 'bg-green-100 text-green-800'}`}>
                           {m.status === 'service' ? 'På service' : 'Aktiv'}
                         </Badge>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-5 w-5 text-red-400 hover:text-red-600 hover:bg-red-50 shrink-0"
+                          onClick={() => handleDeleteMachine(m)}
+                          title="Ta bort maskin"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </Button>
                       </div>
                       <div className="text-xs text-slate-500 font-mono">SN: {m.serial_number}</div>
                       {m.service_contract && m.service_contract !== 'none' && (
