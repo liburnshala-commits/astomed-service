@@ -158,6 +158,28 @@ export default function ServiceContractLeads() {
     try {
       await base44.functions.invoke('sendServiceContractProposalEmail', { to: contact.email });
       await base44.entities.ServiceContractLead.update(lead.id, { status: 'proposal_sent' });
+      
+      const user = await base44.auth.me();
+      await base44.functions.invoke('logAuditEntry', {
+        action: 'update',
+        entity_type: 'ServiceContractLead',
+        entity_id: lead.id,
+        entity_label: getLeadName(lead),
+        user_email: user?.email || 'unknown',
+        user_name: user?.full_name || user?.email,
+        details: `Offert skickad via e-post till ${contact.email}`
+      });
+
+      if (lead.customer_id) {
+        await base44.entities.CustomerInteraction.create({
+          customer_id: lead.customer_id,
+          interaction_type: 'email',
+          interaction_date: new Date().toISOString(),
+          notes: `Offert för serviceavtal skickad till ${contact.email}.`,
+          logged_by: user?.full_name || user?.email || "System"
+        });
+      }
+
       toast({
         title: "Offert skickad!",
         description: `E-post skickades till ${contact.email}`,
