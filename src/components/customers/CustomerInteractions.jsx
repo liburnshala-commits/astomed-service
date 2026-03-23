@@ -132,7 +132,7 @@ export default function CustomerInteractions({ customerId }) {
                     <div className="text-[11px] text-slate-500">Loggat av: {item.logged_by}</div>
                   </div>
                 </div>
-                <div className="text-sm text-slate-600 pl-9 whitespace-pre-wrap">
+                <div className="text-sm text-slate-600 pl-9 whitespace-pre-wrap break-words">
                   {item.notes}
                 </div>
               </div>
