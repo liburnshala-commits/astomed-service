@@ -2,9 +2,7 @@ import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { createPageUrl } from "@/utils";
 import { Link } from "react-router-dom";
-import { Monitor, Users, Wrench, CheckCircle, Clock } from "lucide-react";
-import DashboardCharts from "@/components/dashboard/DashboardCharts";
-import BillingChart from "@/components/dashboard/BillingChart";
+import { Monitor, Users, Wrench, CheckCircle, Clock, Phone, Mail, FileText, Star, ThumbsUp } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
@@ -14,11 +12,14 @@ export default function Dashboard() {
   const [machines, setMachines] = useState([]);
   const [customers, setCustomers] = useState([]);
   const [records, setRecords] = useState([]);
+  const [leads, setLeads] = useState([]);
+  const [userRole, setUserRole] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const loadData = async () => {
       const currentUser = await base44.auth.me();
+      setUserRole(currentUser?.role);
       if (currentUser?.role === "customer") {
         const ownCustomers = await base44.entities.Customer.filter({ email: currentUser.email });
         const cust = ownCustomers[0];
@@ -30,16 +31,19 @@ export default function Dashboard() {
           ]);
           setMachines(m);
           setRecords(r);
+          setLeads([]);
         }
       } else {
-        const [m, c, r] = await Promise.all([
+        const [m, c, r, l] = await Promise.all([
           base44.entities.Machine.list("-created_date"),
           base44.entities.Customer.list("-created_date"),
-          base44.entities.ServiceRecord.list("-service_date", 50)
+          base44.entities.ServiceRecord.list("-service_date", 50),
+          base44.entities.ServiceContractLead.list()
         ]);
         setMachines(m);
         setCustomers(c);
         setRecords(r);
+        setLeads(l);
       }
       setLoading(false);
     };
@@ -69,6 +73,12 @@ export default function Dashboard() {
 
   const estimatedActiveRevenue = activeContractsCount * 600;
   const estimatedPendingRevenue = pendingContractsCount * 600;
+
+  const contactedLeads = leads.filter(l => l.status === "contacted").length;
+  const calledLeads = leads.filter(l => l.status === "called").length;
+  const newLeads = leads.filter(l => l.status === "new").length;
+  const interestedLeads = leads.filter(l => l.status === "interested").length;
+  const proposalSentLeads = leads.filter(l => l.status === "proposal_sent").length;
 
   return (
     <div className="p-6 space-y-6">
@@ -206,11 +216,90 @@ export default function Dashboard() {
         </Link>
       </div>
 
-      <DashboardCharts records={records} machines={machines} />
+      {userRole !== "customer" && (
+        <>
+          <h2 className="text-lg font-bold astomed-title mt-8 mb-4">Prospektbearbetning</h2>
+          <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
+            <Link to={createPageUrl("ServiceContractLeads")} className="block">
+              <Card className="astomed-card cursor-pointer" style={{ background: "#f8fafc" }}>
+                <CardContent className="p-5">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-xs astomed-muted font-medium uppercase tracking-wide">Nya prospekt</p>
+                      <p className="text-3xl font-bold astomed-title mt-1">{newLeads}</p>
+                    </div>
+                    <div className="w-10 h-10 astomed-icon-box" style={{ width: 40, height: 40, background: "#e2e8f0" }}>
+                      <Star className="w-5 h-5" style={{ color: "#475569" }} />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </Link>
+            <Link to={createPageUrl("ServiceContractLeads")} className="block">
+              <Card className="astomed-card cursor-pointer" style={{ background: "#fffbeb" }}>
+                <CardContent className="p-5">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-xs astomed-muted font-medium uppercase tracking-wide">Kontaktade</p>
+                      <p className="text-3xl font-bold astomed-title mt-1">{contactedLeads}</p>
+                    </div>
+                    <div className="w-10 h-10 astomed-icon-box" style={{ width: 40, height: 40, background: "#fef3c7" }}>
+                      <Mail className="w-5 h-5" style={{ color: "#d97706" }} />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </Link>
+            <Link to={createPageUrl("ServiceContractLeads")} className="block">
+              <Card className="astomed-card cursor-pointer" style={{ background: "#f0fdfa" }}>
+                <CardContent className="p-5">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-xs astomed-muted font-medium uppercase tracking-wide">Ringda</p>
+                      <p className="text-3xl font-bold astomed-title mt-1">{calledLeads}</p>
+                    </div>
+                    <div className="w-10 h-10 astomed-icon-box" style={{ width: 40, height: 40, background: "#ccfbf1" }}>
+                      <Phone className="w-5 h-5" style={{ color: "#0f766e" }} />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </Link>
+            <Link to={createPageUrl("ServiceContractLeads")} className="block">
+              <Card className="astomed-card cursor-pointer" style={{ background: "#f0fdf4" }}>
+                <CardContent className="p-5">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-xs astomed-muted font-medium uppercase tracking-wide">Intresserade</p>
+                      <p className="text-3xl font-bold astomed-title mt-1">{interestedLeads}</p>
+                    </div>
+                    <div className="w-10 h-10 astomed-icon-box" style={{ width: 40, height: 40, background: "#ccfbf1" }}>
+                      <ThumbsUp className="w-5 h-5" style={{ color: "#14b8a6" }} />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </Link>
+            <Link to={createPageUrl("ServiceContractLeads")} className="block">
+              <Card className="astomed-card cursor-pointer" style={{ background: "#faf5ff" }}>
+                <CardContent className="p-5">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-xs astomed-muted font-medium uppercase tracking-wide">Offert skickad</p>
+                      <p className="text-3xl font-bold astomed-title mt-1">{proposalSentLeads}</p>
+                    </div>
+                    <div className="w-10 h-10 astomed-icon-box" style={{ width: 40, height: 40, background: "#f3e8ff" }}>
+                      <FileText className="w-5 h-5" style={{ color: "#a855f7" }} />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </Link>
+          </div>
+        </>
+      )}
 
-      <BillingChart records={records} />
-
-      <div className="grid lg:grid-cols-2 gap-6">
+      <div className="grid lg:grid-cols-2 gap-6 mt-8">
         <Card className="astomed-card" style={{ background: "#f4f9f9" }}>
           <CardHeader className="pb-3">
             <CardTitle className="text-base font-semibold astomed-title">Senaste serviceärenden</CardTitle>
