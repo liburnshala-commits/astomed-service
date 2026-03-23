@@ -253,3 +253,17 @@ export const machineServiceDetails = {
     additionalInfo: ""
   }
 };
+
+// Mappa varianter från dropdown-listan till deras bas-servicebeskrivning
+machineServiceDetails["Helios III"] = machineServiceDetails["Helios"];
+machineServiceDetails["Helius"] = machineServiceDetails["Helios"];
+machineServiceDetails["Picolo"] = machineServiceDetails["PicoLo"];
+machineServiceDetails["Pento 9900"] = machineServiceDetails["Pento"];
+machineServiceDetails["Splendor X"] = machineServiceDetails["Splendor"];
+machineServiceDetails["Cocoon Elysion"] = machineServiceDetails["Elysion"];
+machineServiceDetails["Aldix (Triodus)"] = machineServiceDetails["Triodus"];
+machineServiceDetails["PrimeLase HR"] = machineServiceDetails["PrimeLase"];
+machineServiceDetails["PrimeLase Excel"] = machineServiceDetails["PrimeLase"];
+machineServiceDetails["PrimeLase Excel HR"] = machineServiceDetails["PrimeLase"];
+machineServiceDetails["Soprano Platinum"] = machineServiceDetails["Soprano ICE Platinum"];
+machineServiceDetails["Soprano Titanium Special Edition"] = machineServiceDetails["Soprano Titanium"];
