@@ -239,10 +239,10 @@ export default function Machines() {
                 <h3 className="font-bold astomed-title mb-0.5">{machine.model}</h3>
                 <p className="text-xs astomed-muted mb-3 font-mono">SN: {machine.serial_number}</p>
                 {customer && (
-                  <div className="flex items-center gap-1.5 text-sm astomed-subtitle mb-3">
+                  <Link to={createPageUrl(`CustomerDetails?id=${customer.id}`)} className="flex items-center gap-1.5 text-sm astomed-subtitle mb-3 hover:opacity-80 transition-opacity w-fit">
                     <Building2 className="w-3.5 h-3.5 astomed-muted" />
-                    {customer.company_name}
-                  </div>
+                    <span className="hover:underline">{customer.company_name}</span>
+                  </Link>
                 )}
                 <div className="text-xs astomed-muted mb-4 pt-3 border-t space-y-1" style={{ borderColor: "#dce8e8" }}>
                   <div className="flex items-center justify-between">
