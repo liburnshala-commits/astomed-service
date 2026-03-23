@@ -291,10 +291,10 @@ export default function ServiceContracts() {
       {/* Summary cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
         {[
-          { label: "Totalt tecknade", value: contracted.length },
-          { label: "Aktiva avtal", value: active.length },
-          { label: "Övriga / Inaktiva", value: expired.length },
-          { label: "Väntar på godkännande", value: pendingRequests.length, highlight: pendingRequests.length > 0 },
+          { label: "Under signering", value: contracted.filter(m => contractStatus(m) === "pending_signature").length },
+          { label: "Signerade avtal", value: active.length },
+          { label: "Offert", value: contracted.filter(m => contractStatus(m) === "inactive").length },
+          { label: "Nekat signering", value: contracted.filter(m => contractStatus(m) === "rejected").length, highlight: contracted.filter(m => contractStatus(m) === "rejected").length > 0 },
         ].map(stat => (
           <div key={stat.label} className={`astomed-card p-4 rounded-xl border ${stat.highlight ? "border-amber-300 bg-amber-50" : "bg-white"}`}>
             <div className={`text-2xl font-bold ${stat.highlight ? "text-amber-800" : "astomed-title"}`}>{stat.value}</div>
