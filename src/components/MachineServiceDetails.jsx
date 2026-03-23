@@ -245,6 +245,27 @@ export const machineServiceDetails = {
     ],
     additionalInfo: "Pris: 600 kr/månad"
   },
+  "Fraction CO2": {
+    title: "Standardservice och underhåll – Fraction CO2",
+    details: [
+      "Kontroll av luftintagsfilter",
+      "Lasereffektmätning",
+      "Rengöring av kylflänsar",
+      "Rengöring av till-luftsfläktar",
+      "Rengöring av från-luftsfläktar",
+      "Rengörning av Switchade nätaggret",
+      "Kontroll av nödstopp och interlock",
+      "Upprättande av serviceprotokoll",
+      "Serviceuppmärkning av utrustning",
+      "Kontroll av säkerhetsrem",
+      "Kontroll av possitionering av ledljus",
+      "Kontroll av träffbildsmönster",
+      "Kontroll av alla handenheters linser",
+      "20 % på arbetstid för övriga reparationer",
+      "20 % på resekostnader"
+    ],
+    additionalInfo: "Pris: 600 kr/månad"
+  },
   "Annan": {
     title: "Maskin som ej finns i listan",
     details: [
