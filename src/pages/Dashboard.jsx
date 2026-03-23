@@ -46,10 +46,6 @@ export default function Dashboard() {
     loadData();
   }, []);
 
-  const pending = records.filter(r => r.status === "pending").length;
-  const awaitingApproval = records.filter(r => r.status === "awaiting_approval").length;
-  const inProgress = records.filter(r => r.status === "in_progress").length;
-  const completed = records.filter(r => r.status === "completed").length;
   const recent = records.slice(0, 5);
 
   const statusColor = {
@@ -81,7 +77,7 @@ export default function Dashboard() {
         <p className="astomed-subtitle text-sm">Översikt av serviceverksamheten</p>
       </div>
 
-      <div className="grid grid-cols-2 lg:grid-cols-6 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <Link to={createPageUrl("Machines")} className="block">
           <Card className="astomed-card cursor-pointer" style={{ background: "#f4f9f9" }}>
             <CardContent className="p-5">
@@ -107,66 +103,6 @@ export default function Dashboard() {
                 </div>
                 <div className="w-10 h-10 astomed-icon-box" style={{ width: 40, height: 40 }}>
                   <Users className="w-5 h-5" style={{ color: "#1b3a3a" }} />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </Link>
-        <Link to={createPageUrl("ServiceRecords?status=pending")} className="block">
-          <Card className="astomed-card cursor-pointer" style={{ background: "#fffaf0" }}>
-            <CardContent className="p-5">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-xs astomed-muted font-medium uppercase tracking-wide">Väntande</p>
-                  <p className="text-3xl font-bold astomed-title mt-1">{pending}</p>
-                </div>
-                <div className="w-10 h-10 astomed-icon-box" style={{ width: 40, height: 40 }}>
-                  <Wrench className="w-5 h-5" style={{ color: "#e6a817" }} />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </Link>
-        <Link to={createPageUrl("ServiceRecords?status=awaiting_approval")} className="block">
-          <Card className="astomed-card cursor-pointer" style={{ background: "#fff5f0" }}>
-            <CardContent className="p-5">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-xs astomed-muted font-medium uppercase tracking-wide">Inv. godkänn.</p>
-                  <p className="text-3xl font-bold astomed-title mt-1">{awaitingApproval}</p>
-                </div>
-                <div className="w-10 h-10 astomed-icon-box" style={{ width: 40, height: 40 }}>
-                  <Clock className="w-5 h-5" style={{ color: "#e67317" }} />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </Link>
-        <Link to={createPageUrl("ServiceRecords?status=in_progress")} className="block">
-          <Card className="astomed-card cursor-pointer" style={{ background: "#f0fafa" }}>
-            <CardContent className="p-5">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-xs astomed-muted font-medium uppercase tracking-wide">Pågående</p>
-                  <p className="text-3xl font-bold astomed-title mt-1">{inProgress}</p>
-                </div>
-                <div className="w-10 h-10 astomed-icon-box" style={{ width: 40, height: 40 }}>
-                  <Clock className="w-5 h-5" style={{ color: "#3a9e9e" }} />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </Link>
-        <Link to={createPageUrl("ServiceRecords?status=completed")} className="block">
-          <Card className="astomed-card cursor-pointer" style={{ background: "#f0faf9" }}>
-            <CardContent className="p-5">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-xs astomed-muted font-medium uppercase tracking-wide">Slutförda</p>
-                  <p className="text-3xl font-bold astomed-title mt-1">{completed}</p>
-                </div>
-                <div className="w-10 h-10 astomed-icon-box" style={{ width: 40, height: 40 }}>
-                  <CheckCircle className="w-5 h-5" style={{ color: "#3a9e9e" }} />
                 </div>
               </div>
             </CardContent>
