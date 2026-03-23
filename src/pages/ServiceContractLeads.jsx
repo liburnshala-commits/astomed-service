@@ -27,6 +27,7 @@ export default function ServiceContractLeads() {
   const { toast } = useToast();
   const [leads, setLeads] = useState([]);
   const [customers, setCustomers] = useState([]);
+  const [machines, setMachines] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showNewLeadModal, setShowNewLeadModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -41,12 +42,14 @@ export default function ServiceContractLeads() {
 
   const fetchData = async () => {
     setLoading(true);
-    const [leadsData, customersData] = await Promise.all([
+    const [leadsData, customersData, machinesData] = await Promise.all([
       base44.entities.ServiceContractLead.list(),
-      base44.entities.Customer.list()
+      base44.entities.Customer.list(),
+      base44.entities.Machine.list()
     ]);
     setLeads(leadsData);
     setCustomers(customersData);
+    setMachines(machinesData);
     setLoading(false);
   };
 
@@ -254,6 +257,7 @@ export default function ServiceContractLeads() {
                 <tr>
                   <th className="px-4 py-3">Namn</th>
                   <th className="px-4 py-3">Kontakt</th>
+                  <th className="px-4 py-3">Maskin(er)</th>
                   <th className="px-4 py-3">Typ</th>
                   <th className="px-4 py-3">Status</th>
                   <th className="px-4 py-3">Uppföljning</th>
@@ -295,6 +299,19 @@ export default function ServiceContractLeads() {
                         </div>
                       )}
                       {!contact.phone && !contact.email && <span className="text-slate-400">-</span>}
+                    </td>
+                    <td className="px-4 py-3 text-xs text-slate-600">
+                      {lead.machine_ids?.length > 0 || lead.proposed_machines?.length > 0 ? (
+                        <div className="flex flex-col gap-1">
+                          {lead.machine_ids?.map(id => {
+                            const m = machines.find(m => m.id === id);
+                            return m ? <div key={id} className="truncate max-w-[150px]" title={`${m.model} (SN: ${m.serial_number})`}>{m.model} <span className="text-slate-400">({m.serial_number})</span></div> : null;
+                          })}
+                          {lead.proposed_machines?.map((m, idx) => (
+                            <div key={`prop-${idx}`} className="truncate max-w-[150px]" title={`${m.model} (SN: ${m.serial_number})`}>{m.model} <span className="text-slate-400">({m.serial_number})</span></div>
+                          ))}
+                        </div>
+                      ) : <span className="text-slate-400">-</span>}
                     </td>
                     <td className="px-4 py-3">
                       {lead.customer_id ? (
