@@ -142,6 +142,22 @@ export default function ServiceContractLeads() {
     return { phone: lead.phone, email: lead.email };
   };
 
+  const formatPhone = (phone) => {
+    if (!phone) return "";
+    let str = String(phone).trim();
+    if (str.includes("E") || str.includes("e") || str.includes(",")) {
+      str = str.replace(",", ".");
+      const num = parseFloat(str);
+      if (!isNaN(num)) {
+        str = num.toLocaleString('fullwide', {useGrouping:false});
+      }
+    }
+    if (str.startsWith("46") && str.length >= 10) {
+      str = "+" + str;
+    }
+    return str;
+  };
+
   const getStatusWeight = (status) => {
     const index = Object.keys(statusMap).indexOf(status);
     return index !== -1 ? index + 1 : 99;
@@ -278,7 +294,7 @@ export default function ServiceContractLeads() {
                       )}
                     </td>
                     <td className="px-4 py-3 text-xs text-slate-600">
-                      {contact.phone && <div className="flex items-center gap-1"><Phone className="w-3 h-3" /> {contact.phone}</div>}
+                      {contact.phone && <div className="flex items-center gap-1"><Phone className="w-3 h-3" /> {formatPhone(contact.phone)}</div>}
                       {contact.email && (
                         <div className="flex items-center gap-1 mt-1 group">
                           <Mail className="w-3 h-3" /> 
