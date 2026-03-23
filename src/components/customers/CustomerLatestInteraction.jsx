@@ -56,7 +56,7 @@ export default function CustomerLatestInteraction({ customerId }) {
   }
 
   return (
-    <div className="mt-4 p-3 bg-slate-50 rounded-lg">
+    <div className="mt-4 p-3 bg-slate-50 rounded-lg overflow-hidden">
       <div className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide mb-2 flex items-center gap-1.5">
         <MessageSquare className="w-3 h-3" /> Senaste händelsen
       </div>
@@ -73,7 +73,7 @@ export default function CustomerLatestInteraction({ customerId }) {
               {format(new Date(interaction.interaction_date), "d MMM yyyy", { locale: sv })}
             </span>
           </div>
-          <p className="text-xs text-slate-600 truncate mt-0.5" title={interaction.notes}>
+          <p className="text-xs text-slate-600 line-clamp-2 break-words mt-0.5" title={interaction.notes}>
             {interaction.notes}
           </p>
         </div>
