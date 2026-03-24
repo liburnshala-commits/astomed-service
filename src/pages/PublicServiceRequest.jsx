@@ -26,7 +26,6 @@ export default function PublicServiceRequest() {
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
   const [privacyAccepted, setPrivacyAccepted] = useState(false);
-  const [isAuthorizedSignatory, setIsAuthorizedSignatory] = useState(false);
   const [showPrivacyDialog, setShowPrivacyDialog] = useState(false);
 
   const set = (field, value) => setForm(prev => ({ ...prev, [field]: value }));
@@ -63,7 +62,7 @@ export default function PublicServiceRequest() {
     }
   };
 
-  const isValid = form.company_name && form.contact_person && form.email && form.phone && form.machine_name && form.serial_number && privacyAccepted && isAuthorizedSignatory && (form.machine_name !== "Annan" || form.other_machine_name);
+  const isValid = form.company_name && form.contact_person && form.email && form.phone && form.machine_name && form.serial_number && privacyAccepted && (form.machine_name !== "Annan" || form.other_machine_name);
 
   if (success) {
     return (
@@ -251,15 +250,6 @@ export default function PublicServiceRequest() {
           </div>
 
           <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
-            <label className="flex items-start gap-3 cursor-pointer select-none mb-3">
-              <input
-                type="checkbox"
-                checked={isAuthorizedSignatory}
-                onChange={e => setIsAuthorizedSignatory(e.target.checked)}
-                className="mt-0.5 w-4 h-4 accent-teal-700 flex-shrink-0"
-              />
-              <span className="text-sm text-gray-700">Jag bekräftar att jag är firmatecknare.</span>
-            </label>
             <label className="flex items-start gap-3 cursor-pointer select-none">
               <input
                 type="checkbox"
