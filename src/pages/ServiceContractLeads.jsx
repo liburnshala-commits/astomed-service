@@ -28,6 +28,7 @@ export default function ServiceContractLeads() {
   const [leads, setLeads] = useState([]);
   const [customers, setCustomers] = useState([]);
   const [machines, setMachines] = useState([]);
+  const [serviceRequests, setServiceRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showNewLeadModal, setShowNewLeadModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -42,19 +43,34 @@ export default function ServiceContractLeads() {
 
   const fetchData = async () => {
     setLoading(true);
-    const [leadsData, customersData, machinesData] = await Promise.all([
+    const [leadsData, customersData, machinesData, requestsData] = await Promise.all([
       base44.entities.ServiceContractLead.list(),
       base44.entities.Customer.list(),
-      base44.entities.Machine.list()
+      base44.entities.Machine.list(),
+      base44.entities.PublicServiceLead.filter({ status: 'new' })
     ]);
     setLeads(leadsData);
     setCustomers(customersData);
     setMachines(machinesData);
+    setServiceRequests(requestsData);
     setLoading(false);
   };
 
   const handleCreateLead = async (data) => {
+    const sourceRequestId = data._source_request_id;
+    delete data._source_request_id; // Remove it so it doesn't go into the lead DB model
+
     await base44.entities.ServiceContractLead.create(data);
+    
+    // If it was created from a service request, archive that request
+    if (sourceRequestId) {
+        try {
+             await base44.entities.PublicServiceLead.update(sourceRequestId, { status: "archived" });
+        } catch(e) {
+             console.error("Failed to archive source request", e);
+        }
+    }
+    
     setShowNewLeadModal(false);
     fetchData();
   };
@@ -389,6 +405,7 @@ export default function ServiceContractLeads() {
       {showNewLeadModal && (
         <NewLeadModal
           customers={customers}
+          serviceRequests={serviceRequests}
           onClose={() => setShowNewLeadModal(false)}
           onSave={handleCreateLead}
         />
