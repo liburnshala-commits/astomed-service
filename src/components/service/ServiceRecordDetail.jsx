@@ -69,6 +69,33 @@ export default function ServiceRecordDetail({ record, machine, customer, onClose
                   <Wrench className="w-4 h-4 mr-1" /> Ta upp ärende
                 </Button>
               )}
+              {record.protocol_uri && (
+                <Button size="sm" variant="outline" onClick={async () => {
+                  try {
+                    const res = await base44.integrations.Core.CreateFileSignedUrl({ file_uri: record.protocol_uri });
+                    window.open(res.signed_url, '_blank');
+                  } catch(e) {
+                    alert("Kunde inte hämta protokoll.");
+                  }
+                }}>
+                  <FileText className="w-4 h-4 mr-1" /> Ladda ner protokoll
+                </Button>
+              )}
+              {!record.protocol_uri && (userRole === "admin" || userRole === "technician") && record.status === "completed" && (
+                <Button size="sm" variant="outline" disabled={quoteLoading} onClick={async () => {
+                  setQuoteLoading(true);
+                  try {
+                    await base44.functions.invoke("generateServiceProtocol", { recordId: record.id });
+                    onUpdated?.();
+                    onClose();
+                  } catch(e) {
+                    alert("Kunde inte generera protokoll.");
+                  }
+                  setQuoteLoading(false);
+                }}>
+                  <FileText className="w-4 h-4 mr-1" /> Generera protokoll
+                </Button>
+              )}
               <Button size="sm" variant="outline" onClick={() => setShowReport(true)}>
                 <FileText className="w-4 h-4 mr-1" /> Rapport
               </Button>

@@ -308,14 +308,26 @@ export default function CustomerDashboard() {
               {recent.map(r => {
                 const machine = machines.find(m => m.id === r.machine_id);
                 return (
-                  <div key={r.id} className="flex items-center justify-between p-3 rounded-lg" style={{ background: "#f4f9f9" }}>
-                    <div>
+                  <div key={r.id} className="flex items-center justify-between p-3 rounded-lg flex-wrap gap-2" style={{ background: "#f4f9f9" }}>
+                    <div className="flex-1 min-w-0">
                       <div className="text-sm font-medium astomed-title">{machine?.model || "Okänd maskin"}</div>
                       <div className="text-xs astomed-muted">
                         SN: {machine?.serial_number} · {r.service_date ? format(new Date(r.service_date), "d MMM yyyy", { locale: sv }) : ""}
                       </div>
                     </div>
-                    <Badge className={statusColor[r.status]}>{statusLabel[r.status]}</Badge>
+                    <div className="flex items-center gap-2">
+                      {r.protocol_uri && (
+                        <Button size="sm" variant="outline" className="text-xs h-7 px-2" onClick={async () => {
+                          try {
+                            const res = await base44.integrations.Core.CreateFileSignedUrl({ file_uri: r.protocol_uri });
+                            window.open(res.signed_url, '_blank');
+                          } catch(e) {
+                            alert("Kunde inte hämta protokoll.");
+                          }
+                        }}>Ladda ner protokoll</Button>
+                      )}
+                      <Badge className={statusColor[r.status]}>{statusLabel[r.status]}</Badge>
+                    </div>
                   </div>
                 );
               })}
