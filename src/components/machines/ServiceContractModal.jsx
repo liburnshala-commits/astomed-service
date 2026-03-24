@@ -137,8 +137,10 @@ export default function ServiceContractModal({ machine, onSave, onClose }) {
             <Button variant="outline" onClick={onClose}>Avbryt</Button>
             <Button onClick={() => {
               const dataToSave = { ...form };
-              if (dataToSave.service_contract !== "none" && !dataToSave.contract_created_date) {
-                dataToSave.contract_created_date = new Date().toISOString().split("T")[0];
+              if (dataToSave.service_contract !== "none") {
+                if (machine?.service_contract === "none" || !machine?.service_contract || !dataToSave.contract_created_date) {
+                  dataToSave.contract_created_date = new Date().toISOString().split("T")[0];
+                }
               }
               onSave(dataToSave);
             }} className="astomed-btn-primary">
