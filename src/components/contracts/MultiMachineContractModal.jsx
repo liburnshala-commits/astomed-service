@@ -18,7 +18,7 @@ export default function MultiMachineContractModal({ onClose, onSave, initialCust
   const [templateQuantities, setTemplateQuantities] = useState({});
   
   const [discount, setDiscount] = useState(0);
-  const [discountType, setDiscountType] = useState("amount");
+  const [discountType, setDiscountType] = useState("percent");
   const [startDate, setStartDate] = useState(new Date().toISOString().split("T")[0]);
   const [bindingMonths, setBindingMonths] = useState("12");
   
@@ -231,18 +231,8 @@ export default function MultiMachineContractModal({ onClose, onSave, initialCust
                 <h3 className="font-semibold text-sm text-slate-700">Rabatt & Prisberäkning</h3>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label>Rabatt</Label>
-                    <Input type="number" min="0" value={discount} onChange={e => setDiscount(e.target.value)} />
-                  </div>
-                  <div className="space-y-2">
-                    <Label>Typ av rabatt</Label>
-                    <Select value={discountType} onValueChange={setDiscountType}>
-                      <SelectTrigger><SelectValue /></SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="amount">Kronor (Totalt)</SelectItem>
-                        <SelectItem value="percent">Procent (%)</SelectItem>
-                      </SelectContent>
-                    </Select>
+                    <Label>Rabatt (%)</Label>
+                    <Input type="number" min="0" max="100" value={discount} onChange={e => setDiscount(e.target.value)} />
                   </div>
                 </div>
                 
