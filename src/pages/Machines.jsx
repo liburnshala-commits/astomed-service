@@ -258,11 +258,11 @@ export default function Machines() {
                 <div className="text-xs astomed-muted mb-4 pt-3 border-t space-y-1" style={{ borderColor: "#dce8e8" }}>
                   <div className="flex items-center justify-between">
                     <span>{serviceCount} servicetillfällen</span>
-                    {lastService && (
+                    {displayServiceDate && (
                       <div className="flex items-center gap-1.5">
                         <span>Senast:</span>
                         <span className="px-2 py-0.5 rounded border border-blue-200 bg-blue-50 text-blue-700 font-medium">
-                          {lastService.service_date}
+                          {displayServiceDate}
                         </span>
                       </div>
                     )}
