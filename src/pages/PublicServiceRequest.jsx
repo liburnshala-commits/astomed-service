@@ -62,7 +62,7 @@ export default function PublicServiceRequest() {
     }
   };
 
-  const isValid = form.company_name && form.contact_person && form.email && form.phone && form.machine_name && form.serial_number && privacyAccepted && (form.machine_name !== "Annan" || form.other_machine_name);
+  const isValid = form.company_name && form.contact_person && form.email && form.phone && form.machine_name && privacyAccepted && (form.machine_name !== "Annan" || form.other_machine_name);
 
   if (success) {
     return (
@@ -212,8 +212,8 @@ export default function PublicServiceRequest() {
               </div>
 
               <div className="space-y-1">
-                <Label>Serienummer *</Label>
-                <Input value={form.serial_number || ""} onChange={e => set("serial_number", e.target.value)} placeholder="Ange serienummer" required />
+                <Label>Serienummer (kan skickas in senare)</Label>
+                <Input value={form.serial_number || ""} onChange={e => set("serial_number", e.target.value)} placeholder="Ange serienummer" />
               </div>
               
               {form.machine_name === "Annan" && (
