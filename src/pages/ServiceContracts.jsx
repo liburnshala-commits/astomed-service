@@ -82,6 +82,7 @@ export default function ServiceContracts() {
       service_contract: machine.requested_service_contract,
       service_contract_status: "approved",
       contract_start_date: new Date().toISOString().split("T")[0],
+      contract_created_date: new Date().toISOString().split("T")[0],
       contract_binding_months: machine.contract_binding_months
     };
     await base44.entities.Machine.update(machine.id, updateData);
