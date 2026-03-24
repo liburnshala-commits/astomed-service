@@ -199,6 +199,11 @@ export default function ServiceContracts() {
           {machine.service_contract === "basic" ? "BAS – Astomed 3.0" : machine.service_contract}
         </td>
         <td className="py-3 px-4 text-sm text-slate-600">
+          {machine.contract_created_date
+            ? format(parseISO(machine.contract_created_date), "d MMM yyyy", { locale: sv })
+            : "–"}
+        </td>
+        <td className="py-3 px-4 text-sm text-slate-600">
           {machine.contract_start_date
             ? format(parseISO(machine.contract_start_date), "d MMM yyyy", { locale: sv })
             : "–"}
