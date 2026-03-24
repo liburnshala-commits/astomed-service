@@ -229,6 +229,7 @@ export default function Machines() {
           const customer = getCustomer(machine.customer_id);
           const serviceCount = getServiceCount(machine.id);
           const lastService = getLastService(machine.id);
+          const displayServiceDate = lastService ? lastService.service_date : machine.service_date;
           return (
             <Card key={machine.id} className="astomed-card">
               <CardContent className="p-5">
