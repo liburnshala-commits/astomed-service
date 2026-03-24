@@ -14,7 +14,8 @@ export default function ServiceContractModal({ machine, onSave, onClose }) {
     contract_start_date: machine?.contract_start_date || "",
     contract_binding_months: 12,
     service_agreement_template_id: machine?.service_agreement_template_id || "",
-    contract_discount_percent: machine?.contract_discount_percent || 0
+    contract_discount_percent: machine?.contract_discount_percent || 0,
+    contract_created_date: machine?.contract_created_date || ""
   });
 
   useEffect(() => {
