@@ -67,6 +67,7 @@ export default function ServiceContracts() {
       service_contract: "none",
       service_contract_status: null,
       contract_start_date: null,
+      contract_created_date: null,
       contract_binding_months: null,
       service_agreement_template_id: null,
       contract_status: "inactive"
