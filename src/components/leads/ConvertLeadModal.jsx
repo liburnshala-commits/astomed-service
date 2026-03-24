@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { base44 } from "@/api/base44Client";
 import { machineServiceDetails } from "../MachineServiceDetails";
 
-const TECHNICIANS = ["Erik Lindström", "Anna Karlsson", "Johan Bergström", "Maria Svensson"];
+const TECHNICIANS = ["Elman@astomed.se", "Liburn@Astomed.se"];
 
 const MODELS = [
   "Soprano ICE Platinum",
