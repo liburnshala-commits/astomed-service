@@ -44,6 +44,50 @@ Deno.serve(async (req) => {
             console.error('Kunde inte logga audit entry:', e);
         }
 
+        // Hämta maskinens servicebeskrivning
+        const machineServiceDetails = {
+            "Aldix Smart Laser": { title: "Standardservice och underhåll – Aldix Smart Laser", details: ["Byte av pneumatisk avjoniseringsfilter A", "Byte av pneumatisk avjoniseringsfilter B", "Byte av snabbkopplingar till filter", "Påfyllning av destillerat avjoniserat kylvätska", "Spolning av pneumatisk krets", "Läckagekontroll", "Kontroll av luftintagsfilter", "Lasereffektmätning", "Rengöring av värmeväxlare", "Rengörning av Switchade nätaggret", "Kontroll av nödstopp och interlock", "Upprättande av serviceprotokoll", "Serviceuppmärkning av utrustning", "Kontroll av säkerhetsrem", "20 % på arbetstid för övriga reparationer", "20 % på resekostnader"] },
+            "Elysion": { title: "Standardservice och underhåll – Elysion", details: ["Byte av mekanisk vattenfilter", "Påfyllning av destillerat avjoniserat kylvätska med glykolblandning", "Spolning av pneumatisk krets", "Läckagekontroll", "Kontroll av luftintagsfilter", "Lasereffektmätning", "Rengöring av värmeväxlare", "Rengörning av Switchade nätaggret", "Kontroll av nödstopp och interlock", "Upprättande av serviceprotokoll", "Serviceuppmärkning av utrustning", "Kontroll av säkerhetsrem", "20 % på arbetstid för övriga reparationer", "20 % på resekostnader"] },
+            "Helios": { title: "Standardservice och underhåll – Helios", details: ["Byte av vattenfiltersystem", "Påfyllning av destillerat avjoniserat kylvätska", "Spolning av pneumatisk krets", "Läckagekontroll", "Kontroll av luftintagsfilter", "Lasereffektmätning", "Rengöring av värmeväxlare", "Rengörning av Switchade nätaggret", "Kontroll av nödstopp och interlock", "Upprättande av serviceprotokoll", "Serviceuppmärkning av utrustning", "Kontroll av säkerhetsrem", "Kontroll av possitionering av ledljus", "Kontroll av träffbildsmönster", "Kontroll av alla handneheters linser", "20 % på arbetstid för övriga reparationer", "20 % på resekostnader"] },
+            "Pento": { title: "Standardservice och underhåll – Pento", details: ["Byte av avjoniserande DI-filter", "Rengöring av värmeväxlare", "Kontroll av optiska linser", "Påfyllning av destillerat avjoniserat kylvätska", "Spolning av pneumatisk krets", "Läckagekontroll", "Lasereffektmätning", "Rengörning av Switchade nätaggret", "Kontroll av nödstopp och interlock", "Upprättande av serviceprotokoll", "Serviceuppmärkning av utrustning", "Kontroll av säkerhetsrem", "Kontroll av träffbildsmönster", "Kontroll av alla handneheters linser", "20 % på arbetstid för övriga reparationer", "20 % på resekostnader"] },
+            "PicoLo": { title: "Standardservice och underhåll – PicoLo", details: ["Byte av vattenfiltersystem", "Påfyllning av destillerat avjoniserat kylvätska", "Spolning av pneumatisk krets", "Läckagekontroll", "Kontroll av luftintagsfilter", "Lasereffektmätning", "Rengöring av värmeväxlare", "Rengörning av Switchade nätaggret", "Kontroll av nödstopp och interlock", "Upprättande av serviceprotokoll", "Serviceuppmärkning av utrustning", "Kontroll av säkerhetsrem", "Kontroll av possitionering av ledljus", "Kontroll av träffbildsmönster", "Kontroll av alla handneheters linser", "20 % på arbetstid för övriga reparationer", "20 % på resekostnader"] },
+            "PrimeLase": { title: "Standardservice och underhåll – PrimeLase", details: ["Byte av vattenfilter för intern vattenkrets", "Byte av vattenfilter för tip-kylningssystem", "Byte av vattenfilter för diodkylningssystem", "Påfyllning av destillerat avjoniserat kylvätska med glykolblandning", "Spolning av pneumatisk krets", "Läckagekontroll", "Kontroll av luftintagsfilter", "Lasereffektmätning", "Rengöring av värmeväxlare", "Rengörning av Switchade nätaggret", "Kontroll av nödstopp och interlock", "Upprättande av serviceprotokoll", "Serviceuppmärkning av utrustning", "Kontroll av säkerhetsrem", "20 % på arbetstid för övriga reparationer", "20 % på resekostnader"] },
+            "Soprano ICE Platinum": { title: "Standardservice och underhåll – Soprano ICE Platinum / Titanium", details: ["Byte av Avjoniseringsfilter", "Byte av mekaniskpartikelfilter", "Byte av steriliserande UV-lampa", "Byte av CPC-kopplingar till filter", "Påfyllning av destillerat avjoniserat kylvätska", "Spolning av pneumatisk krets", "Läckagekontroll", "Kontroll av luftintagsfilter", "Lasereffektmätning", "Rengöring av värmeväxlare", "Rengörning av Switchade nätaggret", "Kontroll av nödstopp och interlock", "Upprättande av serviceprotokoll", "Serviceuppmärkning av utrustning", "Kontroll av säkerhetsrem", "20 % på arbetstid för övriga reparationer", "20 % på resekostnader"] },
+            "Soprano Titanium": { title: "Standardservice och underhåll – Soprano ICE Platinum / Titanium", details: ["Byte av Avjoniseringsfilter", "Byte av mekaniskpartikelfilter", "Byte av steriliserande UV-lampa", "Byte av CPC-kopplingar till filter", "Påfyllning av destillerat avjoniserat kylvätska", "Spolning av pneumatisk krets", "Läckagekontroll", "Kontroll av luftintagsfilter", "Lasereffektmätning", "Rengöring av värmeväxlare", "Rengörning av Switchade nätaggret", "Kontroll av nödstopp och interlock", "Upprättande av serviceprotokoll", "Serviceuppmärkning av utrustning", "Kontroll av säkerhetsrem", "20 % på arbetstid för övriga reparationer", "20 % på resekostnader"] },
+            "Splendor": { title: "Standardservice och underhåll – Splendor", details: ["Byte av avjoniserande DI-filter", "Byte av Smoke Evacuation-filter", "Rengöring av värmeväxlare i kylsystemet", "Rengöring av värmeväxlare i Splendor", "Kontroll av optiska linser", "Påfyllning av destillerat avjoniserat kylvätska", "Spolning av pneumatisk krets", "Läckagekontroll", "Lasereffektmätning", "Rengörning av Switchade nätaggret", "Kontroll av nödstopp och interlock", "Upprättande av serviceprotokoll", "Serviceuppmärkning av utrustning", "Kontroll av säkerhetsrem", "Kontroll av träffbildsmönster", "Kontroll av alla handneheters linser", "20 % på arbetstid för övriga reparationer", "20 % på resekostnader"] },
+            "Triodus": { title: "Standardservice och underhåll – Triodus", details: ["Byte av pneumatisk avjoniseringsfilter A", "Byte av pneumatisk avjoniseringsfilter B", "Byte av snabbkopplingar till filter", "Påfyllning av destillerat avjoniserat kylvätska", "Spolning av pneumatisk krets", "Läckagekontroll", "Kontroll av luftintagsfilter", "Lasereffektmätning", "Rengöring av värmeväxlare", "Rengörning av Switchade nätaggret", "Kontroll av nödstopp och interlock", "Upprättande av serviceprotokoll", "Serviceuppmärkning av utrustning", "Kontroll av säkerhetsrem", "20 % på arbetstid för övriga reparationer", "20 % på resekostnader"] },
+            "Alma Harmony": { title: "Standardservice och underhåll – Alma Harmony", details: ["Byte av Avjoniseringsfilter", "Byte av mekaniskpartikelfilter", "Byte av CPC-kopplingar till filter", "Påfyllning av destillerat avjoniserat kylvätska", "Spolning av pneumatisk krets", "Läckagekontroll", "Kontroll av luftintagsfilter", "Lasereffektmätning", "Rengöring av värmeväxlare", "Rengörning av Switchade nätaggret", "Kontroll av nödstopp och interlock", "Upprättande av serviceprotokoll", "Serviceuppmärkning av utrustning", "Kontroll av säkerhetsrem", "20 % på arbetstid för övriga reparationer", "20 % på resekostnader"] },
+            "Fraction CO2": { title: "Standardservice och underhåll – Fraction CO2", details: ["Kontroll av luftintagsfilter", "Lasereffektmätning", "Rengöring av kylflänsar", "Rengöring av till-luftsfläktar", "Rengöring av från-luftsfläktar", "Rengörning av Switchade nätaggret", "Kontroll av nödstopp och interlock", "Upprättande av serviceprotokoll", "Serviceuppmärkning av utrustning", "Kontroll av säkerhetsrem", "Kontroll av possitionering av ledljus", "Kontroll av träffbildsmönster", "Kontroll av alla handenheters linser", "20 % på arbetstid för övriga reparationer", "20 % på resekostnader"] },
+            "Annan": { title: "Maskin som ej finns i listan", details: ["Vi återkommer till dig angående om vi kan serva just din maskin"] }
+        };
+
+        machineServiceDetails["Helios III"] = machineServiceDetails["Helios"];
+        machineServiceDetails["Helius"] = machineServiceDetails["Helios"];
+        machineServiceDetails["Picolo"] = machineServiceDetails["PicoLo"];
+        machineServiceDetails["Pento 9900"] = machineServiceDetails["Pento"];
+        machineServiceDetails["Splendor X"] = machineServiceDetails["Splendor"];
+        machineServiceDetails["Cocoon Elysion"] = machineServiceDetails["Elysion"];
+        machineServiceDetails["Aldix (Triodus)"] = machineServiceDetails["Triodus"];
+        machineServiceDetails["PrimeLase HR"] = machineServiceDetails["PrimeLase"];
+        machineServiceDetails["PrimeLase Excel"] = machineServiceDetails["PrimeLase"];
+        machineServiceDetails["PrimeLase Excel HR"] = machineServiceDetails["PrimeLase"];
+        machineServiceDetails["Soprano Platinum"] = machineServiceDetails["Soprano ICE Platinum"];
+        machineServiceDetails["Soprano Titanium Special Edition"] = machineServiceDetails["Soprano Titanium"];
+
+        let serviceDetailsHtml = '';
+        const machineKey = Object.keys(machineServiceDetails).find(k => data.machine_name.startsWith(k)) || "Annan";
+        const serviceInfo = machineServiceDetails[machineKey];
+
+        if (serviceInfo && serviceInfo.details.length > 0) {
+            serviceDetailsHtml = `
+            <div style="background: #ffffff; padding: 20px; border-radius: 8px; margin: 25px 0; border: 1px solid #dce8e8;">
+                <h3 style="color: #1b3a3a; margin-top: 0; margin-bottom: 15px; font-size: 16px;">Följande ingår i ${serviceInfo.title}:</h3>
+                <ul style="color: #254f4f; font-size: 14px; line-height: 1.6; margin: 0; padding-left: 20px;">
+                    ${serviceInfo.details.map(detail => `<li style="margin-bottom: 5px;">${detail}</li>`).join('')}
+                </ul>
+            </div>`;
+        }
+
         // Skicka bekräftelsemejl till kunden
         try {
             const emailHtml = `
@@ -66,6 +110,8 @@ Deno.serve(async (req) => {
                         <p style="margin: 8px 0; color: #254f4f;"><strong>Serienummer:</strong> ${data.serial_number || 'Ej angivet'}</p>
                         <p style="margin: 8px 0; color: #254f4f;"><strong>Beskrivning:</strong><br/> ${data.service_description}</p>
                     </div>
+
+                    ${serviceDetailsHtml}
 
                     <p style="color: #254f4f; font-size: 16px; line-height: 1.6;">
                         Har du några kompletterande uppgifter kan du svara direkt på detta mejl eller kontakta oss.
