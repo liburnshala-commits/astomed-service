@@ -124,6 +124,7 @@ export default function ServiceContractModal({ machine, onSave, onClose }) {
                     service_contract: "none",
                     contract_status: "inactive",
                     contract_start_date: null,
+                    contract_created_date: null,
                     contract_binding_months: null,
                     service_agreement_template_id: null
                   });
