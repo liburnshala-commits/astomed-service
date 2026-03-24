@@ -88,6 +88,10 @@ export default function ServiceContractModal({ machine, onSave, onClose }) {
           {form.service_contract !== "none" && (
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-1">
+                <Label>Skapat datum</Label>
+                <Input type="date" value={form.contract_created_date} onChange={e => set("contract_created_date", e.target.value)} />
+              </div>
+              <div className="space-y-1">
                 <Label>Avtalets startdatum</Label>
                 <Input type="date" value={form.contract_start_date} onChange={e => set("contract_start_date", e.target.value)} />
               </div>
