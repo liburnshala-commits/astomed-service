@@ -19,8 +19,8 @@ const statusMap = {
   other_service_contract: "Annat Serviceavtal",
 };
 
-export default function NewLeadModal({ customers, serviceRequests, onClose, onSave }) {
-  const [mode, setMode] = useState("existing"); // "existing" | "new" | "from_request"
+export default function NewLeadModal({ customers, onClose, onSave }) {
+  const [mode, setMode] = useState("existing"); // "existing" | "new"
   const [form, setForm] = useState({
     customer_id: "",
     company_name: "",
@@ -31,34 +31,9 @@ export default function NewLeadModal({ customers, serviceRequests, onClose, onSa
     status: "new",
     follow_up_date: "",
     notes: "",
-    public_service_lead_id: "", // For linking to a service request
-    proposed_machines: [] // Array to hold machine info from request
   });
 
   const set = (k, v) => setForm(prev => ({ ...prev, [k]: v }));
-
-  const handleRequestSelect = (requestId) => {
-    const request = serviceRequests?.find(r => r.id === requestId);
-    if (request) {
-      setForm(prev => ({
-        ...prev,
-        public_service_lead_id: requestId,
-        company_name: request.company_name,
-        org_number: request.org_number || "",
-        contact_person: request.contact_person || "",
-        email: request.email || "",
-        phone: request.phone || "",
-        notes: request.service_description ? `Från serviceförfrågan: ${request.service_description}` : "",
-        proposed_machines: [{
-          model: request.machine_name,
-          serial_number: request.serial_number || "Okänt",
-          notes: request.manufacturer ? `Tillverkare: ${request.manufacturer}` : ""
-        }]
-      }));
-    } else {
-        set("public_service_lead_id", "");
-    }
-  };
 
   const isValid = mode === "existing"
     ? !!form.customer_id
@@ -66,12 +41,7 @@ export default function NewLeadModal({ customers, serviceRequests, onClose, onSa
 
   const handleSave = () => {
     const data = mode === "existing"
-      ? { 
-          customer_id: form.customer_id, 
-          status: form.status, 
-          follow_up_date: form.follow_up_date || null, 
-          notes: form.notes 
-        }
+      ? { customer_id: form.customer_id, status: form.status, follow_up_date: form.follow_up_date || null, notes: form.notes }
       : {
           company_name: form.company_name,
           org_number: form.org_number,
@@ -81,14 +51,7 @@ export default function NewLeadModal({ customers, serviceRequests, onClose, onSa
           status: form.status,
           follow_up_date: form.follow_up_date || null,
           notes: form.notes,
-          proposed_machines: form.proposed_machines
         };
-    
-    // Pass back the original request ID so the parent can archive it if needed
-    if (mode === "from_request" && form.public_service_lead_id) {
-        data._source_request_id = form.public_service_lead_id;
-    }
-        
     onSave(data);
   };
 
@@ -115,12 +78,6 @@ export default function NewLeadModal({ customers, serviceRequests, onClose, onSa
             >
               Nytt prospekt
             </button>
-            <button
-              onClick={() => setMode("from_request")}
-              className={`flex-1 py-2 text-sm font-medium rounded-md transition-colors ${mode === "from_request" ? "bg-white shadow text-slate-900" : "text-slate-500"}`}
-            >
-              Från förfrågan
-            </button>
           </div>
 
           {mode === "existing" ? (
@@ -137,28 +94,10 @@ export default function NewLeadModal({ customers, serviceRequests, onClose, onSa
             </div>
           ) : (
             <div className="space-y-4">
-              {mode === "from_request" && (
-                <div className="space-y-2 col-span-2 mb-4">
-                  <Label>Välj Serviceförfrågan *</Label>
-                  <Select value={form.public_service_lead_id} onValueChange={handleRequestSelect}>
-                    <SelectTrigger><SelectValue placeholder="Välj en obehandlad förfrågan..." /></SelectTrigger>
-                    <SelectContent>
-                      {serviceRequests?.filter(r => r.status === 'new').map(r => (
-                        <SelectItem key={r.id} value={r.id}>
-                          {r.company_name} - {r.machine_name}
-                        </SelectItem>
-                      ))}
-                      {(!serviceRequests || serviceRequests.filter(r => r.status === 'new').length === 0) && (
-                        <SelectItem value="none" disabled>Inga nya förfrågningar finns</SelectItem>
-                      )}
-                    </SelectContent>
-                  </Select>
-                </div>
-              )}
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2 col-span-2">
                   <Label>Företagsnamn *</Label>
-                  <Input value={form.company_name} onChange={e => set("company_name", e.target.value)} placeholder="AB Företaget" disabled={mode === "from_request" && !form.company_name} />
+                  <Input value={form.company_name} onChange={e => set("company_name", e.target.value)} placeholder="AB Företaget" />
                 </div>
                 <div className="space-y-2">
                   <Label>Org.nummer</Label>
