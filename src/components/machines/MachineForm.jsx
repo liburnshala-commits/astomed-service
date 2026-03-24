@@ -146,8 +146,8 @@ export default function MachineForm({ machine, customers, preselectedCustomerId,
               </Select>
             </div>
             <div className="space-y-1">
-              <Label>Installationsdatum</Label>
-              <Input type="date" value={form.installation_date} onChange={e => set("installation_date", e.target.value)} />
+              <Label>Senaste servicedatum</Label>
+              <Input type="date" value={form.service_date} onChange={e => set("service_date", e.target.value)} />
             </div>
             <div className="col-span-2 space-y-1">
               <Label>Garanti till</Label>
