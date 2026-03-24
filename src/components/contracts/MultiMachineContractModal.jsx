@@ -65,6 +65,7 @@ export default function MultiMachineContractModal({ onClose, onSave, initialCust
             service_agreement_template_id: templateId,
             service_agreement_instance_id: instance.id,
             contract_start_date: startDate,
+            contract_created_date: new Date().toISOString().split("T")[0],
             contract_binding_months: Number(bindingMonths)
           });
         }
