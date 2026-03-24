@@ -46,7 +46,7 @@ export default function Machines() {
           base44.entities.Machine.filter({ customer_id: cust.id }, "-created_date"),
           base44.entities.ServiceRecord.filter({ customer_id: cust.id }, "-service_date")
         ]);
-        setMachines(m);
+        setMachines(m.filter(x => !x.is_deleted));
         setRecords(r);
       }
     } else {
@@ -55,7 +55,7 @@ export default function Machines() {
         base44.entities.Customer.list(),
         base44.entities.ServiceRecord.list("-service_date")
       ]);
-      setMachines(m);
+      setMachines(m.filter(x => !x.is_deleted));
       setCustomers(c);
       setRecords(r);
     }
@@ -159,20 +159,23 @@ export default function Machines() {
   };
 
   const handleDelete = async (machine) => {
-    if (window.confirm(`Är du säker på att du vill ta bort maskinen ${machine.model} (SN: ${machine.serial_number})? Detta går inte att ångra.`)) {
+    if (window.confirm(`Är du säker på att du vill ta bort maskinen ${machine.model} (SN: ${machine.serial_number})? Den kommer att flyttas till papperskorgen.`)) {
       const currentUser = await base44.auth.me();
       const customer = customers.find(c => c.id === machine.customer_id);
       
-      await base44.entities.Machine.delete(machine.id);
+      await base44.entities.Machine.update(machine.id, {
+        is_deleted: true,
+        deleted_date: new Date().toISOString()
+      });
       
       base44.functions.invoke('logAuditEntry', {
-        action: 'delete',
+        action: 'delete', // We keep action 'delete' for audit logs but it's a soft delete
         entity_type: 'Machine',
         entity_id: machine.id,
         entity_label: `${machine.model} – SN: ${machine.serial_number}`,
         user_email: currentUser?.email || 'unknown',
         user_name: currentUser?.full_name || currentUser?.email,
-        details: `Maskin borttagen${customer ? ` (tillhörde ${customer.company_name})` : ''}`
+        details: `Maskin flyttad till papperskorgen${customer ? ` (tillhörde ${customer.company_name})` : ''}`
       });
       
       load();
@@ -187,9 +190,16 @@ export default function Machines() {
            <p className="astomed-subtitle text-sm">{machines.length} maskiner registrerade</p>
          </div>
          {userRole !== "customer" && (
-           <Button onClick={() => { setEditing(null); setShowForm(true); }} className="astomed-btn-primary">
-             <Plus className="w-4 h-4 mr-2" /> Ny maskin
-           </Button>
+           <div className="flex gap-2">
+             <Link to="/DeletedMachines">
+               <Button variant="outline" className="border-dashed text-slate-500">
+                 <Trash2 className="w-4 h-4 mr-2" /> Papperskorg
+               </Button>
+             </Link>
+             <Button onClick={() => { setEditing(null); setShowForm(true); }} className="astomed-btn-primary">
+               <Plus className="w-4 h-4 mr-2" /> Ny maskin
+             </Button>
+           </div>
          )}
        </div>
 

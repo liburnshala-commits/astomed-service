@@ -10,6 +10,7 @@ import PublicServiceRequest from './pages/PublicServiceRequest';
 import ServiceAgreementTemplates from './pages/ServiceAgreementTemplates';
 import CustomerDetails from './pages/CustomerDetails';
 import ServiceContractLeads from './pages/ServiceContractLeads';
+import DeletedMachines from './pages/DeletedMachines';
 
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
@@ -54,6 +55,7 @@ const AuthenticatedApp = () => {
       <Route path="/ServiceAgreementTemplates" element={<LayoutWrapper currentPageName="ServiceAgreementTemplates"><ServiceAgreementTemplates /></LayoutWrapper>} />
       <Route path="/CustomerDetails" element={<LayoutWrapper currentPageName="CustomerDetails"><CustomerDetails /></LayoutWrapper>} />
       <Route path="/ServiceContractLeads" element={<LayoutWrapper currentPageName="ServiceContractLeads"><ServiceContractLeads /></LayoutWrapper>} />
+      <Route path="/DeletedMachines" element={<LayoutWrapper currentPageName="Machines"><DeletedMachines /></LayoutWrapper>} />
       {Object.entries(Pages).map(([path, Page]) => (
         <Route
           key={path}
