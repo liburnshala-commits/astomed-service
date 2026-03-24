@@ -343,6 +343,7 @@ export default function ServiceContracts() {
                   <th className="py-2 px-4 text-left font-medium">Kund</th>
                   <th className="py-2 px-4 text-left font-medium">Maskin</th>
                   <th className="py-2 px-4 text-left font-medium">Avtal</th>
+                  <th className="py-2 px-4 text-left font-medium">Skapat</th>
                   <th className="py-2 px-4 text-left font-medium">Startdatum</th>
                   <th className="py-2 px-4 text-left font-medium">Bindningstid</th>
                   <th className="py-2 px-4 text-left font-medium">Slutdatum</th>
@@ -390,6 +391,7 @@ export default function ServiceContracts() {
                   <th className="py-2 px-4 text-left font-medium">Kund</th>
                   <th className="py-2 px-4 text-left font-medium">Maskin</th>
                   <th className="py-2 px-4 text-left font-medium">Avtal</th>
+                  <th className="py-2 px-4 text-left font-medium">Skapat</th>
                   <th className="py-2 px-4 text-left font-medium">Startdatum</th>
                   <th className="py-2 px-4 text-left font-medium">Bindningstid</th>
                   <th className="py-2 px-4 text-left font-medium">Slutdatum</th>
