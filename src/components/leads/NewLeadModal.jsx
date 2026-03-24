@@ -6,6 +6,49 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { X } from "lucide-react";
 
+const MODELS = [
+  "Soprano ICE Platinum",
+  "Soprano Titanium",
+  "Alma Harmony",
+  "Helios",
+  "Picolo",
+  "Cocoon Elysion",
+  "Aldix Smart Laser",
+  "Pento 9900",
+  "PrimeLase HR",
+  "PrimeLase Excel",
+  "PrimeLase Excel HR",
+  "Soprano Platinum",
+  "Soprano Titanium Special Edition",
+  "Aldix (Triodus)",
+  "PrimeLase",
+  "Elysion",
+  "PicoLo",
+  "Splendor X",
+  "Pento",
+  "Clearlight IPL",
+  "Fraction CO2",
+  "Mezotix",
+  "IOXO Laser",
+  "IOXO Microneedling",
+  "Focus Dual",
+  "Ultraformer III",
+  "Powershape 2",
+  "Indiba",
+  "CMSlim",
+  "Coolshaping 2",
+  "Hydra Beauty 2",
+  "Dermadrop",
+  "Carbomed",
+  "Cryopen",
+  "CryoIQ",
+  "Reoxy",
+  "Oxyhelp",
+  "Omega PDT",
+  "Eskimo Luftkylare",
+  "TBH Röksug"
+];
+
 const statusMap = {
   new: "Nytt",
   contacted: "Kontaktad",
@@ -31,17 +74,24 @@ export default function NewLeadModal({ customers, onClose, onSave }) {
     status: "new",
     follow_up_date: "",
     notes: "",
+    machine_model: "none",
+    custom_machine_model: "",
+    serial_number: ""
   });
 
   const set = (k, v) => setForm(prev => ({ ...prev, [k]: v }));
 
-  const isValid = mode === "existing"
-    ? !!form.customer_id
-    : !!form.company_name;
+  const isValid = (mode === "existing" ? !!form.customer_id : !!form.company_name) &&
+    (form.machine_model !== "none" ? !!form.serial_number && (form.machine_model !== "Annan" || !!form.custom_machine_model) : true);
 
   const handleSave = () => {
+    const proposed_machines = form.machine_model !== "none" ? [{
+      model: form.machine_model === "Annan" ? form.custom_machine_model : form.machine_model,
+      serial_number: form.serial_number
+    }] : [];
+
     const data = mode === "existing"
-      ? { customer_id: form.customer_id, status: form.status, follow_up_date: form.follow_up_date || null, notes: form.notes }
+      ? { customer_id: form.customer_id, status: form.status, follow_up_date: form.follow_up_date || null, notes: form.notes, proposed_machines }
       : {
           company_name: form.company_name,
           org_number: form.org_number,
@@ -51,7 +101,10 @@ export default function NewLeadModal({ customers, onClose, onSave }) {
           status: form.status,
           follow_up_date: form.follow_up_date || null,
           notes: form.notes,
+          proposed_machines
         };
+    
+    if (proposed_machines.length === 0) delete data.proposed_machines;
     onSave(data);
   };
 
@@ -119,7 +172,36 @@ export default function NewLeadModal({ customers, onClose, onSave }) {
             </div>
           )}
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="space-y-4 pt-4 border-t border-slate-100">
+            <h3 className="text-sm font-semibold text-slate-800">Föreslagen maskin (frivilligt)</h3>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2 col-span-2 sm:col-span-1">
+                <Label>Maskinmodell</Label>
+                <Select value={form.machine_model} onValueChange={v => set("machine_model", v)}>
+                  <SelectTrigger><SelectValue placeholder="Välj modell" /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="none">Ingen vald</SelectItem>
+                    {MODELS.map(m => <SelectItem key={m} value={m}>{m}</SelectItem>)}
+                    <SelectItem value="Annan">Annan</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              {form.machine_model === "Annan" && (
+                <div className="space-y-2 col-span-2 sm:col-span-1">
+                  <Label>Egen maskinmodell *</Label>
+                  <Input value={form.custom_machine_model} onChange={e => set("custom_machine_model", e.target.value)} placeholder="Ange modell" />
+                </div>
+              )}
+              {form.machine_model && form.machine_model !== "none" && (
+                <div className="space-y-2 col-span-2 sm:col-span-1">
+                  <Label>Serienummer *</Label>
+                  <Input value={form.serial_number} onChange={e => set("serial_number", e.target.value)} placeholder="SN-XXXXXX" />
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4 pt-4 border-t border-slate-100">
             <div className="space-y-2">
               <Label>Status</Label>
               <Select value={form.status} onValueChange={v => set("status", v)}>
