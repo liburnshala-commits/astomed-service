@@ -234,9 +234,9 @@ export default function Machines() {
             <Card key={machine.id} className="astomed-card">
               <CardContent className="p-5">
                 <div className="flex items-start justify-between mb-3">
-                  <div className="astomed-icon-box flex-shrink-0" style={{ width: 40, height: 40 }}>
+                  <Link to={createPageUrl(`ServiceRecords?machine=${machine.id}`)} className="astomed-icon-box flex-shrink-0 hover:opacity-80 transition-opacity" style={{ width: 40, height: 40 }} title="Visa serviceärenden för denna maskin">
                     <Monitor className="w-5 h-5" style={{ color: "#1b3a3a" }} />
-                  </div>
+                  </Link>
                   {machine.status === "service" ? (
                     <Link to={createPageUrl(`ServiceRecords?machine=${machine.id}`)}>
                       <Badge className={`${statusColor["service"]} cursor-pointer hover:opacity-80 underline-offset-2`}>
@@ -247,8 +247,10 @@ export default function Machines() {
                     <Badge className={statusColor[machine.status || "active"]}>{statusLabel[machine.status || "active"]}</Badge>
                   )}
                 </div>
-                <h3 className="font-bold astomed-title mb-0.5">{machine.model}</h3>
-                <p className="text-xs astomed-muted mb-3 font-mono">SN: {machine.serial_number}</p>
+                <Link to={createPageUrl(`ServiceRecords?machine=${machine.id}`)} className="block w-fit group" title="Visa serviceärenden för denna maskin">
+                  <h3 className="font-bold astomed-title mb-0.5 group-hover:underline group-hover:text-[#3a9e9e] transition-colors">{machine.model}</h3>
+                  <p className="text-xs astomed-muted mb-3 font-mono group-hover:text-slate-600 transition-colors">SN: {machine.serial_number}</p>
+                </Link>
                 {customer && (
                   <Link to={createPageUrl(`CustomerDetails?id=${customer.id}`)} className="flex items-center gap-1.5 text-sm astomed-subtitle mb-3 hover:opacity-80 transition-opacity w-fit">
                     <Building2 className="w-3.5 h-3.5 astomed-muted" />
