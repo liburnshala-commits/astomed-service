@@ -140,11 +140,26 @@ export default function ServiceContractModal({ machine, onSave, onClose }) {
           ) : <div />}
           <div className="flex gap-3">
             <Button variant="outline" onClick={onClose}>Avbryt</Button>
-            <Button onClick={() => {
+            <Button onClick={async () => {
               const dataToSave = { ...form };
               if (dataToSave.service_contract !== "none" && !dataToSave.contract_created_date) {
                 dataToSave.contract_created_date = new Date().toISOString().split("T")[0];
               }
+              
+              if (dataToSave.service_contract !== "none" && !machine.service_date) {
+                const u = await base44.auth.me();
+                if (u) {
+                  await base44.entities.Notification.create({
+                    user_email: u.email,
+                    title: "Saknar servicedatum",
+                    message: `Serviceavtal skapades för ${machine.model} (SN: ${machine.serial_number}), men senaste servicedatum saknas. Vänligen uppdatera maskinen.`,
+                    type: "warning",
+                    related_entity: "Machine",
+                    related_entity_id: machine.id
+                  });
+                }
+              }
+
               onSave(dataToSave);
             }} className="astomed-btn-primary">
               Spara

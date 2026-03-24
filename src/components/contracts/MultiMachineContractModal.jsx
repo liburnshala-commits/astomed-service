@@ -68,6 +68,21 @@ export default function MultiMachineContractModal({ onClose, onSave, initialCust
             contract_created_date: new Date().toISOString().split("T")[0],
             contract_binding_months: Number(bindingMonths)
           });
+
+          const machine = machines.find(m => m.id === machineId);
+          if (machine && !machine.service_date) {
+            const currentUser = await base44.auth.me();
+            if (currentUser) {
+              await base44.entities.Notification.create({
+                user_email: currentUser.email,
+                title: "Saknar servicedatum",
+                message: `Serviceavtal skapades för ${machine.model} (SN: ${machine.serial_number}), men senaste servicedatum saknas.`,
+                type: "warning",
+                related_entity: "Machine",
+                related_entity_id: machine.id
+              });
+            }
+          }
         }
       }
 
