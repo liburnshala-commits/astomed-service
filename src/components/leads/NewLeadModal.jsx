@@ -5,49 +5,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { X } from "lucide-react";
-
-const MODELS = [
-  "Soprano ICE Platinum",
-  "Soprano Titanium",
-  "Alma Harmony",
-  "Helios",
-  "Picolo",
-  "Cocoon Elysion",
-  "Aldix Smart Laser",
-  "Pento 9900",
-  "PrimeLase HR",
-  "PrimeLase Excel",
-  "PrimeLase Excel HR",
-  "Soprano Platinum",
-  "Soprano Titanium Special Edition",
-  "Aldix (Triodus)",
-  "PrimeLase",
-  "Elysion",
-  "PicoLo",
-  "Splendor X",
-  "Pento",
-  "Clearlight IPL",
-  "Fraction CO2",
-  "Mezotix",
-  "IOXO Laser",
-  "IOXO Microneedling",
-  "Focus Dual",
-  "Ultraformer III",
-  "Powershape 2",
-  "Indiba",
-  "CMSlim",
-  "Coolshaping 2",
-  "Hydra Beauty 2",
-  "Dermadrop",
-  "Carbomed",
-  "Cryopen",
-  "CryoIQ",
-  "Reoxy",
-  "Oxyhelp",
-  "Omega PDT",
-  "Eskimo Luftkylare",
-  "TBH Röksug"
-];
+import { MACHINE_MODELS } from "@/lib/constants";
 
 const statusMap = {
   new: "Nytt",
@@ -181,7 +139,7 @@ export default function NewLeadModal({ customers, onClose, onSave }) {
                   <SelectTrigger><SelectValue placeholder="Välj modell" /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="none">Ingen vald</SelectItem>
-                    {MODELS.map(m => <SelectItem key={m} value={m}>{m}</SelectItem>)}
+                    {MACHINE_MODELS.map(m => <SelectItem key={m} value={m}>{m}</SelectItem>)}
                     <SelectItem value="Annan">Annan</SelectItem>
                   </SelectContent>
                 </Select>

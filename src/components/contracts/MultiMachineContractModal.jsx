@@ -6,12 +6,20 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { base44 } from "@/api/base44Client";
+import { MACHINE_MODELS } from "@/lib/constants";
 
 export default function MultiMachineContractModal({ onClose, onSave, initialCustomerId }) {
   const [customers, setCustomers] = useState([]);
   const [machines, setMachines] = useState([]);
   const [templates, setTemplates] = useState([]);
   
+  const [showAddMachine, setShowAddMachine] = useState(false);
+  const [newMachineForm, setNewMachineForm] = useState({
+    model: "none",
+    custom_model: "",
+    serial_number: ""
+  });
+
   const [selectedCustomer, setSelectedCustomer] = useState(initialCustomerId || "");
   const [selectedMachines, setSelectedMachines] = useState([]);
   const [selectedTemplates, setSelectedTemplates] = useState([]);
@@ -96,6 +104,29 @@ export default function MultiMachineContractModal({ onClose, onSave, initialCust
     setSelectedMachines(prev => prev.includes(id) ? prev.filter(m => m !== id) : [...prev, id]);
   };
 
+  const handleAddMachine = async () => {
+    setSaving(true);
+    try {
+      const actualModel = newMachineForm.model === "Annan" ? newMachineForm.custom_model : newMachineForm.model;
+      const newMachine = await base44.entities.Machine.create({
+        model: actualModel,
+        serial_number: newMachineForm.serial_number,
+        customer_id: selectedCustomer,
+        status: "active",
+        service_contract: "none",
+        notes: "Skapad vid avtalsregistrering"
+      });
+      setMachines(prev => [...prev, newMachine]);
+      setSelectedMachines(prev => [...prev, newMachine.id]);
+      setShowAddMachine(false);
+      setNewMachineForm({ model: "none", custom_model: "", serial_number: "" });
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setSaving(false);
+    }
+  };
+
   const toggleTemplate = (id) => {
     setSelectedTemplates(prev => {
       const isSelected = prev.includes(id);
@@ -155,30 +186,76 @@ export default function MultiMachineContractModal({ onClose, onSave, initialCust
             </Select>
           </div>
 
-          {selectedCustomer && machines.length > 0 && (
-            <div className="space-y-2">
-              <Label>Välj Maskiner att inkludera i avtalet</Label>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-2">
-                {machines.map(m => (
-                  <label key={m.id} className="flex items-start gap-3 p-3 border rounded-lg cursor-pointer hover:bg-slate-50">
-                    <Checkbox 
-                      checked={selectedMachines.includes(m.id)} 
-                      onCheckedChange={() => toggleMachine(m.id)} 
-                      className="mt-1"
-                    />
-                    <div>
-                      <div className="font-semibold text-sm">{m.model}</div>
-                      <div className="text-xs text-slate-500">SN: {m.serial_number}</div>
-                    </div>
-                  </label>
-                ))}
+          {selectedCustomer && (
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <Label>Maskiner i avtalet</Label>
+                <Button variant="outline" size="sm" onClick={() => setShowAddMachine(!showAddMachine)}>
+                  {showAddMachine ? "Avbryt lägg till" : "+ Lägg till maskin"}
+                </Button>
               </div>
-            </div>
-          )}
 
-          {selectedCustomer && machines.length === 0 && (
-            <div className="p-4 bg-amber-50 text-amber-800 rounded-lg text-sm">
-              Kunden har inga registrerade maskiner.
+              {machines.length > 0 && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-2">
+                  {machines.map(m => (
+                    <label key={m.id} className="flex items-start gap-3 p-3 border rounded-lg cursor-pointer hover:bg-slate-50">
+                      <Checkbox 
+                        checked={selectedMachines.includes(m.id)} 
+                        onCheckedChange={() => toggleMachine(m.id)} 
+                        className="mt-1"
+                      />
+                      <div>
+                        <div className="font-semibold text-sm">{m.model}</div>
+                        <div className="text-xs text-slate-500">SN: {m.serial_number}</div>
+                      </div>
+                    </label>
+                  ))}
+                </div>
+              )}
+
+              {machines.length === 0 && !showAddMachine && (
+                <div className="p-4 bg-amber-50 text-amber-800 rounded-lg text-sm">
+                  Kunden har inga registrerade maskiner.
+                </div>
+              )}
+
+              {showAddMachine && (
+                <div className="p-4 bg-slate-50 border rounded-lg space-y-3">
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="space-y-1">
+                      <Label>Maskinmodell *</Label>
+                      <Select value={newMachineForm.model} onValueChange={v => setNewMachineForm(prev => ({...prev, model: v}))}>
+                        <SelectTrigger><SelectValue placeholder="Välj modell" /></SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="none">Ingen vald</SelectItem>
+                          {MACHINE_MODELS.map(m => <SelectItem key={m} value={m}>{m}</SelectItem>)}
+                          <SelectItem value="Annan">Annan</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    {newMachineForm.model === "Annan" && (
+                      <div className="space-y-1">
+                        <Label>Egen modell *</Label>
+                        <Input value={newMachineForm.custom_model} onChange={e => setNewMachineForm(prev => ({...prev, custom_model: e.target.value}))} placeholder="Maskinmodell" />
+                      </div>
+                    )}
+                    <div className="space-y-1">
+                      <Label>Serienummer *</Label>
+                      <Input value={newMachineForm.serial_number} onChange={e => setNewMachineForm(prev => ({...prev, serial_number: e.target.value}))} placeholder="SN-XXXX" />
+                    </div>
+                  </div>
+                  <div className="flex justify-end">
+                    <Button 
+                      size="sm" 
+                      className="astomed-btn-primary"
+                      disabled={newMachineForm.model === "none" || (newMachineForm.model === "Annan" && !newMachineForm.custom_model) || !newMachineForm.serial_number || saving}
+                      onClick={handleAddMachine}
+                    >
+                      Spara och välj maskin
+                    </Button>
+                  </div>
+                </div>
+              )}
             </div>
           )}
 

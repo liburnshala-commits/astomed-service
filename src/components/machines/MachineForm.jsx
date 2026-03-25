@@ -6,51 +6,9 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { machineServiceDetails } from "../MachineServiceDetails";
+import { MACHINE_MODELS } from "@/lib/constants";
 
-const MODELS = [
-  "Soprano ICE Platinum",
-  "Soprano Titanium",
-  "Alma Harmony",
-  "Helios",
-  "Picolo",
-  "Cocoon Elysion",
-  "Aldix Smart Laser",
-  "Pento 9900",
-  "PrimeLase HR",
-  "PrimeLase Excel",
-  "PrimeLase Excel HR",
-  "Soprano Platinum",
-  "Soprano Titanium Special Edition",
-  "Aldix (Triodus)",
-  "PrimeLase",
-  "Elysion",
-  "PicoLo",
-  "Splendor X",
-  "Pento",
-  "Clearlight IPL",
-  "Fraction CO2",
-  "Mezotix",
-  "IOXO Laser",
-  "IOXO Microneedling",
-  "Focus Dual",
-  "Ultraformer III",
-  "Powershape 2",
-  "Indiba",
-  "CMSlim",
-  "Coolshaping 2",
-  "Hydra Beauty 2",
-  "Dermadrop",
-  "Carbomed",
-  "Cryopen",
-  "CryoIQ",
-  "Reoxy",
-  "Oxyhelp",
-  "Omega PDT",
-  "Eskimo Luftkylare",
-  "TBH Röksug"
-];
-
-const isCustomModel = (model) => model && !MODELS.includes(model);
+const isCustomModel = (model) => model && !MACHINE_MODELS.includes(model);
 
 export default function MachineForm({ machine, customers, preselectedCustomerId, onSave, onClose }) {
   const existingIsCustom = machine?.model ? isCustomModel(machine.model) : false;
@@ -93,7 +51,7 @@ export default function MachineForm({ machine, customers, preselectedCustomerId,
               <Select value={form.model} onValueChange={v => set("model", v)}>
                 <SelectTrigger><SelectValue placeholder="Välj modell" /></SelectTrigger>
                 <SelectContent>
-                  {MODELS.map(m => <SelectItem key={m} value={m}>{m}</SelectItem>)}
+                  {MACHINE_MODELS.map(m => <SelectItem key={m} value={m}>{m}</SelectItem>)}
                   <SelectItem value="Annan">Annan</SelectItem>
                 </SelectContent>
               </Select>
