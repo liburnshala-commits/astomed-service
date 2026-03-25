@@ -287,11 +287,22 @@ export default function ServiceContractLeads() {
                   <tr key={lead.id} className="hover:bg-slate-50">
                     <td className="px-4 py-3">
                       <div className="font-medium text-slate-900">{getLeadName(lead)}</div>
-                      {lead.notes && (
-                        <div className="text-xs text-slate-500 mt-1 max-w-xs truncate" title={lead.notes}>
-                          {lead.notes}
-                        </div>
-                      )}
+                      <div className="flex items-center gap-2 mt-1">
+                        {lead.notes ? (
+                          <div className="text-xs text-slate-500 max-w-xs truncate" title={lead.notes}>
+                            {lead.notes}
+                          </div>
+                        ) : (
+                          <span className="text-xs text-slate-400 italic">Inga anteckningar</span>
+                        )}
+                        <button 
+                          onClick={(e) => { e.stopPropagation(); setEditingLead(lead); }}
+                          className="text-slate-400 hover:text-blue-500 transition-colors"
+                          title="Lägg till/redigera anteckning"
+                        >
+                          <Pencil className="w-3 h-3" />
+                        </button>
+                      </div>
                     </td>
                     <td className="px-4 py-3 text-xs text-slate-600">
                       {contact.phone && <div className="flex items-center gap-1"><Phone className="w-3 h-3" /> {formatPhone(contact.phone)}</div>}
@@ -321,10 +332,10 @@ export default function ServiceContractLeads() {
                         <div className="flex flex-col gap-1">
                           {lead.machine_ids?.map(id => {
                             const m = machines.find(m => m.id === id);
-                            return m ? <div key={id} className="truncate max-w-[150px]" title={`${m.model} (SN: ${m.serial_number})`}>{m.model} <span className="text-slate-400">({m.serial_number})</span></div> : null;
+                            return m ? <div key={id} title={`${m.model} (SN: ${m.serial_number})`}>{m.model} <span className="text-slate-400">({m.serial_number})</span></div> : null;
                           })}
                           {lead.proposed_machines?.map((m, idx) => (
-                            <div key={`prop-${idx}`} className="truncate max-w-[150px]" title={`${m.model} (SN: ${m.serial_number})`}>{m.model} <span className="text-slate-400">({m.serial_number})</span></div>
+                            <div key={`prop-${idx}`} title={`${m.model} (SN: ${m.serial_number})`}>{m.model} <span className="text-slate-400">({m.serial_number})</span></div>
                           ))}
                         </div>
                       ) : <span className="text-slate-400">-</span>}
