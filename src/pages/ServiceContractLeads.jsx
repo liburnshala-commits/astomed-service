@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
 import MultiMachineContractModal from "@/components/contracts/MultiMachineContractModal";
 import NewLeadModal from "@/components/leads/NewLeadModal";
@@ -270,133 +272,197 @@ export default function ServiceContractLeads() {
         ) : filteredLeads.length === 0 ? (
           <div className="p-8 text-center text-slate-500">Inga prospekt hittades.</div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm text-left">
-              <thead className="bg-slate-50 text-slate-500 font-medium">
-                <tr>
-                  <th className="px-4 py-3">Namn</th>
-                  <th className="px-4 py-3">Kontakt</th>
-                  <th className="px-4 py-3">Maskin(er)</th>
-                  <th className="px-4 py-3">Typ</th>
-                  <th className="px-4 py-3">Status</th>
-                  <th className="px-4 py-3">Uppföljning</th>
-                  <th className="px-4 py-3 text-right">Åtgärder</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100">
-                {filteredLeads.map(lead => {
-                  const contact = getLeadContact(lead);
-                  return (
-                  <tr key={lead.id} className="hover:bg-slate-50">
-                    <td className="px-4 py-3">
-                      <div className="font-medium text-slate-900">{getLeadName(lead)}</div>
-                      <div className="flex items-center gap-2 mt-1">
-                        {lead.notes ? (
-                          <div className="text-xs text-slate-500 max-w-xs truncate" title={lead.notes}>
-                            {lead.notes}
-                          </div>
-                        ) : (
-                          <span className="text-xs text-slate-400 italic">Inga anteckningar</span>
-                        )}
-                        <button 
-                          onClick={(e) => { e.stopPropagation(); setEditingLead(lead); }}
-                          className="text-slate-400 hover:text-blue-500 transition-colors"
-                          title="Lägg till/redigera anteckning"
-                        >
-                          <Pencil className="w-3 h-3" />
-                        </button>
-                      </div>
-                    </td>
-                    <td className="px-4 py-3 text-xs text-slate-600">
-                      {contact.phone && <div className="flex items-center gap-1"><Phone className="w-3 h-3" /> {formatPhone(contact.phone)}</div>}
-                      {contact.email && (
-                        <div className="flex items-center gap-1 mt-1 group">
-                          <Mail className="w-3 h-3" /> 
-                          {contact.email}
+          <>
+            {/* Desktop Table View */}
+            <div className="hidden md:block overflow-x-auto">
+              <table className="w-full text-sm text-left">
+                <thead className="bg-slate-50 text-slate-500 font-medium">
+                  <tr>
+                    <th className="px-2 py-3 w-1/4">Namn</th>
+                    <th className="px-2 py-3">Kontakt</th>
+                    <th className="px-2 py-3">Maskin(er)</th>
+                    <th className="px-2 py-3 w-[160px]">Status</th>
+                    <th className="px-2 py-3 text-right w-[180px]">Åtgärder</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  {filteredLeads.map(lead => {
+                    const contact = getLeadContact(lead);
+                    return (
+                    <tr key={lead.id} className="hover:bg-slate-50">
+                      <td className="px-2 py-3">
+                        <div className="font-medium text-slate-900">{getLeadName(lead)}</div>
+                        <div className="mb-1">
+                          {lead.customer_id ? (
+                            <span className="flex items-center gap-1 text-slate-500 text-[10px]"><User className="w-3 h-3" /> Befintlig kund</span>
+                          ) : (
+                            <span className="flex items-center gap-1 text-indigo-500 text-[10px]"><Building2 className="w-3 h-3" /> Nytt prospekt</span>
+                          )}
+                        </div>
+                        <div className="flex items-center gap-2 mt-1">
+                          {lead.notes ? (
+                            <div className="text-xs text-slate-500 max-w-xs truncate" title={lead.notes}>
+                              {lead.notes}
+                            </div>
+                          ) : (
+                            <span className="text-xs text-slate-400 italic">Inga anteckningar</span>
+                          )}
                           <button 
-                            onClick={() => {
-                              navigator.clipboard.writeText(contact.email);
-                              toast({
-                                title: "Kopierad!",
-                                description: "E-postadressen har kopierats till urklipp.",
-                              });
-                            }}
-                            className="ml-1 text-slate-400 hover:text-slate-700 opacity-0 group-hover:opacity-100 transition-opacity"
-                            title="Kopiera e-post"
+                            onClick={(e) => { e.stopPropagation(); setEditingLead(lead); }}
+                            className="text-slate-400 hover:text-blue-500 transition-colors"
+                            title="Lägg till/redigera anteckning"
                           >
-                            <Copy className="w-3 h-3" />
+                            <Pencil className="w-3 h-3" />
                           </button>
                         </div>
-                      )}
-                      {!contact.phone && !contact.email && <span className="text-slate-400">-</span>}
-                    </td>
-                    <td className="px-4 py-3 text-xs text-slate-600">
-                      {lead.machine_ids?.length > 0 || lead.proposed_machines?.length > 0 ? (
+                      </td>
+                      <td className="px-2 py-3 text-xs text-slate-600">
+                        {contact.phone && <div className="flex items-center gap-1 mb-1"><Phone className="w-3 h-3" /> {formatPhone(contact.phone)}</div>}
+                        {contact.email && (
+                          <div className="flex items-center gap-1 group">
+                            <Mail className="w-3 h-3" /> 
+                            <span className="truncate max-w-[150px]" title={contact.email}>{contact.email}</span>
+                            <button 
+                              onClick={() => {
+                                navigator.clipboard.writeText(contact.email);
+                                toast({ title: "Kopierad!", description: "E-postadressen kopierad." });
+                              }}
+                              className="ml-1 text-slate-400 hover:text-slate-700 opacity-0 group-hover:opacity-100 transition-opacity"
+                            >
+                              <Copy className="w-3 h-3" />
+                            </button>
+                          </div>
+                        )}
+                      </td>
+                      <td className="px-2 py-3 text-xs text-slate-600">
                         <div className="flex flex-col gap-1">
                           {lead.machine_ids?.map(id => {
                             const m = machines.find(m => m.id === id);
-                            return m ? <div key={id} title={`${m.model} (SN: ${m.serial_number})`}>{m.model} <span className="text-slate-400">({m.serial_number})</span></div> : null;
+                            return m ? <div key={id} title={`${m.model} (SN: ${m.serial_number})`}>{m.model} <span className="text-slate-400 text-[10px]">({m.serial_number})</span></div> : null;
                           })}
                           {lead.proposed_machines?.map((m, idx) => (
-                            <div key={`prop-${idx}`} title={`${m.model} (SN: ${m.serial_number})`}>{m.model} <span className="text-slate-400">({m.serial_number})</span></div>
+                            <div key={`prop-${idx}`} title={`${m.model} (SN: ${m.serial_number})`}>{m.model} <span className="text-slate-400 text-[10px]">({m.serial_number})</span></div>
                           ))}
                         </div>
-                      ) : <span className="text-slate-400">-</span>}
-                    </td>
-                    <td className="px-4 py-3">
-                      {lead.customer_id ? (
-                        <span className="flex items-center gap-1 text-slate-500 text-xs"><User className="w-3 h-3" /> Befintlig kund</span>
-                      ) : (
-                        <span className="flex items-center gap-1 text-indigo-500 text-xs"><Building2 className="w-3 h-3" /> Nytt prospekt</span>
-                      )}
-                    </td>
-                    <td className="px-4 py-3 w-44">
-                      <Select value={lead.status} onValueChange={(v) => handleUpdateStatus(lead.id, v)}>
-                        <SelectTrigger className={`h-8 text-xs font-medium ${statusMap[lead.status]?.color}`}>
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {Object.entries(statusMap).map(([k, v]) => (
-                            <SelectItem key={k} value={k}>{v.label}</SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </td>
-                    <td className="px-4 py-3 text-slate-600">
-                      {lead.follow_up_date ? (
-                        <div className="flex items-center gap-2">
-                          <CalendarIcon className="w-4 h-4 text-slate-400" />
-                          {format(new Date(lead.follow_up_date), "yyyy-MM-dd")}
+                      </td>
+                      <td className="px-2 py-3">
+                        <Select value={lead.status} onValueChange={(v) => handleUpdateStatus(lead.id, v)}>
+                          <SelectTrigger className={`h-8 text-xs font-medium ${statusMap[lead.status]?.color}`}>
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {Object.entries(statusMap).map(([k, v]) => (
+                              <SelectItem key={k} value={k}>{v.label}</SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        {lead.follow_up_date && (
+                          <div className="flex items-center gap-1 text-[10px] text-slate-500 mt-1 justify-center">
+                            <CalendarIcon className="w-3 h-3" />
+                            {format(new Date(lead.follow_up_date), "yyyy-MM-dd")}
+                          </div>
+                        )}
+                      </td>
+                      <td className="px-2 py-3 text-right">
+                        <div className="flex items-center justify-end gap-1">
+                          {lead.status !== "accepted" && (
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              className="h-8 w-8 p-0 text-emerald-600 hover:bg-emerald-50 hover:text-emerald-700"
+                              onClick={() => handleConvert(lead)}
+                              title="Konvertera till kund/maskin"
+                            >
+                              <ArrowRight className="w-4 h-4" />
+                            </Button>
+                          )}
+                          <Button size="sm" variant="ghost" className="h-8 w-8 p-0 text-purple-500 hover:bg-purple-50" onClick={() => handleSendProposal(lead)} title="Skicka offert">
+                            <Send className="w-4 h-4" />
+                          </Button>
+                          <Button size="sm" variant="ghost" className="h-8 w-8 p-0 text-blue-500 hover:bg-blue-50" onClick={() => setEditingLead(lead)} title="Redigera">
+                            <Pencil className="w-4 h-4" />
+                          </Button>
+                          <Button size="sm" variant="ghost" className="h-8 w-8 p-0 text-red-500 hover:bg-red-50" onClick={() => handleDelete(lead.id)} title="Ta bort">
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
                         </div>
-                      ) : "-"}
-                    </td>
-                    <td className="px-4 py-3 text-right space-x-1">
-                      {lead.status !== "accepted" && (
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          className="text-emerald-600 border-emerald-200 hover:bg-emerald-50"
-                          onClick={() => handleConvert(lead)}
-                        >
-                          <ArrowRight className="w-4 h-4 mr-1" /> Konvertera
-                        </Button>
+                      </td>
+                    </tr>
+                  );
+                  })}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Mobile Card View */}
+            <div className="md:hidden space-y-4 p-4 bg-slate-50">
+              {filteredLeads.map(lead => {
+                const contact = getLeadContact(lead);
+                return (
+                  <Card key={lead.id} className="bg-white">
+                    <CardContent className="p-4 space-y-3">
+                      <div className="flex justify-between items-start gap-2">
+                        <div>
+                          <div className="font-semibold text-slate-900">{getLeadName(lead)}</div>
+                          <div className="flex items-center gap-2 text-xs mt-0.5">
+                            {lead.customer_id ? (
+                              <span className="text-slate-500 flex items-center gap-1"><User className="w-3 h-3" /> Befintlig</span>
+                            ) : (
+                              <span className="text-indigo-500 flex items-center gap-1"><Building2 className="w-3 h-3" /> Ny</span>
+                            )}
+                          </div>
+                        </div>
+                        <Badge className={`${statusMap[lead.status]?.color} border-0`}>
+                          {statusMap[lead.status]?.label}
+                        </Badge>
+                      </div>
+
+                      <div className="space-y-1 text-sm text-slate-600">
+                        {contact.phone && <div className="flex items-center gap-2"><Phone className="w-3 h-3" /> {formatPhone(contact.phone)}</div>}
+                        {contact.email && <div className="flex items-center gap-2"><Mail className="w-3 h-3" /> {contact.email}</div>}
+                      </div>
+
+                      {(lead.machine_ids?.length > 0 || lead.proposed_machines?.length > 0) && (
+                        <div className="bg-slate-50 p-2 rounded text-xs text-slate-700">
+                          {lead.machine_ids?.map(id => {
+                            const m = machines.find(m => m.id === id);
+                            return m ? <div key={id} className="truncate">{m.model} ({m.serial_number})</div> : null;
+                          })}
+                          {lead.proposed_machines?.map((m, idx) => (
+                            <div key={`prop-${idx}`} className="truncate">{m.model} ({m.serial_number})</div>
+                          ))}
+                        </div>
                       )}
-                      <Button size="icon" variant="ghost" className="text-purple-500 hover:bg-purple-50" onClick={() => handleSendProposal(lead)} title="Skicka offert">
-                        <Send className="w-4 h-4" />
-                      </Button>
-                      <Button size="icon" variant="ghost" className="text-blue-500 hover:bg-blue-50" onClick={() => setEditingLead(lead)} title="Redigera">
-                        <Pencil className="w-4 h-4" />
-                      </Button>
-                      <Button size="icon" variant="ghost" className="text-red-500 hover:bg-red-50" onClick={() => handleDelete(lead.id)} title="Ta bort">
-                        <Trash2 className="w-4 h-4" />
-                      </Button>
-                    </td>
-                  </tr>
+
+                      <div className="pt-2 border-t flex flex-wrap gap-2 justify-between items-center">
+                        <Select value={lead.status} onValueChange={(v) => handleUpdateStatus(lead.id, v)}>
+                          <SelectTrigger className="h-8 w-[140px] text-xs">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {Object.entries(statusMap).map(([k, v]) => (
+                              <SelectItem key={k} value={k}>{v.label}</SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+
+                        <div className="flex gap-1">
+                          {lead.status !== "accepted" && (
+                            <Button size="sm" variant="outline" className="h-8 w-8 p-0 text-emerald-600" onClick={() => handleConvert(lead)} title="Konvertera">
+                              <ArrowRight className="w-4 h-4" />
+                            </Button>
+                          )}
+                          <Button size="sm" variant="ghost" className="h-8 w-8 p-0" onClick={() => handleSendProposal(lead)}><Send className="w-4 h-4" /></Button>
+                          <Button size="sm" variant="ghost" className="h-8 w-8 p-0" onClick={() => setEditingLead(lead)}><Pencil className="w-4 h-4" /></Button>
+                          <Button size="sm" variant="ghost" className="h-8 w-8 p-0 text-red-500" onClick={() => handleDelete(lead.id)}><Trash2 className="w-4 h-4" /></Button>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
                 );
-                })}
-              </tbody>
-            </table>
-          </div>
+              })}
+            </div>
+          </>
         )}
       </div>
 
