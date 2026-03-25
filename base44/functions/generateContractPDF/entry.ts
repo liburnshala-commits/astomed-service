@@ -122,14 +122,34 @@ Deno.serve(async (req) => {
             // Find all instances for this customer with the same machine_ids
             const allInstances = await base44.asServiceRole.entities.ServiceAgreementInstance.filter({ customer_id: machine.customer_id });
             const sameMachineInstances = allInstances.filter(inst => {
+                // Exclude inactive/expired instances if possible
+                if (inst.status === 'inactive' || inst.status === 'expired') return false;
+
                 if (!inst.machine_ids || !instance.machine_ids) return false;
                 const a = [...inst.machine_ids].sort();
                 const b = [...instance.machine_ids].sort();
                 return JSON.stringify(a) === JSON.stringify(b);
             });
+
+            // Deduplicate: Keep only the latest instance per template ID
+            const latestInstancesByTemplate = {};
+            for (const inst of sameMachineInstances) {
+                if (!inst.service_agreement_template_id) continue;
+                
+                const existing = latestInstancesByTemplate[inst.service_agreement_template_id];
+                if (!existing) {
+                    latestInstancesByTemplate[inst.service_agreement_template_id] = inst;
+                } else {
+                    const instDate = new Date(inst.created_date || 0);
+                    const existingDate = new Date(existing.created_date || 0);
+                    if (instDate > existingDate) {
+                        latestInstancesByTemplate[inst.service_agreement_template_id] = inst;
+                    }
+                }
+            }
+
             templates = await Promise.all(
-                sameMachineInstances
-                    .filter(inst => inst.service_agreement_template_id)
+                Object.values(latestInstancesByTemplate)
                     .map(async inst => {
                         const t = await base44.asServiceRole.entities.ServiceAgreementTemplate.get(inst.service_agreement_template_id).catch(() => null);
                         if (t) t.quantity = inst.quantity || 1;
