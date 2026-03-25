@@ -3,11 +3,14 @@ import { Bell, X } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useNavigate } from "react-router-dom";
+import { createPageUrl } from "@/utils";
 
 export default function NotificationBell() {
   const [notifications, setNotifications] = useState([]);
   const [open, setOpen] = useState(false);
   const [user, setUser] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -49,6 +52,35 @@ export default function NotificationBell() {
   const markAsRead = async (notificationId) => {
     await base44.entities.Notification.update(notificationId, { is_read: true });
     setNotifications((prev) => prev.filter((n) => n.id !== notificationId));
+  };
+
+  const handleNotificationClick = async (notification) => {
+    await markAsRead(notification.id);
+    
+    if (notification.related_entity) {
+      let path = "";
+      switch (notification.related_entity) {
+        case "ServiceRecord":
+          path = notification.related_entity_id ? `ServiceRecords?id=${notification.related_entity_id}` : "ServiceRecords";
+          break;
+        case "Machine":
+          path = notification.related_entity_id ? `ServiceRecords?machine=${notification.related_entity_id}` : "Machines";
+          break;
+        case "Customer":
+          path = notification.related_entity_id ? `CustomerDetails?id=${notification.related_entity_id}` : "Customers";
+          break;
+        case "ServiceContractLead":
+          path = "ServiceContractLeads";
+          break;
+        case "PublicServiceLead":
+          path = "PublicServiceLeads";
+          break;
+      }
+      if (path) {
+        navigate(createPageUrl(path));
+      }
+    }
+    setOpen(false);
   };
 
   const getTypeColor = (type) => {
@@ -102,7 +134,7 @@ export default function NotificationBell() {
                 <div
                   key={notification.id}
                   className={cn("p-3 border-l-4 cursor-pointer hover:bg-gray-50 transition-colors", getTypeColor(notification.type))}
-                  onClick={() => markAsRead(notification.id)}
+                  onClick={() => handleNotificationClick(notification)}
                 >
                   <div className="flex justify-between items-start gap-2">
                     <div className="flex-1">
