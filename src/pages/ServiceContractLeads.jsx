@@ -381,9 +381,6 @@ export default function ServiceContractLeads() {
                               <ArrowRight className="w-4 h-4" />
                             </Button>
                           )}
-                          <Button size="sm" variant="ghost" className="h-8 w-8 p-0 text-purple-500 hover:bg-purple-50" onClick={() => handleSendProposal(lead)} title="Skicka offert">
-                            <Send className="w-4 h-4" />
-                          </Button>
                           <Button size="sm" variant="ghost" className="h-8 w-8 p-0 text-slate-500 hover:bg-slate-100" onClick={() => setViewingInteractions(lead)} title="Logga/visa historik">
                             <MessageSquare className="w-4 h-4" />
                           </Button>
@@ -460,7 +457,6 @@ export default function ServiceContractLeads() {
                               <ArrowRight className="w-4 h-4" />
                             </Button>
                           )}
-                          <Button size="sm" variant="ghost" className="h-8 w-8 p-0" onClick={() => handleSendProposal(lead)}><Send className="w-4 h-4" /></Button>
                           <Button size="sm" variant="ghost" className="h-8 w-8 p-0 text-slate-500" onClick={() => setViewingInteractions(lead)}><MessageSquare className="w-4 h-4" /></Button>
                           <Button size="sm" variant="ghost" className="h-8 w-8 p-0" onClick={() => setEditingLead(lead)}><Pencil className="w-4 h-4" /></Button>
                           <Button size="sm" variant="ghost" className="h-8 w-8 p-0 text-red-500" onClick={() => handleDelete(lead.id)}><Trash2 className="w-4 h-4" /></Button>
