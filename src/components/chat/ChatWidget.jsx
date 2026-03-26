@@ -19,10 +19,16 @@ export default function ChatWidget() {
 
     // Initialize Guest ID
     useEffect(() => {
-        let storedId = localStorage.getItem('astomed_chat_guest_id');
-        if (!storedId) {
-            storedId = crypto.randomUUID();
-            localStorage.setItem('astomed_chat_guest_id', storedId);
+        let storedId;
+        try {
+            storedId = localStorage.getItem('astomed_chat_guest_id');
+            if (!storedId) {
+                storedId = typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).substring(2, 15);
+                localStorage.setItem('astomed_chat_guest_id', storedId);
+            }
+        } catch (e) {
+            console.warn("localStorage ej tillgängligt, använder tillfälligt ID", e);
+            storedId = typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).substring(2, 15);
         }
         setGuestId(storedId);
     }, []);
@@ -127,21 +133,39 @@ export default function ChatWidget() {
 
     if (!isOpen) {
         return (
-            <Button 
+            <button 
                 onClick={() => setIsOpen(true)}
-                className="fixed bottom-6 right-6 h-14 w-14 rounded-full shadow-lg bg-primary hover:bg-primary/90 z-50 p-0"
+                className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-2 group hover:scale-105 transition-transform"
             >
-                <MessageCircle className="h-7 w-7 text-white" />
-            </Button>
+                <div className="bg-white text-[#1b3a3a] px-4 py-2 rounded-xl shadow-lg border border-[#1b3a3a]/10 mb-1">
+                    <span className="text-sm font-semibold">Chatta med en servicetekniker</span>
+                </div>
+                <div className="h-16 w-16 rounded-full shadow-xl overflow-hidden border-2 border-white ring-2 ring-[#1b3a3a]/10">
+                    <img 
+                        src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69a9446fcb1cd4ab529479ba/bc2852de1_channels4_profile-2.jpg" 
+                        alt="Chat" 
+                        className="w-full h-full object-cover"
+                    />
+                </div>
+            </button>
         );
     }
 
     return (
         <Card className="fixed bottom-6 right-6 w-[350px] h-[500px] shadow-2xl z-50 flex flex-col border-primary/20">
-            <CardHeader className="bg-primary text-primary-foreground p-4 rounded-t-xl flex flex-row items-center justify-between shrink-0">
-                <div>
-                    <CardTitle className="text-base">Astomed Support</CardTitle>
-                    <p className="text-xs text-primary-foreground/80">Vi hjälper dig med dina frågor</p>
+            <CardHeader className="bg-[#1b3a3a] text-white p-4 rounded-t-xl flex flex-row items-center justify-between shrink-0">
+                <div className="flex items-center gap-3">
+                    <div className="h-10 w-10 rounded-full bg-white/10 overflow-hidden border border-white/20">
+                         <img 
+                            src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69a9446fcb1cd4ab529479ba/bc2852de1_channels4_profile-2.jpg" 
+                            alt="Astomed" 
+                            className="w-full h-full object-cover"
+                        />
+                    </div>
+                    <div>
+                        <CardTitle className="text-base">Astomed Support</CardTitle>
+                        <p className="text-xs text-white/80">Vi hjälper dig med dina frågor</p>
+                    </div>
                 </div>
                 <Button variant="ghost" size="icon" onClick={() => setIsOpen(false)} className="h-8 w-8 text-primary-foreground hover:bg-primary-foreground/20">
                     <X className="h-5 w-5" />

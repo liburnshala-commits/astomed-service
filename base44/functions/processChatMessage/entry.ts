@@ -30,8 +30,14 @@ Deno.serve(async (req) => {
         // Business hours: 08:30 - 16:30
         const isBusinessHours = currentTime >= startTime && currentTime < endTime;
         
-        // If it is business hours, do nothing (wait for human agent)
+        // If it is business hours, send a quick auto-reply so the user knows we got it
         if (isBusinessHours) {
+             await base44.asServiceRole.entities.ChatMessage.create({
+                 conversation_id: data.conversation_id,
+                 sender_type: 'system',
+                 sender_name: 'Astomed',
+                 content: 'Tack för ditt meddelande! Vår support är öppen och en tekniker kommer att svara dig i chatten så snart som möjligt.'
+             });
              return Response.json({ status: 'business_hours', time: timeString });
         }
 
