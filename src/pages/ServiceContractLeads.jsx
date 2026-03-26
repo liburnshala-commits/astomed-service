@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
-import { Plus, Search, Calendar as CalendarIcon, Trash2, ArrowRight, User, Building2, Phone, Mail, Copy, Pencil, Send } from "lucide-react";
+import { Plus, Search, Calendar as CalendarIcon, Trash2, ArrowRight, User, Building2, Phone, Mail, Copy, Pencil, Send, MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { Input } from "@/components/ui/input";
@@ -11,6 +11,7 @@ import { format } from "date-fns";
 import MultiMachineContractModal from "@/components/contracts/MultiMachineContractModal";
 import NewLeadModal from "@/components/leads/NewLeadModal";
 import EditLeadModal from "@/components/leads/EditLeadModal";
+import CustomerInteractionsModal from "@/components/customers/CustomerInteractionsModal";
 
 const statusMap = {
   new: { label: "Nytt", color: "bg-blue-100 text-blue-800" },
@@ -40,6 +41,7 @@ export default function ServiceContractLeads() {
   const [convertingLead, setConvertingLead] = useState(null);
   const [convertingCustomerId, setConvertingCustomerId] = useState(null);
   const [editingLead, setEditingLead] = useState(null);
+  const [viewingInteractions, setViewingInteractions] = useState(null);
 
   useEffect(() => {
     fetchData();
@@ -194,15 +196,14 @@ export default function ServiceContractLeads() {
         details: `Offert skickad via e-post till ${contact.email}`
       });
 
-      if (lead.customer_id) {
-        await base44.entities.CustomerInteraction.create({
-          customer_id: lead.customer_id,
-          interaction_type: 'email',
-          interaction_date: new Date().toISOString(),
-          notes: `Offert för serviceavtal skickad till ${contact.email}.`,
-          logged_by: user?.full_name || user?.email || "System"
-        });
-      }
+      await base44.entities.CustomerInteraction.create({
+        customer_id: lead.customer_id || undefined,
+        lead_id: lead.id,
+        interaction_type: 'email',
+        interaction_date: new Date().toISOString(),
+        notes: `Offert för serviceavtal skickad till ${contact.email}.`,
+        logged_by: user?.full_name || user?.email || "System"
+      });
 
       toast({
         title: "Offert skickad!",
@@ -379,6 +380,9 @@ export default function ServiceContractLeads() {
                           <Button size="sm" variant="ghost" className="h-8 w-8 p-0 text-purple-500 hover:bg-purple-50" onClick={() => handleSendProposal(lead)} title="Skicka offert">
                             <Send className="w-4 h-4" />
                           </Button>
+                          <Button size="sm" variant="ghost" className="h-8 w-8 p-0 text-slate-500 hover:bg-slate-100" onClick={() => setViewingInteractions(lead)} title="Logga/visa historik">
+                            <MessageSquare className="w-4 h-4" />
+                          </Button>
                           <Button size="sm" variant="ghost" className="h-8 w-8 p-0 text-blue-500 hover:bg-blue-50" onClick={() => setEditingLead(lead)} title="Redigera">
                             <Pencil className="w-4 h-4" />
                           </Button>
@@ -453,6 +457,7 @@ export default function ServiceContractLeads() {
                             </Button>
                           )}
                           <Button size="sm" variant="ghost" className="h-8 w-8 p-0" onClick={() => handleSendProposal(lead)}><Send className="w-4 h-4" /></Button>
+                          <Button size="sm" variant="ghost" className="h-8 w-8 p-0 text-slate-500" onClick={() => setViewingInteractions(lead)}><MessageSquare className="w-4 h-4" /></Button>
                           <Button size="sm" variant="ghost" className="h-8 w-8 p-0" onClick={() => setEditingLead(lead)}><Pencil className="w-4 h-4" /></Button>
                           <Button size="sm" variant="ghost" className="h-8 w-8 p-0 text-red-500" onClick={() => handleDelete(lead.id)}><Trash2 className="w-4 h-4" /></Button>
                         </div>
@@ -487,6 +492,15 @@ export default function ServiceContractLeads() {
           lead={editingLead}
           onClose={() => setEditingLead(null)}
           onSave={handleEditLead}
+        />
+      )}
+
+      {viewingInteractions && (
+        <CustomerInteractionsModal
+          customerId={viewingInteractions.customer_id}
+          leadId={viewingInteractions.id}
+          title={`Historik: ${getLeadName(viewingInteractions)}`}
+          onClose={() => setViewingInteractions(null)}
         />
       )}
     </div>

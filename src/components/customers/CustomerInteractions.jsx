@@ -22,7 +22,7 @@ const interactionLabels = {
   other: "Övrigt"
 };
 
-export default function CustomerInteractions({ customerId }) {
+export default function CustomerInteractions({ customerId, leadId }) {
   const [interactions, setInteractions] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [type, setType] = useState("phone");
@@ -30,13 +30,23 @@ export default function CustomerInteractions({ customerId }) {
   const [loading, setLoading] = useState(false);
 
   const load = async () => {
-    const data = await base44.entities.CustomerInteraction.filter({ customer_id: customerId }, "-interaction_date");
+    let query = {};
+    if (customerId && leadId) {
+      query = { $or: [{ customer_id: customerId }, { lead_id: leadId }] };
+    } else if (customerId) {
+      query = { customer_id: customerId };
+    } else if (leadId) {
+      query = { lead_id: leadId };
+    } else {
+      return;
+    }
+    const data = await base44.entities.CustomerInteraction.filter(query, "-interaction_date");
     setInteractions(data);
   };
 
   useEffect(() => {
-    if (customerId) load();
-  }, [customerId]);
+    if (customerId || leadId) load();
+  }, [customerId, leadId]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -45,7 +55,8 @@ export default function CustomerInteractions({ customerId }) {
     try {
       const user = await base44.auth.me();
       await base44.entities.CustomerInteraction.create({
-        customer_id: customerId,
+        customer_id: customerId || undefined,
+        lead_id: leadId || undefined,
         interaction_type: type,
         interaction_date: new Date().toISOString(),
         notes: notes,
