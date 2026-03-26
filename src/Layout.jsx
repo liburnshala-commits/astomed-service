@@ -87,17 +87,28 @@ export default function Layout({ children, currentPageName }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [showUserInfo, setShowUserInfo] = useState(false);
   const [showPrivacyModal, setShowPrivacyModal] = useState(false);
+  const [newServiceLeadsCount, setNewServiceLeadsCount] = useState(0);
   const navigate = useNavigate();
 
   useEffect(() => {
+    let unsubscribe;
     base44.auth.me().then(u => {
       setUser(u);
       if (u && !u.privacy_policy_accepted) {
         setShowPrivacyModal(true);
       }
+      if (u && (u.role === 'admin' || u.role === 'technician')) {
+        const loadLeads = () => base44.entities.PublicServiceLead.filter({ status: 'new' }).then(res => setNewServiceLeadsCount(res.length));
+        loadLeads();
+        unsubscribe = base44.entities.PublicServiceLead.subscribe(() => loadLeads());
+      }
     }).catch(() => {
       base44.auth.redirectToLogin(window.location.href);
     }).finally(() => setUserLoaded(true));
+
+    return () => {
+      if (unsubscribe) unsubscribe();
+    };
   }, []);
 
   if (currentPageName === "CustomerPortal") {
@@ -182,7 +193,12 @@ export default function Layout({ children, currentPageName }) {
                         )}
                       >
                         <Icon className="w-4 h-4 flex-shrink-0" />
-                        {item.label}
+                        <span className="flex-1">{item.label}</span>
+                        {item.page === "PublicServiceLeads" && newServiceLeadsCount > 0 && (
+                          <span className="bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[20px] text-center shadow-sm">
+                            {newServiceLeadsCount}
+                          </span>
+                        )}
                         {active && <ChevronRight className="w-3 h-3 ml-auto" />}
                       </Link>
                     );
