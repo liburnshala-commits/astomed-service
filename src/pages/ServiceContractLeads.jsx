@@ -211,9 +211,13 @@ export default function ServiceContractLeads() {
       });
       fetchData();
     } catch (error) {
+      // Specialhantering för Base44 e-postrestriktion
+      const isEmailRestriction = error.message?.includes("500") || error.message?.includes("outside the app");
       toast({
-        title: "Ett fel uppstod",
-        description: error.message,
+        title: isEmailRestriction ? "Kan inte skicka e-post" : "Ett fel uppstod",
+        description: isEmailRestriction 
+          ? "I testläget kan e-post endast skickas till registrerade användare i systemet. Ändra prospektets e-post till din egen för att testa." 
+          : error.message,
         variant: "destructive"
       });
     }
