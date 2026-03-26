@@ -1,6 +1,28 @@
 export const machineServiceDetails = {
-  "Aldix Smart Laser": {
-    title: "Standardservice och underhåll – Aldix Smart Laser",
+  "Alma Harmony": {
+    title: "Standardservice och underhåll – Alma Harmony",
+    details: [
+      "Byte av Avjoniseringsfilter",
+      "Byte av mekaniskpartikelfilter",
+      "Byte av CPC-kopplingar till filter",
+      "Påfyllning av destillerat avjoniserat kylvätska",
+      "Spolning av pneumatisk krets",
+      "Läckagekontroll",
+      "Kontroll av luftintagsfilter",
+      "Lasereffektmätning",
+      "Rengöring av värmeväxlare",
+      "Rengörning av Switchade nätaggret",
+      "Kontroll av nödstopp och interlock",
+      "Upprättande av serviceprotokoll",
+      "Serviceuppmärkning av utrustning",
+      "Kontroll av säkerhetsrem",
+      "20 % på arbetstid för övriga reparationer",
+      "20 % på resekostnader"
+    ],
+    additionalInfo: "Pris: 600 kr/månad"
+  },
+  "Aldix (Triodus) / Aldix Smart Laser": {
+    title: "Standardservice och underhåll – Aldix / Triodus",
     details: [
       "Byte av pneumatisk avjoniseringsfilter A",
       "Byte av pneumatisk avjoniseringsfilter B",
@@ -21,7 +43,27 @@ export const machineServiceDetails = {
     ],
     additionalInfo: "Pris: 600 kr/månad"
   },
-  "Elysion": {
+  "CoolTech": {
+    title: "Standardservice och underhåll – CoolTech",
+    details: [
+      "Byte av mekanisk vattenfilter",
+      "Påfyllning av destillerat avjoniserat kylvätska med glykolblandning",
+      "Spolning av pneumatisk krets",
+      "Läckagekontroll",
+      "Kontroll av luftintagsfilter",
+      "Lasereffektmätning",
+      "Rengöring av värmeväxlare",
+      "Rengörning av Switchade nätaggret",
+      "Kontroll av nödstopp och interlock",
+      "Upprättande av serviceprotokoll",
+      "Serviceuppmärkning av utrustning",
+      "Kontroll av säkerhetsrem",
+      "20 % på arbetstid för övriga reparationer",
+      "20 % på resekostnader"
+    ],
+    additionalInfo: "Pris: 600 kr/månad"
+  },
+  "Elysion / Cocoon Elysion": {
     title: "Standardservice och underhåll – Elysion",
     details: [
       "Byte av mekanisk vattenfilter",
@@ -41,7 +83,28 @@ export const machineServiceDetails = {
     ],
     additionalInfo: "Pris: 600 kr/månad"
   },
-  "Helios": {
+  "Fraction CO2": {
+    title: "Standardservice och underhåll – Fraction CO2",
+    details: [
+      "Kontroll av luftintagsfilter",
+      "Lasereffektmätning",
+      "Rengöring av kylflänsar",
+      "Rengöring av till-luftsfläktar",
+      "Rengöring av från-luftsfläktar",
+      "Rengörning av Switchade nätaggret",
+      "Kontroll av nödstopp och interlock",
+      "Upprättande av serviceprotokoll",
+      "Serviceuppmärkning av utrustning",
+      "Kontroll av säkerhetsrem",
+      "Kontroll av possitionering av ledljus",
+      "Kontroll av träffbildsmönster",
+      "Kontroll av alla handenheters linser",
+      "20 % på arbetstid för övriga reparationer",
+      "20 % på resekostnader"
+    ],
+    additionalInfo: "Pris: 600 kr/månad"
+  },
+  "Helios / Helios III": {
     title: "Standardservice och underhåll – Helios",
     details: [
       "Byte av vattenfiltersystem",
@@ -64,8 +127,78 @@ export const machineServiceDetails = {
     ],
     additionalInfo: "Pris: 600 kr/månad"
   },
-  "Pento": {
-    title: "Standardservice och underhåll – Pento",
+  "Splendor X": {
+    title: "Standardservice och underhåll – Splendor X",
+    details: [
+      "Byte av avjoniserande DI-filter",
+      "Byte av Smoke Evacuation-filter",
+      "Rengöring av värmeväxlare i kylsystemet",
+      "Rengöring av värmeväxlare i Splendor",
+      "Kontroll av optiska linser",
+      "Påfyllning av destillerat avjoniserat kylvätska",
+      "Spolning av pneumatisk krets",
+      "Läckagekontroll",
+      "Lasereffektmätning",
+      "Rengörning av Switchade nätaggret",
+      "Kontroll av nödstopp och interlock",
+      "Upprättande av serviceprotokoll",
+      "Serviceuppmärkning av utrustning",
+      "Kontroll av säkerhetsrem",
+      "Kontroll av träffbildsmönster",
+      "Kontroll av alla handneheters linser",
+      "20 % på arbetstid för övriga reparationer",
+      "20 % på resekostnader"
+    ],
+    additionalInfo: "Pris: 709 kr/månad"
+  },
+  "Soprano Titanium": {
+    title: "Standardservice och underhåll – Soprano Titanium",
+    details: [
+      "Byte av Avjoniseringsfilter",
+      "Byte av mekaniskpartikelfilter",
+      "Byte av steriliserande UV-lampa",
+      "Byte av CPC-kopplingar till filter",
+      "Påfyllning av destillerat avjoniserat kylvätska",
+      "Spolning av pneumatisk krets",
+      "Läckagekontroll",
+      "Kontroll av luftintagsfilter",
+      "Lasereffektmätning",
+      "Rengöring av värmeväxlare",
+      "Rengörning av Switchade nätaggret",
+      "Kontroll av nödstopp och interlock",
+      "Upprättande av serviceprotokoll",
+      "Serviceuppmärkning av utrustning",
+      "Kontroll av säkerhetsrem",
+      "20 % på arbetstid för övriga reparationer",
+      "20 % på resekostnader"
+    ],
+    additionalInfo: "Pris: 600 kr/månad"
+  },
+  "Soprano ICE Platinum": {
+    title: "Standardservice och underhåll – Soprano ICE Platinum",
+    details: [
+      "Byte av Avjoniseringsfilter",
+      "Byte av mekaniskpartikelfilter",
+      "Byte av steriliserande UV-lampa",
+      "Byte av CPC-kopplingar till filter",
+      "Påfyllning av destillerat avjoniserat kylvätska",
+      "Spolning av pneumatisk krets",
+      "Läckagekontroll",
+      "Kontroll av luftintagsfilter",
+      "Lasereffektmätning",
+      "Rengöring av värmeväxlare",
+      "Rengörning av Switchade nätaggret",
+      "Kontroll av nödstopp och interlock",
+      "Upprättande av serviceprotokoll",
+      "Serviceuppmärkning av utrustning",
+      "Kontroll av säkerhetsrem",
+      "20 % på arbetstid för övriga reparationer",
+      "20 % på resekostnader"
+    ],
+    additionalInfo: "Pris: 600 kr/månad"
+  },
+  "Pento / Pento 9900": {
+    title: "Standardservice och underhåll – Pento / Pento 9900",
     details: [
       "Byte av avjoniserande DI-filter",
       "Rengöring av värmeväxlare",
@@ -86,8 +219,8 @@ export const machineServiceDetails = {
     ],
     additionalInfo: "Pris: 709 kr/månad"
   },
-  "PicoLo": {
-    title: "Standardservice och underhåll – PicoLo",
+  "Picolo": {
+    title: "Standardservice och underhåll – Picolo",
     details: [
       "Byte av vattenfiltersystem",
       "Påfyllning av destillerat avjoniserat kylvätska",
@@ -131,141 +264,6 @@ export const machineServiceDetails = {
     ],
     additionalInfo: "Pris: 679 kr/månad"
   },
-  "Soprano ICE Platinum": {
-    title: "Standardservice och underhåll – Soprano ICE Platinum / Titanium",
-    details: [
-      "Byte av Avjoniseringsfilter",
-      "Byte av mekaniskpartikelfilter",
-      "Byte av steriliserande UV-lampa",
-      "Byte av CPC-kopplingar till filter",
-      "Påfyllning av destillerat avjoniserat kylvätska",
-      "Spolning av pneumatisk krets",
-      "Läckagekontroll",
-      "Kontroll av luftintagsfilter",
-      "Lasereffektmätning",
-      "Rengöring av värmeväxlare",
-      "Rengörning av Switchade nätaggret",
-      "Kontroll av nödstopp och interlock",
-      "Upprättande av serviceprotokoll",
-      "Serviceuppmärkning av utrustning",
-      "Kontroll av säkerhetsrem",
-      "20 % på arbetstid för övriga reparationer",
-      "20 % på resekostnader"
-    ],
-    additionalInfo: "Pris: 600 kr/månad"
-  },
-  "Soprano Titanium": {
-    title: "Standardservice och underhåll – Soprano ICE Platinum / Titanium",
-    details: [
-      "Byte av Avjoniseringsfilter",
-      "Byte av mekaniskpartikelfilter",
-      "Byte av steriliserande UV-lampa",
-      "Byte av CPC-kopplingar till filter",
-      "Påfyllning av destillerat avjoniserat kylvätska",
-      "Spolning av pneumatisk krets",
-      "Läckagekontroll",
-      "Kontroll av luftintagsfilter",
-      "Lasereffektmätning",
-      "Rengöring av värmeväxlare",
-      "Rengörning av Switchade nätaggret",
-      "Kontroll av nödstopp och interlock",
-      "Upprättande av serviceprotokoll",
-      "Serviceuppmärkning av utrustning",
-      "Kontroll av säkerhetsrem",
-      "20 % på arbetstid för övriga reparationer",
-      "20 % på resekostnader"
-    ],
-    additionalInfo: "Pris: 600 kr/månad"
-  },
-  "Splendor": {
-    title: "Standardservice och underhåll – Splendor",
-    details: [
-      "Byte av avjoniserande DI-filter",
-      "Byte av Smoke Evacuation-filter",
-      "Rengöring av värmeväxlare i kylsystemet",
-      "Rengöring av värmeväxlare i Splendor",
-      "Kontroll av optiska linser",
-      "Påfyllning av destillerat avjoniserat kylvätska",
-      "Spolning av pneumatisk krets",
-      "Läckagekontroll",
-      "Lasereffektmätning",
-      "Rengörning av Switchade nätaggret",
-      "Kontroll av nödstopp och interlock",
-      "Upprättande av serviceprotokoll",
-      "Serviceuppmärkning av utrustning",
-      "Kontroll av säkerhetsrem",
-      "Kontroll av träffbildsmönster",
-      "Kontroll av alla handneheters linser",
-      "20 % på arbetstid för övriga reparationer",
-      "20 % på resekostnader"
-    ],
-    additionalInfo: "Pris: 709 kr/månad"
-  },
-  "Triodus": {
-    title: "Standardservice och underhåll – Triodus",
-    details: [
-      "Byte av pneumatisk avjoniseringsfilter A",
-      "Byte av pneumatisk avjoniseringsfilter B",
-      "Byte av snabbkopplingar till filter",
-      "Påfyllning av destillerat avjoniserat kylvätska",
-      "Spolning av pneumatisk krets",
-      "Läckagekontroll",
-      "Kontroll av luftintagsfilter",
-      "Lasereffektmätning",
-      "Rengöring av värmeväxlare",
-      "Rengörning av Switchade nätaggret",
-      "Kontroll av nödstopp och interlock",
-      "Upprättande av serviceprotokoll",
-      "Serviceuppmärkning av utrustning",
-      "Kontroll av säkerhetsrem",
-      "20 % på arbetstid för övriga reparationer",
-      "20 % på resekostnader"
-    ],
-    additionalInfo: "Pris: 600 kr/månad"
-  },
-  "Alma Harmony": {
-    title: "Standardservice och underhåll – Alma Harmony",
-    details: [
-      "Byte av Avjoniseringsfilter",
-      "Byte av mekaniskpartikelfilter",
-      "Byte av CPC-kopplingar till filter",
-      "Påfyllning av destillerat avjoniserat kylvätska",
-      "Spolning av pneumatisk krets",
-      "Läckagekontroll",
-      "Kontroll av luftintagsfilter",
-      "Lasereffektmätning",
-      "Rengöring av värmeväxlare",
-      "Rengörning av Switchade nätaggret",
-      "Kontroll av nödstopp och interlock",
-      "Upprättande av serviceprotokoll",
-      "Serviceuppmärkning av utrustning",
-      "Kontroll av säkerhetsrem",
-      "20 % på arbetstid för övriga reparationer",
-      "20 % på resekostnader"
-    ],
-    additionalInfo: "Pris: 600 kr/månad"
-  },
-  "Fraction CO2": {
-    title: "Standardservice och underhåll – Fraction CO2",
-    details: [
-      "Kontroll av luftintagsfilter",
-      "Lasereffektmätning",
-      "Rengöring av kylflänsar",
-      "Rengöring av till-luftsfläktar",
-      "Rengöring av från-luftsfläktar",
-      "Rengörning av Switchade nätaggret",
-      "Kontroll av nödstopp och interlock",
-      "Upprättande av serviceprotokoll",
-      "Serviceuppmärkning av utrustning",
-      "Kontroll av säkerhetsrem",
-      "Kontroll av possitionering av ledljus",
-      "Kontroll av träffbildsmönster",
-      "Kontroll av alla handenheters linser",
-      "20 % på arbetstid för övriga reparationer",
-      "20 % på resekostnader"
-    ],
-    additionalInfo: "Pris: 600 kr/månad"
-  },
   "Annan": {
     title: "Maskin som ej finns i listan",
     details: [
@@ -274,17 +272,3 @@ export const machineServiceDetails = {
     additionalInfo: ""
   }
 };
-
-// Mappa varianter från dropdown-listan till deras bas-servicebeskrivning
-machineServiceDetails["Helios III"] = machineServiceDetails["Helios"];
-machineServiceDetails["Helius"] = machineServiceDetails["Helios"];
-machineServiceDetails["Picolo"] = machineServiceDetails["PicoLo"];
-machineServiceDetails["Pento 9900"] = machineServiceDetails["Pento"];
-machineServiceDetails["Splendor X"] = machineServiceDetails["Splendor"];
-machineServiceDetails["Cocoon Elysion"] = machineServiceDetails["Elysion"];
-machineServiceDetails["Aldix (Triodus)"] = machineServiceDetails["Triodus"];
-machineServiceDetails["PrimeLase HR"] = machineServiceDetails["PrimeLase"];
-machineServiceDetails["PrimeLase Excel"] = machineServiceDetails["PrimeLase"];
-machineServiceDetails["PrimeLase Excel HR"] = machineServiceDetails["PrimeLase"];
-machineServiceDetails["Soprano Platinum"] = machineServiceDetails["Soprano ICE Platinum"];
-machineServiceDetails["Soprano Titanium Special Edition"] = machineServiceDetails["Soprano Titanium"];
