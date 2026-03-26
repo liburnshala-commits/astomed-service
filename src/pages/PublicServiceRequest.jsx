@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { machineServiceDetails } from "../components/MachineServiceDetails";
 import PrivacyPolicyContent from "../components/PrivacyPolicyContent";
+import ChatWidget from "../components/chat/ChatWidget";
 
 export default function PublicServiceRequest() {
   const [form, setForm] = useState({
@@ -310,6 +311,7 @@ export default function PublicServiceRequest() {
           </div>
         </DialogContent>
       </Dialog>
+      <ChatWidget />
     </div>
   );
 }
