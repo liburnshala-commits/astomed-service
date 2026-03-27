@@ -61,7 +61,24 @@ export default function ServiceContractLeads() {
   };
 
   const handleCreateLead = async (data) => {
-    await base44.entities.ServiceContractLead.create(data);
+    const newLead = await base44.entities.ServiceContractLead.create(data);
+    
+    if (data.notes) {
+      try {
+        const user = await base44.auth.me();
+        await base44.entities.CustomerInteraction.create({
+          customer_id: data.customer_id || undefined,
+          lead_id: newLead.id,
+          interaction_type: 'other',
+          interaction_date: new Date().toISOString(),
+          notes: `Nytt prospekt skapat med anteckning: ${data.notes}`,
+          logged_by: user?.full_name || user?.email || "System"
+        });
+      } catch (err) {
+        console.error("Kunde inte logga anteckning", err);
+      }
+    }
+
     setShowNewLeadModal(false);
     fetchData();
   };
@@ -72,7 +89,25 @@ export default function ServiceContractLeads() {
   };
 
   const handleEditLead = async (id, updatedData) => {
+    const oldLead = leads.find(l => l.id === id);
     await base44.entities.ServiceContractLead.update(id, updatedData);
+    
+    if (updatedData.notes !== undefined && updatedData.notes !== (oldLead?.notes || "")) {
+      try {
+        const user = await base44.auth.me();
+        await base44.entities.CustomerInteraction.create({
+          customer_id: oldLead?.customer_id || undefined,
+          lead_id: id,
+          interaction_type: 'other',
+          interaction_date: new Date().toISOString(),
+          notes: updatedData.notes ? `Prospektanteckning uppdaterad: ${updatedData.notes}` : "Prospektanteckning borttagen.",
+          logged_by: user?.full_name || user?.email || "System"
+        });
+      } catch (err) {
+        console.error("Kunde inte logga anteckning", err);
+      }
+    }
+
     setEditingLead(null);
     fetchData();
   };
