@@ -29,15 +29,15 @@ export default function PublicServiceRequest() {
   const [privacyAccepted, setPrivacyAccepted] = useState(false);
   const [showPrivacyDialog, setShowPrivacyDialog] = useState(false);
 
-  const set = (field, value) => setForm(prev => ({ ...prev, [field]: value }));
+  const set = (field, value) => setForm((prev) => ({ ...prev, [field]: value }));
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmitting(true);
     try {
-      const finalMachineName = form.machine_name === "Annan" && form.other_machine_name 
-        ? `Annan (${form.other_machine_name})` 
-        : form.machine_name;
+      const finalMachineName = form.machine_name === "Annan" && form.other_machine_name ?
+      `Annan (${form.other_machine_name})` :
+      form.machine_name;
 
       const submitData = {
         ...form,
@@ -75,8 +75,8 @@ export default function PublicServiceRequest() {
           <h2 className="text-2xl font-bold mb-3" style={{ color: "#1b3a3a" }}>Förfrågan skickad!</h2>
           <p className="text-gray-500">Tack! Vi har tagit emot din serviceförfrågan och återkommer till dig så snart som möjligt.</p>
         </div>
-      </div>
-    );
+      </div>);
+
   }
 
   return (
@@ -102,7 +102,7 @@ export default function PublicServiceRequest() {
             
             {/* Card 1 */}
             <div className="p-8 rounded-2xl bg-[#fcf8f2] border-l-4 border-[#3a9e9e] shadow-sm hover:shadow-md transition-shadow">
-              <h3 className="text-xl font-bold mb-3 text-[#1b3a3a]">Anmälningsplikt & Myndighetskrav (Inför 2026)</h3>
+              <h3 className="text-xl font-bold mb-3 text-[#1b3a3a]">1. Anmälningsplikt & Myndighetskrav (Inför 2026)</h3>
               <p className="text-[#1b3a3a]/80 mb-4 leading-relaxed">
                 Våren 2026 inför Strålsäkerhetsmyndigheten anmälningsplikt för alla laserverksamheter. Med Astomeds serviceavtal är din klinik 'inspektionsredo' från dag ett – vi säkrar din dokumentation så att du kan fokusera på dina kunder.
               </p>
@@ -113,7 +113,7 @@ export default function PublicServiceRequest() {
 
             {/* Card 2 */}
             <div className="p-8 rounded-2xl bg-[#fcf8f2] border-l-4 border-[#3a9e9e] shadow-sm hover:shadow-md transition-shadow">
-              <h3 className="text-xl font-bold mb-3 text-[#1b3a3a]">Krav på Lokalen & Säkerhetsmiljö</h3>
+              <h3 className="text-xl font-bold mb-3 text-[#1b3a3a]">2. Krav på Lokalen & Säkerhetsmiljö</h3>
               <p className="text-[#1b3a3a]/80 mb-4 leading-relaxed">
                 En säker behandling kräver en säker miljö. Vi hjälper dig att säkerställa att din lokal uppfyller kraven för lasersäkerhet, från korrekta varningsskyltar till fungerande interlock-system och dörrspärrar.
               </p>
@@ -124,7 +124,7 @@ export default function PublicServiceRequest() {
 
             {/* Card 3 */}
             <div className="p-8 rounded-2xl bg-[#fcf8f2] border-l-4 border-[#3a9e9e] shadow-sm hover:shadow-md transition-shadow">
-              <h3 className="text-xl font-bold mb-3 text-[#1b3a3a]">Regelbunden Service & Tekniskt Underhåll</h3>
+              <h3 className="text-xl font-bold mb-3 text-[#1b3a3a]">3. Regelbunden Service & Tekniskt Underhåll</h3>
               <p className="text-[#1b3a3a]/80 mb-4 leading-relaxed">
                 Strålskyddslagen är tydlig: fungerande skyddsfunktioner är ditt ansvar som ägare. Genom årlig auktoriserad service garanterar vi att laserns effekt och säkerhetsspärrar levererar exakt det de lovar.
               </p>
@@ -135,7 +135,7 @@ export default function PublicServiceRequest() {
 
             {/* Card 4 */}
             <div className="p-8 rounded-2xl bg-[#fcf8f2] border-l-4 border-[#3a9e9e] shadow-sm hover:shadow-md transition-shadow">
-              <h3 className="text-xl font-bold mb-3 text-[#1b3a3a]">Auktoriserad Service & CE-märkning (MDR)</h3>
+              <h3 className="text-xl font-bold mb-3 text-[#1b3a3a]">4. Auktoriserad Service & CE-märkning (MDR)</h3>
               <p className="text-[#1b3a3a]/80 mb-4 leading-relaxed">
                 Visste du att din CE-märkning kan upphöra om en obehörig tekniker öppnar maskinen? Som auktoriserad servicepartner skyddar vi din investering, din försäkring och din juridiska trygghet.
               </p>
@@ -148,7 +148,7 @@ export default function PublicServiceRequest() {
           {/* Included Services List */}
           <div className="p-8 md:p-12 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20 text-white">
             <h2 className="text-3xl font-light mb-2">Serviceavtal</h2>
-            <p className="font-bold mb-8 text-lg text-slate-300">Detta ingår när du väljer oss</p>
+            <p className="font-bold mb-8 text-lg text-slate-300">Detta ingår när du väljer Astomeds serviceavtal:</p>
             
             <div className="grid md:grid-cols-2 gap-x-12 gap-y-4 text-base leading-relaxed text-slate-200">
               <ul className="space-y-3 list-disc pl-5 marker:text-[#3a9e9e]">
@@ -184,23 +184,23 @@ export default function PublicServiceRequest() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-1">
                 <Label>Företagsnamn *</Label>
-                <Input value={form.company_name} onChange={e => set("company_name", e.target.value)} placeholder="Ditt företag AB" required />
+                <Input value={form.company_name} onChange={(e) => set("company_name", e.target.value)} placeholder="Ditt företag AB" required />
               </div>
               <div className="space-y-1">
                 <Label>Organisationsnummer</Label>
-                <Input value={form.org_number} onChange={e => set("org_number", e.target.value)} placeholder="XXXXXX-XXXX" />
+                <Input value={form.org_number} onChange={(e) => set("org_number", e.target.value)} placeholder="XXXXXX-XXXX" />
               </div>
               <div className="space-y-1">
                 <Label>Kontaktperson *</Label>
-                <Input value={form.contact_person} onChange={e => set("contact_person", e.target.value)} placeholder="För- och efternamn" required />
+                <Input value={form.contact_person} onChange={(e) => set("contact_person", e.target.value)} placeholder="För- och efternamn" required />
               </div>
               <div className="space-y-1">
                 <Label>Telefon *</Label>
-                <Input value={form.phone} onChange={e => set("phone", e.target.value)} placeholder="07XXXXXXXX" required />
+                <Input value={form.phone} onChange={(e) => set("phone", e.target.value)} placeholder="07XXXXXXXX" required />
               </div>
               <div className="sm:col-span-2 space-y-1">
                 <Label>E-post *</Label>
-                <Input type="email" value={form.email} onChange={e => set("email", e.target.value)} placeholder="din@email.se" required />
+                <Input type="email" value={form.email} onChange={(e) => set("email", e.target.value)} placeholder="din@email.se" required />
               </div>
             </div>
           </div>
@@ -213,52 +213,52 @@ export default function PublicServiceRequest() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-1">
                 <Label>Maskintyp *</Label>
-                <Select value={form.machine_name} onValueChange={v => set("machine_name", v)} required>
+                <Select value={form.machine_name} onValueChange={(v) => set("machine_name", v)} required>
                   <SelectTrigger>
                     <SelectValue placeholder="Välj maskintyp" />
                   </SelectTrigger>
                   <SelectContent>
-                    {Object.keys(machineServiceDetails).map(machine => (
-                      <SelectItem key={machine} value={machine}>{machine}</SelectItem>
-                    ))}
+                    {Object.keys(machineServiceDetails).map((machine) =>
+                    <SelectItem key={machine} value={machine}>{machine}</SelectItem>
+                    )}
                   </SelectContent>
                 </Select>
               </div>
 
               <div className="space-y-1">
                 <Label>Serienummer (kan skickas in senare)</Label>
-                <Input value={form.serial_number || ""} onChange={e => set("serial_number", e.target.value)} placeholder="Ange serienummer" />
+                <Input value={form.serial_number || ""} onChange={(e) => set("serial_number", e.target.value)} placeholder="Ange serienummer" />
               </div>
               
-              {form.machine_name === "Annan" && (
-                <div className="sm:col-span-2 space-y-1">
+              {form.machine_name === "Annan" &&
+              <div className="sm:col-span-2 space-y-1">
                   <Label>Maskinnamn *</Label>
-                  <Input value={form.other_machine_name || ""} onChange={e => set("other_machine_name", e.target.value)} placeholder="Ange maskinens namn" required />
+                  <Input value={form.other_machine_name || ""} onChange={(e) => set("other_machine_name", e.target.value)} placeholder="Ange maskinens namn" required />
                 </div>
-              )}
+              }
 
-              {form.machine_name && machineServiceDetails[form.machine_name] && (
-                <div className="sm:col-span-2 p-4 bg-blue-50 rounded-lg border border-blue-200">
+              {form.machine_name && machineServiceDetails[form.machine_name] &&
+              <div className="sm:col-span-2 p-4 bg-blue-50 rounded-lg border border-blue-200">
                   <h3 className="font-semibold text-blue-900 mb-2">
                     {machineServiceDetails[form.machine_name].title}
                   </h3>
                   <ul className="space-y-2 text-sm text-blue-800">
-                    {machineServiceDetails[form.machine_name].details.map((detail, idx) => (
-                     <li key={idx} className="flex gap-2">
+                    {machineServiceDetails[form.machine_name].details.map((detail, idx) =>
+                  <li key={idx} className="flex gap-2">
                        <span className="text-blue-600">•</span>
                        <span dangerouslySetInnerHTML={{ __html: detail }} />
                      </li>
-                    ))}
+                  )}
                   </ul>
-                  {machineServiceDetails[form.machine_name].additionalInfo && (
-                    <div className="mt-3 pt-3 border-t border-blue-300">
+                  {machineServiceDetails[form.machine_name].additionalInfo &&
+                <div className="mt-3 pt-3 border-t border-blue-300">
                       <p className="text-sm font-semibold text-blue-900">
                         {machineServiceDetails[form.machine_name].additionalInfo}
                       </p>
                     </div>
-                  )}
+                }
                 </div>
-              )}
+              }
 
             </div>
           </div>
@@ -268,16 +268,16 @@ export default function PublicServiceRequest() {
               <input
                 type="checkbox"
                 checked={privacyAccepted}
-                onChange={e => setPrivacyAccepted(e.target.checked)}
-                className="mt-0.5 w-4 h-4 accent-teal-700 flex-shrink-0"
-              />
+                onChange={(e) => setPrivacyAccepted(e.target.checked)}
+                className="mt-0.5 w-4 h-4 accent-teal-700 flex-shrink-0" />
+              
               <span className="text-sm text-gray-700">
                 Jag har läst och godkänner{" "}
                 <button
                   type="button"
                   onClick={() => setShowPrivacyDialog(true)}
-                  className="text-blue-600 hover:underline font-medium"
-                >
+                  className="text-blue-600 hover:underline font-medium">
+                  
                   integritetspolicyn
                 </button>
                 .
@@ -289,8 +289,8 @@ export default function PublicServiceRequest() {
             type="submit"
             className="w-full h-12 text-base"
             style={{ background: "#1b3a3a" }}
-            disabled={!isValid || submitting}
-          >
+            disabled={!isValid || submitting}>
+            
             {submitting ? "Skickar..." : "Skicka serviceförfrågan"}
           </Button>
 
@@ -317,14 +317,14 @@ export default function PublicServiceRequest() {
           <div className="p-6 border-t border-slate-100 flex-shrink-0">
             <Button
               className="w-full astomed-btn-primary"
-              onClick={() => setShowPrivacyDialog(false)}
-            >
+              onClick={() => setShowPrivacyDialog(false)}>
+              
               Stäng
             </Button>
           </div>
         </DialogContent>
       </Dialog>
       <ChatWidget />
-    </div>
-  );
+    </div>);
+
 }
