@@ -3,8 +3,11 @@ import { base44 } from "@/api/base44Client";
 import { MessageCircle, X, Send, Loader2, User, Bot } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
+import PrivacyPolicyContent from "@/components/PrivacyPolicyContent";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 
@@ -13,6 +16,10 @@ export default function ChatWidget() {
     const [conversation, setConversation] = useState(null);
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState("");
+    const [email, setEmail] = useState("");
+    const [privacyAccepted, setPrivacyAccepted] = useState(false);
+    const [showPrivacyDialog, setShowPrivacyDialog] = useState(false);
+    const [isStarting, setIsStarting] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [guestId, setGuestId] = useState("");
     const scrollRef = useRef(null);
@@ -92,8 +99,30 @@ export default function ChatWidget() {
         }
     };
 
+    const handleStartChat = async (e) => {
+        e.preventDefault();
+        if (!email.trim() || !privacyAccepted) return;
+        
+        setIsStarting(true);
+        try {
+            const currentConv = await base44.entities.ChatConversation.create({
+                guest_id: guestId,
+                guest_email: email.trim(),
+                status: 'open',
+                last_message_at: new Date().toISOString()
+            });
+            setConversation(currentConv);
+            
+            // Log interaction if needed, or just let them start sending messages
+        } catch (error) {
+            console.error("Failed to start conversation", error);
+        } finally {
+            setIsStarting(false);
+        }
+    };
+
     const handleSend = async () => {
-        if (!input.trim()) return;
+        if (!input.trim() || !conversation) return;
         
         const content = input;
         setInput(""); // Clear input immediately
@@ -101,20 +130,10 @@ export default function ChatWidget() {
         try {
             let currentConv = conversation;
 
-            // Create conversation if doesn't exist
-            if (!currentConv) {
-                currentConv = await base44.entities.ChatConversation.create({
-                    guest_id: guestId,
-                    status: 'open',
-                    last_message_at: new Date().toISOString()
-                });
-                setConversation(currentConv);
-            } else {
-                // Update timestamp
-                await base44.entities.ChatConversation.update(currentConv.id, {
-                    last_message_at: new Date().toISOString()
-                });
-            }
+            // Update timestamp
+            await base44.entities.ChatConversation.update(currentConv.id, {
+                last_message_at: new Date().toISOString()
+            });
 
             // Create message
             await base44.entities.ChatMessage.create({
@@ -173,6 +192,62 @@ export default function ChatWidget() {
             </CardHeader>
             
             <CardContent className="flex-1 p-0 flex flex-col overflow-hidden bg-white">
+                {!conversation && !isLoading ? (
+                    <div className="p-6 flex flex-col h-full overflow-y-auto">
+                        <div className="text-center mb-6">
+                            <h3 className="text-lg font-semibold text-[#1b3a3a] mb-2">Välkommen till chatten!</h3>
+                            <p className="text-sm text-slate-500">För att vi ska kunna ge dig bästa möjliga service behöver vi din e-postadress ifall vi skulle tappa anslutningen.</p>
+                        </div>
+                        <form onSubmit={handleStartChat} className="space-y-5 flex-1 flex flex-col">
+                            <div className="space-y-2">
+                                <Label htmlFor="chat-email">E-postadress</Label>
+                                <Input 
+                                    id="chat-email"
+                                    type="email" 
+                                    placeholder="din.epost@exempel.se" 
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    required
+                                />
+                            </div>
+                            
+                            <div className="p-3 bg-slate-50 rounded-lg border border-slate-200 mt-auto">
+                                <label className="flex items-start gap-3 cursor-pointer select-none">
+                                    <input
+                                        type="checkbox"
+                                        checked={privacyAccepted}
+                                        onChange={(e) => setPrivacyAccepted(e.target.checked)}
+                                        className="mt-0.5 w-4 h-4 accent-[#3a9e9e] flex-shrink-0"
+                                        required
+                                    />
+                                    <span className="text-xs text-slate-700">
+                                        Jag godkänner{" "}
+                                        <button
+                                            type="button"
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                setShowPrivacyDialog(true);
+                                            }}
+                                            className="text-[#3a9e9e] hover:underline font-medium"
+                                        >
+                                            integritetspolicyn
+                                        </button>
+                                        .
+                                    </span>
+                                </label>
+                            </div>
+                            
+                            <Button 
+                                type="submit" 
+                                className="w-full bg-[#1b3a3a] hover:bg-[#254f4f]" 
+                                disabled={!email.trim() || !privacyAccepted || isStarting}
+                            >
+                                {isStarting ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : "Starta chatt"}
+                            </Button>
+                        </form>
+                    </div>
+                ) : (
+                <>
                 <ScrollArea className="flex-1 p-4">
                     <div className="space-y-4">
                         {messages.length === 0 && !isLoading && (
@@ -221,7 +296,23 @@ export default function ChatWidget() {
                         </Button>
                     </form>
                 </div>
+                </>
+                )}
             </CardContent>
+            
+            <Dialog open={showPrivacyDialog} onOpenChange={setShowPrivacyDialog}>
+                <DialogContent className="max-w-2xl max-h-[90vh] flex flex-col p-0">
+                    <PrivacyPolicyContent />
+                    <div className="p-6 border-t border-slate-100 flex-shrink-0">
+                        <Button
+                            className="w-full bg-[#1b3a3a] hover:bg-[#254f4f] text-white"
+                            onClick={() => setShowPrivacyDialog(false)}
+                        >
+                            Stäng
+                        </Button>
+                    </div>
+                </DialogContent>
+            </Dialog>
         </Card>
     );
 }

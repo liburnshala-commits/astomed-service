@@ -1,0 +1,52 @@
+{
+  "name": "ChatConversation",
+  "type": "object",
+  "properties": {
+    "guest_id": {
+      "type": "string",
+      "description": "Unikt ID f\u00f6r att identifiera den oinloggade bes\u00f6karen"
+    },
+    "guest_email": {
+      "type": "string",
+      "description": "Bes\u00f6karens e-postadress"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "open",
+        "in_progress",
+        "closed",
+        "ai_active"
+      ],
+      "default": "open",
+      "description": "Status p\u00e5 konversationen"
+    },
+    "assigned_to": {
+      "type": "string",
+      "description": "E-postadress till den agent som hanterar chatten"
+    },
+    "assigned_to_name": {
+      "type": "string",
+      "description": "Namn p\u00e5 den agent som hanterar chatten"
+    },
+    "last_message_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "N\u00e4r senaste meddelandet skickades"
+    }
+  },
+  "required": [
+    "guest_id",
+    "status"
+  ],
+  "rls": {
+    "create": {},
+    "read": {},
+    "update": {},
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}
