@@ -310,10 +310,11 @@ export default function PublicServiceRequest() {
                               {info}
                             </p>
                             {price && (
-                              <div className="mt-3 pt-3 border-t border-blue-200/60 text-right">
-                                <p className="text-xs text-blue-800 mb-1">Jämförspris vid <span className="font-semibold">Engångsservice</span> (utan avtal):</p>
-                                <p className="text-sm font-bold text-blue-900">{Math.round(price * 12 * 1.30).toLocaleString('sv-SE')} kr / gång</p>
+                              <div className="mt-3 pt-3 border-t border-blue-200/60 text-right opacity-90">
+                                <p className="text-[11px] text-blue-800/80 mb-0.5">Jämförspris vid Engångsservice (utan avtal):</p>
+                                <p className="text-sm font-medium text-blue-800/90 mb-1">{Math.round(price * 12 * 1.30).toLocaleString('sv-SE')} kr / gång</p>
                                 <p className="text-[10px] text-blue-700/80 mt-1 italic">* Inkluderar ej 20% rabatt på reservdelar, arbetskostnader och resor.</p>
+                                <p className="text-[10px] text-blue-700/80 mt-0.5 italic">* Engångsservice kan ej prioriteras på samma sätt som avtalskunder då vi har över 1200 maskinkunder i Sverige.</p>
                               </div>
                             )}
                           </>
