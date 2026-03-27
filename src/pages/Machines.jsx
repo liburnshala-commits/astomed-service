@@ -82,7 +82,16 @@ export default function Machines() {
   const contractBadgeColor = { basic: "bg-teal-100 text-teal-800" };
 
   const filtered = machines.filter(m => {
-    const matchSearch = m.serial_number?.toLowerCase().includes(search.toLowerCase()) || m.model?.toLowerCase().includes(search.toLowerCase());
+    const customer = getCustomer(m.customer_id);
+    const searchLower = search.toLowerCase();
+    const matchSearch = 
+      m.serial_number?.toLowerCase().includes(searchLower) || 
+      m.model?.toLowerCase().includes(searchLower) ||
+      customer?.company_name?.toLowerCase().includes(searchLower) || 
+      customer?.org_number?.toLowerCase().includes(searchLower) ||
+      customer?.contact_person?.toLowerCase().includes(searchLower) || 
+      customer?.email?.toLowerCase().includes(searchLower) ||
+      customer?.phone?.toLowerCase().includes(searchLower);
     const matchModel = filterModel === "all" || m.model === filterModel;
     const matchCustomer = filterCustomer === "all" || m.customer_id === filterCustomer;
     return matchSearch && matchModel && matchCustomer;

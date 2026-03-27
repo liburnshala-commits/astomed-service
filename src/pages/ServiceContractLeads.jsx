@@ -259,7 +259,21 @@ export default function ServiceContractLeads() {
   };
 
   const filteredLeads = leads.filter(l => {
-    const matchesSearch = getLeadName(l).toLowerCase().includes(searchTerm.toLowerCase());
+    const customer = l.customer_id ? customers.find(c => c.id === l.customer_id) : null;
+    const contact = getLeadContact(l);
+    const searchLower = searchTerm.toLowerCase();
+    
+    const matchesSearch = 
+      getLeadName(l).toLowerCase().includes(searchLower) ||
+      l.org_number?.toLowerCase().includes(searchLower) ||
+      l.contact_person?.toLowerCase().includes(searchLower) ||
+      contact.email?.toLowerCase().includes(searchLower) ||
+      contact.phone?.toLowerCase().includes(searchLower) ||
+      l.notes?.toLowerCase().includes(searchLower) ||
+      customer?.company_name?.toLowerCase().includes(searchLower) ||
+      customer?.org_number?.toLowerCase().includes(searchLower) ||
+      customer?.contact_person?.toLowerCase().includes(searchLower);
+
     const matchesStatus = statusFilter === "all" || l.status === statusFilter;
     return matchesSearch && matchesStatus;
   }).sort((a, b) => {

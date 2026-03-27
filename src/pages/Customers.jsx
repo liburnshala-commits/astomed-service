@@ -49,11 +49,14 @@ export default function Customers() {
 
   useEffect(() => { load(); }, []);
 
-  const filtered = customers.filter(c =>
-    c.company_name?.toLowerCase().includes(search.toLowerCase()) ||
-    c.org_number?.includes(search) ||
-    c.contact_person?.toLowerCase().includes(search.toLowerCase())
-  );
+  const filtered = customers.filter(c => {
+    const searchLower = search.toLowerCase();
+    return c.company_name?.toLowerCase().includes(searchLower) ||
+      c.org_number?.toLowerCase().includes(searchLower) ||
+      c.contact_person?.toLowerCase().includes(searchLower) ||
+      c.email?.toLowerCase().includes(searchLower) ||
+      c.phone?.toLowerCase().includes(searchLower);
+  });
 
   const getMachineCount = (customerId) => machines.filter(m => m.customer_id === customerId).length;
   const getContractCount = (customerId) => machines.filter(m => m.customer_id === customerId && m.service_contract && m.service_contract !== "none").length;
