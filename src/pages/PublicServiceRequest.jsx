@@ -96,35 +96,62 @@ export default function PublicServiceRequest() {
           <p className="text-lg text-slate-200 mb-8">Fyll i formuläret nedan så kontaktar vi dig för kostnadsfri konsultation av serviceavtal för din/dina maskiner.</p>
         </div>
 
-        <div className="mb-10 space-y-6">
-          <div className="p-8 md:p-12 rounded-2xl" style={{ background: "#fcf8f2", color: "#1b3a3a" }}>
-            <h2 className="text-3xl font-light mb-4">Nya regler stärker säkerheten vid estetiska behandlingar</h2>
-            <div className="space-y-6 text-[15px] leading-relaxed">
-              <p>
-                <strong>4 Maj 2026</strong> kommer nya föreskrifter från Strålsäkerhetsmyndigheten träda i kraft för att stärka skyddet vid behandlingar med icke-joniserande strålning.
+        <div className="mb-10 space-y-8">
+          {/* Info Grid */}
+          <div className="grid md:grid-cols-2 gap-6">
+            
+            {/* Card 1 */}
+            <div className="p-8 rounded-2xl bg-[#fcf8f2] border-l-4 border-[#3a9e9e] shadow-sm hover:shadow-md transition-shadow">
+              <h3 className="text-xl font-bold mb-3 text-[#1b3a3a]">Anmälningsplikt & Myndighetskrav (Inför 2026)</h3>
+              <p className="text-[#1b3a3a]/80 mb-4 leading-relaxed">
+                Våren 2026 inför Strålsäkerhetsmyndigheten anmälningsplikt för alla laserverksamheter. Med Astomeds serviceavtal är din klinik 'inspektionsredo' från dag ett – vi säkrar din dokumentation så att du kan fokusera på dina kunder.
               </p>
-              
-              <div>
-                <h3 className="font-bold text-lg mb-2">Obligatorisk anmälningsplikt</h3>
-                <p>
-                  Senast den 4 Juli 2026 måste alla verksamheter som erbjuder estetiska behandlingar med strålning anmäla sin verksamhet till Strålsäkerhetsmyndigheten. Anmälan ska innehålla information om vilken teknisk utrustning som används i verksamheten. Syftet är att myndigheten ska få bättre översyn och kunna bedriva effektiv tillsyn.
-                </p>
-              </div>
+              <p className="text-[#1b3a3a]/80 font-medium italic">
+                "Myndighetskraven skärps: Snart är skriftliga rutiner och teknisk historik ett krav för att få driva klinik. Vi digitaliserar din egenkontroll och ser till att du alltid ligger steget före lagen."
+              </p>
+            </div>
+
+            {/* Card 2 */}
+            <div className="p-8 rounded-2xl bg-[#fcf8f2] border-l-4 border-[#3a9e9e] shadow-sm hover:shadow-md transition-shadow">
+              <h3 className="text-xl font-bold mb-3 text-[#1b3a3a]">Krav på Lokalen & Säkerhetsmiljö</h3>
+              <p className="text-[#1b3a3a]/80 mb-4 leading-relaxed">
+                En säker behandling kräver en säker miljö. Vi hjälper dig att säkerställa att din lokal uppfyller kraven för lasersäkerhet, från korrekta varningsskyltar till fungerande interlock-system och dörrspärrar.
+              </p>
+              <p className="text-[#1b3a3a]/80 font-medium italic">
+                "Strålsäkerhet handlar om mer än bara maskinen. Vi besiktigar din behandlingsmiljö vid varje servicebesök för att garantera att både personal och kunder vistas i en godkänd och riskfri lokal."
+              </p>
+            </div>
+
+            {/* Card 3 */}
+            <div className="p-8 rounded-2xl bg-[#fcf8f2] border-l-4 border-[#3a9e9e] shadow-sm hover:shadow-md transition-shadow">
+              <h3 className="text-xl font-bold mb-3 text-[#1b3a3a]">Regelbunden Service & Tekniskt Underhåll</h3>
+              <p className="text-[#1b3a3a]/80 mb-4 leading-relaxed">
+                Strålskyddslagen är tydlig: fungerande skyddsfunktioner är ditt ansvar som ägare. Genom årlig auktoriserad service garanterar vi att laserns effekt och säkerhetsspärrar levererar exakt det de lovar.
+              </p>
+              <p className="text-[#1b3a3a]/80 font-medium italic">
+                "Slumpmässig effekt eller instabil stråle är den största orsaken till brännskador. Vår precisionskalibrering minimerar riskerna och maximerar dina behandlingsresultat – dokumenterat och klart."
+              </p>
+            </div>
+
+            {/* Card 4 */}
+            <div className="p-8 rounded-2xl bg-[#fcf8f2] border-l-4 border-[#3a9e9e] shadow-sm hover:shadow-md transition-shadow">
+              <h3 className="text-xl font-bold mb-3 text-[#1b3a3a]">Auktoriserad Service & CE-märkning (MDR)</h3>
+              <p className="text-[#1b3a3a]/80 mb-4 leading-relaxed">
+                Visste du att din CE-märkning kan upphöra om en obehörig tekniker öppnar maskinen? Som auktoriserad servicepartner skyddar vi din investering, din försäkring och din juridiska trygghet.
+              </p>
+              <p className="text-[#1b3a3a]/80 font-medium italic">
+                "Det finns ingen genväg till säkerhet. Genom att anlita Astomeds certifierade tekniker säkerställer du att endast originaldelar och kalibrerad mätutrustning används – ett krav för att uppfylla kraven på medicintekniska produkter (MDR)."
+              </p>
             </div>
           </div>
 
-          <div className="p-8 md:p-12 rounded-2xl" style={{ background: "#fcf8f2", color: "#1b3a3a" }}>
-            <h2 className="text-4xl font-light mb-4">Serviceavtal</h2>
-            <p className="font-bold mb-8 text-lg">Vad ingår när du väljer oss?</p>
+          {/* Included Services List */}
+          <div className="p-8 md:p-12 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20 text-white">
+            <h2 className="text-3xl font-light mb-2">Serviceavtal</h2>
+            <p className="font-bold mb-8 text-lg text-slate-300">Detta ingår när du väljer oss</p>
             
-            <div className="relative flex py-5 items-center mb-8">
-                <div className="flex-grow border-t border-black/20"></div>
-                <span className="flex-shrink-0 mx-4 text-black/40">//</span>
-                <div className="flex-grow border-t border-black/20"></div>
-            </div>
-            
-            <div className="grid md:grid-cols-2 gap-x-12 gap-y-4 text-base leading-relaxed">
-              <ul className="space-y-3 list-disc pl-5 marker:text-black">
+            <div className="grid md:grid-cols-2 gap-x-12 gap-y-4 text-base leading-relaxed text-slate-200">
+              <ul className="space-y-3 list-disc pl-5 marker:text-[#3a9e9e]">
                 <li>Fri teknisk rådgivning via telefon och fjärrsupport under avtalstiden.</li>
                 <li>Årlig service på 12 månader.</li>
                 <li>Prestandakontroll. Mätning av uteffekt och kalibrering för att minimera risk för skador.</li>
@@ -134,7 +161,7 @@ export default function PublicServiceRequest() {
                 <li>Byte av snabbkopplingar till filter.</li>
                 <li>Läckagekontroll.</li>
               </ul>
-              <ul className="space-y-3 list-disc pl-5 marker:text-black">
+              <ul className="space-y-3 list-disc pl-5 marker:text-[#3a9e9e]">
                 <li>Kontroll av luftintagsfilter.</li>
                 <li>Lasereffektmätning.</li>
                 <li>Rengöring av värmeväxlare.</li>
@@ -147,8 +174,6 @@ export default function PublicServiceRequest() {
                 <li>Spolning av pneumatisk krets.</li>
               </ul>
             </div>
-            
-
           </div>
         </div>
 
