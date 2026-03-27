@@ -36,10 +36,15 @@ export default function PublicServiceLeads() {
   useEffect(() => { loadLeads(); }, []);
 
   const filtered = leads.filter(l => {
+    const searchLower = search.toLowerCase();
     const matchSearch =
-      l.company_name?.toLowerCase().includes(search.toLowerCase()) ||
-      l.contact_person?.toLowerCase().includes(search.toLowerCase()) ||
-      l.machine_name?.toLowerCase().includes(search.toLowerCase());
+      l.company_name?.toLowerCase().includes(searchLower) ||
+      l.org_number?.toLowerCase().includes(searchLower) ||
+      l.contact_person?.toLowerCase().includes(searchLower) ||
+      l.email?.toLowerCase().includes(searchLower) ||
+      l.phone?.toLowerCase().includes(searchLower) ||
+      l.machine_name?.toLowerCase().includes(searchLower) ||
+      l.serial_number?.toLowerCase().includes(searchLower);
     const matchStatus = statusFilter === "all" || l.status === statusFilter;
     return matchSearch && matchStatus;
   });

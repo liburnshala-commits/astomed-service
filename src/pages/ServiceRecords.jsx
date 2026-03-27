@@ -111,6 +111,7 @@ export default function ServiceRecords() {
       machine?.model?.toLowerCase().includes(q) ||
       machine?.serial_number?.toLowerCase().includes(q) ||
       customer?.company_name?.toLowerCase().includes(q) ||
+      customer?.org_number?.toLowerCase().includes(q) ||
       customer?.contact_person?.toLowerCase().includes(q) ||
       customer?.email?.toLowerCase().includes(q) ||
       customer?.phone?.toLowerCase().includes(q) ||

@@ -134,7 +134,10 @@ export default function ServiceContracts() {
         m.model?.toLowerCase().includes(q) ||
         m.serial_number?.toLowerCase().includes(q) ||
         cust?.company_name?.toLowerCase().includes(q) ||
-        cust?.contact_person?.toLowerCase().includes(q)
+        cust?.org_number?.toLowerCase().includes(q) ||
+        cust?.contact_person?.toLowerCase().includes(q) ||
+        cust?.email?.toLowerCase().includes(q) ||
+        cust?.phone?.toLowerCase().includes(q)
       );
     });
 
@@ -151,7 +154,10 @@ export default function ServiceContracts() {
         m.model?.toLowerCase().includes(q) ||
         m.serial_number?.toLowerCase().includes(q) ||
         cust?.company_name?.toLowerCase().includes(q) ||
-        cust?.contact_person?.toLowerCase().includes(q)
+        cust?.org_number?.toLowerCase().includes(q) ||
+        cust?.contact_person?.toLowerCase().includes(q) ||
+        cust?.email?.toLowerCase().includes(q) ||
+        cust?.phone?.toLowerCase().includes(q)
       );
     });
 
