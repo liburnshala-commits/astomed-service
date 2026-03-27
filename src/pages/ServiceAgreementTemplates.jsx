@@ -140,7 +140,7 @@ export default function ServiceAgreementTemplates() {
                   </ul>
                 )}
                 {t.price_per_month && (
-                  <div className="mt-3 pt-3 border-t border-gray-100">
+                  <div className="mt-3 pt-3 border-t border-gray-100 text-right">
                     <p className="text-xs text-gray-500 mb-1">Jämförspris vid <span className="font-semibold">Engångsservice</span> (utan avtal):</p>
                     <p className="text-sm font-bold text-gray-700">{Math.round(t.price_per_month * 12 * 1.30).toLocaleString('sv-SE')} kr / gång</p>
                     <p className="text-[10px] text-gray-400 mt-1 italic">* Inkluderar ej 20% rabatt på reservdelar, arbetskostnader och resor.</p>
