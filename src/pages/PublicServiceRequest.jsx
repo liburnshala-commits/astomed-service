@@ -157,9 +157,13 @@ export default function PublicServiceRequest() {
           <div>
             <h2 className="text-sm font-semibold uppercase tracking-wide mb-4" style={{ color: "#254f4f" }}>Dina uppgifter</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="sm:col-span-2 space-y-1">
+              <div className="space-y-1">
                 <Label>Företagsnamn *</Label>
                 <Input value={form.company_name} onChange={e => set("company_name", e.target.value)} placeholder="Ditt företag AB" required />
+              </div>
+              <div className="space-y-1">
+                <Label>Organisationsnummer</Label>
+                <Input value={form.org_number} onChange={e => set("org_number", e.target.value)} placeholder="XXXXXX-XXXX" />
               </div>
               <div className="space-y-1">
                 <Label>Kontaktperson *</Label>
@@ -172,22 +176,6 @@ export default function PublicServiceRequest() {
               <div className="sm:col-span-2 space-y-1">
                 <Label>E-post *</Label>
                 <Input type="email" value={form.email} onChange={e => set("email", e.target.value)} placeholder="din@email.se" required />
-              </div>
-              <div className="space-y-1">
-                <Label>Organisationsnummer</Label>
-                <Input value={form.org_number} onChange={e => set("org_number", e.target.value)} placeholder="XXXXXX-XXXX" />
-              </div>
-              <div className="space-y-1">
-                <Label>Stad</Label>
-                <Input value={form.city} onChange={e => set("city", e.target.value)} placeholder="Stad" />
-              </div>
-              <div className="space-y-1">
-                <Label>Adress</Label>
-                <Input value={form.address} onChange={e => set("address", e.target.value)} placeholder="Gatuadress" />
-              </div>
-              <div className="space-y-1">
-                <Label>Postnummer</Label>
-                <Input value={form.postal_code} onChange={e => set("postal_code", e.target.value)} placeholder="XXX XX" />
               </div>
             </div>
           </div>
