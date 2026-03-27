@@ -19,7 +19,7 @@ export const machineServiceDetails = {
       "20 % på arbetstid för övriga reparationer",
       "20 % på resekostnader"
     ],
-    additionalInfo: "Pris: 600 kr/månad"
+    additionalInfo: "Pris: 600 kr/månad eller 7 200 kr per år"
   },
   "Aldix (Triodus) / Aldix Smart Laser": {
     title: "Standardservice och underhåll – Aldix / Triodus",
@@ -41,7 +41,7 @@ export const machineServiceDetails = {
       "20 % på arbetstid för övriga reparationer",
       "20 % på resekostnader"
     ],
-    additionalInfo: "Pris: 600 kr/månad"
+    additionalInfo: "Pris: 600 kr/månad eller 7 200 kr per år"
   },
   "CoolTech": {
     title: "Standardservice och underhåll – CoolTech",
@@ -61,7 +61,7 @@ export const machineServiceDetails = {
       "20 % på arbetstid för övriga reparationer",
       "20 % på resekostnader"
     ],
-    additionalInfo: "Pris: 600 kr/månad"
+    additionalInfo: "Pris: 600 kr/månad eller 7 200 kr per år"
   },
   "Elysion / Cocoon Elysion": {
     title: "Standardservice och underhåll – Elysion",
@@ -81,7 +81,7 @@ export const machineServiceDetails = {
       "20 % på arbetstid för övriga reparationer",
       "20 % på resekostnader"
     ],
-    additionalInfo: "Pris: 600 kr/månad"
+    additionalInfo: "Pris: 600 kr/månad eller 7 200 kr per år"
   },
   "Fraction CO2": {
     title: "Standardservice och underhåll – Fraction CO2",
@@ -102,7 +102,7 @@ export const machineServiceDetails = {
       "20 % på arbetstid för övriga reparationer",
       "20 % på resekostnader"
     ],
-    additionalInfo: "Pris: 600 kr/månad"
+    additionalInfo: "Pris: 600 kr/månad eller 7 200 kr per år"
   },
   "Helios / Helios III": {
     title: "Standardservice och underhåll – Helios",
@@ -125,7 +125,7 @@ export const machineServiceDetails = {
       "20 % på arbetstid för övriga reparationer",
       "20 % på resekostnader"
     ],
-    additionalInfo: "Pris: 600 kr/månad"
+    additionalInfo: "Pris: 600 kr/månad eller 7 200 kr per år"
   },
   "Splendor X": {
     title: "Standardservice och underhåll – Splendor X",
@@ -149,7 +149,7 @@ export const machineServiceDetails = {
       "20 % på arbetstid för övriga reparationer",
       "20 % på resekostnader"
     ],
-    additionalInfo: "Pris: 709 kr/månad"
+    additionalInfo: "Pris: 709 kr/månad eller 8 508 kr per år"
   },
   "Soprano Titanium": {
     title: "Standardservice och underhåll – Soprano Titanium",
@@ -172,7 +172,7 @@ export const machineServiceDetails = {
       "20 % på arbetstid för övriga reparationer",
       "20 % på resekostnader"
     ],
-    additionalInfo: "Pris: 600 kr/månad"
+    additionalInfo: "Pris: 600 kr/månad eller 7 200 kr per år"
   },
   "Soprano ICE Platinum": {
     title: "Standardservice och underhåll – Soprano ICE Platinum",
@@ -195,7 +195,7 @@ export const machineServiceDetails = {
       "20 % på arbetstid för övriga reparationer",
       "20 % på resekostnader"
     ],
-    additionalInfo: "Pris: 600 kr/månad"
+    additionalInfo: "Pris: 600 kr/månad eller 7 200 kr per år"
   },
   "Pento / Pento 9900": {
     title: "Standardservice och underhåll – Pento / Pento 9900",
@@ -217,7 +217,7 @@ export const machineServiceDetails = {
       "20 % på arbetstid för övriga reparationer",
       "20 % på resekostnader"
     ],
-    additionalInfo: "Pris: 709 kr/månad"
+    additionalInfo: "Pris: 709 kr/månad eller 8 508 kr per år"
   },
   "Picolo": {
     title: "Standardservice och underhåll – Picolo",
@@ -240,7 +240,7 @@ export const machineServiceDetails = {
       "20 % på arbetstid för övriga reparationer",
       "20 % på resekostnader"
     ],
-    additionalInfo: "Pris: 600 kr/månad"
+    additionalInfo: "Pris: 600 kr/månad eller 7 200 kr per år"
   },
   "PrimeLase": {
     title: "Standardservice och underhåll – PrimeLase",
@@ -262,7 +262,7 @@ export const machineServiceDetails = {
       "20 % på arbetstid för övriga reparationer",
       "20 % på resekostnader"
     ],
-    additionalInfo: "Pris: 679 kr/månad"
+    additionalInfo: "Pris: 679 kr/månad eller 8 148 kr per år"
   },
   "Annan": {
     title: "Maskin som ej finns i listan",

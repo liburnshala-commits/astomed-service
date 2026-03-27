@@ -307,7 +307,7 @@ export default function PublicServiceRequest() {
                         return (
                           <>
                             <p className="text-sm font-semibold text-blue-900">
-                              {info}{price ? ` (eller ${(price * 12).toLocaleString('sv-SE')} kr/år)` : ""}
+                              {info}
                             </p>
                             {price && (
                               <div className="mt-3 pt-3 border-t border-blue-200/60">
