@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { MessageSquare, Send, User, CheckCircle } from "lucide-react";
+import { MessageSquare, Send, User, CheckCircle, Building2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 
@@ -128,7 +128,11 @@ export default function ChatSupport() {
                                     >
                                         <div className="flex justify-between items-start mb-1">
                                             <span className="font-medium text-sm flex items-center gap-2">
-                                                <User className="w-4 h-4 text-slate-400" /> Gäst
+                                                {conv.customer_name ? (
+                                                    <><Building2 className="w-4 h-4 text-indigo-500" /> {conv.customer_name}</>
+                                                ) : (
+                                                    <><User className="w-4 h-4 text-slate-400" /> Gäst</>
+                                                )}
                                             </span>
                                             <span className="text-xs text-slate-400">
                                                 {conv.last_message_at ? format(new Date(conv.last_message_at), "HH:mm") : ""}
@@ -163,11 +167,13 @@ export default function ChatSupport() {
                             <CardHeader className="py-3 border-b flex flex-row items-center justify-between shrink-0">
                                 <div className="flex items-center gap-3">
                                     <div className="h-10 w-10 rounded-full bg-slate-100 flex items-center justify-center">
-                                        <User className="w-5 h-5 text-slate-500" />
+                                        {selectedConv.customer_name ? <Building2 className="w-5 h-5 text-indigo-500" /> : <User className="w-5 h-5 text-slate-500" />}
                                     </div>
                                     <div>
-                                        <CardTitle className="text-base">Gäst</CardTitle>
-                                        <p className="text-xs text-slate-500">ID: {selectedConv.guest_id.substring(0, 8)}...</p>
+                                        <CardTitle className="text-base">{selectedConv.customer_name || "Gäst"}</CardTitle>
+                                        <p className="text-xs text-slate-500">
+                                            {selectedConv.guest_email ? selectedConv.guest_email : `ID: ${selectedConv.guest_id.substring(0, 8)}...`}
+                                        </p>
                                     </div>
                                 </div>
                                 <Button variant="outline" size="sm" onClick={handleClose} className="text-red-600 hover:text-red-700 hover:bg-red-50">

@@ -105,13 +105,11 @@ export default function ChatWidget() {
         
         setIsStarting(true);
         try {
-            const currentConv = await base44.entities.ChatConversation.create({
-                guest_id: guestId,
-                guest_email: email.trim(),
-                status: 'open',
-                last_message_at: new Date().toISOString()
+            const response = await base44.functions.invoke('startChatConversation', {
+                email: email.trim(),
+                guestId: guestId
             });
-            setConversation(currentConv);
+            setConversation(response.data.conversation);
             
             // Log interaction if needed, or just let them start sending messages
         } catch (error) {

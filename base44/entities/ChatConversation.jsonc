@@ -10,6 +10,14 @@
       "type": "string",
       "description": "Bes\u00f6karens e-postadress"
     },
+    "customer_id": {
+      "type": "string",
+      "description": "ID f\u00f6r matchad kund (baserat p\u00e5 e-post)"
+    },
+    "customer_name": {
+      "type": "string",
+      "description": "Namn p\u00e5 matchad kund"
+    },
     "status": {
       "type": "string",
       "enum": [
@@ -33,6 +41,11 @@
       "type": "string",
       "format": "date-time",
       "description": "N\u00e4r senaste meddelandet skickades"
+    },
+    "delay_email_sent": {
+      "type": "boolean",
+      "default": false,
+      "description": "Om f\u00f6rseningsmailet har skickats ut"
     }
   },
   "required": [
