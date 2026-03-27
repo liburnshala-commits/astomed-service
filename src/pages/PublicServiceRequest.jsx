@@ -125,8 +125,8 @@ export default function PublicServiceRequest() {
             {/* Card 3 */}
             <div className="p-8 rounded-2xl bg-[#fcf8f2] border-l-4 border-[#3a9e9e] shadow-sm hover:shadow-md transition-shadow">
               <h3 className="text-xl font-bold mb-3 text-[#1b3a3a]">3. Regelbunden Service & Tekniskt Underhåll</h3>
-              <p className="text-[#1b3a3a]/80 mb-4 leading-relaxed">
-                Strålskyddslagen är tydlig: fungerande skyddsfunktioner är ditt ansvar som ägare. Genom årlig auktoriserad service garanterar vi att laserns effekt och säkerhetsspärrar levererar exakt det de lovar.
+              <p className="text-[#1b3a3a]/80 mb-4 leading-relaxed">Strålskyddslagen är tydlig: fungerande skyddsfunktioner är ditt ansvar som ägare. Genom årlig service garanterar vi att laserns effekt och säkerhetsspärrar levererar exakt det de lovar.
+
               </p>
               <p className="text-[#1b3a3a]/80 font-medium italic">
                 "Slumpmässig effekt eller instabil stråle är den största orsaken till brännskador. Vår precisionskalibrering minimerar riskerna och maximerar dina behandlingsresultat – dokumenterat och klart."
@@ -136,11 +136,11 @@ export default function PublicServiceRequest() {
             {/* Card 4 */}
             <div className="p-8 rounded-2xl bg-[#fcf8f2] border-l-4 border-[#3a9e9e] shadow-sm hover:shadow-md transition-shadow">
               <h3 className="text-xl font-bold mb-3 text-[#1b3a3a]">4.  Fackmässig Service & CE-märkning (MDR) </h3>
-              <p className="text-[#1b3a3a]/80 mb-4 leading-relaxed">
-                Visste du att din CE-märkning kan upphöra om en obehörig tekniker öppnar maskinen? Som auktoriserad servicepartner skyddar vi din investering, din försäkring och din juridiska trygghet.
+              <p className="text-[#1b3a3a]/80 mb-4 leading-relaxed">Visste du att din CE-märkning kan upphöra om någon som inte har kunskap öppnar maskinen? Som din servicepartner skyddar vi din investering, din försäkring och din juridiska trygghet.
+
               </p>
-              <p className="text-[#1b3a3a]/80 font-medium italic">
-                "Det finns ingen genväg till säkerhet. Genom att anlita Astomeds certifierade tekniker säkerställer du att endast originaldelar och kalibrerad mätutrustning används – ett krav för att uppfylla kraven på medicintekniska produkter (MDR)."
+              <p className="text-[#1b3a3a]/80 font-medium italic">"Det finns ingen genväg till säkerhet. Genom att anlita Astomeds erfarna tekniker säkerställer du att endast originaldelar och kalibrerad mätutrustning används – ett krav för att uppfylla kraven på medicintekniska produkter (MDR)."
+
               </p>
             </div>
           </div>
