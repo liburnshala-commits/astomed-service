@@ -102,9 +102,9 @@ export default function PublicServiceRequest() {
             
             {/* Card 1 */}
             <div className="p-8 rounded-2xl bg-[#fcf8f2] border-l-4 border-[#3a9e9e] shadow-sm hover:shadow-md transition-shadow">
-              <h3 className="text-xl font-bold mb-3 text-[#1b3a3a]">1. Anmälningsplikt & Myndighetskrav (Inför 2026)</h3>
-              <p className="text-[#1b3a3a]/80 mb-4 leading-relaxed">
-                Våren 2026 inför Strålsäkerhetsmyndigheten anmälningsplikt för alla laserverksamheter. Med Astomeds serviceavtal är din klinik 'inspektionsredo' från dag ett – vi säkrar din dokumentation så att du kan fokusera på dina kunder.
+              <h3 className="text-xl font-bold mb-3 text-[#1b3a3a]">1. Anmälningsplikt & Myndighetskrav from 4 maj 2026.</h3>
+              <p className="text-[#1b3a3a]/80 mb-4 leading-relaxed">Från och med 4 maj inför Strålsäkerhetsmyndigheten anmälningsplikt för alla laserverksamheter. Med Astomeds serviceavtal är din klinik 'inspektionsredo' från dag ett – vi säkrar din dokumentation så att du kan fokusera på dina kunder.
+
               </p>
               <p className="text-[#1b3a3a]/80 font-medium italic">
                 "Myndighetskraven skärps: Snart är skriftliga rutiner och teknisk historik ett krav för att få driva klinik. Vi digitaliserar din egenkontroll och ser till att du alltid ligger steget före lagen."
