@@ -110,7 +110,7 @@ export default function PublicServiceRequest() {
                 "Myndighetskraven skärps: Snart är skriftliga rutiner och teknisk historik ett krav för att få driva klinik. Vi digitaliserar din egenkontroll och ser till att du alltid ligger steget före lagen."
               </p>
               <div className="mt-6 pt-4 border-t border-[#3a9e9e]/20">
-                <a href="https://www.stralsakerhetsmyndigheten.se/omraden/laser/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center text-sm font-semibold text-[#3a9e9e] hover:text-[#254f4f] transition-colors">
+                <a href="https://www.stralsakerhetsmyndigheten.se/omraden/laser/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center text-sm font-semibold text-[#002B3C] hover:text-[#002B3C]/80 transition-colors">
                   Läs mer om regelverket för laser <ExternalLink className="w-4 h-4 ml-1.5" />
                 </a>
               </div>
@@ -137,7 +137,7 @@ export default function PublicServiceRequest() {
                 "Slumpmässig effekt eller instabil stråle är den största orsaken till brännskador. Vår precisionskalibrering minimerar riskerna och maximerar dina behandlingsresultat – dokumenterat och klart."
               </p>
               <div className="mt-6 pt-4 border-t border-[#3a9e9e]/20">
-                <a href="https://www.stralsakerhetsmyndigheten.se/publikationer/foreskrifter/ssmfs-2014/ssmfs-20144/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center text-sm font-semibold text-[#3a9e9e] hover:text-[#254f4f] transition-colors">
+                <a href="https://www.stralsakerhetsmyndigheten.se/publikationer/foreskrifter/ssmfs-2014/ssmfs-20144/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center text-sm font-semibold text-[#002B3C] hover:text-[#002B3C]/80 transition-colors">
                   Läs föreskriften SSMFS 2014:4 (kap 3-4) <ExternalLink className="w-4 h-4 ml-1.5" />
                 </a>
               </div>
