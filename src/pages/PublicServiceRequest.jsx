@@ -265,9 +265,17 @@ export default function PublicServiceRequest() {
                     <SelectValue placeholder="Välj maskintyp" />
                   </SelectTrigger>
                   <SelectContent>
-                    {Object.keys(machineServiceDetails).map((machine) =>
-                    <SelectItem key={machine} value={machine}>{machine}</SelectItem>
-                    )}
+                    {Object.keys(machineServiceDetails).map((machine) => {
+                      const details = machineServiceDetails[machine];
+                      const match = details?.additionalInfo?.match(/(\d+)/);
+                      const price = match ? parseInt(match[0], 10) : null;
+                      const engangs = price ? ` – Engångsservice: ${Math.round(price * 12 * 1.30).toLocaleString('sv-SE')} kr/år` : "";
+                      return (
+                        <SelectItem key={machine} value={machine}>
+                          {machine}{engangs}
+                        </SelectItem>
+                      );
+                    })}
                   </SelectContent>
                 </Select>
               </div>
