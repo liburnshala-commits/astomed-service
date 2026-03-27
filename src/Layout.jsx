@@ -90,6 +90,7 @@ export default function Layout({ children, currentPageName }) {
   const [showUserInfo, setShowUserInfo] = useState(false);
   const [showPrivacyModal, setShowPrivacyModal] = useState(false);
   const [newServiceLeadsCount, setNewServiceLeadsCount] = useState(0);
+  const [logoError, setLogoError] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -157,8 +158,17 @@ export default function Layout({ children, currentPageName }) {
       )}>
         <div className="p-6 border-b border-white/10">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-lg overflow-hidden">
-              <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69a9446fcb1cd4ab529479ba/bc2852de1_channels4_profile-2.jpg" alt="Astomed" className="w-full h-full object-cover" />
+            <div className="w-9 h-9 rounded-lg overflow-hidden flex items-center justify-center bg-[#3a9e9e]">
+              {!logoError ? (
+                <img 
+                  src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69a9446fcb1cd4ab529479ba/bc2852de1_channels4_profile-2.jpg" 
+                  alt="Astomed" 
+                  className="w-full h-full object-cover" 
+                  onError={() => setLogoError(true)}
+                />
+              ) : (
+                <span className="text-white font-bold text-[10px]">AST</span>
+              )}
             </div>
             <div>
               <div className="font-bold text-white text-sm tracking-wide">Astomed Pro</div>
