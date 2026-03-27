@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Send, Wrench, ArrowLeft, ExternalLink } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Send, Wrench, ArrowLeft, ExternalLink, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -9,6 +9,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { machineServiceDetails } from "../components/MachineServiceDetails";
 import PrivacyPolicyContent from "../components/PrivacyPolicyContent";
 import ChatWidget from "../components/chat/ChatWidget";
+import { base44 } from "@/api/base44Client";
 
 export default function PublicServiceRequest() {
   const [form, setForm] = useState({
@@ -28,8 +29,38 @@ export default function PublicServiceRequest() {
   const [success, setSuccess] = useState(false);
   const [privacyAccepted, setPrivacyAccepted] = useState(false);
   const [showPrivacyDialog, setShowPrivacyDialog] = useState(false);
+  const [orgNumberWarning, setOrgNumberWarning] = useState("");
 
   const set = (field, value) => setForm((prev) => ({ ...prev, [field]: value }));
+
+  useEffect(() => {
+    const checkOrgNumber = async () => {
+      const orgNo = form.org_number.trim();
+      setOrgNumberWarning("");
+      
+      if (!orgNo) return;
+
+      const isValidFormat = /^\d{6}-?\d{4}$/.test(orgNo);
+      if (!isValidFormat && orgNo.length >= 10) {
+        setOrgNumberWarning("Ogiltigt format på organisationsnummer (förväntat format: XXXXXX-XXXX).");
+        return;
+      }
+
+      if (isValidFormat) {
+        try {
+          const customers = await base44.entities.Customer.filter({ org_number: orgNo });
+          if (customers.length > 0) {
+            setOrgNumberWarning(`Detta organisationsnummer finns redan registrerat på kunden "${customers[0].company_name}".`);
+          }
+        } catch (error) {
+          console.error("Kunde inte kontrollera organisationsnummer", error);
+        }
+      }
+    };
+
+    const timer = setTimeout(checkOrgNumber, 600);
+    return () => clearTimeout(timer);
+  }, [form.org_number]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -199,6 +230,12 @@ export default function PublicServiceRequest() {
               <div className="space-y-1">
                 <Label>Organisationsnummer</Label>
                 <Input value={form.org_number} onChange={(e) => set("org_number", e.target.value)} placeholder="XXXXXX-XXXX" />
+                {orgNumberWarning && (
+                  <p className="text-amber-600 text-xs font-medium flex items-start gap-1 pt-1">
+                    <AlertCircle className="w-3.5 h-3.5 shrink-0 mt-0.5" />
+                    <span>{orgNumberWarning}</span>
+                  </p>
+                )}
               </div>
               <div className="space-y-1">
                 <Label>Kontaktperson *</Label>
