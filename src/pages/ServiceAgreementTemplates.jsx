@@ -130,7 +130,7 @@ export default function ServiceAgreementTemplates() {
                 </div>
                 {t.description && <p className="text-sm text-gray-500 mb-2">{t.description}</p>}
                 {t.included_services && t.included_services.length > 0 && (
-                  <ul className="space-y-0.5">
+                  <ul className="space-y-0.5 mb-3">
                     {t.included_services.map((s, i) => (
                       <li key={i} className="flex items-center gap-1.5 text-xs text-gray-600">
                         <CheckCircle className="w-3 h-3 text-teal-500 flex-shrink-0" />
@@ -138,6 +138,13 @@ export default function ServiceAgreementTemplates() {
                       </li>
                     ))}
                   </ul>
+                )}
+                {t.price_per_month && (
+                  <div className="mt-3 pt-3 border-t border-gray-100">
+                    <p className="text-xs text-gray-500 mb-1">Jämförspris vid <span className="font-semibold">Engångsservice</span> (utan avtal):</p>
+                    <p className="text-sm font-bold text-gray-700">{Math.round(t.price_per_month * 12 * 1.30).toLocaleString('sv-SE')} kr / år</p>
+                    <p className="text-[10px] text-gray-400 mt-1 italic">* Inkluderar ej 20% rabatt på reservdelar, arbetskostnader och resor.</p>
+                  </div>
                 )}
               </div>
               <div className="flex gap-2 flex-shrink-0">
