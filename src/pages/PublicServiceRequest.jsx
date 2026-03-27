@@ -395,7 +395,7 @@ export default function PublicServiceRequest() {
   };
 
   return (
-    <div className="min-h-screen py-6 md:py-10 px-4 flex flex-col" style={{ background: "#002B3C" }}>
+    <div className="min-h-screen py-6 md:py-10 px-4 pb-28 md:pb-10 flex flex-col" style={{ background: "#002B3C" }}>
       <div className="max-w-4xl mx-auto w-full flex-1 flex flex-col">
         
         <div className="flex justify-between items-center mb-6 md:mb-8">
