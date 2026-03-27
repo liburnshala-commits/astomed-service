@@ -265,17 +265,9 @@ export default function PublicServiceRequest() {
                     <SelectValue placeholder="Välj maskintyp" />
                   </SelectTrigger>
                   <SelectContent>
-                    {Object.keys(machineServiceDetails).map((machine) => {
-                      const details = machineServiceDetails[machine];
-                      const match = details?.additionalInfo?.match(/(\d+)/);
-                      const price = match ? parseInt(match[0], 10) : null;
-                      const engangs = price ? ` – Engångsservice: ${Math.round(price * 12 * 1.30).toLocaleString('sv-SE')} kr/år` : "";
-                      return (
-                        <SelectItem key={machine} value={machine}>
-                          {machine}{engangs}
-                        </SelectItem>
-                      );
-                    })}
+                    {Object.keys(machineServiceDetails).map((machine) =>
+                      <SelectItem key={machine} value={machine}>{machine}</SelectItem>
+                    )}
                   </SelectContent>
                 </Select>
               </div>
@@ -318,7 +310,7 @@ export default function PublicServiceRequest() {
                           return (
                             <div className="mt-3 pt-3 border-t border-blue-200/60">
                               <p className="text-xs text-blue-800 mb-1">Jämförspris vid <span className="font-semibold">Engångsservice</span> (utan avtal):</p>
-                              <p className="text-sm font-bold text-blue-900">{Math.round(price * 12 * 1.30).toLocaleString('sv-SE')} kr / år</p>
+                              <p className="text-sm font-bold text-blue-900">{Math.round(price * 12 * 1.30).toLocaleString('sv-SE')} kr / gång</p>
                               <p className="text-[10px] text-blue-700/80 mt-1 italic">* Inkluderar ej 20% rabatt på reservdelar, arbetskostnader och resor.</p>
                             </div>
                           );

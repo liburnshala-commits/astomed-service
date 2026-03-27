@@ -85,7 +85,7 @@ export default function ServiceContractModal({ machine, onSave, onClose }) {
               {selectedTemplate.price_per_month && (
                 <div className="mt-3 pt-3 border-t border-[#dce8e8]">
                   <p className="text-xs text-slate-500 mb-1">Jämförspris vid <span className="font-semibold">Engångsservice</span> (utan avtal):</p>
-                  <p className="text-sm font-bold text-slate-700">{Math.round(selectedTemplate.price_per_month * 12 * 1.30).toLocaleString('sv-SE')} kr / år</p>
+                  <p className="text-sm font-bold text-slate-700">{Math.round(selectedTemplate.price_per_month * 12 * 1.30).toLocaleString('sv-SE')} kr / gång</p>
                   <p className="text-[10px] text-slate-400 mt-1 italic">* Inkluderar ej 20% rabatt på reservdelar, arbetskostnader och resor.</p>
                 </div>
               )}
