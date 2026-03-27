@@ -135,7 +135,7 @@ export default function PublicServiceRequest() {
 
             {/* Card 4 */}
             <div className="p-8 rounded-2xl bg-[#fcf8f2] border-l-4 border-[#3a9e9e] shadow-sm hover:shadow-md transition-shadow">
-              <h3 className="text-xl font-bold mb-3 text-[#1b3a3a]">4. Auktoriserad Service & CE-märkning (MDR)</h3>
+              <h3 className="text-xl font-bold mb-3 text-[#1b3a3a]">4.  Fackmässig Service & CE-märkning (MDR) </h3>
               <p className="text-[#1b3a3a]/80 mb-4 leading-relaxed">
                 Visste du att din CE-märkning kan upphöra om en obehörig tekniker öppnar maskinen? Som auktoriserad servicepartner skyddar vi din investering, din försäkring och din juridiska trygghet.
               </p>
