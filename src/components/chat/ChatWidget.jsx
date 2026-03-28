@@ -152,12 +152,12 @@ export default function ChatWidget() {
         return (
             <button 
                 onClick={() => setIsOpen(true)}
-                className="fixed bottom-4 right-4 md:bottom-6 md:right-6 z-[60] flex flex-col items-end gap-2 group hover:scale-105 transition-transform"
+                className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-2 group hover:scale-105 transition-transform"
             >
-                <div className="bg-white text-[#1b3a3a] px-4 py-2 rounded-xl shadow-lg border border-[#1b3a3a]/10 mb-1 hidden md:block">
+                <div className="bg-white text-[#1b3a3a] px-4 py-2 rounded-xl shadow-lg border border-[#1b3a3a]/10 mb-1">
                     <span className="text-sm font-semibold">Chatta med en servicetekniker</span>
                 </div>
-                <div className="h-14 w-14 md:h-16 md:w-16 rounded-full shadow-xl overflow-hidden border-2 border-white ring-2 ring-[#1b3a3a]/10">
+                <div className="h-16 w-16 rounded-full shadow-xl overflow-hidden border-2 border-white ring-2 ring-[#1b3a3a]/10">
                     <img 
                         src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69a9446fcb1cd4ab529479ba/bc2852de1_channels4_profile-2.jpg" 
                         alt="Chat" 
@@ -169,7 +169,7 @@ export default function ChatWidget() {
     }
 
     return (
-        <Card className="fixed bottom-4 right-4 md:bottom-6 md:right-6 w-[calc(100vw-32px)] md:w-[350px] h-[500px] max-h-[calc(100vh-120px)] shadow-2xl z-[60] flex flex-col border-primary/20">
+        <Card className="fixed bottom-6 right-6 w-[350px] h-[500px] shadow-2xl z-50 flex flex-col border-primary/20">
             <CardHeader className="bg-[#1b3a3a] text-white p-4 rounded-t-xl flex flex-row items-center justify-between shrink-0">
                 <div className="flex items-center gap-3">
                     <div className="h-10 w-10 rounded-full bg-white/10 overflow-hidden border border-white/20">
