@@ -1,0 +1,103 @@
+{
+  "name": "ServiceContractLead",
+  "type": "object",
+  "properties": {
+    "customer_id": {
+      "type": "string",
+      "description": "L\u00e4nk till befintlig kund (frivilligt)"
+    },
+    "company_name": {
+      "type": "string",
+      "description": "F\u00f6retagsnamn (f\u00f6r nya prospekt)"
+    },
+    "org_number": {
+      "type": "string",
+      "description": "Organisationsnummer"
+    },
+    "contact_person": {
+      "type": "string",
+      "description": "Kontaktperson"
+    },
+    "email": {
+      "type": "string",
+      "description": "E-post"
+    },
+    "phone": {
+      "type": "string",
+      "description": "Telefon"
+    },
+    "machine_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Maskiner som prospektet g\u00e4ller (frivilligt)"
+    },
+    "proposed_machines": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "model": {
+            "type": "string",
+            "description": "F\u00f6reslagen maskinmodell"
+          },
+          "serial_number": {
+            "type": "string",
+            "description": "F\u00f6reslaget serienummer"
+          },
+          "installation_date": {
+            "type": "string",
+            "format": "date",
+            "description": "F\u00f6reslaget installationsdatum"
+          },
+          "notes": {
+            "type": "string",
+            "description": "Anteckningar f\u00f6r f\u00f6reslagen maskin"
+          }
+        },
+        "required": [
+          "model",
+          "serial_number"
+        ]
+      },
+      "description": "Information om nya maskiner som ska skapas vid konvertering av prospektet"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "new",
+        "sold_machines",
+        "mailed",
+        "called",
+        "interested",
+        "proposal_sent",
+        "accepted",
+        "rejected",
+        "no_contract_wanted",
+        "not_interested",
+        "other_service_contract",
+        "wrong_phone",
+        "wrong_email"
+      ],
+      "default": "new",
+      "description": "Status p\u00e5 prospektet"
+    },
+    "service_agreement_template_id": {
+      "type": "string",
+      "description": "F\u00f6reslagen serviceavtalsmall"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Anteckningar om prospektet"
+    },
+    "follow_up_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Datum f\u00f6r uppf\u00f6ljning"
+    }
+  },
+  "required": [
+    "status"
+  ]
+}

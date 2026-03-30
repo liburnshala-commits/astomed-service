@@ -15,7 +15,7 @@ import CustomerInteractionsModal from "@/components/customers/CustomerInteractio
 
 const statusMap = {
   new: { label: "Nytt", color: "bg-blue-100 text-blue-800" },
-  contacted: { label: "Kontaktad", color: "bg-amber-100 text-amber-800" },
+  sold_machines: { label: "Sålt sina maskiner", color: "bg-amber-100 text-amber-800" },
   mailed: { label: "Mailat", color: "bg-indigo-100 text-indigo-800" },
   called: { label: "Ringt", color: "bg-cyan-100 text-cyan-800" },
   interested: { label: "Intresserad", color: "bg-teal-100 text-teal-800" },

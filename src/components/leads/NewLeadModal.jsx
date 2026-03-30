@@ -9,7 +9,7 @@ import { MACHINE_MODELS } from "@/lib/constants";
 
 const statusMap = {
   new: "Nytt",
-  contacted: "Kontaktad",
+  sold_machines: "Sålt sina maskiner",
   called: "Ringt",
   interested: "Intresserad",
   proposal_sent: "Offert skickad",
