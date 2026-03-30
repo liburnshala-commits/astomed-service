@@ -31,13 +31,16 @@ const statusMap = {
 
 export default function ServiceContractLeads() {
   const { toast } = useToast();
+  const urlParams = new URLSearchParams(window.location.search);
+  const initialStatus = urlParams.get("status") || "all";
+
   const [leads, setLeads] = useState([]);
   const [customers, setCustomers] = useState([]);
   const [machines, setMachines] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showNewLeadModal, setShowNewLeadModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const [statusFilter, setStatusFilter] = useState("all");
+  const [statusFilter, setStatusFilter] = useState(initialStatus);
   const [convertingLead, setConvertingLead] = useState(null);
   const [convertingCustomerId, setConvertingCustomerId] = useState(null);
   const [editingLead, setEditingLead] = useState(null);

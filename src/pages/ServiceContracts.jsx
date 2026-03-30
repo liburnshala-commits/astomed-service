@@ -31,9 +31,13 @@ function endDate(machine) {
 }
 
 export default function ServiceContracts() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const initialStatusFilter = urlParams.get("status") || "all";
+
   const [machines, setMachines] = useState([]);
   const [customers, setCustomers] = useState([]);
   const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState(initialStatusFilter);
   const [editingMachine, setEditingMachine] = useState(null);
   const [showMultiContract, setShowMultiContract] = useState(false);
 
@@ -139,6 +143,10 @@ export default function ServiceContracts() {
         cust?.email?.toLowerCase().includes(q) ||
         cust?.phone?.toLowerCase().includes(q)
       );
+    })
+    .filter(m => {
+      if (statusFilter === "all") return true;
+      return contractStatus(m) === statusFilter;
     });
 
   const active = contracted.filter(m => contractStatus(m) === "active");

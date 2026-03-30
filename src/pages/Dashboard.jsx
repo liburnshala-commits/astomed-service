@@ -74,7 +74,7 @@ export default function Dashboard() {
   const estimatedActiveRevenue = activeContractsCount * 600;
   const estimatedPendingRevenue = pendingContractsCount * 600;
 
-  const contactedLeads = leads.filter(l => l.status === "contacted").length;
+  const contactedLeads = leads.filter(l => l.status === "sold_machines").length;
   const calledLeads = leads.filter(l => l.status === "called").length;
   const newLeads = leads.filter(l => l.status === "new").length;
   const interestedLeads = leads.filter(l => l.status === "interested").length;
@@ -121,7 +121,7 @@ export default function Dashboard() {
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <Link to={createPageUrl("ServiceContracts")} className="block">
+        <Link to={createPageUrl("ServiceContracts") + "?status=active"} className="block">
           <Card className="astomed-card cursor-pointer" style={{ background: "#f4f9f9" }}>
             <CardContent className="p-5">
               <div className="flex items-center justify-between">
@@ -136,7 +136,7 @@ export default function Dashboard() {
             </CardContent>
           </Card>
         </Link>
-        <Link to={createPageUrl("ServiceContracts")} className="block">
+        <Link to={createPageUrl("ServiceContracts") + "?status=pending_signature"} className="block">
           <Card className="astomed-card cursor-pointer" style={{ background: "#fffaf0" }}>
             <CardContent className="p-5">
               <div className="flex items-center justify-between">
@@ -151,7 +151,7 @@ export default function Dashboard() {
             </CardContent>
           </Card>
         </Link>
-        <Link to={createPageUrl("ServiceContracts")} className="block">
+        <Link to={createPageUrl("ServiceContracts") + "?status=inactive"} className="block">
           <Card className="astomed-card cursor-pointer" style={{ background: "#f1f5f9" }}>
             <CardContent className="p-5">
               <div className="flex items-center justify-between">
@@ -166,7 +166,7 @@ export default function Dashboard() {
             </CardContent>
           </Card>
         </Link>
-        <Link to={createPageUrl("ServiceContracts")} className="block">
+        <Link to={createPageUrl("ServiceContracts") + "?status=rejected"} className="block">
           <Card className="astomed-card cursor-pointer" style={{ background: "#fef2f2" }}>
             <CardContent className="p-5">
               <div className="flex items-center justify-between">
@@ -184,7 +184,7 @@ export default function Dashboard() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <Link to={createPageUrl("ServiceContracts")} className="block">
+        <Link to={createPageUrl("ServiceContracts") + "?status=active"} className="block">
           <Card className="astomed-card cursor-pointer" style={{ background: "#f4f9f9" }}>
             <CardContent className="p-5">
               <div className="flex items-center justify-between">
@@ -199,7 +199,7 @@ export default function Dashboard() {
             </CardContent>
           </Card>
         </Link>
-        <Link to={createPageUrl("ServiceContracts")} className="block">
+        <Link to={createPageUrl("ServiceContracts") + "?status=pending_signature"} className="block">
           <Card className="astomed-card cursor-pointer" style={{ background: "#fffaf0" }}>
             <CardContent className="p-5">
               <div className="flex items-center justify-between">
@@ -220,7 +220,7 @@ export default function Dashboard() {
         <>
           <h2 className="text-lg font-bold astomed-title mt-8 mb-4">Prospektbearbetning</h2>
           <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
-            <Link to={createPageUrl("ServiceContractLeads")} className="block">
+            <Link to={createPageUrl("ServiceContractLeads") + "?status=new"} className="block">
               <Card className="astomed-card cursor-pointer" style={{ background: "#f8fafc" }}>
                 <CardContent className="p-5">
                   <div className="flex items-center justify-between">
@@ -235,12 +235,12 @@ export default function Dashboard() {
                 </CardContent>
               </Card>
             </Link>
-            <Link to={createPageUrl("ServiceContractLeads")} className="block">
+            <Link to={createPageUrl("ServiceContractLeads") + "?status=sold_machines"} className="block">
               <Card className="astomed-card cursor-pointer" style={{ background: "#fffbeb" }}>
                 <CardContent className="p-5">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-xs astomed-muted font-medium uppercase tracking-wide">Kontaktade</p>
+                      <p className="text-xs astomed-muted font-medium uppercase tracking-wide">Sålt maskiner</p>
                       <p className="text-3xl font-bold astomed-title mt-1">{contactedLeads}</p>
                     </div>
                     <div className="w-10 h-10 astomed-icon-box" style={{ width: 40, height: 40, background: "#fef3c7" }}>
@@ -250,7 +250,7 @@ export default function Dashboard() {
                 </CardContent>
               </Card>
             </Link>
-            <Link to={createPageUrl("ServiceContractLeads")} className="block">
+            <Link to={createPageUrl("ServiceContractLeads") + "?status=called"} className="block">
               <Card className="astomed-card cursor-pointer" style={{ background: "#f0fdfa" }}>
                 <CardContent className="p-5">
                   <div className="flex items-center justify-between">
@@ -265,7 +265,7 @@ export default function Dashboard() {
                 </CardContent>
               </Card>
             </Link>
-            <Link to={createPageUrl("ServiceContractLeads")} className="block">
+            <Link to={createPageUrl("ServiceContractLeads") + "?status=interested"} className="block">
               <Card className="astomed-card cursor-pointer" style={{ background: "#f0fdf4" }}>
                 <CardContent className="p-5">
                   <div className="flex items-center justify-between">
@@ -280,7 +280,7 @@ export default function Dashboard() {
                 </CardContent>
               </Card>
             </Link>
-            <Link to={createPageUrl("ServiceContractLeads")} className="block">
+            <Link to={createPageUrl("ServiceContractLeads") + "?status=proposal_sent"} className="block">
               <Card className="astomed-card cursor-pointer" style={{ background: "#faf5ff" }}>
                 <CardContent className="p-5">
                   <div className="flex items-center justify-between">
