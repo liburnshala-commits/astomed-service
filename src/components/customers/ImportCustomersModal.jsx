@@ -73,6 +73,7 @@ export default function ImportCustomersModal({ onClose, onImported }) {
                 <p>⏭️ Befintliga kunder hoppade över: <strong>{result.skipped_customers}</strong></p>
                 <p>⚠️ Rader ignorerades: <strong>{result.skipped_rows}</strong></p>
                 <p>🖥️ Maskiner skapade: <strong>{result.created_machines}</strong></p>
+                <p>⏭️ Befintliga maskiner hoppade över: <strong>{result.skipped_machines}</strong></p>
               </div>
             </div>
           )}

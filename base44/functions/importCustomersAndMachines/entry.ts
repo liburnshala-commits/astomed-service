@@ -38,11 +38,13 @@ Deno.serve(async (req) => {
   let created_customers = 0;
   let skipped_customers = 0;
   let created_machines = 0;
+  let skipped_machines = 0;
   let skipped_rows = 0;
   const errors = [];
 
   // Load existing customers once
   const existingCustomers = await base44.asServiceRole.entities.Customer.list();
+  const existingMachines = await base44.asServiceRole.entities.Machine.list();
 
   for (const row of rows) {
     if (!row.company_name) {
@@ -93,26 +95,34 @@ Deno.serve(async (req) => {
 
     // Create machine if model provided
     if (customer && row.machine_model) {
-      let machineAttempts = 0;
-      while (machineAttempts < 5) {
-        try {
-          await base44.asServiceRole.entities.Machine.create({
-            model: row.machine_model,
-            serial_number: row.serial_number || '',
-            service_date: row.latest_service_date || null,
-            customer_id: customer.id,
-            status: 'active',
-            service_contract: 'none',
-          });
-          created_machines++;
-          break;
-        } catch (e) {
-          if (e.status === 429) {
-            machineAttempts++;
-            await sleep(1000 * machineAttempts);
-          } else {
-            errors.push(`Maskin för "${row.company_name}": ${e.message}`);
+      // Skip if serial number already exists
+      const serialExists = row.serial_number &&
+        existingMachines.some(m => m.serial_number && m.serial_number === row.serial_number);
+      if (serialExists) {
+        skipped_machines++;
+      } else {
+        let machineAttempts = 0;
+        while (machineAttempts < 5) {
+          try {
+            const newMachine = await base44.asServiceRole.entities.Machine.create({
+              model: row.machine_model,
+              serial_number: row.serial_number || '',
+              service_date: row.latest_service_date || null,
+              customer_id: customer.id,
+              status: 'active',
+              service_contract: 'none',
+            });
+            existingMachines.push(newMachine);
+            created_machines++;
             break;
+          } catch (e) {
+            if (e.status === 429) {
+              machineAttempts++;
+              await sleep(1000 * machineAttempts);
+            } else {
+              errors.push(`Maskin för "${row.company_name}": ${e.message}`);
+              break;
+            }
           }
         }
       }
@@ -128,6 +138,7 @@ Deno.serve(async (req) => {
     skipped_customers,
     skipped_rows,
     created_machines,
+    skipped_machines,
     errors,
   });
 });
