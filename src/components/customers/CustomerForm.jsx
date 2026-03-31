@@ -1,9 +1,15 @@
 import { useState } from "react";
-import { X } from "lucide-react";
+import { X, Monitor } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+
+const MODELS = [
+  "Soprano Platinum", "Soprano Titanium", "Alma Harmony", "Aldix (Triodus)",
+  "PrimeLase", "Elysion", "PicoLo", "Helius", "Splendor X", "Pento", "Annan"
+];
 
 export default function CustomerForm({ customer, onSave, onClose }) {
   const [form, setForm] = useState({
@@ -19,7 +25,21 @@ export default function CustomerForm({ customer, onSave, onClose }) {
     portal_token: customer?.portal_token || ""
   });
 
+  const [machine, setMachine] = useState({
+    model: "",
+    serial_number: "",
+    service_date: ""
+  });
+
   const set = (field, value) => setForm(prev => ({ ...prev, [field]: value }));
+  const setM = (field, value) => setMachine(prev => ({ ...prev, [field]: value }));
+
+  const isNew = !customer;
+
+  const handleSubmit = () => {
+    const machineData = isNew && machine.model ? machine : null;
+    onSave(form, machineData);
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
@@ -67,10 +87,44 @@ export default function CustomerForm({ customer, onSave, onClose }) {
               <Textarea value={form.notes} onChange={e => set("notes", e.target.value)} placeholder="Övriga anteckningar..." rows={3} />
             </div>
           </div>
+
+          {isNew && (
+            <div className="border-t pt-4 space-y-3">
+              <div className="flex items-center gap-2 text-sm font-semibold text-slate-700">
+                <Monitor className="w-4 h-4" />
+                Lägg till maskin (valfritt)
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="col-span-2 space-y-1">
+                  <Label>Maskinmodell</Label>
+                  <Select value={machine.model} onValueChange={v => setM("model", v)}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Välj modell..." />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {MODELS.map(m => <SelectItem key={m} value={m}>{m}</SelectItem>)}
+                    </SelectContent>
+                  </Select>
+                </div>
+                {machine.model && (
+                  <>
+                    <div className="space-y-1">
+                      <Label>Serienummer</Label>
+                      <Input value={machine.serial_number} onChange={e => setM("serial_number", e.target.value)} placeholder="SN-XXXXXX" />
+                    </div>
+                    <div className="space-y-1">
+                      <Label>Senaste servicedatum</Label>
+                      <Input type="date" value={machine.service_date} onChange={e => setM("service_date", e.target.value)} />
+                    </div>
+                  </>
+                )}
+              </div>
+            </div>
+          )}
         </div>
         <div className="flex justify-end gap-3 p-6 border-t bg-slate-50 rounded-b-2xl">
           <Button variant="outline" onClick={onClose}>Avbryt</Button>
-          <Button onClick={() => onSave(form)} className="bg-blue-600 hover:bg-blue-700" disabled={!form.company_name}>
+          <Button onClick={handleSubmit} className="bg-blue-600 hover:bg-blue-700" disabled={!form.company_name}>
             {customer ? "Spara ändringar" : "Skapa kund"}
           </Button>
         </div>
