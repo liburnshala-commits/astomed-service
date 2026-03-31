@@ -61,7 +61,7 @@ export default function Customers() {
   const getMachineCount = (customerId) => machines.filter(m => m.customer_id === customerId).length;
   const getContractCount = (customerId) => machines.filter(m => m.customer_id === customerId && m.service_contract && m.service_contract !== "none").length;
 
-  const handleSave = async (data) => {
+  const handleSave = async (data, machineData) => {
     if (!data.portal_token) {
       data.portal_token = Math.random().toString(36).substring(2, 18);
     }
@@ -88,6 +88,26 @@ export default function Customers() {
         user_name: currentUser?.full_name || currentUser?.email,
         details: `Ny kund skapad: ${data.company_name}`
       });
+
+      if (machineData && machineData.model) {
+        const newMachine = await base44.entities.Machine.create({
+          model: machineData.model,
+          serial_number: machineData.serial_number || "",
+          service_date: machineData.service_date || null,
+          customer_id: created.id,
+          status: "active",
+          service_contract: "none"
+        });
+        base44.functions.invoke('logAuditEntry', {
+          action: 'create',
+          entity_type: 'Machine',
+          entity_id: newMachine.id,
+          entity_label: machineData.model,
+          user_email: currentUser?.email || 'unknown',
+          user_name: currentUser?.full_name || currentUser?.email,
+          details: `Maskin tillagd vid kundregistrering: ${machineData.model} (${machineData.serial_number || 'inget SN'})`
+        });
+      }
     }
     setShowForm(false);
     setEditing(null);
