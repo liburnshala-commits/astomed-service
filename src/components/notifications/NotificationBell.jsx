@@ -24,22 +24,33 @@ export default function NotificationBell() {
     if (!user?.email) return;
 
     let cancelled = false;
+    let isFetching = false;
 
     const fetchNotifications = async () => {
-      if (cancelled) return;
-      const unread = await base44.entities.Notification.filter(
-        { user_email: user.email, is_read: false },
-        "-created_date",
-        50
-      );
-      if (!cancelled) setNotifications(unread);
+      if (cancelled || isFetching) return;
+      isFetching = true;
+      try {
+        const unread = await base44.entities.Notification.filter(
+          { user_email: user.email, is_read: false },
+          "-created_date",
+          50
+        );
+        if (!cancelled) setNotifications(unread);
+      } catch (err) {
+        // Silently ignore rate limit and network errors — subscription keeps us updated
+        if (!err?.message?.includes("Rate limit")) {
+          console.warn("NotificationBell fetch error:", err?.message);
+        }
+      } finally {
+        isFetching = false;
+      }
     };
 
-    // Initial fetch with a small delay to avoid rate limits on page load
-    const initialTimer = setTimeout(fetchNotifications, 500);
+    // Initial fetch with a longer delay to avoid rate limits on page load
+    const initialTimer = setTimeout(fetchNotifications, 3000);
 
-    // Poll every 60 seconds instead of relying solely on subscriptions
-    const pollInterval = setInterval(fetchNotifications, 60000);
+    // Poll every 3 minutes — subscription handles real-time updates
+    const pollInterval = setInterval(fetchNotifications, 3 * 60 * 1000);
 
     const unsubscribe = base44.entities.Notification.subscribe((event) => {
       if (cancelled) return;

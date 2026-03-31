@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { createPageUrl } from "@/utils";
 import { Link } from "react-router-dom";
@@ -8,15 +9,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Checkbox } from "@/components/ui/checkbox";
 import CustomerForm from "@/components/customers/CustomerForm.jsx";
 import DeleteCustomerDialog from "@/components/gdpr/DeleteCustomerDialog.jsx";
 import CustomerLatestInteraction from "@/components/customers/CustomerLatestInteraction.jsx";
 import ImportCustomersModal from "@/components/customers/ImportCustomersModal.jsx";
 
 export default function Customers() {
-  const [customers, setCustomers] = useState([]);
-  const [machines, setMachines] = useState([]);
+  const queryClient = useQueryClient();
   const [search, setSearch] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [editing, setEditing] = useState(null);
@@ -24,32 +23,47 @@ export default function Customers() {
   const [generatingLink, setGeneratingLink] = useState(null);
   const [copiedId, setCopiedId] = useState(null);
   const [deletingCustomer, setDeletingCustomer] = useState(null);
-  const [userRole, setUserRole] = useState(null);
   const [cleaningData, setCleaningData] = useState(false);
   const [showImport, setShowImport] = useState(false);
 
-  const load = async () => {
-    const currentUser = await base44.auth.me();
-    setUserRole(currentUser?.role);
-    if (currentUser?.role === "customer") {
-      // Customers should not access this page at all
-      const ownCustomers = await base44.entities.Customer.filter({ email: currentUser.email });
-      setCustomers(ownCustomers);
-      if (ownCustomers[0]) {
-        const m = await base44.entities.Machine.filter({ customer_id: ownCustomers[0].id });
-        setMachines(m);
-      }
-    } else {
-      const [c, m] = await Promise.all([
-        base44.entities.Customer.list("-created_date"),
-        base44.entities.Machine.list()
-      ]);
-      setCustomers(c);
-      setMachines(m);
-    }
-  };
+  const { data: user } = useQuery({
+    queryKey: ["me"],
+    queryFn: () => base44.auth.me(),
+    staleTime: 5 * 60 * 1000,
+    retry: 3,
+  });
 
-  useEffect(() => { load(); }, []);
+  const userRole = user?.role;
+
+  const { data: pageData } = useQuery({
+    queryKey: ["customersPage", user?.role, user?.email],
+    queryFn: async () => {
+      if (user?.role === "customer") {
+        const ownCustomers = await base44.entities.Customer.filter({ email: user.email });
+        if (ownCustomers[0]) {
+          const m = await base44.entities.Machine.filter({ customer_id: ownCustomers[0].id });
+          return { customers: ownCustomers, machines: m };
+        }
+        return { customers: ownCustomers, machines: [] };
+      } else {
+        const [c, m] = await Promise.all([
+          base44.entities.Customer.list("-created_date"),
+          base44.entities.Machine.list()
+        ]);
+        return { customers: c, machines: m };
+      }
+    },
+    enabled: !!user,
+    staleTime: 30 * 1000,
+    retry: 3,
+    retryDelay: (attempt) => Math.min(1000 * 2 ** attempt, 10000),
+    keepPreviousData: true,
+  });
+
+  const customers = pageData?.customers || [];
+  const machines = pageData?.machines || [];
+
+  const load = () => queryClient.invalidateQueries({ queryKey: ["customersPage"] });
 
   const filtered = customers.filter(c => {
     const searchLower = search.toLowerCase();
