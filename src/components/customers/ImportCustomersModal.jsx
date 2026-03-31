@@ -71,6 +71,7 @@ export default function ImportCustomersModal({ onClose, onImported }) {
               <div className="bg-green-50 rounded-lg p-4 text-sm space-y-1 text-slate-700">
                 <p>✅ Nya kunder skapade: <strong>{result.created_customers}</strong></p>
                 <p>⏭️ Befintliga kunder hoppade över: <strong>{result.skipped_customers}</strong></p>
+                <p>⚠️ Rader ignorerades: <strong>{result.skipped_rows}</strong></p>
                 <p>🖥️ Maskiner skapade: <strong>{result.created_machines}</strong></p>
               </div>
             </div>
