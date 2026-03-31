@@ -1,4 +1,5 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.23';
+import Papa from 'npm:papaparse';
 
 Deno.serve(async (req) => {
   const base44 = createClientFromRequest(req);
@@ -12,18 +13,24 @@ Deno.serve(async (req) => {
 
   // Fetch and parse CSV
   const res = await fetch(fileUrl);
-  const text = await res.text();
-  const lines = text.trim().split('\n');
-  const headers = lines[0].split(',').map(h => h.replace(/"/g, '').trim());
+  let text = await res.text();
+  
+  // Remove BOM if present (often added by Excel)
+  text = text.replace(/^\uFEFF/, '');
 
-  const rows = lines.slice(1).map(line => {
-    const values = line.match(/(".*?"|[^,]+|(?<=,)(?=,)|^(?=,)|(?<=,)$)/g) || [];
-    const obj = {};
-    headers.forEach((h, i) => {
-      obj[h] = (values[i] || '').replace(/^"|"$/g, '').trim();
-    });
-    return obj;
+  const parsed = Papa.parse(text.trim(), {
+    header: true,
+    skipEmptyLines: true,
+    transformHeader: (h) => h.trim().toLowerCase()
   });
+
+  const rows = parsed.data;
+
+  if (rows.length === 0) {
+    return Response.json({ 
+      error: 'Inga rader hittades eller fel format. Kontrollera att filen är en CSV och att första raden har rubrikerna.' 
+    });
+  }
 
   let created_customers = 0;
   let skipped_customers = 0;
@@ -34,7 +41,11 @@ Deno.serve(async (req) => {
   const existingCustomers = await base44.asServiceRole.entities.Customer.list();
 
   for (const row of rows) {
-    if (!row.company_name) continue;
+    // If Excel used ';' PapaParse usually detects it, but ensure we check the right column names
+    if (!row.company_name) {
+      console.log('Skipping row missing company_name:', row);
+      continue;
+    }
 
     // Find or create customer (match on company_name or org_number)
     let customer = existingCustomers.find(c =>
