@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { createPageUrl } from "@/utils";
 import {
@@ -37,18 +38,12 @@ function saveOfflineQueue(q) {
 }
 
 export default function TechnicianMobile() {
-  const [user, setUser] = useState(null);
-  const [records, setRecords] = useState([]);
-  const [machines, setMachines] = useState([]);
-  const [customers, setCustomers] = useState([]);
+  const queryClient = useQueryClient();
   const [search, setSearch] = useState("");
   const [filterStatus, setFilterStatus] = useState("active");
-  const [loading, setLoading] = useState(true);
   const [online, setOnline] = useState(navigator.onLine);
   const [offlineQueue, setOfflineQueue] = useState(loadOfflineQueue);
-  const [selectedRecord, setSelectedRecord] = useState(null);
   const [syncing, setSyncing] = useState(false);
-  const [lastSync, setLastSync] = useState(null);
 
   // Online/offline detection
   useEffect(() => {
@@ -59,43 +54,55 @@ export default function TechnicianMobile() {
     return () => { window.removeEventListener("online", up); window.removeEventListener("offline", down); };
   }, []);
 
-  const load = useCallback(async () => {
-    if (!navigator.onLine) {
-      // Load from cache
-      try {
-        const cached = JSON.parse(localStorage.getItem("techapp_cache") || "null");
-        if (cached) {
-          setRecords(cached.records || []);
-          setMachines(cached.machines || []);
-          setCustomers(cached.customers || []);
-          setUser(cached.user || null);
-        }
-      } catch {}
-      setLoading(false);
-      return;
-    }
-    setLoading(true);
-    const u = await base44.auth.me();
-    setUser(u);
-    const [r, m, c] = await Promise.all([
-      base44.entities.ServiceRecord.list("-service_date", 200),
-      base44.entities.Machine.list(),
-      base44.entities.Customer.list(),
-    ]);
-    // Filter to this technician's records
-    const myRecords = u?.role === "technician"
-      ? r.filter(rec => rec.technician_name === u.full_name || rec.created_by === u.email)
-      : r;
-    setRecords(myRecords);
-    setMachines(m);
-    setCustomers(c);
-    // Cache for offline
-    localStorage.setItem("techapp_cache", JSON.stringify({ records: myRecords, machines: m, customers: c, user: u }));
-    setLastSync(new Date());
-    setLoading(false);
-  }, []);
+  const { data: user } = useQuery({
+    queryKey: ["me"],
+    queryFn: () => base44.auth.me(),
+    staleTime: 5 * 60 * 1000,
+    retry: 3,
+  });
 
-  useEffect(() => { load(); }, [load]);
+  const { data: rawData, isLoading: loading, dataUpdatedAt } = useQuery({
+    queryKey: ["technicianData"],
+    queryFn: async () => {
+      if (!navigator.onLine) {
+        try {
+          const cached = JSON.parse(localStorage.getItem("techapp_cache") || "null");
+          if (cached) return cached;
+        } catch {}
+        return { records: [], machines: [], customers: [] };
+      }
+      const u = user || await base44.auth.me();
+      const [r, m, c] = await Promise.all([
+        base44.entities.ServiceRecord.list("-service_date", 200),
+        base44.entities.Machine.list(),
+        base44.entities.Customer.list(),
+      ]);
+      const myRecords = u?.role === "technician"
+        ? r.filter(rec => rec.technician_name === u.full_name || rec.created_by === u.email)
+        : r;
+      const result = { records: myRecords, machines: m, customers: c, user: u };
+      localStorage.setItem("techapp_cache", JSON.stringify(result));
+      return result;
+    },
+    enabled: !!user,
+    staleTime: 30 * 1000,
+    retry: 3,
+    retryDelay: (attempt) => Math.min(1000 * 2 ** attempt, 10000),
+    placeholderData: () => {
+      try {
+        return JSON.parse(localStorage.getItem("techapp_cache") || "null");
+      } catch { return null; }
+    },
+  });
+
+  const records = rawData?.records || [];
+  const machines = rawData?.machines || [];
+  const customers = rawData?.customers || [];
+  const lastSync = dataUpdatedAt ? new Date(dataUpdatedAt) : null;
+
+  const load = useCallback(() => {
+    queryClient.invalidateQueries({ queryKey: ["technicianData"] });
+  }, [queryClient]);
 
   // Sync offline queue when coming back online
   useEffect(() => {
@@ -123,17 +130,18 @@ export default function TechnicianMobile() {
 
   async function handleStatusUpdate(record, newStatus) {
     const update = { status: newStatus };
+    // Optimistic update in cache
+    queryClient.setQueryData(["technicianData"], (old) => {
+      if (!old) return old;
+      return { ...old, records: old.records.map(r => r.id === record.id ? { ...r, status: newStatus } : r) };
+    });
     if (navigator.onLine) {
       await base44.entities.ServiceRecord.update(record.id, update);
-      // Update local state optimistically
-      setRecords(prev => prev.map(r => r.id === record.id ? { ...r, status: newStatus } : r));
-      if (selectedRecord?.id === record.id) setSelectedRecord(r => ({ ...r, status: newStatus }));
     } else {
       // Queue for later
       const queue = [...offlineQueue.filter(q => q.id !== record.id), { id: record.id, data: update }];
       setOfflineQueue(queue);
       saveOfflineQueue(queue);
-      setRecords(prev => prev.map(r => r.id === record.id ? { ...r, status: newStatus } : r));
     }
   }
 

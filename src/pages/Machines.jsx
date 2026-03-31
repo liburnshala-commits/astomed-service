@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { createPageUrl } from "@/utils";
 import { Link } from "react-router-dom";
@@ -20,49 +21,63 @@ const statusColor = { active: "bg-green-100 text-green-700", inactive: "bg-slate
 const statusLabel = { active: "Aktiv", inactive: "Inaktiv", service: "På service" };
 
 export default function Machines() {
-  const [machines, setMachines] = useState([]);
-  const [customers, setCustomers] = useState([]);
-  const [records, setRecords] = useState([]);
+  const queryClient = useQueryClient();
   const [search, setSearch] = useState("");
   const [filterModel, setFilterModel] = useState("all");
   const [filterCustomer, setFilterCustomer] = useState("all");
   const [showForm, setShowForm] = useState(false);
   const [editing, setEditing] = useState(null);
   const [contractMachine, setContractMachine] = useState(null);
-  const [userRole, setUserRole] = useState(null);
 
   const urlParams = new URLSearchParams(window.location.search);
   const preselectedCustomer = urlParams.get("customer");
 
-  const load = async () => {
-    const currentUser = await base44.auth.me();
-    setUserRole(currentUser?.role);
-    if (currentUser?.role === "customer") {
-      const ownCustomers = await base44.entities.Customer.filter({ email: currentUser.email });
-      const cust = ownCustomers[0];
-      setCustomers(cust ? [cust] : []);
-      if (cust) {
-        const [m, r] = await Promise.all([
-          base44.entities.Machine.filter({ customer_id: cust.id }, "-created_date"),
-          base44.entities.ServiceRecord.filter({ customer_id: cust.id }, "-service_date")
+  const { data: user } = useQuery({
+    queryKey: ["me"],
+    queryFn: () => base44.auth.me(),
+    staleTime: 5 * 60 * 1000,
+    retry: 3,
+  });
+
+  const userRole = user?.role;
+
+  const { data: pageData } = useQuery({
+    queryKey: ["machinesPage", user?.role, user?.email],
+    queryFn: async () => {
+      if (user?.role === "customer") {
+        const ownCustomers = await base44.entities.Customer.filter({ email: user.email });
+        const cust = ownCustomers[0];
+        if (cust) {
+          const [m, r] = await Promise.all([
+            base44.entities.Machine.filter({ customer_id: cust.id }, "-created_date"),
+            base44.entities.ServiceRecord.filter({ customer_id: cust.id }, "-service_date")
+          ]);
+          return { machines: m.filter(x => !x.is_deleted), records: r, customers: [cust] };
+        }
+        return { machines: [], records: [], customers: [] };
+      } else {
+        const [m, c, r] = await Promise.all([
+          base44.entities.Machine.list("-created_date"),
+          base44.entities.Customer.list(),
+          base44.entities.ServiceRecord.list("-service_date")
         ]);
-        setMachines(m.filter(x => !x.is_deleted));
-        setRecords(r);
+        return { machines: m.filter(x => !x.is_deleted), customers: c, records: r };
       }
-    } else {
-      const [m, c, r] = await Promise.all([
-        base44.entities.Machine.list("-created_date"),
-        base44.entities.Customer.list(),
-        base44.entities.ServiceRecord.list("-service_date")
-      ]);
-      setMachines(m.filter(x => !x.is_deleted));
-      setCustomers(c);
-      setRecords(r);
-    }
-  };
+    },
+    enabled: !!user,
+    staleTime: 30 * 1000,
+    retry: 3,
+    retryDelay: (attempt) => Math.min(1000 * 2 ** attempt, 10000),
+    keepPreviousData: true,
+  });
+
+  const machines = pageData?.machines || [];
+  const customers = pageData?.customers || [];
+  const records = pageData?.records || [];
+
+  const load = () => queryClient.invalidateQueries({ queryKey: ["machinesPage"] });
 
   useEffect(() => {
-    load();
     if (preselectedCustomer) setFilterCustomer(preselectedCustomer);
   }, []);
 
