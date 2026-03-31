@@ -208,7 +208,7 @@ export default function PublicServiceRequest() {
                 <li>Rengöring av värmeväxlare.</li>
                 <li>Rengörning av Switchade nätaggregat.</li>
                 <li>Kontroll av nödstopp och interlock.</li>
-                <li>Upprättande av serviceprotokoll.</li>
+                <li>Upprättande av serviceprotokoll i webportal.</li>
                 <li>Serviceuppmärkning av utrustning.</li>
                 <li>Kontroll av säkerhetsrem.</li>
                 <li>Påfyllning av destillerat avjoniserad kylvätska.</li>
