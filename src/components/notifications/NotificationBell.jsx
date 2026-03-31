@@ -23,21 +23,29 @@ export default function NotificationBell() {
   useEffect(() => {
     if (!user?.email) return;
 
+    let cancelled = false;
+
     const fetchNotifications = async () => {
+      if (cancelled) return;
       const unread = await base44.entities.Notification.filter(
         { user_email: user.email, is_read: false },
         "-created_date",
         50
       );
-      setNotifications(unread);
+      if (!cancelled) setNotifications(unread);
     };
 
-    fetchNotifications();
+    // Initial fetch with a small delay to avoid rate limits on page load
+    const initialTimer = setTimeout(fetchNotifications, 500);
+
+    // Poll every 60 seconds instead of relying solely on subscriptions
+    const pollInterval = setInterval(fetchNotifications, 60000);
 
     const unsubscribe = base44.entities.Notification.subscribe((event) => {
-      if (event.type === "create" && event.data.user_email === user.email && !event.data.is_read) {
+      if (cancelled) return;
+      if (event.type === "create" && event.data?.user_email === user.email && !event.data.is_read) {
         setNotifications((prev) => [event.data, ...prev]);
-      } else if (event.type === "update" && event.data.user_email === user.email) {
+      } else if (event.type === "update" && event.data?.user_email === user.email) {
         setNotifications((prev) =>
           prev.map((n) => (n.id === event.id ? event.data : n)).filter((n) => !n.is_read)
         );
@@ -46,7 +54,12 @@ export default function NotificationBell() {
       }
     });
 
-    return unsubscribe;
+    return () => {
+      cancelled = true;
+      clearTimeout(initialTimer);
+      clearInterval(pollInterval);
+      unsubscribe();
+    };
   }, [user?.email]);
 
   const markAsRead = async (notificationId) => {
