@@ -248,6 +248,9 @@ export default function Customers() {
                     <Link to={createPageUrl(`CustomerDetails?id=${customer.id}`)} className="font-semibold astomed-title truncate hover:text-[#3a9e9e] hover:underline">
                       {customer.company_name}
                     </Link>
+                    {customer.is_imported && (
+                      <span title="Importerad via CSV" className="text-xs bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded font-medium flex-shrink-0">⭐ Import</span>
+                    )}
                   </div>
                   {userRole === "admin" && (
                     <div className="ml-6 mb-2">

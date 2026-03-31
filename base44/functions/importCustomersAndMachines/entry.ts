@@ -75,6 +75,7 @@ Deno.serve(async (req) => {
             phone: row.phone || '',
             notes: row.notes || '',
             portal_token: portalToken,
+            is_imported: true,
           });
           existingCustomers.push(customer);
           created_customers++;

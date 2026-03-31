@@ -1,0 +1,64 @@
+{
+  "name": "Customer",
+  "type": "object",
+  "properties": {
+    "company_name": {
+      "type": "string",
+      "description": "F\u00f6retagsnamn"
+    },
+    "org_number": {
+      "type": "string",
+      "description": "Organisationsnummer"
+    },
+    "address": {
+      "type": "string",
+      "description": "Adress"
+    },
+    "postal_code": {
+      "type": "string",
+      "description": "Postnummer"
+    },
+    "city": {
+      "type": "string",
+      "description": "Stad"
+    },
+    "contact_person": {
+      "type": "string",
+      "description": "Referensperson"
+    },
+    "email": {
+      "type": "string",
+      "description": "E-post"
+    },
+    "phone": {
+      "type": "string",
+      "description": "Telefon"
+    },
+    "portal_token": {
+      "type": "string",
+      "description": "Unik token f\u00f6r kundportal"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Anteckningar"
+    },
+    "is_imported": {
+      "type": "boolean",
+      "default": false,
+      "description": "Importerad via CSV-import"
+    },
+    "is_deleted": {
+      "type": "boolean",
+      "default": false,
+      "description": "Markerad f\u00f6r radering (GDPR)"
+    },
+    "deleted_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Datum n\u00e4r kunden markerades f\u00f6r radering"
+    }
+  },
+  "required": [
+    "company_name"
+  ]
+}
