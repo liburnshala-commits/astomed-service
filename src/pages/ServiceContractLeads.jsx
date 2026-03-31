@@ -349,6 +349,11 @@ export default function ServiceContractLeads() {
                     <tr key={lead.id} className="hover:bg-slate-50">
                       <td className="px-2 py-3">
                         <div className="font-medium text-slate-900">{getLeadName(lead)}</div>
+                        {(lead.contact_person || customers.find(c => c.id === lead.customer_id)?.contact_person) && (
+                          <div className="text-xs text-slate-500 mb-0.5">
+                            {lead.contact_person || customers.find(c => c.id === lead.customer_id)?.contact_person}
+                          </div>
+                        )}
                         <div className="mb-1">
                           {lead.customer_id ? (
                             <span className="flex items-center gap-1 text-slate-500 text-[10px]"><User className="w-3 h-3" /> Befintlig kund</span>
@@ -461,6 +466,11 @@ export default function ServiceContractLeads() {
                       <div className="flex justify-between items-start gap-2">
                         <div>
                           <div className="font-semibold text-slate-900">{getLeadName(lead)}</div>
+                          {(lead.contact_person || customers.find(c => c.id === lead.customer_id)?.contact_person) && (
+                            <div className="text-xs text-slate-500 mt-0.5">
+                              {lead.contact_person || customers.find(c => c.id === lead.customer_id)?.contact_person}
+                            </div>
+                          )}
                           <div className="flex items-center gap-2 text-xs mt-0.5">
                             {lead.customer_id ? (
                               <span className="text-slate-500 flex items-center gap-1"><User className="w-3 h-3" /> Befintlig</span>
