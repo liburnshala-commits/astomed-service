@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { createPageUrl } from "@/utils";
 import { Link } from "react-router-dom";
-import { Plus, Search, Building2, Phone, Mail, ExternalLink, Trash2, UserPlus, Check, Copy, Loader2, Database } from "lucide-react";
+import { Plus, Search, Building2, Phone, Mail, ExternalLink, Trash2, UserPlus, Check, Copy, Loader2, Database, Upload } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,6 +12,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import CustomerForm from "@/components/customers/CustomerForm.jsx";
 import DeleteCustomerDialog from "@/components/gdpr/DeleteCustomerDialog.jsx";
 import CustomerLatestInteraction from "@/components/customers/CustomerLatestInteraction.jsx";
+import ImportCustomersModal from "@/components/customers/ImportCustomersModal.jsx";
 
 export default function Customers() {
   const [customers, setCustomers] = useState([]);
@@ -25,6 +26,7 @@ export default function Customers() {
   const [deletingCustomer, setDeletingCustomer] = useState(null);
   const [userRole, setUserRole] = useState(null);
   const [cleaningData, setCleaningData] = useState(false);
+  const [showImport, setShowImport] = useState(false);
 
   const load = async () => {
     const currentUser = await base44.auth.me();
@@ -221,6 +223,9 @@ export default function Customers() {
               Rensa raderade kunder
             </Button>
           )}
+          <Button onClick={() => setShowImport(true)} variant="outline" className="border-dashed">
+            <Upload className="w-4 h-4 mr-2" /> Importera
+          </Button>
           <Button onClick={() => { setEditing(null); setShowForm(true); }} className="astomed-btn-primary">
             <Plus className="w-4 h-4 mr-2" /> Ny kund
           </Button>
@@ -340,6 +345,13 @@ export default function Customers() {
           customer={editing}
           onSave={handleSave}
           onClose={() => { setShowForm(false); setEditing(null); }}
+        />
+      )}
+
+      {showImport && (
+        <ImportCustomersModal 
+          onClose={() => setShowImport(false)}
+          onImported={() => load()}
         />
       )}
 
