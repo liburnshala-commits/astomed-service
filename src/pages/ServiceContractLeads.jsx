@@ -293,7 +293,7 @@ export default function ServiceContractLeads() {
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h1 className="text-2xl font-bold text-slate-900">Serviceavtals-prospekt</h1>
-          <p className="text-slate-500">Hantera potentiella kunder för serviceavtal.</p>
+          <p className="text-slate-500">Hantera potentiella kunder för serviceavtal. <span className="font-medium text-slate-700">{filteredLeads.length} visas</span>{filteredLeads.length !== leads.length && <span className="text-slate-400"> av {leads.length} totalt</span>}</p>
         </div>
         <Button onClick={() => setShowNewLeadModal(true)} className="astomed-btn-primary">
           <Plus className="w-4 h-4 mr-2" /> Nytt Prospekt
