@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { createPageUrl } from "@/utils";
 import { Link, useNavigate } from "react-router-dom";
-import { Building2, Phone, Mail, Monitor, ArrowLeft, ExternalLink, Shield, Trash2 } from "lucide-react";
+import { Building2, Phone, Mail, Monitor, ArrowLeft, ExternalLink, Shield, Trash2, Download } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -16,6 +16,30 @@ export default function CustomerDetails() {
 
   const urlParams = new URLSearchParams(window.location.search);
   const customerId = urlParams.get("id");
+
+  const handleExportMachines = () => {
+    const rows = [
+      ["Modell", "Serienummer", "Status", "Installationsdatum", "Senaste servicedatum", "Nästa servicedatum", "Serviceavtal", "Garantiutgång"],
+      ...machines.map(m => [
+        m.model || "",
+        m.serial_number || "",
+        m.status === "active" ? "Aktiv" : m.status === "service" ? "På service" : "Inaktiv",
+        m.installation_date || "",
+        m.service_date || "",
+        m.next_service_date || "",
+        m.service_contract && m.service_contract !== "none" ? (m.service_contract === "basic" ? "BAS" : m.service_contract) : "Inget",
+        m.warranty_expiry || ""
+      ])
+    ];
+    const csvContent = rows.map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(";")).join("\n");
+    const blob = new Blob(["\uFEFF" + csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `maskiner_${customer.company_name.replace(/\s+/g, "_")}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
 
   const handleDeleteMachine = async (machine) => {
     if (window.confirm(`Är du säker på att du vill ta bort maskinen ${machine.model} (SN: ${machine.serial_number})?`)) {
@@ -108,7 +132,14 @@ export default function CustomerDetails() {
             <CardContent className="p-5">
               <div className="flex items-center justify-between border-b pb-2 mb-4">
                 <h3 className="font-semibold text-slate-800">Kundens maskiner</h3>
-                <Badge variant="secondary" className="bg-[#e8f2f2] text-[#1b3a3a]">{machines.length}</Badge>
+                <div className="flex items-center gap-2">
+                  <Badge variant="secondary" className="bg-[#e8f2f2] text-[#1b3a3a]">{machines.length}</Badge>
+                  {machines.length > 0 && (
+                    <Button variant="outline" size="sm" className="h-6 px-2 text-xs" onClick={handleExportMachines} title="Exportera till Excel">
+                      <Download className="w-3 h-3 mr-1" /> Excel
+                    </Button>
+                  )}
+                </div>
               </div>
 
               <div className="space-y-3">
