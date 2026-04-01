@@ -37,7 +37,12 @@ export default function MultiMachineContractModal({ onClose, onSave, initialCust
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    base44.entities.Customer.list().then(setCustomers);
+    base44.entities.Customer.list().then(data => {
+      const sortedCustomers = data.sort((a, b) => 
+        (a.company_name || "").localeCompare(b.company_name || "", "sv")
+      );
+      setCustomers(sortedCustomers);
+    });
     base44.entities.ServiceAgreementTemplate.list().then(setTemplates);
   }, []);
 
