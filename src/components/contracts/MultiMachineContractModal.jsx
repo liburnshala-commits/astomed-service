@@ -1,12 +1,15 @@
 import { useState, useEffect } from "react";
-import { X } from "lucide-react";
+import { X, Check, ChevronsUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Checkbox } from "@/components/ui/checkbox";
 import { base44 } from "@/api/base44Client";
 import { MACHINE_MODELS } from "@/lib/constants";
+import { cn } from "@/lib/utils";
 
 export default function MultiMachineContractModal({ onClose, onSave, initialCustomerId }) {
   const [customers, setCustomers] = useState([]);
@@ -21,6 +24,7 @@ export default function MultiMachineContractModal({ onClose, onSave, initialCust
   });
 
   const [selectedCustomer, setSelectedCustomer] = useState(initialCustomerId || "");
+  const [openCustomerPopover, setOpenCustomerPopover] = useState(false);
   const [selectedMachines, setSelectedMachines] = useState([]);
   const [selectedTemplates, setSelectedTemplates] = useState([]);
   const [templateQuantities, setTemplateQuantities] = useState({});
@@ -174,16 +178,53 @@ export default function MultiMachineContractModal({ onClose, onSave, initialCust
         </div>
 
         <div className="p-6 space-y-6">
-          <div className="space-y-2">
+          <div className="space-y-2 flex flex-col">
             <Label>Välj Kund</Label>
-            <Select value={selectedCustomer} onValueChange={setSelectedCustomer}>
-              <SelectTrigger><SelectValue placeholder="Välj kund..." /></SelectTrigger>
-              <SelectContent>
-                {customers.map(c => (
-                  <SelectItem key={c.id} value={c.id}>{c.company_name}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <Popover open={openCustomerPopover} onOpenChange={setOpenCustomerPopover}>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  role="combobox"
+                  aria-expanded={openCustomerPopover}
+                  className="w-full justify-between font-normal border-input"
+                >
+                  <span className="truncate">
+                    {selectedCustomer
+                      ? customers.find((c) => c.id === selectedCustomer)?.company_name || "Välj kund..."
+                      : "Välj kund..."}
+                  </span>
+                  <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-[--radix-popover-trigger-width] p-0" align="start">
+                <Command>
+                  <CommandInput placeholder="Sök kund..." />
+                  <CommandList>
+                    <CommandEmpty>Ingen kund hittades.</CommandEmpty>
+                    <CommandGroup>
+                      {customers.map((c) => (
+                        <CommandItem
+                          key={c.id}
+                          value={c.company_name}
+                          onSelect={() => {
+                            setSelectedCustomer(c.id === selectedCustomer ? "" : c.id);
+                            setOpenCustomerPopover(false);
+                          }}
+                        >
+                          <Check
+                            className={cn(
+                              "mr-2 h-4 w-4 shrink-0",
+                              selectedCustomer === c.id ? "opacity-100" : "opacity-0"
+                            )}
+                          />
+                          <span className="truncate">{c.company_name}</span>
+                        </CommandItem>
+                      ))}
+                    </CommandGroup>
+                  </CommandList>
+                </Command>
+              </PopoverContent>
+            </Popover>
           </div>
 
           {selectedCustomer && (
