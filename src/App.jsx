@@ -10,6 +10,7 @@ import PublicServiceRequest from './pages/PublicServiceRequest';
 import ServiceAgreementTemplates from './pages/ServiceAgreementTemplates';
 import CustomerDetails from './pages/CustomerDetails';
 import ServiceContractLeads from './pages/ServiceContractLeads';
+import ClosedLeads from './pages/ClosedLeads';
 import DeletedMachines from './pages/DeletedMachines';
 import ChatSupport from './pages/ChatSupport';
 
@@ -56,6 +57,7 @@ const AuthenticatedApp = () => {
       <Route path="/ServiceAgreementTemplates" element={<LayoutWrapper currentPageName="ServiceAgreementTemplates"><ServiceAgreementTemplates /></LayoutWrapper>} />
       <Route path="/CustomerDetails" element={<LayoutWrapper currentPageName="CustomerDetails"><CustomerDetails /></LayoutWrapper>} />
       <Route path="/ServiceContractLeads" element={<LayoutWrapper currentPageName="ServiceContractLeads"><ServiceContractLeads /></LayoutWrapper>} />
+      <Route path="/ClosedLeads" element={<LayoutWrapper currentPageName="ClosedLeads"><ClosedLeads /></LayoutWrapper>} />
       <Route path="/DeletedMachines" element={<LayoutWrapper currentPageName="Machines"><DeletedMachines /></LayoutWrapper>} />
       <Route path="/ChatSupport" element={<LayoutWrapper currentPageName="ChatSupport"><ChatSupport /></LayoutWrapper>} />
       {Object.entries(Pages).map(([path, Page]) => (

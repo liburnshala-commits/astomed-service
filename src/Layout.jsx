@@ -24,7 +24,8 @@ import {
   CalendarDays,
   ClipboardList,
   FileCheck,
-  MessageSquare
+  MessageSquare,
+  Archive
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -48,6 +49,7 @@ const navSections = [
       { label: "Servicekalender", page: "Calendar", icon: CalendarDays, roles: ["admin", "technician"] },
       { label: "Serviceavtal", page: "ServiceContracts", icon: FileCheck, roles: ["admin", "technician"] },
       { label: "Avtalsprospekt", page: "ServiceContractLeads", icon: UsersIcon, roles: ["admin", "technician"] },
+      { label: "Avslutade prospekt", page: "ClosedLeads", icon: Archive, roles: ["admin", "technician"] },
       { label: "Serviceavtalsmallar", page: "ServiceAgreementTemplates", icon: FileCheck, roles: ["admin"] },
     ]
   },
