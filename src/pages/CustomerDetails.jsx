@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { createPageUrl } from "@/utils";
 import { Link, useNavigate } from "react-router-dom";
@@ -9,13 +10,30 @@ import { Button } from "@/components/ui/button";
 import CustomerInteractions from "@/components/customers/CustomerInteractions";
 
 export default function CustomerDetails() {
-  const [customer, setCustomer] = useState(null);
-  const [machines, setMachines] = useState([]);
-  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const urlParams = new URLSearchParams(window.location.search);
   const customerId = urlParams.get("id");
+
+  const { data, isLoading: loading } = useQuery({
+    queryKey: ["customerDetails", customerId],
+    queryFn: async () => {
+      if (!customerId) return null;
+      const [c, m] = await Promise.all([
+        base44.entities.Customer.get(customerId),
+        base44.entities.Machine.filter({ customer_id: customerId })
+      ]);
+      return { customer: c, machines: m };
+    },
+    enabled: !!customerId,
+    retry: 3,
+    retryDelay: (attempt) => Math.min(1000 * 2 ** attempt, 10000),
+    staleTime: 30 * 1000,
+  });
+
+  const customer = data?.customer;
+  const machines = data?.machines || [];
 
   const handleExportMachines = () => {
     const rows = [
@@ -44,24 +62,10 @@ export default function CustomerDetails() {
   const handleDeleteMachine = async (machine) => {
     if (window.confirm(`Är du säker på att du vill ta bort maskinen ${machine.model} (SN: ${machine.serial_number})?`)) {
       await base44.entities.Machine.delete(machine.id);
-      setMachines(prev => prev.filter(m => m.id !== machine.id));
+      queryClient.invalidateQueries({ queryKey: ["customerDetails", customerId] });
+      queryClient.invalidateQueries({ queryKey: ["machinesPage"] });
     }
   };
-
-  useEffect(() => {
-    if (!customerId) return;
-    Promise.all([
-      base44.entities.Customer.get(customerId),
-      base44.entities.Machine.filter({ customer_id: customerId })
-    ]).then(([c, m]) => {
-      setCustomer(c);
-      setMachines(m);
-      setLoading(false);
-    }).catch(err => {
-      console.error("Fel vid laddning", err);
-      setLoading(false);
-    });
-  }, [customerId]);
 
   if (loading) return <div className="p-8 text-center text-slate-500">Laddar kundbild...</div>;
   if (!customer) return <div className="p-8 text-center text-red-500">Kunden hittades inte.</div>;
