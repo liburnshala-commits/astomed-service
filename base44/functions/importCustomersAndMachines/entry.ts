@@ -94,6 +94,39 @@ Deno.serve(async (req) => {
       skipped_customers++;
     }
 
+    // Create ServiceContractLead for newly created customers
+    if (customer && created_customers > 0) {
+      // Only create lead for customers just created in this iteration
+      const justCreated = existingCustomers[existingCustomers.length - 1]?.id === customer.id &&
+        existingCustomers.filter(c => c.id === customer.id).length === 1;
+      
+      // Check if lead already exists for this customer
+      const existingLeads = await base44.asServiceRole.entities.ServiceContractLead.filter({ customer_id: customer.id });
+      if (existingLeads.length === 0) {
+        const leadData = {
+          customer_id: customer.id,
+          company_name: customer.company_name,
+          org_number: customer.org_number || undefined,
+          contact_person: customer.contact_person || undefined,
+          email: customer.email || undefined,
+          phone: customer.phone || undefined,
+          status: 'new',
+          proposed_machines: [],
+        };
+        if (row.machine_model && row.serial_number) {
+          leadData.proposed_machines.push({
+            model: row.machine_model,
+            serial_number: row.serial_number,
+          });
+        }
+        try {
+          await base44.asServiceRole.entities.ServiceContractLead.create(leadData);
+        } catch (e) {
+          errors.push(`Prospekt för "${row.company_name}": ${e.message}`);
+        }
+      }
+    }
+
     // Create machine if model provided
     if (customer && row.machine_model) {
       // Skip if serial number already exists
