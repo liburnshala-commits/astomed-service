@@ -162,40 +162,45 @@ export default function ServiceRecords() {
   };
 
   const handleSave = async (data) => {
-    const currentUser = await base44.auth.me();
-    // Auto-update machine status when service is completed or invoiced
-    if (data.machine_id && (data.status === "completed" || data.status === "invoiced")) {
-      const machine = getMachine(data.machine_id);
-      if (machine?.status === "service") {
-        await base44.entities.Machine.update(data.machine_id, { status: "active" });
+    try {
+      const currentUser = await base44.auth.me();
+      // Auto-update machine status when service is completed or invoiced
+      if (data.machine_id && (data.status === "completed" || data.status === "invoiced")) {
+        const machine = getMachine(data.machine_id);
+        if (machine?.status === "service") {
+          await base44.entities.Machine.update(data.machine_id, { status: "active" });
+        }
       }
+      if (editing) {
+        await base44.entities.ServiceRecord.update(editing.id, data);
+        base44.functions.invoke('logAuditEntry', {
+          action: 'update',
+          entity_type: 'ServiceRecord',
+          entity_id: editing.id,
+          entity_label: `${getMachine(editing.machine_id)?.model || 'Okänd maskin'} – ${getCustomer(editing.customer_id)?.company_name || ''}`,
+          user_email: currentUser?.email || 'unknown',
+          user_name: currentUser?.full_name || currentUser?.email,
+          details: `Serviceärende uppdaterat, status: ${data.status}`
+        });
+      } else {
+        const created = await base44.entities.ServiceRecord.create(data);
+        base44.functions.invoke('logAuditEntry', {
+          action: 'create',
+          entity_type: 'ServiceRecord',
+          entity_id: created.id,
+          entity_label: `${getMachine(data.machine_id)?.model || 'Okänd maskin'} – ${getCustomer(data.customer_id)?.company_name || ''}`,
+          user_email: currentUser?.email || 'unknown',
+          user_name: currentUser?.full_name || currentUser?.email,
+          details: `Nytt serviceärende skapat, typ: ${data.service_type}`
+        });
+      }
+      setShowForm(false);
+      setEditing(null);
+      load();
+    } catch (error) {
+      console.error("Fel vid sparning av serviceärende:", error);
+      alert("Det gick inte att spara: " + (error.message || "okänt fel"));
     }
-    if (editing) {
-      await base44.entities.ServiceRecord.update(editing.id, data);
-      base44.functions.invoke('logAuditEntry', {
-        action: 'update',
-        entity_type: 'ServiceRecord',
-        entity_id: editing.id,
-        entity_label: `${getMachine(editing.machine_id)?.model || 'Okänd maskin'} – ${getCustomer(editing.customer_id)?.company_name || ''}`,
-        user_email: currentUser?.email || 'unknown',
-        user_name: currentUser?.full_name || currentUser?.email,
-        details: `Serviceärende uppdaterat, status: ${data.status}`
-      });
-    } else {
-      const created = await base44.entities.ServiceRecord.create(data);
-      base44.functions.invoke('logAuditEntry', {
-        action: 'create',
-        entity_type: 'ServiceRecord',
-        entity_id: created.id,
-        entity_label: `${getMachine(data.machine_id)?.model || 'Okänd maskin'} – ${getCustomer(data.customer_id)?.company_name || ''}`,
-        user_email: currentUser?.email || 'unknown',
-        user_name: currentUser?.full_name || currentUser?.email,
-        details: `Nytt serviceärende skapat, typ: ${data.service_type}`
-      });
-    }
-    setShowForm(false);
-    setEditing(null);
-    load();
   };
 
   return (

@@ -457,6 +457,8 @@ export default function ServiceRecordForm({ record, machines, customers, presele
                 hourly_rate: form.hourly_rate === "" ? undefined : Number(form.hourly_rate),
                 labor_cost: form.labor_cost === "" ? undefined : Number(form.labor_cost),
                 total_cost: form.total_cost === "" ? calcTotal() : Number(form.total_cost) || calcTotal(),
+                discount_percent: form.discount_percent === "" ? 0 : Number(form.discount_percent),
+                next_service_date: form.next_service_date || undefined,
                 status: "awaiting_approval",
                 quote_sent: true,
                 quote_approved: "pending"
@@ -470,7 +472,9 @@ export default function ServiceRecordForm({ record, machines, customers, presele
             labor_hours: form.labor_hours === "" ? undefined : Number(form.labor_hours),
             hourly_rate: form.hourly_rate === "" ? undefined : Number(form.hourly_rate),
             labor_cost: form.labor_cost === "" ? undefined : Number(form.labor_cost),
-            total_cost: form.total_cost === "" ? calcTotal() : Number(form.total_cost) || calcTotal()
+            total_cost: form.total_cost === "" ? calcTotal() : Number(form.total_cost) || calcTotal(),
+            discount_percent: form.discount_percent === "" ? 0 : Number(form.discount_percent),
+            next_service_date: form.next_service_date || undefined
           })} className="bg-blue-600 hover:bg-blue-700" disabled={!form.machine_id || !form.customer_id || !form.service_date}>
             {record ? "Spara ändringar" : "Skapa ärende"}
           </Button>
