@@ -119,13 +119,27 @@ export default function ServiceRecordForm({ record, machines, customers, presele
       unit_price: 0
     }));
 
-    setForm(prev => ({
-      ...prev,
-      description: prev.description 
-        ? `${prev.description}\n\nGenomförda moment från mall (${template.name}):`
-        : `Genomförda moment från mall (${template.name}):`,
-      parts_used: [...prev.parts_used, ...newParts]
-    }));
+    setForm(prev => {
+      // Hitta och ta bort moment som kommer från någon mall (bevara manuella)
+      const allTemplateServices = new Set(templates.flatMap(t => t.included_services || []));
+      const manualParts = prev.parts_used.filter(p => !allTemplateServices.has(p.part_name));
+      
+      // Rensa bort gamla mall-texter från beskrivningen
+      let newDesc = prev.description || "";
+      templates.forEach(t => {
+        newDesc = newDesc.replace(`\n\nGenomförda moment från mall (${t.name}):`, "");
+        newDesc = newDesc.replace(`Genomförda moment från mall (${t.name}):`, "");
+      });
+      newDesc = newDesc.trim();
+
+      return {
+        ...prev,
+        description: newDesc 
+          ? `${newDesc}\n\nGenomförda moment från mall (${template.name}):`
+          : `Genomförda moment från mall (${template.name}):`,
+        parts_used: [...manualParts, ...newParts]
+      };
+    });
     
     setSelectedTemplate("");
   };
