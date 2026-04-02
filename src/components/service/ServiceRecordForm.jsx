@@ -96,6 +96,34 @@ export default function ServiceRecordForm({ record, machines, customers, presele
   });
   const [serialMatch, setSerialMatch] = useState(null); // null | "found" | "not_found"
   const [uploading, setUploading] = useState(false);
+  const [templates, setTemplates] = useState([]);
+  const [selectedTemplate, setSelectedTemplate] = useState("");
+
+  useEffect(() => {
+    base44.entities.ServiceAgreementTemplate.list().then(setTemplates).catch(console.error);
+  }, []);
+
+  const applyTemplate = (templateId) => {
+    const template = templates.find(t => t.id === templateId);
+    if (!template) return;
+    
+    const newParts = (template.included_services || []).map(service => ({
+      part_name: service,
+      part_number: "",
+      quantity: 1,
+      unit_price: 0
+    }));
+
+    setForm(prev => ({
+      ...prev,
+      description: prev.description 
+        ? `${prev.description}\n\nGenomförda moment från mall (${template.name}):`
+        : `Genomförda moment från mall (${template.name}):`,
+      parts_used: [...prev.parts_used, ...newParts]
+    }));
+    
+    setSelectedTemplate("");
+  };
 
   const set = (field, value) => {
     setForm(prev => {
@@ -281,16 +309,40 @@ export default function ServiceRecordForm({ record, machines, customers, presele
             </div>
           </div>
 
+          {/* Apply Template */}
+          <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-3">
+            <Label className="text-sm font-semibold text-slate-800">Fyll i moment från serviceavtalsmall</Label>
+            <div className="flex gap-2">
+              <Select value={selectedTemplate} onValueChange={setSelectedTemplate}>
+                <SelectTrigger className="bg-white"><SelectValue placeholder="Välj serviceavtalsmall..." /></SelectTrigger>
+                <SelectContent>
+                  {templates.map(t => <SelectItem key={t.id} value={t.id}>{t.name}</SelectItem>)}
+                </SelectContent>
+              </Select>
+              <Button 
+                variant="outline" 
+                onClick={() => applyTemplate(selectedTemplate)}
+                disabled={!selectedTemplate}
+                className="shrink-0 bg-white"
+              >
+                Applicera moment
+              </Button>
+            </div>
+            <p className="text-xs text-slate-500">
+              Detta lägger automatiskt till mallens inkluderade tjänster i listan nedan, redo att checkas av eller prissättas.
+            </p>
+          </div>
+
           {/* Parts */}
           <div>
             <div className="flex items-center justify-between mb-3">
-              <Label className="text-base font-semibold">Reservdelar</Label>
-              <Button size="sm" variant="outline" onClick={addPart}><Plus className="w-3 h-3 mr-1" /> Lägg till del</Button>
+              <Label className="text-base font-semibold">Reservdelar & Moment</Label>
+              <Button size="sm" variant="outline" onClick={addPart}><Plus className="w-3 h-3 mr-1" /> Lägg till rad</Button>
             </div>
             <div className="space-y-2">
               {form.parts_used.map((part, i) => (
                 <div key={i} className="grid grid-cols-12 gap-2 items-center">
-                  <Input className="col-span-4" placeholder="Delnamn" value={part.part_name} onChange={e => updatePart(i, "part_name", e.target.value)} />
+                  <Input className="col-span-4" placeholder="Namn/Moment" value={part.part_name} onChange={e => updatePart(i, "part_name", e.target.value)} />
                   <Input className="col-span-3" placeholder="Art.nr" value={part.part_number} onChange={e => updatePart(i, "part_number", e.target.value)} />
                   <Input className="col-span-2" type="number" placeholder="Antal" value={part.quantity} onChange={e => updatePart(i, "quantity", parseFloat(e.target.value))} />
                   <Input className="col-span-2" type="number" placeholder="à-pris" value={part.unit_price} onChange={e => updatePart(i, "unit_price", parseFloat(e.target.value))} />
