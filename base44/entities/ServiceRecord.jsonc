@@ -1,0 +1,157 @@
+{
+  "name": "ServiceRecord",
+  "type": "object",
+  "properties": {
+    "machine_id": {
+      "type": "string",
+      "description": "Maskin-ID"
+    },
+    "customer_id": {
+      "type": "string",
+      "description": "Kund-ID"
+    },
+    "service_type": {
+      "type": "string",
+      "enum": [
+        "standard",
+        "advanced"
+      ],
+      "description": "Servicetyp"
+    },
+    "service_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Servicedatum"
+    },
+    "technician_name": {
+      "type": "string",
+      "description": "Tekniker"
+    },
+    "description": {
+      "type": "string",
+      "description": "Beskrivning av utf\u00f6rt arbete"
+    },
+    "parts_used": {
+      "type": "array",
+      "description": "Anv\u00e4nda reservdelar",
+      "items": {
+        "type": "object",
+        "properties": {
+          "part_name": {
+            "type": "string"
+          },
+          "part_number": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "number"
+          },
+          "unit_price": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "labor_hours": {
+      "type": "number",
+      "description": "Arbetstimmar"
+    },
+    "hourly_rate": {
+      "type": "number",
+      "description": "Timpris"
+    },
+    "labor_cost": {
+      "type": "number",
+      "description": "Arbetskostnad"
+    },
+    "additional_costs": {
+      "type": "array",
+      "description": "\u00d6vriga kostnadsmoment (t.ex. restid, hotell)",
+      "items": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string"
+          },
+          "cost": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "discount_percent": {
+      "type": "number",
+      "default": 0,
+      "description": "Rabatt i procent"
+    },
+    "total_cost": {
+      "type": "number",
+      "description": "Totalkostnad"
+    },
+    "images": {
+      "type": "array",
+      "description": "Bilder",
+      "items": {
+        "type": "string"
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "awaiting_approval",
+        "in_progress",
+        "completed",
+        "invoiced"
+      ],
+      "default": "pending",
+      "description": "Status"
+    },
+    "next_service_date": {
+      "type": "string",
+      "format": "date",
+      "description": "N\u00e4sta servicedatum"
+    },
+    "technician_signature": {
+      "type": "string",
+      "description": "Teknikersignatur"
+    },
+    "customer_approved": {
+      "type": "boolean",
+      "default": false,
+      "description": "Kundgodk\u00e4nnande"
+    },
+    "report_url": {
+      "type": "string",
+      "description": "Rapportl\u00e4nk"
+    },
+    "quote_sent": {
+      "type": "boolean",
+      "default": false,
+      "description": "Kostnadsf\u00f6rslag skickat till kund"
+    },
+    "quote_approved": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "approved",
+        "rejected"
+      ],
+      "description": "Kundens svar p\u00e5 kostnadsf\u00f6rslag"
+    },
+    "quote_note": {
+      "type": "string",
+      "description": "Kundens meddelande vid godk\u00e4nnande/avvisning av kostnadsf\u00f6rslag"
+    },
+    "protocol_uri": {
+      "type": "string",
+      "description": "URI till det genererade serviceprotokollet i privat lagring"
+    }
+  },
+  "required": [
+    "machine_id",
+    "customer_id",
+    "service_type",
+    "service_date"
+  ]
+}

@@ -52,6 +52,7 @@ export default function ServiceRecordForm({ record, machines, customers, presele
     description: record?.description || "",
     parts_used: record?.parts_used || [],
     labor_hours: record?.labor_hours || "",
+    hourly_rate: record?.hourly_rate || "",
     labor_cost: record?.labor_cost || "",
     total_cost: record?.total_cost || "",
     discount_percent: record?.discount_percent || "",
@@ -96,7 +97,17 @@ export default function ServiceRecordForm({ record, machines, customers, presele
   const [serialMatch, setSerialMatch] = useState(null); // null | "found" | "not_found"
   const [uploading, setUploading] = useState(false);
 
-  const set = (field, value) => setForm(prev => ({ ...prev, [field]: value }));
+  const set = (field, value) => {
+    setForm(prev => {
+      const next = { ...prev, [field]: value };
+      if (field === "labor_hours" || field === "hourly_rate") {
+        const hours = parseFloat(next.labor_hours) || 0;
+        const rate = parseFloat(next.hourly_rate) || 0;
+        next.labor_cost = hours * rate || "";
+      }
+      return next;
+    });
+  };
 
   const handleSerialChange = (value) => {
     setSerialInput(value);
@@ -296,15 +307,20 @@ export default function ServiceRecordForm({ record, machines, customers, presele
               <Label>Arbetstimmar{currentContract === "none" && " *"}</Label>
               <Input type="number" value={form.labor_hours} onChange={e => set("labor_hours", e.target.value === "" ? "" : parseFloat(e.target.value))} placeholder="0" />
               {currentContract === "none" && (
-                <p className="text-xs text-slate-500">Obligatoriskt för service utan avtal</p>
+                <p className="text-xs text-slate-500">Oblig. utan avtal</p>
               )}
             </div>
             <div className="space-y-1">
-              <Label>Arbetskostnad (kr){currentContract === "none" && " *"}</Label>
-              <Input type="number" value={form.labor_cost} onChange={e => set("labor_cost", e.target.value === "" ? "" : parseFloat(e.target.value))} placeholder="0" />
+              <Label>Timpris (kr/h){currentContract === "none" && " *"}</Label>
+              <Input type="number" value={form.hourly_rate} onChange={e => set("hourly_rate", e.target.value === "" ? "" : parseFloat(e.target.value))} placeholder="0" />
               {currentContract === "none" && (
-                <p className="text-xs text-slate-500">Obligatoriskt för service utan avtal</p>
+                <p className="text-xs text-slate-500">Oblig. utan avtal</p>
               )}
+            </div>
+            <div className="col-span-2 space-y-1">
+              <Label>Arbetskostnad (kr)</Label>
+              <Input type="number" value={form.labor_cost} readOnly className="bg-slate-50 text-slate-600 font-medium" placeholder="0" />
+              <p className="text-xs text-slate-500">Beräknas automatiskt (Timmar × Timpris)</p>
             </div>
 
             <div className="col-span-2 mt-2">
@@ -369,6 +385,7 @@ export default function ServiceRecordForm({ record, machines, customers, presele
               onClick={() => onSave({
                 ...form,
                 labor_hours: form.labor_hours === "" ? undefined : Number(form.labor_hours),
+                hourly_rate: form.hourly_rate === "" ? undefined : Number(form.hourly_rate),
                 labor_cost: form.labor_cost === "" ? undefined : Number(form.labor_cost),
                 total_cost: form.total_cost === "" ? calcTotal() : Number(form.total_cost) || calcTotal(),
                 status: "awaiting_approval",
@@ -382,6 +399,7 @@ export default function ServiceRecordForm({ record, machines, customers, presele
           <Button onClick={() => onSave({
             ...form,
             labor_hours: form.labor_hours === "" ? undefined : Number(form.labor_hours),
+            hourly_rate: form.hourly_rate === "" ? undefined : Number(form.hourly_rate),
             labor_cost: form.labor_cost === "" ? undefined : Number(form.labor_cost),
             total_cost: form.total_cost === "" ? calcTotal() : Number(form.total_cost) || calcTotal()
           })} className="bg-blue-600 hover:bg-blue-700" disabled={!form.machine_id || !form.customer_id || !form.service_date}>
