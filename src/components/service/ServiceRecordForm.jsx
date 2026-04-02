@@ -107,7 +107,12 @@ export default function ServiceRecordForm({ record, machines, customers, presele
     const template = templates.find(t => t.id === templateId);
     if (!template) return;
     
-    const newParts = (template.included_services || []).map(service => ({
+    const filteredServices = (template.included_services || []).filter(service => {
+      const s = service.toLowerCase();
+      return !s.includes("20 %") && !s.includes("20%") && !s.includes("rabatt");
+    });
+
+    const newParts = filteredServices.map(service => ({
       part_name: service,
       part_number: "",
       quantity: 1,
