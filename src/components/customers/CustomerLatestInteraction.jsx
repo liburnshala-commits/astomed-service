@@ -3,6 +3,7 @@ import { base44 } from "@/api/base44Client";
 import { Phone, Mail, Users, FileText, MessageSquare } from "lucide-react";
 import { format } from "date-fns";
 import { sv } from "date-fns/locale";
+import CustomerInteractionsModal from "./CustomerInteractionsModal";
 
 const interactionIcons = {
   phone: <Phone className="w-3.5 h-3.5 text-blue-500" />,
@@ -21,10 +22,16 @@ const interactionLabels = {
 export default function CustomerLatestInteraction({ customerId }) {
   const [interaction, setInteraction] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     loadLatest();
   }, [customerId]);
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    loadLatest();
+  };
 
   const loadLatest = async () => {
     try {
@@ -48,18 +55,36 @@ export default function CustomerLatestInteraction({ customerId }) {
 
   if (!interaction) {
     return (
-      <div className="mt-4 p-3 bg-slate-50 rounded-lg text-sm text-slate-500 text-center">
-        <MessageSquare className="w-4 h-4 mx-auto mb-1 opacity-50" />
-        Inga händelser loggade än
-      </div>
+      <>
+        <button 
+          onClick={() => setShowModal(true)}
+          className="w-full mt-4 p-3 bg-slate-50 hover:bg-slate-100 transition-colors rounded-lg text-sm text-slate-500 text-center border border-dashed border-slate-200"
+        >
+          <MessageSquare className="w-4 h-4 mx-auto mb-1 opacity-50" />
+          Inga händelser loggade än. Klicka för att logga.
+        </button>
+        {showModal && (
+          <CustomerInteractionsModal 
+            customerId={customerId} 
+            onClose={handleCloseModal} 
+          />
+        )}
+      </>
     );
   }
 
   return (
-    <div className="mt-4 p-3 bg-slate-50 rounded-lg overflow-hidden">
-      <div className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide mb-2 flex items-center gap-1.5">
-        <MessageSquare className="w-3 h-3" /> Senaste händelsen
-      </div>
+    <>
+      <div 
+        onClick={() => setShowModal(true)}
+        className="mt-4 p-3 bg-slate-50 hover:bg-slate-100 cursor-pointer transition-colors rounded-lg overflow-hidden border border-transparent hover:border-slate-200"
+      >
+        <div className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide mb-2 flex items-center justify-between gap-1.5">
+          <div className="flex items-center gap-1.5">
+            <MessageSquare className="w-3 h-3" /> Senaste händelsen
+          </div>
+          <span className="text-[10px] text-blue-500 lowercase font-normal">Klicka för att visa alla</span>
+        </div>
       <div className="flex items-start gap-2">
         <div className="p-1.5 bg-white rounded-md border border-slate-200 shadow-sm flex-shrink-0">
           {interactionIcons[interaction.interaction_type] || interactionIcons.other}
@@ -78,6 +103,13 @@ export default function CustomerLatestInteraction({ customerId }) {
           </p>
         </div>
       </div>
-    </div>
+      </div>
+      {showModal && (
+        <CustomerInteractionsModal 
+          customerId={customerId} 
+          onClose={handleCloseModal} 
+        />
+      )}
+    </>
   );
 }
