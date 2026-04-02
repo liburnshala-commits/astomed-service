@@ -54,6 +54,8 @@ export default function ServiceRecordForm({ record, machines, customers, presele
     labor_hours: record?.labor_hours || "",
     labor_cost: record?.labor_cost || "",
     total_cost: record?.total_cost || "",
+    discount_percent: record?.discount_percent || "",
+    additional_costs: record?.additional_costs || [],
     status: record?.status || "pending",
     next_service_date: record?.next_service_date || "",
     images: record?.images || [],
@@ -133,6 +135,23 @@ export default function ServiceRecordForm({ record, machines, customers, presele
     setForm(prev => ({ ...prev, parts_used: prev.parts_used.filter((_, idx) => idx !== i) }));
   };
 
+  const addAdditionalCost = () => {
+    setForm(prev => ({
+      ...prev,
+      additional_costs: [...prev.additional_costs, { description: "", cost: 0 }]
+    }));
+  };
+
+  const updateAdditionalCost = (i, field, value) => {
+    const costs = [...form.additional_costs];
+    costs[i] = { ...costs[i], [field]: value };
+    setForm(prev => ({ ...prev, additional_costs: costs }));
+  };
+
+  const removeAdditionalCost = (i) => {
+    setForm(prev => ({ ...prev, additional_costs: prev.additional_costs.filter((_, idx) => idx !== i) }));
+  };
+
   const handleImageUpload = async (e) => {
     const files = Array.from(e.target.files);
     if (!files.length) return;
@@ -151,7 +170,10 @@ export default function ServiceRecordForm({ record, machines, customers, presele
 
   const calcTotal = () => {
     const partsTotal = form.parts_used.reduce((sum, p) => sum + ((p.unit_price || 0) * (p.quantity || 1)), 0);
-    return partsTotal + (parseFloat(form.labor_cost) || 0);
+    const additionalTotal = form.additional_costs.reduce((sum, c) => sum + (parseFloat(c.cost) || 0), 0);
+    const baseTotal = partsTotal + additionalTotal + (parseFloat(form.labor_cost) || 0);
+    const discount = parseFloat(form.discount_percent) || 0;
+    return Math.round(baseTotal * (1 - (discount / 100)));
   };
 
   return (
@@ -284,7 +306,30 @@ export default function ServiceRecordForm({ record, machines, customers, presele
                 <p className="text-xs text-slate-500">Obligatoriskt för service utan avtal</p>
               )}
             </div>
-            <div className="col-span-2 p-3 bg-slate-50 rounded-lg flex items-center justify-between">
+
+            <div className="col-span-2 mt-2">
+              <div className="flex items-center justify-between mb-3">
+                <Label className="text-base font-semibold">Övriga kostnadsmoment</Label>
+                <Button size="sm" variant="outline" onClick={addAdditionalCost}><Plus className="w-3 h-3 mr-1" /> Lägg till kostnad</Button>
+              </div>
+              <div className="space-y-2">
+                {form.additional_costs.map((cost, i) => (
+                  <div key={i} className="grid grid-cols-12 gap-2 items-center">
+                    <Input className="col-span-7" placeholder="Beskrivning (t.ex. Restid, Hotell)" value={cost.description} onChange={e => updateAdditionalCost(i, "description", e.target.value)} />
+                    <Input className="col-span-4" type="number" placeholder="Kostnad (kr)" value={cost.cost} onChange={e => updateAdditionalCost(i, "cost", parseFloat(e.target.value))} />
+                    <Button size="icon" variant="ghost" className="col-span-1 text-red-400 hover:text-red-600" onClick={() => removeAdditionalCost(i)}><Trash2 className="w-3 h-3" /></Button>
+                  </div>
+                ))}
+                {form.additional_costs.length === 0 && <p className="text-sm text-slate-400 text-center py-4 border rounded-lg border-dashed">Inga övriga kostnader tillagda</p>}
+              </div>
+            </div>
+
+            <div className="space-y-1 col-span-2 md:col-span-1 mt-2">
+              <Label>Rabatt (%)</Label>
+              <Input type="number" min="0" max="100" value={form.discount_percent} onChange={e => set("discount_percent", e.target.value === "" ? "" : parseFloat(e.target.value))} placeholder="0" />
+            </div>
+
+            <div className="col-span-2 p-3 bg-slate-50 rounded-lg flex items-center justify-between mt-2">
               <span className="text-sm text-slate-600">Beräknad totalkostnad</span>
               <span className="font-bold text-lg text-slate-900">{calcTotal().toLocaleString("sv-SE")} kr</span>
             </div>
