@@ -3,7 +3,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { X } from "lucide-react";
+import { X, Calendar as CalendarIcon } from "lucide-react";
+import { format } from "date-fns";
 
 export default function EditLeadModal({ lead, onClose, onSave }) {
   const [form, setForm] = useState({
@@ -15,10 +16,15 @@ export default function EditLeadModal({ lead, onClose, onSave }) {
     notes: lead.notes || "",
   });
 
+  const [createFollowUp, setCreateFollowUp] = useState(false);
+  const [followUpDate, setFollowUpDate] = useState(
+    format(new Date(Date.now() + 3 * 24 * 60 * 60 * 1000), "yyyy-MM-dd")
+  );
+
   const set = (k, v) => setForm(prev => ({ ...prev, [k]: v }));
 
   const handleSave = () => {
-    onSave(lead.id, form);
+    onSave(lead.id, { ...form, createFollowUp, followUpDate });
   };
 
   return (
@@ -56,6 +62,31 @@ export default function EditLeadModal({ lead, onClose, onSave }) {
           <div className="space-y-2">
             <Label>Anteckningar</Label>
             <Textarea value={form.notes} onChange={e => set("notes", e.target.value)} rows={3} />
+          </div>
+
+          <div className="flex flex-col gap-2 p-3 bg-slate-50 border border-slate-200 rounded-md">
+            <label className="flex items-center gap-2 text-sm font-medium text-slate-700 cursor-pointer w-fit">
+              <input 
+                type="checkbox" 
+                className="w-4 h-4 rounded border-gray-300 text-primary cursor-pointer"
+                checked={createFollowUp} 
+                onChange={(e) => setCreateFollowUp(e.target.checked)} 
+              />
+              Skapa uppföljning (To-Do)
+            </label>
+            {createFollowUp && (
+              <div className="flex items-center gap-2 pl-6 mt-1">
+                <CalendarIcon className="w-4 h-4 text-slate-500" />
+                <span className="text-sm text-slate-600">Förfallodatum:</span>
+                <Input
+                  type="date"
+                  value={followUpDate}
+                  onChange={(e) => setFollowUpDate(e.target.value)}
+                  className="bg-white w-40 h-8"
+                  required={createFollowUp}
+                />
+              </div>
+            )}
           </div>
         </div>
 

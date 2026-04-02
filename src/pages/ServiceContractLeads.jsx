@@ -92,10 +92,11 @@ export default function ServiceContractLeads() {
   };
 
   const handleEditLead = async (id, updatedData) => {
+    const { createFollowUp, followUpDate, ...leadData } = updatedData;
     const oldLead = leads.find(l => l.id === id);
-    await base44.entities.ServiceContractLead.update(id, updatedData);
+    await base44.entities.ServiceContractLead.update(id, leadData);
     
-    if (updatedData.notes !== undefined && updatedData.notes !== (oldLead?.notes || "")) {
+    if (leadData.notes !== undefined && leadData.notes !== (oldLead?.notes || "")) {
       try {
         const user = await base44.auth.me();
         await base44.entities.CustomerInteraction.create({
@@ -103,11 +104,28 @@ export default function ServiceContractLeads() {
           lead_id: id,
           interaction_type: 'other',
           interaction_date: new Date().toISOString(),
-          notes: updatedData.notes ? `Prospektanteckning uppdaterad: ${updatedData.notes}` : "Prospektanteckning borttagen.",
+          notes: leadData.notes ? `Prospektanteckning uppdaterad: ${leadData.notes}` : "Prospektanteckning borttagen.",
           logged_by: user?.full_name || user?.email || "System"
         });
       } catch (err) {
         console.error("Kunde inte logga anteckning", err);
+      }
+    }
+
+    if (createFollowUp && followUpDate) {
+      try {
+        const user = await base44.auth.me();
+        await base44.entities.Task.create({
+          title: `Uppföljning: Prospekt ${leadData.company_name || oldLead?.company_name || 'Okänd'}`,
+          description: leadData.notes || "Följ upp prospekt.",
+          status: "pending",
+          due_date: followUpDate,
+          customer_id: oldLead?.customer_id || undefined,
+          lead_id: id,
+          assigned_to: user?.email || undefined
+        });
+      } catch (err) {
+        console.error("Kunde inte skapa uppföljning", err);
       }
     }
 
