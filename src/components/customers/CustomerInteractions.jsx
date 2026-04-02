@@ -7,7 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { format } from "date-fns";
 import { sv } from "date-fns/locale";
-import { Phone, Mail, Users, FileText, Plus, MessageSquare } from "lucide-react";
+import { Phone, Mail, Users, FileText, Plus, MessageSquare, Calendar as CalendarIcon } from "lucide-react";
 
 const interactionIcons = {
   phone: <Phone className="w-4 h-4 text-blue-500" />,
@@ -30,6 +30,10 @@ export default function CustomerInteractions({ customerId, leadId }) {
   const [interactionDate, setInteractionDate] = useState(format(new Date(), "yyyy-MM-dd'T'HH:mm"));
   const [notes, setNotes] = useState("");
   const [loading, setLoading] = useState(false);
+  const [createFollowUp, setCreateFollowUp] = useState(false);
+  const [followUpDate, setFollowUpDate] = useState(
+    format(new Date(Date.now() + 3 * 24 * 60 * 60 * 1000), "yyyy-MM-dd")
+  );
 
   const load = async () => {
     let query = {};
@@ -64,7 +68,21 @@ export default function CustomerInteractions({ customerId, leadId }) {
         notes: notes,
         logged_by: user?.full_name || user?.email || "Okänd"
       });
+
+      if (createFollowUp && followUpDate) {
+        await base44.entities.Task.create({
+          title: `Uppföljning: ${interactionLabels[type] || "Övrigt"}`,
+          description: notes,
+          status: "pending",
+          due_date: followUpDate,
+          customer_id: customerId || undefined,
+          lead_id: leadId || undefined,
+          assigned_to: user?.email || undefined
+        });
+      }
+
       setNotes("");
+      setCreateFollowUp(false);
       setInteractionDate(format(new Date(), "yyyy-MM-dd'T'HH:mm"));
       setShowForm(false);
       load();
@@ -117,7 +135,33 @@ export default function CustomerInteractions({ customerId, leadId }) {
                 onChange={e => setNotes(e.target.value)}
                 autoFocus
               />
-              <div className="flex justify-end gap-2">
+              
+              <div className="flex flex-col gap-2 p-3 bg-white border border-slate-200 rounded-md">
+                <label className="flex items-center gap-2 text-sm font-medium text-slate-700 cursor-pointer w-fit">
+                  <input 
+                    type="checkbox" 
+                    className="w-4 h-4 rounded border-gray-300 text-primary cursor-pointer"
+                    checked={createFollowUp} 
+                    onChange={(e) => setCreateFollowUp(e.target.checked)} 
+                  />
+                  Skapa uppföljning (To-Do)
+                </label>
+                {createFollowUp && (
+                  <div className="flex items-center gap-2 pl-6 mt-1">
+                    <CalendarIcon className="w-4 h-4 text-slate-500" />
+                    <span className="text-sm text-slate-600">Förfallodatum:</span>
+                    <Input
+                      type="date"
+                      value={followUpDate}
+                      onChange={(e) => setFollowUpDate(e.target.value)}
+                      className="bg-white w-40 h-8"
+                      required={createFollowUp}
+                    />
+                  </div>
+                )}
+              </div>
+
+              <div className="flex justify-end gap-2 mt-2">
                 <Button type="button" variant="ghost" size="sm" onClick={() => setShowForm(false)}>
                   Avbryt
                 </Button>

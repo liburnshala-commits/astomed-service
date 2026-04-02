@@ -25,7 +25,8 @@ import {
   ClipboardList,
   FileCheck,
   MessageSquare,
-  Archive
+  Archive,
+  CheckSquare
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -44,6 +45,7 @@ const navSections = [
     title: "Service",
     items: [
       { label: "Serviceförfrågningar", page: "PublicServiceLeads", icon: ClipboardList, roles: ["admin", "technician"] },
+      { label: "Uppföljningar (To-Do)", page: "Tasks", icon: CheckSquare, roles: ["admin", "technician"] },
       { label: "Chattsupport", page: "ChatSupport", icon: MessageSquare, roles: ["admin", "technician"] },
       { label: "Serviceärenden", page: "ServiceRecords", icon: Wrench, roles: ["admin", "technician", "customer"] },
       { label: "Servicekalender", page: "Calendar", icon: CalendarDays, roles: ["admin", "technician"] },

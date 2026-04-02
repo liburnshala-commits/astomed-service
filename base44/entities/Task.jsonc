@@ -1,0 +1,44 @@
+{
+  "name": "Task",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Titel p\u00e5 uppgiften"
+    },
+    "description": {
+      "type": "string",
+      "description": "Beskrivning"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "completed"
+      ],
+      "default": "pending",
+      "description": "Status"
+    },
+    "due_date": {
+      "type": "string",
+      "format": "date",
+      "description": "F\u00f6rfallodatum"
+    },
+    "customer_id": {
+      "type": "string",
+      "description": "L\u00e4nk till kund"
+    },
+    "lead_id": {
+      "type": "string",
+      "description": "L\u00e4nk till prospekt"
+    },
+    "assigned_to": {
+      "type": "string",
+      "description": "Tilldelad anv\u00e4ndare (e-post)"
+    }
+  },
+  "required": [
+    "title",
+    "status"
+  ]
+}

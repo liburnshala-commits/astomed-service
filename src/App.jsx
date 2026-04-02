@@ -13,6 +13,7 @@ import ServiceContractLeads from './pages/ServiceContractLeads';
 import ClosedLeads from './pages/ClosedLeads';
 import DeletedMachines from './pages/DeletedMachines';
 import ChatSupport from './pages/ChatSupport';
+import Tasks from './pages/Tasks';
 
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
@@ -60,6 +61,7 @@ const AuthenticatedApp = () => {
       <Route path="/ClosedLeads" element={<LayoutWrapper currentPageName="ClosedLeads"><ClosedLeads /></LayoutWrapper>} />
       <Route path="/DeletedMachines" element={<LayoutWrapper currentPageName="Machines"><DeletedMachines /></LayoutWrapper>} />
       <Route path="/ChatSupport" element={<LayoutWrapper currentPageName="ChatSupport"><ChatSupport /></LayoutWrapper>} />
+      <Route path="/Tasks" element={<LayoutWrapper currentPageName="Tasks"><Tasks /></LayoutWrapper>} />
       {Object.entries(Pages).map(([path, Page]) => (
         <Route
           key={path}
