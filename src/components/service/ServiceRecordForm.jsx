@@ -335,13 +335,14 @@ export default function ServiceRecordForm({ record, machines, customers, presele
               <Select value={selectedTemplate} onValueChange={setSelectedTemplate}>
                 <SelectTrigger className="bg-white"><SelectValue placeholder="Välj serviceavtalsmall..." /></SelectTrigger>
                 <SelectContent>
+                  <SelectItem value="only_repair">Endast reparation - ange servicemoment nedan</SelectItem>
                   {templates.map(t => <SelectItem key={t.id} value={t.id}>{t.name}</SelectItem>)}
                 </SelectContent>
               </Select>
               <Button 
                 variant="outline" 
                 onClick={() => applyTemplate(selectedTemplate)}
-                disabled={!selectedTemplate}
+                disabled={!selectedTemplate || selectedTemplate === "only_repair"}
                 className="shrink-0 bg-white"
               >
                 Applicera moment
