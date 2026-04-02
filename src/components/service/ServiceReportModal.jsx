@@ -1,7 +1,10 @@
-import { X, Printer } from "lucide-react";
+import { X, Printer, Download, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
 import { sv } from "date-fns/locale";
+import { useState } from "react";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 
 const COMPANY = {
   name: "Astomed Klinikutrustning Sverige AB",
@@ -15,10 +18,55 @@ const COMPANY = {
 };
 
 export default function ServiceReportModal({ record, machine, customer, onClose }) {
+  const [generatingPDF, setGeneratingPDF] = useState(false);
   const serviceDate = record.service_date ? format(new Date(record.service_date), "d MMMM yyyy", { locale: sv }) : "";
   const printDate = format(new Date(), "d MMMM yyyy", { locale: sv });
   const typeLabel = record.service_type === "standard" ? "Standard årlig service" : "Avancerad service";
   const partsTotal = (record.parts_used || []).reduce((s, p) => s + (p.unit_price || 0) * (p.quantity || 1), 0);
+
+  const handleDownloadPDF = async () => {
+    const input = document.getElementById('service-report');
+    if (!input) return;
+    
+    setGeneratingPDF(true);
+    try {
+      const canvas = await html2canvas(input, {
+        scale: 2,
+        useCORS: true,
+        logging: false,
+        backgroundColor: '#ffffff'
+      });
+      
+      const imgData = canvas.toDataURL('image/jpeg', 1.0);
+      const pdf = new jsPDF({
+        orientation: 'portrait',
+        unit: 'mm',
+        format: 'a4'
+      });
+      
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+      
+      let heightLeft = pdfHeight;
+      let position = 0;
+      
+      pdf.addImage(imgData, 'JPEG', 0, position, pdfWidth, pdfHeight);
+      heightLeft -= pdf.internal.pageSize.getHeight();
+      
+      while (heightLeft > 0) {
+        position = heightLeft - pdfHeight;
+        pdf.addPage();
+        pdf.addImage(imgData, 'JPEG', 0, position, pdfWidth, pdfHeight);
+        heightLeft -= pdf.internal.pageSize.getHeight();
+      }
+      
+      pdf.save(`Servicerapport_${machine?.serial_number || 'Maskin'}_${format(new Date(), 'yyyyMMdd')}.pdf`);
+    } catch (error) {
+      console.error('Error generating PDF:', error);
+    } finally {
+      setGeneratingPDF(false);
+    }
+  };
 
   return (
     <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50 p-4">
@@ -28,8 +76,12 @@ export default function ServiceReportModal({ record, machine, customer, onClose 
         <div className="flex items-center justify-between p-4 border-b sticky top-0 bg-white z-10 print:hidden">
           <h2 className="font-bold text-slate-900">Servicerapport</h2>
           <div className="flex gap-2">
-            <Button size="sm" variant="outline" onClick={() => window.print()}>
-              <Printer className="w-4 h-4 mr-1" /> Skriv ut / Spara PDF
+            <Button size="sm" variant="outline" onClick={() => window.print()} title="Skriv ut">
+              <Printer className="w-4 h-4 mr-1" /> Skriv ut
+            </Button>
+            <Button size="sm" variant="outline" onClick={handleDownloadPDF} disabled={generatingPDF} className="bg-slate-900 text-white hover:bg-slate-800 hover:text-white border-transparent">
+              {generatingPDF ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Download className="w-4 h-4 mr-2" />}
+              Ladda ner PDF
             </Button>
             <Button variant="ghost" size="icon" onClick={onClose}><X className="w-4 h-4" /></Button>
           </div>

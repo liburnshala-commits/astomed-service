@@ -38,7 +38,11 @@
 
 @media print {
   @page {
-    margin: 5mm;
+    margin: 10mm;
+  }
+  body {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
   }
   body * {
     visibility: hidden;
@@ -51,7 +55,21 @@
     left: 0;
     top: 0;
     width: 100%;
+    margin: 0;
+    padding: 0;
   }
+  
+  .fixed {
+    position: absolute !important;
+    overflow: visible !important;
+  }
+  .overflow-y-auto {
+    overflow: visible !important;
+  }
+  .max-h-\[90vh\] {
+    max-height: none !important;
+  }
+  
   .print\:hidden {
     display: none !important;
   }
