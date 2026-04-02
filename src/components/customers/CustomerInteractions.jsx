@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { format } from "date-fns";
@@ -26,6 +27,7 @@ export default function CustomerInteractions({ customerId, leadId }) {
   const [interactions, setInteractions] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [type, setType] = useState("phone");
+  const [interactionDate, setInteractionDate] = useState(format(new Date(), "yyyy-MM-dd'T'HH:mm"));
   const [notes, setNotes] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -58,11 +60,12 @@ export default function CustomerInteractions({ customerId, leadId }) {
         customer_id: customerId || undefined,
         lead_id: leadId || undefined,
         interaction_type: type,
-        interaction_date: new Date().toISOString(),
+        interaction_date: new Date(interactionDate).toISOString(),
         notes: notes,
         logged_by: user?.full_name || user?.email || "Okänd"
       });
       setNotes("");
+      setInteractionDate(format(new Date(), "yyyy-MM-dd'T'HH:mm"));
       setShowForm(false);
       load();
     } finally {
@@ -99,6 +102,13 @@ export default function CustomerInteractions({ customerId, leadId }) {
                     <SelectItem value="other">📝 Övrigt</SelectItem>
                   </SelectContent>
                 </Select>
+                <Input
+                  type="datetime-local"
+                  value={interactionDate}
+                  onChange={(e) => setInteractionDate(e.target.value)}
+                  className="bg-white max-w-[200px]"
+                  required
+                />
               </div>
               <Textarea 
                 placeholder="Anteckningar från samtalet/mötet..." 
