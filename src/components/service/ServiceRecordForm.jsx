@@ -342,10 +342,8 @@ export default function ServiceRecordForm({ record, machines, customers, presele
             <div className="space-y-2">
               {form.parts_used.map((part, i) => (
                 <div key={i} className="grid grid-cols-12 gap-2 items-center">
-                  <Input className="col-span-4" placeholder="Namn/Moment" value={part.part_name} onChange={e => updatePart(i, "part_name", e.target.value)} />
-                  <Input className="col-span-3" placeholder="Art.nr" value={part.part_number} onChange={e => updatePart(i, "part_number", e.target.value)} />
-                  <Input className="col-span-2" type="number" placeholder="Antal" value={part.quantity} onChange={e => updatePart(i, "quantity", parseFloat(e.target.value))} />
-                  <Input className="col-span-2" type="number" placeholder="à-pris" value={part.unit_price} onChange={e => updatePart(i, "unit_price", parseFloat(e.target.value))} />
+                  <Input className="col-span-8" placeholder="Namn/Moment" value={part.part_name} onChange={e => updatePart(i, "part_name", e.target.value)} />
+                  <Input className="col-span-3" type="number" placeholder="Pris (kr)" value={part.unit_price} onChange={e => updatePart(i, "unit_price", parseFloat(e.target.value))} />
                   <Button size="icon" variant="ghost" className="col-span-1 text-red-400 hover:text-red-600" onClick={() => removePart(i)}><Trash2 className="w-3 h-3" /></Button>
                 </div>
               ))}
