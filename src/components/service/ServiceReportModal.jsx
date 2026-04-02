@@ -36,7 +36,7 @@ export default function ServiceReportModal({ record, machine, customer, onClose 
         </div>
 
         {/* Report content */}
-        <div id="service-report" className="p-10 font-sans text-slate-800 text-sm">
+        <div id="service-report" className="p-10 font-sans text-slate-800 text-sm print:p-4 print:text-xs">
 
           {/* Top meta */}
           <div className="text-xs text-slate-400 mb-1">{format(new Date(), "yyyyMMdd")}</div>
@@ -54,14 +54,14 @@ export default function ServiceReportModal({ record, machine, customer, onClose 
           <div className="mb-1"><strong>Datum:</strong> {serviceDate || printDate}</div>
           {customer?.city && <div className="mb-4"><strong>Plats:</strong> {customer.city}</div>}
 
-          <hr className="my-5 border-slate-200" />
+          <hr className="my-5 print:my-2 border-slate-200" />
 
           {/* Customer info */}
           <h2 className="font-bold text-sm mb-2">Kundinformation</h2>
           <div className="mb-1"><strong>Klinik:</strong> {customer?.company_name}</div>
           {customer?.org_number && <div className="mb-4"><strong>Organisationsnummer:</strong> {customer.org_number}</div>}
 
-          <hr className="my-5 border-slate-200" />
+          <hr className="my-5 print:my-2 border-slate-200" />
 
           {/* Machine info */}
           <h2 className="font-bold text-sm mb-2">Utrustningsinformation</h2>
@@ -71,7 +71,7 @@ export default function ServiceReportModal({ record, machine, customer, onClose 
             <li><strong>Serienummer:</strong> {machine?.serial_number}</li>
           </ul>
 
-          <hr className="my-5 border-slate-200" />
+          <hr className="my-5 print:my-2 border-slate-200" />
 
           {/* Ärende */}
           <h2 className="font-bold text-sm mb-2">Ärende</h2>
@@ -80,14 +80,14 @@ export default function ServiceReportModal({ record, machine, customer, onClose 
             <li><strong>Ankomstdatum:</strong> Service utförd hos kund</li>
           </ul>
 
-          <hr className="my-5 border-slate-200" />
+          <hr className="my-5 print:my-2 border-slate-200" />
 
           {/* Technical assessment */}
           {record.description && (
             <>
               <h2 className="font-bold text-sm mb-2">Teknisk bedömning</h2>
               <p className="mb-3 text-slate-700 leading-relaxed whitespace-pre-line">{record.description}</p>
-              <hr className="my-5 border-slate-200" />
+              <hr className="my-5 print:my-2 border-slate-200" />
             </>
           )}
 
@@ -169,7 +169,7 @@ export default function ServiceReportModal({ record, machine, customer, onClose 
           </div>
 
           {/* Footer */}
-          <hr className="mt-10 mb-4 border-slate-300" />
+          <hr className="mt-10 mb-4 print:mt-4 print:mb-2 border-slate-300" />
           <div className="grid grid-cols-4 gap-4 text-xs text-slate-500">
             <div>
               <div className="font-semibold text-slate-700">Adress</div>
