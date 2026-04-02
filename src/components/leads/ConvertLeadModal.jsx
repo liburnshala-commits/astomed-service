@@ -74,6 +74,7 @@ export default function ConvertLeadModal({ lead, onClose, onConverted }) {
     if (lead.machine_name && !MODELS.includes(lead.machine_name)) return lead.machine_name;
     return "";
   });
+  const [serialNumber, setSerialNumber] = useState(lead.serial_number || "");
   const [technician, setTechnician] = useState("");
   const [saving, setSaving] = useState(false);
   const [done, setDone] = useState(false);
@@ -110,7 +111,7 @@ export default function ConvertLeadModal({ lead, onClose, onConverted }) {
       const finalModel = machineModel === "Annan" ? customModel : machineModel;
       const machine = await base44.entities.Machine.create({
         model: finalModel,
-        serial_number: lead.serial_number || "OKÄND",
+        serial_number: serialNumber.trim() || "OKÄND",
         customer_id: customer.id,
         notes: `Maskin från serviceförfrågan: ${lead.machine_name}${lead.manufacturer ? ` (${lead.manufacturer})` : ""}`
       });
@@ -242,6 +243,10 @@ export default function ConvertLeadModal({ lead, onClose, onConverted }) {
                   <Input value={customModel} onChange={e => setCustomModel(e.target.value)} placeholder="Ange maskinens namn" />
                 </div>
               )}
+              <div className="space-y-1">
+                <Label>Serienummer *</Label>
+                <Input value={serialNumber} onChange={e => setSerialNumber(e.target.value)} placeholder="Ange serienummer (eller OKÄND om det saknas)" />
+              </div>
               {machineModel && machineModel !== "Annan" && machineServiceDetails[machineModel] && (
                 <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
                   <h3 className="font-semibold text-blue-900 mb-2">
@@ -282,7 +287,7 @@ export default function ConvertLeadModal({ lead, onClose, onConverted }) {
 
         <div className="flex justify-end gap-3 p-6 border-t bg-slate-50 rounded-b-2xl">
           <Button variant="outline" onClick={onClose}>Avbryt</Button>
-          <Button className="astomed-btn-primary" onClick={handleConvert} disabled={saving || (machineModel === "Annan" && !customModel)}>
+          <Button className="astomed-btn-primary" onClick={handleConvert} disabled={saving || (machineModel === "Annan" && !customModel) || !serialNumber.trim()}>
             {saving ? "Skapar..." : "Skapa kund & serviceärende"}
           </Button>
         </div>
