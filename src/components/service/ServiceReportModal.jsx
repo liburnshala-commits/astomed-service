@@ -36,58 +36,58 @@ export default function ServiceReportModal({ record, machine, customer, onClose 
         </div>
 
         {/* Report content */}
-        <div id="service-report" className="p-10 font-sans text-slate-800 text-sm print:p-4 print:text-xs">
+        <div id="service-report" className="p-10 font-sans text-slate-800 text-sm print:p-2 print:text-[11px] leading-snug">
 
           {/* Top meta */}
           <div className="text-xs text-slate-400 mb-1">{format(new Date(), "yyyyMMdd")}</div>
-          <div className="text-xs text-slate-400 mb-6">{COMPANY.zip.split(" ").slice(2).join(" ")}</div>
+          <div className="text-xs text-slate-400 mb-6 print:mb-2">{COMPANY.zip.split(" ").slice(2).join(" ")}</div>
 
           {/* Title */}
-          <h1 className="text-3xl font-black uppercase tracking-wide text-slate-900 mb-6">SERVICERAPPORT</h1>
+          <h1 className="text-3xl print:text-xl font-black uppercase tracking-wide text-slate-900 mb-6 print:mb-2">SERVICERAPPORT</h1>
 
           {/* Date & location */}
           <div className="mb-1"><strong>Datum:</strong> {serviceDate || printDate}</div>
-          {customer?.city && <div className="mb-4"><strong>Plats:</strong> {customer.city}</div>}
+          {customer?.city && <div className="mb-4 print:mb-1"><strong>Plats:</strong> {customer.city}</div>}
 
-          <hr className="my-5 print:my-2 border-slate-200" />
+          <hr className="my-5 print:my-1 border-slate-200" />
 
           {/* Customer info */}
-          <h2 className="font-bold text-sm mb-2">Kundinformation</h2>
+          <h2 className="font-bold text-sm print:text-[11px] mb-2 print:mb-0.5">Kundinformation</h2>
           <div className="mb-1"><strong>Klinik:</strong> {customer?.company_name}</div>
-          {customer?.org_number && <div className="mb-4"><strong>Organisationsnummer:</strong> {customer.org_number}</div>}
+          {customer?.org_number && <div className="mb-4 print:mb-1"><strong>Organisationsnummer:</strong> {customer.org_number}</div>}
 
-          <hr className="my-5 print:my-2 border-slate-200" />
+          <hr className="my-5 print:my-1 border-slate-200" />
 
           {/* Machine info */}
-          <h2 className="font-bold text-sm mb-2">Utrustningsinformation</h2>
-          <ul className="list-disc list-inside space-y-1 mb-4">
+          <h2 className="font-bold text-sm print:text-[11px] mb-2 print:mb-0.5">Utrustningsinformation</h2>
+          <ul className="list-disc list-inside space-y-1 mb-4 print:mb-1">
             <li><strong>Maskintyp:</strong> {machine?.model}</li>
             <li><strong>Tillverkare:</strong> Alma</li>
             <li><strong>Serienummer:</strong> {machine?.serial_number}</li>
           </ul>
 
-          <hr className="my-5 print:my-2 border-slate-200" />
+          <hr className="my-5 print:my-1 border-slate-200" />
 
           {/* Ärende */}
-          <h2 className="font-bold text-sm mb-2">Ärende</h2>
-          <ul className="list-disc list-inside space-y-1 mb-4">
+          <h2 className="font-bold text-sm print:text-[11px] mb-2 print:mb-0.5">Ärende</h2>
+          <ul className="list-disc list-inside space-y-1 mb-4 print:mb-1">
             <li><strong>Typ av service:</strong> {typeLabel}</li>
             <li><strong>Ankomstdatum:</strong> Service utförd hos kund</li>
           </ul>
 
-          <hr className="my-5 print:my-2 border-slate-200" />
+          <hr className="my-5 print:my-1 border-slate-200" />
 
           {/* Technical assessment */}
           {record.description && (
             <>
-              <h2 className="font-bold text-sm mb-2">Teknisk bedömning</h2>
+              <h2 className="font-bold text-sm print:text-[11px] mb-2 print:mb-0.5">Teknisk bedömning</h2>
               <p className="mb-3 text-slate-700 leading-relaxed whitespace-pre-line">{record.description}</p>
-              <hr className="my-5 print:my-2 border-slate-200" />
+              <hr className="my-5 print:my-1 border-slate-200" />
             </>
           )}
 
           {/* Parts & Costs */}
-          <h2 className="font-bold text-sm mb-2">Värdering och kostnader</h2>
+          <h2 className="font-bold text-sm print:text-[11px] mb-2 print:mb-0.5">Värdering och kostnader</h2>
           {record.parts_used?.length > 0 ? (
             <table className="w-full text-sm mb-3 border rounded overflow-hidden">
               <thead className="bg-slate-50">
@@ -136,10 +136,10 @@ export default function ServiceReportModal({ record, machine, customer, onClose 
           {/* Images */}
           {record.images?.length > 0 && (
             <div className="mt-6">
-              <h2 className="font-bold text-sm mb-2">Bilder</h2>
+              <h2 className="font-bold text-sm print:text-[11px] mb-2 print:mb-0.5">Bilder</h2>
               <div className="grid grid-cols-3 gap-2">
                 {record.images.map((img, i) => (
-                  <img key={i} src={img} alt={`Bild ${i+1}`} className="w-full h-32 object-cover rounded border" />
+                  <img key={i} src={img} alt={`Bild ${i+1}`} className="w-full h-32 print:h-20 object-cover rounded border" />
                 ))}
               </div>
             </div>
@@ -148,11 +148,11 @@ export default function ServiceReportModal({ record, machine, customer, onClose 
           <hr className="my-6 border-slate-300" />
 
           {/* Technician / Signature */}
-          <h2 className="font-bold text-sm mb-3">Reparatör</h2>
-          {record.technician_name && <div className="mb-1"><strong>Tekniker:</strong> {record.technician_name}</div>}
+          <h2 className="font-bold text-sm print:text-[11px] mb-3 print:mb-1">Reparatör</h2>
+          {record.technician_name && <div className="mb-1 print:mb-0"><strong>Tekniker:</strong> {record.technician_name}</div>}
           <div className="mb-1">Ort: <strong>{COMPANY.zip.split(" ").slice(2).join(" ")}</strong></div>
-          <div className="mb-6">Datum: <strong>{serviceDate || printDate}</strong></div>
-          <div className="grid grid-cols-2 gap-10 mt-4">
+          <div className="mb-6 print:mb-1">Datum: <strong>{serviceDate || printDate}</strong></div>
+          <div className="grid grid-cols-2 gap-10 mt-4 print:mt-2 print:break-inside-avoid">
             <div>
               <div className="h-10 border-b border-dashed border-slate-400 mb-1"></div>
               <div className="text-xs text-slate-400">Underskrift tekniker · {record.technician_name}</div>
@@ -164,8 +164,8 @@ export default function ServiceReportModal({ record, machine, customer, onClose 
           </div>
 
           {/* Footer */}
-          <hr className="mt-10 mb-4 print:mt-4 print:mb-2 border-slate-300" />
-          <div className="grid grid-cols-4 gap-4 text-xs text-slate-500">
+          <hr className="mt-10 mb-4 print:mt-2 print:mb-1 border-slate-300" />
+          <div className="grid grid-cols-4 gap-4 text-xs print:text-[9px] text-slate-500 print:break-inside-avoid">
             <div>
               <div className="font-semibold text-slate-700">Adress</div>
               <div>{COMPANY.name}</div>
