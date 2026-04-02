@@ -42,11 +42,6 @@ export default function ServiceReportModal({ record, machine, customer, onClose 
           <div className="text-xs text-slate-400 mb-1">{format(new Date(), "yyyyMMdd")}</div>
           <div className="text-xs text-slate-400 mb-6">{COMPANY.zip.split(" ").slice(2).join(" ")}</div>
 
-          {/* Logo / Company name */}
-          <div className="mb-6">
-            <div className="text-2xl font-black tracking-tight text-slate-900">A</div>
-          </div>
-
           {/* Title */}
           <h1 className="text-3xl font-black uppercase tracking-wide text-slate-900 mb-6">SERVICERAPPORT</h1>
 
