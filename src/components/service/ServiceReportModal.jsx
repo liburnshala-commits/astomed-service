@@ -40,7 +40,7 @@ export default function ServiceReportModal({ record, machine, customer, onClose 
 
           {/* Top meta */}
           <div className="text-xs text-slate-400 mb-1">{format(new Date(), "yyyyMMdd")}</div>
-          <div className="text-xs text-slate-400 mb-6">{COMPANY.zip.split(" ").slice(1).join(" ")}</div>
+          <div className="text-xs text-slate-400 mb-6">{COMPANY.zip.split(" ").slice(2).join(" ")}</div>
 
           {/* Logo / Company name */}
           <div className="mb-6">
@@ -155,7 +155,7 @@ export default function ServiceReportModal({ record, machine, customer, onClose 
           {/* Technician / Signature */}
           <h2 className="font-bold text-sm mb-3">Reparatör</h2>
           {record.technician_name && <div className="mb-1"><strong>Tekniker:</strong> {record.technician_name}</div>}
-          <div className="mb-1">Ort: <strong>{COMPANY.zip.split(" ").slice(1).join(" ")}</strong></div>
+          <div className="mb-1">Ort: <strong>{COMPANY.zip.split(" ").slice(2).join(" ")}</strong></div>
           <div className="mb-6">Datum: <strong>{serviceDate || printDate}</strong></div>
           <div className="grid grid-cols-2 gap-10 mt-4">
             <div>
