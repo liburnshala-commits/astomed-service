@@ -203,6 +203,26 @@ export default function ServiceRecordDetail({ record, machine, customer, onClose
                   <span className="font-medium">{record.labor_cost?.toLocaleString("sv-SE")} kr</span>
                 </div>
               )}
+              
+              {record.additional_costs?.length > 0 && (
+                <div className="pt-2">
+                  <div className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1">Övriga kostnader</div>
+                  {record.additional_costs.map((c, i) => (
+                    <div key={i} className="flex justify-between text-sm">
+                      <span className="text-slate-500">{c.description || "Ospecificerad kostnad"}</span>
+                      <span className="font-medium">{c.cost?.toLocaleString("sv-SE")} kr</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {record.discount_percent > 0 && (
+                <div className="flex justify-between text-sm text-emerald-600 pt-1">
+                  <span>Rabatt</span>
+                  <span className="font-medium">-{record.discount_percent}%</span>
+                </div>
+              )}
+
               {record.total_cost > 0 && (
                 <div className="flex justify-between text-base font-bold border-t pt-2 mt-2">
                   <span>Totalt</span>

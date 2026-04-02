@@ -313,8 +313,26 @@ export default function MobileTechnicianCard({ record, machine, customer, onStat
 
           {/* Cost summary */}
           {record.total_cost > 0 && (
-            <div className="bg-white rounded-xl p-3 border border-slate-100">
-              <div className="flex justify-between text-sm">
+            <div className="bg-white rounded-xl p-3 border border-slate-100 space-y-1">
+              {record.additional_costs?.length > 0 && (
+                <>
+                  <div className="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-1">Övriga kostnader</div>
+                  {record.additional_costs.map((c, i) => (
+                    <div key={i} className="flex justify-between text-sm">
+                      <span className="text-slate-500">{c.description || "Ospec."}</span>
+                      <span className="font-medium text-slate-700">{c.cost?.toLocaleString("sv-SE")} kr</span>
+                    </div>
+                  ))}
+                  <div className="border-t border-slate-100 my-1"></div>
+                </>
+              )}
+              {record.discount_percent > 0 && (
+                <div className="flex justify-between text-sm text-emerald-600">
+                  <span>Rabatt</span>
+                  <span className="font-medium">-{record.discount_percent}%</span>
+                </div>
+              )}
+              <div className="flex justify-between text-sm pt-1">
                 <span className="text-slate-500">Totalkostnad</span>
                 <span className="font-bold text-slate-900">{record.total_cost.toLocaleString("sv-SE")} kr</span>
               </div>
