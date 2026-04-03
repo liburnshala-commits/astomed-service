@@ -14,6 +14,7 @@ import ClosedLeads from './pages/ClosedLeads';
 import DeletedMachines from './pages/DeletedMachines';
 import ChatSupport from './pages/ChatSupport';
 import Tasks from './pages/Tasks';
+import MobileMenu from './pages/MobileMenu';
 
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
@@ -62,6 +63,7 @@ const AuthenticatedApp = () => {
       <Route path="/DeletedMachines" element={<LayoutWrapper currentPageName="Machines"><DeletedMachines /></LayoutWrapper>} />
       <Route path="/ChatSupport" element={<LayoutWrapper currentPageName="ChatSupport"><ChatSupport /></LayoutWrapper>} />
       <Route path="/Tasks" element={<LayoutWrapper currentPageName="Tasks"><Tasks /></LayoutWrapper>} />
+      <Route path="/MobileMenu" element={<LayoutWrapper currentPageName="MobileMenu"><MobileMenu /></LayoutWrapper>} />
       {Object.entries(Pages).map(([path, Page]) => (
         <Route
           key={path}

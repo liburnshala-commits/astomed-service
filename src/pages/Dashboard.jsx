@@ -7,8 +7,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
 import { sv } from "date-fns/locale";
+import { useNavigate } from "react-router-dom";
 
 export default function Dashboard() {
+  const navigate = useNavigate();
   const [machines, setMachines] = useState([]);
   const [customers, setCustomers] = useState([]);
   const [records, setRecords] = useState([]);
@@ -17,6 +19,12 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Mobilnavigering
+    if (window.innerWidth < 1024) {
+      window.location.replace(createPageUrl("MobileMenu"));
+      return;
+    }
+
     const loadData = async () => {
       const currentUser = await base44.auth.me();
       setUserRole(currentUser?.role);
