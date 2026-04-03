@@ -54,7 +54,11 @@ export default function ServiceRecordForm({ record, machines, customers, presele
     labor_hours: record?.labor_hours || "",
     hourly_rate: record?.hourly_rate || "",
     labor_cost: record?.labor_cost || "",
-    total_cost: record?.total_cost || "",
+    manual_price: record && record.total_cost ? Math.max(0, Math.round(record.total_cost / (1 - (record.discount_percent || 0) / 100)) - (
+      ((record.parts_used || []).reduce((s, p) => s + (p.unit_price || 0) * (p.quantity || 1), 0)) +
+      ((record.additional_costs || []).reduce((s, c) => s + (parseFloat(c.cost) || 0), 0)) +
+      (parseFloat(record.labor_cost) || 0)
+    )) || "" : "",
     discount_percent: record?.discount_percent || "",
     additional_costs: record?.additional_costs || [],
     status: record?.status || "pending",
@@ -230,7 +234,8 @@ export default function ServiceRecordForm({ record, machines, customers, presele
       : 0;
     const additionalTotal = form.additional_costs.reduce((sum, c) => sum + (parseFloat(c.cost) || 0), 0);
     const laborTotal = selectedTemplate === "only_repair" ? (parseFloat(form.labor_cost) || 0) : 0;
-    const baseTotal = partsTotal + additionalTotal + laborTotal;
+    const manualCost = parseFloat(form.manual_price) || 0;
+    const baseTotal = partsTotal + additionalTotal + laborTotal + manualCost;
     const discount = parseFloat(form.discount_percent) || 0;
     return Math.round(baseTotal * (1 - (discount / 100)));
   };
@@ -422,13 +427,13 @@ export default function ServiceRecordForm({ record, machines, customers, presele
               <Input type="number" min="0" max="100" value={form.discount_percent} onChange={e => set("discount_percent", e.target.value === "" ? "" : parseFloat(e.target.value))} placeholder="0" />
             </div>
 
+            <div className="col-span-2 space-y-1">
+              <Label>Faktisk kostnad (kr)</Label>
+              <Input type="number" value={form.manual_price} onChange={e => set("manual_price", e.target.value === "" ? "" : parseFloat(e.target.value))} placeholder="0" />
+            </div>
             <div className="col-span-2 p-3 bg-slate-50 rounded-lg flex items-center justify-between mt-2">
               <span className="text-sm text-slate-600">Beräknad totalkostnad</span>
               <span className="font-bold text-lg text-slate-900">{calcTotal().toLocaleString("sv-SE")} kr</span>
-            </div>
-            <div className="col-span-2 space-y-1">
-              <Label>Faktisk totalkostnad (kr)</Label>
-              <Input type="number" value={form.total_cost} onChange={e => set("total_cost", parseFloat(e.target.value))} placeholder={calcTotal().toString()} />
             </div>
           </div>
 
@@ -455,35 +460,41 @@ export default function ServiceRecordForm({ record, machines, customers, presele
 
         <div className="flex justify-end gap-3 p-6 border-t bg-slate-50 rounded-b-2xl">
           <Button variant="outline" onClick={onClose}>Avbryt</Button>
-          {record && (form.total_cost || calcTotal() > 0) && !record.quote_sent && (
+          {record && calcTotal() > 0 && !record.quote_sent && (
             <Button
               variant="outline"
               className="border-amber-400 text-amber-700 hover:bg-amber-50"
-              onClick={() => onSave({
-                ...form,
-                labor_hours: form.labor_hours === "" ? undefined : Number(form.labor_hours),
-                hourly_rate: form.hourly_rate === "" ? undefined : Number(form.hourly_rate),
-                labor_cost: form.labor_cost === "" ? undefined : Number(form.labor_cost),
-                total_cost: form.total_cost === "" ? calcTotal() : Number(form.total_cost) || calcTotal(),
-                discount_percent: form.discount_percent === "" ? 0 : Number(form.discount_percent),
-                next_service_date: form.next_service_date || undefined,
-                status: "awaiting_approval",
-                quote_sent: true,
-                quote_approved: "pending"
-              })}
+              onClick={() => {
+                const { manual_price, ...submitForm } = form;
+                onSave({
+                  ...submitForm,
+                  labor_hours: form.labor_hours === "" ? undefined : Number(form.labor_hours),
+                  hourly_rate: form.hourly_rate === "" ? undefined : Number(form.hourly_rate),
+                  labor_cost: form.labor_cost === "" ? undefined : Number(form.labor_cost),
+                  total_cost: calcTotal(),
+                  discount_percent: form.discount_percent === "" ? 0 : Number(form.discount_percent),
+                  next_service_date: form.next_service_date || undefined,
+                  status: "awaiting_approval",
+                  quote_sent: true,
+                  quote_approved: "pending"
+                });
+              }}
             >
               Spara & skicka kostnadsförslag till kund
             </Button>
           )}
-          <Button onClick={() => onSave({
-            ...form,
-            labor_hours: form.labor_hours === "" ? undefined : Number(form.labor_hours),
-            hourly_rate: form.hourly_rate === "" ? undefined : Number(form.hourly_rate),
-            labor_cost: form.labor_cost === "" ? undefined : Number(form.labor_cost),
-            total_cost: form.total_cost === "" ? calcTotal() : Number(form.total_cost) || calcTotal(),
-            discount_percent: form.discount_percent === "" ? 0 : Number(form.discount_percent),
-            next_service_date: form.next_service_date || undefined
-          })} className="bg-blue-600 hover:bg-blue-700" disabled={!form.machine_id || !form.customer_id || !form.service_date}>
+          <Button onClick={() => {
+            const { manual_price, ...submitForm } = form;
+            onSave({
+              ...submitForm,
+              labor_hours: form.labor_hours === "" ? undefined : Number(form.labor_hours),
+              hourly_rate: form.hourly_rate === "" ? undefined : Number(form.hourly_rate),
+              labor_cost: form.labor_cost === "" ? undefined : Number(form.labor_cost),
+              total_cost: calcTotal(),
+              discount_percent: form.discount_percent === "" ? 0 : Number(form.discount_percent),
+              next_service_date: form.next_service_date || undefined
+            });
+          }} className="bg-blue-600 hover:bg-blue-700" disabled={!form.machine_id || !form.customer_id || !form.service_date}>
             {record ? "Spara ändringar" : "Skapa ärende"}
           </Button>
         </div>
