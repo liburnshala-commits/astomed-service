@@ -8,6 +8,8 @@ import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
+import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
+import { Card, CardContent } from "@/components/ui/card";
 
 export default function Tasks() {
   const [tasks, setTasks] = useState([]);
@@ -120,8 +122,10 @@ export default function Tasks() {
           <p className="text-slate-500 mt-1">Du har inga {filter === "pending" ? "aktuella" : ""} uppföljningar för tillfället.</p>
         </div>
       ) : (
-        <div className="bg-white rounded-xl shadow-sm border border-slate-200 divide-y divide-slate-100">
-          {filteredTasks.map(task => {
+        <>
+          {/* Desktop List View */}
+          <div className="hidden md:block bg-white rounded-xl shadow-sm border border-slate-200 divide-y divide-slate-100">
+            {filteredTasks.map(task => {
             const customer = task.customer_id ? customers[task.customer_id] : null;
             const lead = task.lead_id ? leads[task.lead_id] : null;
             const isCompleted = task.status === "completed";
@@ -185,7 +189,89 @@ export default function Tasks() {
               </div>
             );
           })}
-        </div>
+          </div>
+
+          {/* Mobile Carousel View */}
+          <div className="md:hidden pb-4">
+            {filteredTasks.length > 1 && (
+              <div className="text-center text-xs text-slate-400 mb-3 flex items-center justify-center gap-2">
+                <span>←</span> Svep för fler uppgifter ({filteredTasks.length} st) <span>→</span>
+              </div>
+            )}
+            <Carousel className="w-full" opts={{ align: "start" }}>
+              <CarouselContent>
+                {filteredTasks.map(task => {
+                  const customer = task.customer_id ? customers[task.customer_id] : null;
+                  const lead = task.lead_id ? leads[task.lead_id] : null;
+                  const isCompleted = task.status === "completed";
+
+                  return (
+                    <CarouselItem key={task.id} className="basis-11/12 sm:basis-8/12">
+                      <Card className={`bg-white shadow-sm border-slate-200 mx-1 h-full flex flex-col ${isCompleted ? "opacity-60 bg-slate-50/50" : ""}`}>
+                        <CardContent className="p-4 space-y-4 flex-1 flex flex-col">
+                          <div className="flex items-start justify-between gap-3">
+                            <h3 className={`font-semibold text-lg leading-tight ${isCompleted ? "line-through text-slate-500" : "text-slate-900"}`}>
+                              {task.title}
+                            </h3>
+                            <button 
+                              onClick={() => handleToggleStatus(task)}
+                              className="mt-1 flex-shrink-0 text-slate-400 hover:text-emerald-600 transition-colors"
+                            >
+                              {isCompleted ? (
+                                <CheckCircle2 className="w-7 h-7 text-emerald-500" />
+                              ) : (
+                                <Circle className="w-7 h-7" />
+                              )}
+                            </button>
+                          </div>
+
+                          {!isCompleted && task.due_date && (
+                            <div className="inline-block">
+                              {getDueDateLabel(task.due_date)}
+                            </div>
+                          )}
+
+                          {task.description && (
+                            <p className="text-sm text-slate-600 bg-slate-50 p-3 rounded-lg border border-slate-100 flex-1 whitespace-pre-wrap break-words">
+                              {task.description}
+                            </p>
+                          )}
+
+                          <div className="flex flex-col gap-2 pt-3 border-t border-slate-100 text-sm text-slate-600">
+                            {customer && (
+                              <Link to={createPageUrl(`CustomerDetails?id=${customer.id}`)} className="flex items-center gap-2 hover:text-blue-600">
+                                <Building2 className="w-4 h-4 flex-shrink-0" />
+                                <span className="truncate">{customer.company_name}</span>
+                              </Link>
+                            )}
+                            {lead && !customer && (
+                              <Link to={createPageUrl(`ServiceContractLeads?status=all`)} className="flex items-center gap-2 hover:text-indigo-600">
+                                <User className="w-4 h-4 flex-shrink-0" />
+                                <span className="truncate">Prospekt: {lead.company_name || lead.contact_person || lead.email}</span>
+                              </Link>
+                            )}
+                            {task.assigned_to && (
+                              <div className="flex items-center gap-2 text-slate-500">
+                                <UserCheck className="w-4 h-4 flex-shrink-0" />
+                                <span className="truncate">{task.assigned_to}</span>
+                              </div>
+                            )}
+                            {isCompleted && task.updated_date && (
+                              <div className="flex items-center gap-2 text-emerald-600 font-medium">
+                                <Clock className="w-4 h-4 flex-shrink-0" />
+                                Slutförd {format(new Date(task.updated_date), "d MMM yyyy", { locale: sv })}
+                              </div>
+                            )}
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </CarouselItem>
+                  );
+                })}
+              </CarouselContent>
+            </Carousel>
+          </div>
+        </>
       )}
     </div>
   );
