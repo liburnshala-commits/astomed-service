@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Send, Wrench, ArrowLeft, ExternalLink, AlertCircle } from "lucide-react";
+import { Send, Wrench, ArrowLeft, ExternalLink, AlertCircle, LogIn } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -114,9 +114,18 @@ export default function PublicServiceRequest() {
     <div className="min-h-screen py-10 px-4" style={{ background: "#002B3C" }}>
       <div className="max-w-2xl mx-auto">
         
-        <a href="https://astomed.se/service/" className="inline-flex items-center text-sm mb-8 text-slate-300 hover:text-white transition-colors">
-          <ArrowLeft className="w-4 h-4 mr-2" /> Tillbaka till astomed.se/service
-        </a>
+        <div className="flex justify-between items-start mb-8">
+          <a href="https://astomed.se/service/" className="inline-flex items-center text-sm text-slate-300 hover:text-white transition-colors mt-2">
+            <ArrowLeft className="w-4 h-4 mr-2" /> Tillbaka till astomed.se/service
+          </a>
+          
+          <Button 
+            onClick={() => base44.auth.redirectToLogin()} 
+            className="bg-[#3a9e9e] hover:bg-[#2c7a7a] text-white border-0 shadow-md"
+          >
+            <LogIn className="w-4 h-4 mr-2" /> Logga in
+          </Button>
+        </div>
 
         {/* Header */}
         <div className="text-center mb-10">
