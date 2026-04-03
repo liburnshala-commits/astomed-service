@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import MachineForm from "@/components/machines/MachineForm.jsx";
 import ServiceContractModal from "@/components/machines/ServiceContractModal.jsx";
@@ -206,6 +207,106 @@ export default function Machines() {
     }
   };
 
+  const renderCard = (machine, isMobile = false) => {
+    const customer = getCustomer(machine.customer_id);
+    const serviceCount = getServiceCount(machine.id);
+    const lastService = getLastService(machine.id);
+    const displayServiceDate = lastService ? lastService.service_date : machine.service_date;
+    return (
+      <Card key={machine.id} className={`astomed-card h-full flex flex-col ${isMobile ? 'mx-1' : ''}`}>
+        <CardContent className="p-5 flex-1 flex flex-col">
+          <div className="flex items-start justify-between mb-3">
+            <Link to={createPageUrl(`ServiceRecords?machine=${machine.id}`)} className="astomed-icon-box flex-shrink-0 hover:opacity-80 transition-opacity" style={{ width: 40, height: 40 }} title="Visa serviceärenden för denna maskin">
+              <Monitor className="w-5 h-5" style={{ color: "#1b3a3a" }} />
+            </Link>
+            {machine.status === "service" ? (
+              <Link to={createPageUrl(`ServiceRecords?machine=${machine.id}`)}>
+                <Badge className={`${statusColor["service"]} cursor-pointer hover:opacity-80 underline-offset-2`}>
+                  {statusLabel["service"]}
+                </Badge>
+              </Link>
+            ) : (
+              <Badge className={statusColor[machine.status || "active"]}>{statusLabel[machine.status || "active"]}</Badge>
+            )}
+          </div>
+          <Link to={createPageUrl(`ServiceRecords?machine=${machine.id}`)} className="block w-fit group" title="Visa serviceärenden för denna maskin">
+            <h3 className="font-bold astomed-title mb-0.5 group-hover:underline group-hover:text-[#3a9e9e] transition-colors">{machine.model}</h3>
+            <p className="text-xs astomed-muted mb-3 font-mono group-hover:text-slate-600 transition-colors">SN: {machine.serial_number}</p>
+          </Link>
+          {customer && (
+            <Link to={createPageUrl(`CustomerDetails?id=${customer.id}`)} className="flex items-center gap-1.5 text-sm astomed-subtitle mb-3 hover:opacity-80 transition-opacity w-fit">
+              <Building2 className="w-3.5 h-3.5 astomed-muted" />
+              <span className="hover:underline">{customer.company_name}</span>
+            </Link>
+          )}
+          <div className="text-xs astomed-muted mb-4 pt-3 border-t space-y-1 flex-1" style={{ borderColor: "#dce8e8" }}>
+            <div className="flex items-center justify-between">
+              <Link to={createPageUrl(`ServiceRecords?machine=${machine.id}`)} className="hover:underline hover:text-[#3a9e9e] transition-colors" title="Visa serviceärenden">
+                {serviceCount} servicetillfällen
+              </Link>
+              {displayServiceDate && (
+                <div className="flex items-center gap-1.5">
+                  <span>Senast:</span>
+                  <span className="px-2 py-0.5 rounded border border-blue-200 bg-blue-50 text-blue-700 font-medium">
+                    {displayServiceDate}
+                  </span>
+                </div>
+              )}
+            </div>
+            {(() => {
+              const expiry = getContractExpiry(machine);
+              if (!expiry) return (
+                <div className="flex items-center justify-between">
+                  <span className="text-slate-400">Inget serviceavtal</span>
+                </div>
+              );
+              const expired = expiry < new Date();
+              return (
+                <div className="flex items-center justify-between mt-2">
+                  <span>
+                    Avtal: <span className={`font-semibold px-1.5 py-0.5 rounded ${expired ? "bg-red-100 text-red-700" : contractBadgeColor[machine.service_contract]}`}>{contractLabel[machine.service_contract] || machine.service_contract}</span>
+                  </span>
+                  <span className={expired ? "text-red-600 font-medium" : ""}>
+                    {expired ? "Utgånget " : "Giltigt t.o.m. "}{expiry.toLocaleDateString("sv-SE")}
+                  </span>
+                </div>
+              );
+            })()}
+          </div>
+          <div className="mt-auto pt-4 border-t border-slate-100 flex flex-col items-start sm:items-end gap-2 flex-shrink-0">
+            <div className="flex gap-2 flex-wrap justify-start w-full">
+              <Link to={createPageUrl(`ServiceRecords?machine=${machine.id}`)}>
+                <Button size="sm" variant="outline" className="w-full">
+                  <Wrench className="w-3 h-3 mr-1" /> Starta service
+                </Button>
+              </Link>
+              {userRole !== "customer" && (
+                <Button size="sm" variant="outline" onClick={() => setContractMachine(machine)} title="Hantera serviceavtal">
+                  <FileCheck className="w-3 h-3 mr-1" /> Avtal
+                </Button>
+              )}
+              {userRole !== "customer" && machine.service_contract && machine.service_contract !== "none" && (
+                <Button size="sm" variant="outline" onClick={() => handleDownloadContract(machine)} title="Ladda ner serviceavtal">
+                  <Download className="w-3 h-3" />
+                </Button>
+              )}
+              {userRole !== "customer" && (
+                <>
+                  <Button size="sm" variant="ghost" className="flex-shrink-0" onClick={() => { setEditing(machine); setShowForm(true); }}>
+                    Redigera
+                  </Button>
+                  <Button size="icon" variant="ghost" className="text-red-500 hover:text-red-700 hover:bg-red-50 flex-shrink-0" onClick={() => handleDelete(machine)} title="Ta bort maskin">
+                    <Trash2 className="w-4 h-4" />
+                  </Button>
+                </>
+              )}
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  };
+
   return (
     <div className="p-6 space-y-6">
       <div className="flex items-center justify-between">
@@ -248,111 +349,37 @@ export default function Machines() {
         </Select>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-        {filtered.map(machine => {
-          const customer = getCustomer(machine.customer_id);
-          const serviceCount = getServiceCount(machine.id);
-          const lastService = getLastService(machine.id);
-          const displayServiceDate = lastService ? lastService.service_date : machine.service_date;
-          return (
-            <Card key={machine.id} className="astomed-card">
-              <CardContent className="p-5">
-                <div className="flex items-start justify-between mb-3">
-                  <Link to={createPageUrl(`ServiceRecords?machine=${machine.id}`)} className="astomed-icon-box flex-shrink-0 hover:opacity-80 transition-opacity" style={{ width: 40, height: 40 }} title="Visa serviceärenden för denna maskin">
-                    <Monitor className="w-5 h-5" style={{ color: "#1b3a3a" }} />
-                  </Link>
-                  {machine.status === "service" ? (
-                    <Link to={createPageUrl(`ServiceRecords?machine=${machine.id}`)}>
-                      <Badge className={`${statusColor["service"]} cursor-pointer hover:opacity-80 underline-offset-2`}>
-                        {statusLabel["service"]}
-                      </Badge>
-                    </Link>
-                  ) : (
-                    <Badge className={statusColor[machine.status || "active"]}>{statusLabel[machine.status || "active"]}</Badge>
-                  )}
-                </div>
-                <Link to={createPageUrl(`ServiceRecords?machine=${machine.id}`)} className="block w-fit group" title="Visa serviceärenden för denna maskin">
-                  <h3 className="font-bold astomed-title mb-0.5 group-hover:underline group-hover:text-[#3a9e9e] transition-colors">{machine.model}</h3>
-                  <p className="text-xs astomed-muted mb-3 font-mono group-hover:text-slate-600 transition-colors">SN: {machine.serial_number}</p>
-                </Link>
-                {customer && (
-                  <Link to={createPageUrl(`CustomerDetails?id=${customer.id}`)} className="flex items-center gap-1.5 text-sm astomed-subtitle mb-3 hover:opacity-80 transition-opacity w-fit">
-                    <Building2 className="w-3.5 h-3.5 astomed-muted" />
-                    <span className="hover:underline">{customer.company_name}</span>
-                  </Link>
-                )}
-                <div className="text-xs astomed-muted mb-4 pt-3 border-t space-y-1" style={{ borderColor: "#dce8e8" }}>
-                  <div className="flex items-center justify-between">
-                    <Link to={createPageUrl(`ServiceRecords?machine=${machine.id}`)} className="hover:underline hover:text-[#3a9e9e] transition-colors" title="Visa serviceärenden">
-                      {serviceCount} servicetillfällen
-                    </Link>
-                    {displayServiceDate && (
-                      <div className="flex items-center gap-1.5">
-                        <span>Senast:</span>
-                        <span className="px-2 py-0.5 rounded border border-blue-200 bg-blue-50 text-blue-700 font-medium">
-                          {displayServiceDate}
-                        </span>
-                      </div>
-                    )}
-                  </div>
-                  {(() => {
-                    const expiry = getContractExpiry(machine);
-                    if (!expiry) return (
-                      <div className="flex items-center justify-between">
-                        <span className="text-slate-400">Inget serviceavtal</span>
-                      </div>
-                    );
-                    const expired = expiry < new Date();
-                    return (
-                      <div className="flex items-center justify-between">
-                        <span>
-                          Avtal: <span className={`font-semibold px-1.5 py-0.5 rounded ${expired ? "bg-red-100 text-red-700" : contractBadgeColor[machine.service_contract]}`}>{contractLabel[machine.service_contract] || machine.service_contract}</span>
-                        </span>
-                        <span className={expired ? "text-red-600 font-medium" : ""}>
-                          {expired ? "Utgånget " : "Giltigt t.o.m. "}{expiry.toLocaleDateString("sv-SE")}
-                        </span>
-                      </div>
-                    );
-                  })()}
-                </div>
-                <div className="flex gap-2 flex-wrap">
-                   <Link to={createPageUrl(`ServiceRecords?machine=${machine.id}`)}>
-                     <Button size="sm" variant="outline" className="w-full">
-                       <Wrench className="w-3 h-3 mr-1" /> Starta service
-                     </Button>
-                   </Link>
-                   {userRole !== "customer" && (
-                     <Button size="sm" variant="outline" onClick={() => setContractMachine(machine)} title="Hantera serviceavtal">
-                       <FileCheck className="w-3 h-3 mr-1" /> Avtal
-                     </Button>
-                   )}
-                   {userRole !== "customer" && machine.service_contract && machine.service_contract !== "none" && (
-                     <Button size="sm" variant="outline" onClick={() => handleDownloadContract(machine)} title="Ladda ner serviceavtal">
-                       <Download className="w-3 h-3" />
-                     </Button>
-                   )}
-                   {userRole !== "customer" && (
-                     <>
-                       <Button size="sm" variant="ghost" className="flex-shrink-0" onClick={() => { setEditing(machine); setShowForm(true); }}>
-                         Redigera
-                       </Button>
-                       <Button size="icon" variant="ghost" className="text-red-500 hover:text-red-700 hover:bg-red-50 flex-shrink-0" onClick={() => handleDelete(machine)} title="Ta bort maskin">
-                         <Trash2 className="w-4 h-4" />
-                       </Button>
-                     </>
-                   )}
-                 </div>
-              </CardContent>
-            </Card>
-          );
-        })}
-        {filtered.length === 0 && (
-          <div className="col-span-full text-center py-12 text-slate-400">
-            <Monitor className="w-12 h-12 mx-auto mb-3 opacity-30" />
-            <p>Inga maskiner hittades</p>
+      {filtered.length === 0 ? (
+        <div className="col-span-full text-center py-12 text-slate-400">
+          <Monitor className="w-12 h-12 mx-auto mb-3 opacity-30" />
+          <p>Inga maskiner hittades</p>
+        </div>
+      ) : (
+        <>
+          {/* Desktop Grid View */}
+          <div className="hidden md:grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            {filtered.map(machine => renderCard(machine))}
           </div>
-        )}
-      </div>
+
+          {/* Mobile Carousel View */}
+          <div className="md:hidden">
+            {filtered.length > 1 && (
+              <div className="text-center text-xs text-slate-400 mb-3 flex items-center justify-center gap-2">
+                <span>←</span> Svep för fler maskiner ({filtered.length} st) <span>→</span>
+              </div>
+            )}
+            <Carousel className="w-full" opts={{ align: "start" }}>
+              <CarouselContent>
+                {filtered.map(machine => (
+                  <CarouselItem key={machine.id} className="basis-11/12 sm:basis-8/12">
+                    {renderCard(machine, true)}
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+            </Carousel>
+          </div>
+        </>
+      )}
 
       {contractMachine && (
         <ServiceContractModal
