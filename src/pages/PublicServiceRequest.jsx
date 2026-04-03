@@ -10,8 +10,23 @@ import { machineServiceDetails } from "../components/MachineServiceDetails";
 import PrivacyPolicyContent from "../components/PrivacyPolicyContent";
 import ChatWidget from "../components/chat/ChatWidget";
 import { base44 } from "@/api/base44Client";
+import { useAuth } from "@/lib/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 export default function PublicServiceRequest() {
+  const { isAuthenticated, user, isLoadingAuth } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!isLoadingAuth && isAuthenticated && user) {
+      if (user.role === 'customer') {
+        navigate('/CustomerDashboard');
+      } else {
+        navigate('/Dashboard');
+      }
+    }
+  }, [isAuthenticated, user, isLoadingAuth, navigate]);
+
   const [form, setForm] = useState({
     company_name: "",
     contact_person: "",
