@@ -311,26 +311,26 @@ export default function ServiceContractLeads() {
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h1 className="text-2xl font-bold text-slate-900">Serviceavtals-prospekt</h1>
-          <p className="text-slate-500">Hantera potentiella kunder för serviceavtal. <span className="font-medium text-slate-700">{filteredLeads.length} visas</span>{filteredLeads.length !== leads.length && <span className="text-slate-400"> av {leads.length} totalt</span>}</p>
+          <p className="text-slate-500 text-sm sm:text-base">Hantera potentiella kunder för serviceavtal. <span className="font-medium text-slate-700">{filteredLeads.length} visas</span>{filteredLeads.length !== leads.length && <span className="text-slate-400"> av {leads.length} totalt</span>}</p>
         </div>
-        <Button onClick={() => setShowNewLeadModal(true)} className="astomed-btn-primary">
-          <Plus className="w-4 h-4 mr-2" /> Nytt Prospekt
+        <Button onClick={() => setShowNewLeadModal(true)} className="astomed-btn-primary w-full sm:w-auto h-12 sm:h-10 text-base sm:text-sm">
+          <Plus className="w-5 h-5 sm:w-4 sm:h-4 mr-2" /> Nytt Prospekt
         </Button>
       </div>
 
       <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
         <div className="p-4 border-b border-slate-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div className="flex items-center gap-2 flex-1 w-full">
+          <div className="flex items-center gap-2 flex-1 w-full bg-slate-50 rounded-lg px-3 py-1 focus-within:ring-2 focus-within:ring-blue-100 transition-all">
             <Search className="w-5 h-5 text-slate-400" />
             <Input
-              placeholder="Sök på namn..."
-              className="border-none shadow-none focus-visible:ring-0 px-0"
+              placeholder="Sök på namn, org.nr, email..."
+              className="border-none shadow-none focus-visible:ring-0 px-0 bg-transparent h-10"
               value={searchTerm}
               onChange={e => setSearchTerm(e.target.value)}
             />
           </div>
           <Select value={statusFilter} onValueChange={setStatusFilter}>
-            <SelectTrigger className="w-full sm:w-48 h-9 text-sm">
+            <SelectTrigger className="w-full sm:w-64 h-12 sm:h-10 text-sm bg-slate-50">
               <SelectValue placeholder="Filtrera på status" />
             </SelectTrigger>
             <SelectContent>
@@ -479,67 +479,122 @@ export default function ServiceContractLeads() {
               {filteredLeads.map(lead => {
                 const contact = getLeadContact(lead);
                 return (
-                  <Card key={lead.id} className="bg-white">
-                    <CardContent className="p-4 space-y-3">
+                  <Card key={lead.id} className="bg-white shadow-sm border-slate-200">
+                    <CardContent className="p-4 space-y-4">
                       <div className="flex justify-between items-start gap-2">
                         <div>
-                          <div className="font-semibold text-slate-900">{getLeadName(lead)}</div>
+                          <div className="font-semibold text-slate-900 text-lg leading-tight">{getLeadName(lead)}</div>
                           {(lead.contact_person || customers.find(c => c.id === lead.customer_id)?.contact_person) && (
-                            <div className="text-xs text-slate-500 mt-0.5">
+                            <div className="text-sm text-slate-500 mt-1 flex items-center gap-1.5">
+                              <User className="w-4 h-4" />
                               {lead.contact_person || customers.find(c => c.id === lead.customer_id)?.contact_person}
                             </div>
                           )}
-                          <div className="flex items-center gap-2 text-xs mt-0.5">
+                          <div className="flex items-center gap-2 mt-2">
                             {lead.customer_id ? (
-                              <span className="text-slate-500 flex items-center gap-1"><User className="w-3 h-3" /> Befintlig</span>
+                              <Badge variant="outline" className="text-slate-500 font-normal border-slate-200"><User className="w-3 h-3 mr-1" /> Befintlig</Badge>
                             ) : (
-                              <span className="text-indigo-500 flex items-center gap-1"><Building2 className="w-3 h-3" /> Ny</span>
+                              <Badge variant="outline" className="text-indigo-600 bg-indigo-50 border-indigo-200 font-normal"><Building2 className="w-3 h-3 mr-1" /> Nytt</Badge>
                             )}
                           </div>
                         </div>
-                        <Badge className={`${statusMap[lead.status]?.color} border-0`}>
+                        <Badge className={`${statusMap[lead.status]?.color} border-0 px-2.5 py-1 text-xs text-center break-words max-w-[100px]`}>
                           {statusMap[lead.status]?.label}
                         </Badge>
                       </div>
 
-                      <div className="space-y-1 text-sm text-slate-600">
-                        {contact.phone && <div className="flex items-center gap-2"><Phone className="w-3 h-3" /> {formatPhone(contact.phone)}</div>}
-                        {contact.email && <div className="flex items-center gap-2"><Mail className="w-3 h-3" /> {contact.email}</div>}
+                      <div className="space-y-2 text-sm text-slate-700 bg-slate-50 p-3 rounded-lg border border-slate-100">
+                        {contact.phone ? (
+                          <a href={`tel:${contact.phone}`} className="flex items-center gap-3 text-blue-600 hover:underline py-1">
+                            <Phone className="w-4 h-4 flex-shrink-0" /> <span className="truncate">{formatPhone(contact.phone)}</span>
+                          </a>
+                        ) : (
+                          <div className="flex items-center gap-3 text-slate-400 py-1">
+                            <Phone className="w-4 h-4 flex-shrink-0" /> Telefon saknas
+                          </div>
+                        )}
+                        {contact.email ? (
+                          <a href={`mailto:${contact.email}`} className="flex items-center gap-3 text-blue-600 hover:underline py-1">
+                            <Mail className="w-4 h-4 flex-shrink-0" /> <span className="truncate">{contact.email}</span>
+                          </a>
+                        ) : (
+                          <div className="flex items-center gap-3 text-slate-400 py-1">
+                            <Mail className="w-4 h-4 flex-shrink-0" /> E-post saknas
+                          </div>
+                        )}
                       </div>
 
-                      {(lead.machine_ids?.length > 0 || lead.proposed_machines?.length > 0) && (
-                        <div className="bg-slate-50 p-2 rounded text-xs text-slate-700">
-                          {lead.machine_ids?.map(id => {
-                            const m = machines.find(m => m.id === id);
-                            return m ? <div key={id} className="truncate">{m.model} ({m.serial_number})</div> : null;
-                          })}
-                          {lead.proposed_machines?.map((m, idx) => (
-                            <div key={`prop-${idx}`} className="truncate">{m.model} ({m.serial_number})</div>
-                          ))}
+                      {lead.notes && (
+                        <div className="text-sm text-slate-700 bg-amber-50/50 p-3 rounded-lg border border-amber-100">
+                          <span className="font-medium text-slate-800 block mb-1">Anteckningar:</span>
+                          <span className="whitespace-pre-line">{lead.notes}</span>
                         </div>
                       )}
 
-                      <div className="pt-2 border-t flex flex-wrap gap-2 justify-between items-center">
-                        <Select value={lead.status} onValueChange={(v) => handleUpdateStatus(lead.id, v)}>
-                          <SelectTrigger className="h-8 w-[140px] text-xs">
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {Object.entries(statusMap).map(([k, v]) => (
-                              <SelectItem key={k} value={k}>{v.label}</SelectItem>
+                      {(lead.machine_ids?.length > 0 || lead.proposed_machines?.length > 0) && (
+                        <div className="text-sm text-slate-700">
+                          <span className="font-medium text-slate-800 block mb-1">Maskiner:</span>
+                          <ul className="list-disc pl-5 space-y-1 text-slate-600">
+                            {lead.machine_ids?.map(id => {
+                              const m = machines.find(m => m.id === id);
+                              return m ? <li key={id}>{m.model} <span className="text-xs text-slate-400">({m.serial_number})</span></li> : null;
+                            })}
+                            {lead.proposed_machines?.map((m, idx) => (
+                              <li key={`prop-${idx}`}>{m.model} <span className="text-xs text-slate-400">({m.serial_number})</span></li>
                             ))}
-                          </SelectContent>
-                        </Select>
+                          </ul>
+                        </div>
+                      )}
 
-                        <div className="flex gap-1">
+                      <div className="space-y-3 pt-4 border-t border-slate-100">
+                        <div>
+                          <label className="text-xs font-semibold text-slate-500 mb-1.5 block uppercase tracking-wider">Status</label>
+                          <Select value={lead.status} onValueChange={(v) => handleUpdateStatus(lead.id, v)}>
+                            <SelectTrigger className="h-12 text-sm w-full bg-white shadow-sm border-slate-200 focus:ring-blue-100">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {Object.entries(statusMap).map(([k, v]) => (
+                                <SelectItem key={k} value={k} className="py-3 text-sm">{v.label}</SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-2">
+                          <Button 
+                            className="h-11 shadow-sm" 
+                            variant="outline" 
+                            onClick={() => setViewingInteractions(lead)}
+                          >
+                            <MessageSquare className="w-4 h-4 mr-2 text-slate-500" /> Historik
+                          </Button>
+                          <Button 
+                            className="h-11 shadow-sm" 
+                            variant="outline" 
+                            onClick={() => setEditingLead(lead)}
+                          >
+                            <Pencil className="w-4 h-4 mr-2 text-slate-500" /> Redigera
+                          </Button>
+                        </div>
+                        
+                        <div className="flex gap-2">
                           {lead.status !== "accepted" && (
-                            <Button size="sm" variant="outline" className="h-8 w-8 p-0 text-emerald-600" onClick={() => handleConvert(lead)} title="Konvertera">
-                              <ArrowRight className="w-4 h-4" />
+                            <Button 
+                              className="flex-1 h-11 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200 shadow-sm" 
+                              onClick={() => handleConvert(lead)}
+                            >
+                              <ArrowRight className="w-4 h-4 mr-2" /> Konvertera
                             </Button>
                           )}
-                          <Button size="sm" variant="ghost" className="h-8 w-8 p-0 text-slate-500" onClick={() => setViewingInteractions(lead)}><MessageSquare className="w-4 h-4" /></Button>
-                          <Button size="sm" variant="ghost" className="h-8 w-8 p-0" onClick={() => setEditingLead(lead)}><Pencil className="w-4 h-4" /></Button>
-                          <Button size="sm" variant="ghost" className="h-8 w-8 p-0 text-red-500" onClick={() => handleDelete(lead.id)}><Trash2 className="w-4 h-4" /></Button>
+                          <Button 
+                            variant="ghost" 
+                            className="h-11 px-4 text-red-500 hover:bg-red-50 hover:text-red-700 border border-transparent hover:border-red-100" 
+                            onClick={() => handleDelete(lead.id)}
+                            title="Ta bort"
+                          >
+                            <Trash2 className="w-5 h-5" />
+                          </Button>
                         </div>
                       </div>
                     </CardContent>
