@@ -14,7 +14,6 @@ import {
   ChevronRight,
   Shield,
   Clock,
-  CheckCircle,
   Trash2,
   Info,
   Home,
@@ -132,37 +131,31 @@ export default function Layout({ children, currentPageName }) {
     return null;
   }
 
-
   const userRole = user?.role || "technician";
+  const isRootScreen = ["Dashboard", "ServiceRecords", "Customers", "MobileMenu"].includes(currentPageName);
+
+  const handleDeleteAccount = async () => {
+    if (window.confirm("Är du säker på att du vill radera ditt konto? Denna åtgärd kan inte ångras.")) {
+      try {
+        await base44.entities.User.delete(user.id);
+        base44.auth.logout();
+      } catch (err) {
+        alert("Kunde inte radera kontot. Du kanske saknar behörighet.");
+      }
+    }
+  };
 
   return (
-    <div className="min-h-screen flex" style={{ background: "#f4f6f4" }}>
-      <style>{`
-        :root {
-          --astomed-dark: #1b3a3a;
-          --astomed-mid: #254f4f;
-          --astomed-accent: #3a9e9e;
-          --astomed-light: #e8f2f2;
-          --astomed-text: #1b3a3a;
-        }
-        .astomed-sidebar { background: var(--astomed-dark); }
-        .astomed-header { background: #ffffff; border-bottom: 1px solid #dce8e8; }
-        .astomed-nav-active { background: var(--astomed-accent) !important; color: #fff !important; }
-        .astomed-nav-item:hover { background: var(--astomed-mid) !important; color: #fff !important; }
-        .astomed-section-title { color: #7aadad; }
-        .astomed-logo-icon { background: var(--astomed-accent); }
-        body { color: var(--astomed-text); }
-      `}</style>
-
+    <div className="min-h-screen flex bg-background pb-[calc(4rem+env(safe-area-inset-bottom))] lg:pb-0">
       {/* Sidebar */}
       <aside className={cn(
-        "astomed-sidebar fixed inset-y-0 left-0 z-50 w-64 flex flex-col transition-transform duration-300 text-white",
+        "fixed inset-y-0 left-0 z-50 w-64 flex flex-col transition-transform duration-300 bg-sidebar text-sidebar-foreground border-r border-border",
         sidebarOpen ? "translate-x-0" : "-translate-x-full",
         "lg:translate-x-0 lg:static lg:flex"
       )}>
-        <div className="p-6 border-b border-white/10">
+        <div className="p-6 border-b border-border pt-[calc(1.5rem+env(safe-area-inset-top))]">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-lg overflow-hidden flex items-center justify-center bg-[#3a9e9e]">
+            <div className="w-9 h-9 rounded-lg overflow-hidden flex items-center justify-center bg-primary">
               {!logoError ? (
                 <img 
                   src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69a9446fcb1cd4ab529479ba/bc2852de1_channels4_profile-2.jpg" 
@@ -171,12 +164,12 @@ export default function Layout({ children, currentPageName }) {
                   onError={() => setLogoError(true)}
                 />
               ) : (
-                <span className="text-white font-bold text-[10px]">AST</span>
+                <span className="text-primary-foreground font-bold text-[10px]">AST</span>
               )}
             </div>
             <div>
-              <div className="font-bold text-white text-sm tracking-wide">Astomed Pro</div>
-              <div className="text-xs" style={{ color: "#7aadad" }}>Servicehantering</div>
+              <div className="font-bold text-sidebar-foreground text-sm tracking-wide">Astomed Pro</div>
+              <div className="text-xs text-muted-foreground">Servicehantering</div>
             </div>
           </div>
         </div>
@@ -188,7 +181,7 @@ export default function Layout({ children, currentPageName }) {
             return (
               <div key={si}>
                 {section.title && (
-                  <div className="astomed-section-title text-xs font-semibold uppercase tracking-widest px-3 mb-2">{section.title}</div>
+                  <div className="text-muted-foreground text-xs font-semibold uppercase tracking-widest px-3 mb-2">{section.title}</div>
                 )}
                 <div className="space-y-0.5">
                   {visibleItems.map(item => {
@@ -200,18 +193,18 @@ export default function Layout({ children, currentPageName }) {
                         to={createPageUrl(item.page)}
                         onClick={() => setSidebarOpen(false)}
                         className={cn(
-                          "astomed-nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all",
+                          "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all",
                           active
-                            ? "astomed-nav-active"
+                            ? "bg-primary text-primary-foreground"
                             : item.highlight === "red"
-                            ? "text-red-400 hover:bg-red-900/30 hover:text-red-300"
-                            : "text-white/70"
+                            ? "text-red-500 hover:bg-red-500/10 hover:text-red-600"
+                            : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
                         )}
                       >
                         <Icon className="w-4 h-4 flex-shrink-0" />
                         <span className="flex-1">{item.label}</span>
                         {item.page === "PublicServiceLeads" && newServiceLeadsCount > 0 && (
-                          <span className="bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[20px] text-center shadow-sm">
+                          <span className="bg-destructive text-destructive-foreground text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[20px] text-center shadow-sm">
                             {newServiceLeadsCount}
                           </span>
                         )}
@@ -225,29 +218,39 @@ export default function Layout({ children, currentPageName }) {
           })}
         </nav>
 
-        <div className="p-4 border-t border-white/10">
+        <div className="p-4 border-t border-border pb-[calc(1rem+env(safe-area-inset-bottom))]">
           {user && (
             <button 
               onClick={() => setShowUserInfo(!showUserInfo)}
-              className="w-full text-left mb-3 px-3 py-2 rounded hover:bg-white/10 transition-colors"
+              className="w-full text-left mb-3 px-3 py-2 rounded hover:bg-sidebar-accent transition-colors"
             >
-              <div className="text-xs" style={{ color: "#7aadad" }}>Inloggad som</div>
-              <div className="text-sm text-white font-medium truncate">{user.full_name || user.email}</div>
-              <div className="text-xs capitalize" style={{ color: "#7aadad" }}>{user.role || "technician"}</div>
+              <div className="text-xs text-muted-foreground">Inloggad som</div>
+              <div className="text-sm text-sidebar-foreground font-medium truncate">{user.full_name || user.email}</div>
+              <div className="text-xs capitalize text-muted-foreground">{user.role || "technician"}</div>
             </button>
           )}
           {showUserInfo && user && (
-            <div className="mb-3 px-3 py-2 bg-white/10 rounded text-xs space-y-1">
-              <div style={{ color: "#7aadad" }}>E-postadress:</div>
-              <div className="text-white break-all">{user.email}</div>
-              <div style={{ color: "#7aadad" }} className="mt-2">ID:</div>
-              <div className="text-white text-xs break-all">{user.id}</div>
+            <div className="mb-3 px-3 py-2 bg-sidebar-accent rounded text-xs space-y-1">
+              <div className="text-muted-foreground">E-postadress:</div>
+              <div className="text-sidebar-foreground break-all">{user.email}</div>
+              <div className="text-muted-foreground mt-2">ID:</div>
+              <div className="text-sidebar-foreground text-xs break-all">{user.id}</div>
+              
+              <Button
+                variant="ghost"
+                size="sm"
+                className="w-full justify-start text-red-500 hover:text-red-600 hover:bg-red-500/10 mt-2"
+                onClick={handleDeleteAccount}
+              >
+                <Trash2 className="w-4 h-4 mr-2" />
+                Radera mitt konto
+              </Button>
             </div>
           )}
           <Button
             variant="ghost"
             size="sm"
-            className="w-full justify-start text-white/60 hover:text-white hover:bg-white/10"
+            className="w-full justify-start text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent"
             onClick={() => base44.auth.logout()}
           >
             <LogOut className="w-4 h-4 mr-2" />
@@ -265,33 +268,66 @@ export default function Layout({ children, currentPageName }) {
       )}
 
       {/* Main */}
-      <div className="flex-1 flex flex-col min-w-0">
-        <header className="astomed-header px-4 py-3 flex items-center gap-3 shadow-sm justify-between">
+      <div className="flex-1 flex flex-col min-w-0 bg-background relative">
+        <header className="bg-card px-4 pb-3 pt-[calc(0.75rem+env(safe-area-inset-top))] flex items-center gap-3 shadow-sm justify-between border-b border-border sticky top-0 z-30">
           <div className="flex items-center gap-3">
-            <Button variant="ghost" size="icon" onClick={() => setSidebarOpen(true)} className="lg:hidden">
+            <Button variant="ghost" size="icon" onClick={() => setSidebarOpen(true)} className="lg:hidden text-foreground">
               <Menu className="w-5 h-5" />
             </Button>
-            <Link
-              to={createPageUrl("Dashboard")}
-              className="flex items-center justify-center w-8 h-8 rounded-lg transition-colors"
-              style={{ background: "#e8f2f2", color: "#1b3a3a" }}
-              title="Gå till Dashboard"
-            >
-              <Home className="w-4 h-4" />
-            </Link>
-            <Button variant="ghost" size="icon" onClick={() => navigate(-1)} title="Föregående sida" style={{ color: "#1b3a3a" }}>
-              <ChevronLeft className="w-5 h-5" />
-            </Button>
-            <Button variant="ghost" size="icon" onClick={() => navigate(1)} title="Nästa sida" style={{ color: "#1b3a3a" }}>
-              <ChevronRightIcon className="w-5 h-5" />
-            </Button>
-            <span className="font-semibold lg:hidden" style={{ color: "#1b3a3a" }}>Astomed Pro</span>
+            
+            {isRootScreen ? (
+              <div className="flex items-center gap-2 lg:hidden">
+                <div className="w-8 h-8 rounded-lg overflow-hidden flex items-center justify-center bg-primary">
+                  <span className="text-primary-foreground font-bold text-[10px]">AST</span>
+                </div>
+                <span className="font-semibold text-foreground">Astomed Pro</span>
+              </div>
+            ) : (
+              <Button variant="ghost" size="icon" onClick={() => navigate(-1)} title="Föregående sida" className="text-foreground lg:hidden">
+                <ChevronLeft className="w-5 h-5" />
+              </Button>
+            )}
+
+            <div className="hidden lg:flex items-center gap-2">
+              <Link
+                to={createPageUrl("Dashboard")}
+                className="flex items-center justify-center w-8 h-8 rounded-lg transition-colors bg-accent text-accent-foreground hover:bg-accent/80"
+                title="Gå till Dashboard"
+              >
+                <Home className="w-4 h-4" />
+              </Link>
+              <Button variant="ghost" size="icon" onClick={() => navigate(-1)} title="Föregående sida" className="text-foreground">
+                <ChevronLeft className="w-5 h-5" />
+              </Button>
+              <Button variant="ghost" size="icon" onClick={() => navigate(1)} title="Nästa sida" className="text-foreground">
+                <ChevronRightIcon className="w-5 h-5" />
+              </Button>
+            </div>
+            
+            <span className="font-semibold hidden" style={{ color: "#1b3a3a" }}>Astomed Pro</span>
           </div>
           <NotificationBell />
         </header>
-        <main className="flex-1 overflow-auto">
+
+        <main className="flex-1 overflow-x-hidden overflow-y-auto">
           {children}
         </main>
+      </div>
+
+      {/* Bottom Navigation */}
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-card border-t border-border z-40 flex items-center justify-around pb-[env(safe-area-inset-bottom)] h-[calc(4rem+env(safe-area-inset-bottom))] shadow-[0_-4px_10px_rgba(0,0,0,0.05)]">
+        <Link to={createPageUrl("Dashboard")} className={`flex flex-col items-center justify-center w-full h-full ${currentPageName === 'Dashboard' ? 'text-primary' : 'text-muted-foreground'}`}>
+          <LayoutDashboard className="w-5 h-5 mb-1" />
+          <span className="text-[10px] font-medium">Översikt</span>
+        </Link>
+        <Link to={createPageUrl("ServiceRecords")} className={`flex flex-col items-center justify-center w-full h-full ${currentPageName === 'ServiceRecords' ? 'text-primary' : 'text-muted-foreground'}`}>
+          <Wrench className="w-5 h-5 mb-1" />
+          <span className="text-[10px] font-medium">Service</span>
+        </Link>
+        <Link to={createPageUrl("Customers")} className={`flex flex-col items-center justify-center w-full h-full ${currentPageName === 'Customers' ? 'text-primary' : 'text-muted-foreground'}`}>
+          <Users className="w-5 h-5 mb-1" />
+          <span className="text-[10px] font-medium">Kunder</span>
+        </Link>
       </div>
     </div>
   );

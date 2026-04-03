@@ -2,7 +2,8 @@ import { Toaster } from "@/components/ui/toaster"
 import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClientInstance } from '@/lib/query-client'
 import { pagesConfig } from './pages.config'
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate, useLocation } from 'react-router-dom';
+import { AnimatePresence, motion } from 'framer-motion';
 import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
@@ -26,6 +27,7 @@ const LayoutWrapper = ({ children, currentPageName }) => Layout ?
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
+  const location = useLocation();
   const currentPath = window.location.pathname;
 
   // Public routes that don't require authentication
@@ -52,31 +54,48 @@ const AuthenticatedApp = () => {
   }
 
   // Render the main app
+
+  const AnimatedPage = ({ children }) => (
+    <motion.div
+      initial={{ x: 15, opacity: 0 }}
+      animate={{ x: 0, opacity: 1 }}
+      exit={{ x: -15, opacity: 0 }}
+      transition={{ duration: 0.2, ease: "easeOut" }}
+      className="h-full"
+    >
+      {children}
+    </motion.div>
+  );
+
   return (
-    <Routes>
-      <Route path="/" element={<PublicServiceRequest />} />
-      <Route path="/PublicServiceRequest" element={<PublicServiceRequest />} />
-      <Route path="/ServiceAgreementTemplates" element={<LayoutWrapper currentPageName="ServiceAgreementTemplates"><ServiceAgreementTemplates /></LayoutWrapper>} />
-      <Route path="/CustomerDetails" element={<LayoutWrapper currentPageName="CustomerDetails"><CustomerDetails /></LayoutWrapper>} />
-      <Route path="/ServiceContractLeads" element={<LayoutWrapper currentPageName="ServiceContractLeads"><ServiceContractLeads /></LayoutWrapper>} />
-      <Route path="/ClosedLeads" element={<LayoutWrapper currentPageName="ClosedLeads"><ClosedLeads /></LayoutWrapper>} />
-      <Route path="/DeletedMachines" element={<LayoutWrapper currentPageName="Machines"><DeletedMachines /></LayoutWrapper>} />
-      <Route path="/ChatSupport" element={<LayoutWrapper currentPageName="ChatSupport"><ChatSupport /></LayoutWrapper>} />
-      <Route path="/Tasks" element={<LayoutWrapper currentPageName="Tasks"><Tasks /></LayoutWrapper>} />
-      <Route path="/MobileMenu" element={<LayoutWrapper currentPageName="MobileMenu"><MobileMenu /></LayoutWrapper>} />
-      {Object.entries(Pages).map(([path, Page]) => (
-        <Route
-          key={path}
-          path={`/${path}`}
-          element={
-            <LayoutWrapper currentPageName={path}>
-              <Page />
-            </LayoutWrapper>
-          }
-        />
-      ))}
-      <Route path="*" element={<PageNotFound />} />
-    </Routes>
+    <AnimatePresence mode="wait">
+      <Routes location={location} key={location.pathname}>
+        <Route path="/" element={<AnimatedPage><PublicServiceRequest /></AnimatedPage>} />
+        <Route path="/PublicServiceRequest" element={<AnimatedPage><PublicServiceRequest /></AnimatedPage>} />
+        <Route path="/ServiceAgreementTemplates" element={<AnimatedPage><LayoutWrapper currentPageName="ServiceAgreementTemplates"><ServiceAgreementTemplates /></LayoutWrapper></AnimatedPage>} />
+        <Route path="/CustomerDetails" element={<AnimatedPage><LayoutWrapper currentPageName="CustomerDetails"><CustomerDetails /></LayoutWrapper></AnimatedPage>} />
+        <Route path="/ServiceContractLeads" element={<AnimatedPage><LayoutWrapper currentPageName="ServiceContractLeads"><ServiceContractLeads /></LayoutWrapper></AnimatedPage>} />
+        <Route path="/ClosedLeads" element={<AnimatedPage><LayoutWrapper currentPageName="ClosedLeads"><ClosedLeads /></LayoutWrapper></AnimatedPage>} />
+        <Route path="/DeletedMachines" element={<AnimatedPage><LayoutWrapper currentPageName="Machines"><DeletedMachines /></LayoutWrapper></AnimatedPage>} />
+        <Route path="/ChatSupport" element={<AnimatedPage><LayoutWrapper currentPageName="ChatSupport"><ChatSupport /></LayoutWrapper></AnimatedPage>} />
+        <Route path="/Tasks" element={<AnimatedPage><LayoutWrapper currentPageName="Tasks"><Tasks /></LayoutWrapper></AnimatedPage>} />
+        <Route path="/MobileMenu" element={<AnimatedPage><LayoutWrapper currentPageName="MobileMenu"><MobileMenu /></LayoutWrapper></AnimatedPage>} />
+        {Object.entries(Pages).map(([path, Page]) => (
+          <Route
+            key={path}
+            path={`/${path}`}
+            element={
+              <AnimatedPage>
+                <LayoutWrapper currentPageName={path}>
+                  <Page />
+                </LayoutWrapper>
+              </AnimatedPage>
+            }
+          />
+        ))}
+        <Route path="*" element={<PageNotFound />} />
+      </Routes>
+    </AnimatePresence>
   );
 };
 

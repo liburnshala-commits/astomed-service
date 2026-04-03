@@ -84,5 +84,18 @@
 
   body {
     @apply bg-background text-foreground;
+    overscroll-behavior: none;
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  button, a, [role="button"] {
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  
+  input, textarea {
+    user-select: auto;
+    -webkit-user-select: auto;
   }
 }
