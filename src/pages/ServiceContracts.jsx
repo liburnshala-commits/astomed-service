@@ -3,6 +3,8 @@ import { base44 } from "@/api/base44Client";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
@@ -168,6 +170,95 @@ export default function ServiceContracts() {
         cust?.phone?.toLowerCase().includes(q)
       );
     });
+
+  const renderRow = (machine) => {
+    const cust = customerMap[machine.customer_id];
+    const status = contractStatus(machine);
+    const end = endDate(machine);
+
+  const renderMobileCard = (machine) => {
+    const cust = customerMap[machine.customer_id];
+    const status = contractStatus(machine);
+    const end = endDate(machine);
+
+    return (
+      <CarouselItem key={machine.id} className="basis-11/12 sm:basis-8/12">
+        <Card className={`bg-white shadow-sm border-slate-200 mx-1 h-full flex flex-col ${
+          status === "active" ? "border-l-4 border-l-emerald-500" : "border-l-4 border-l-red-500"
+        }`}>
+          <CardContent className="p-4 space-y-4 flex-1 flex flex-col">
+            <div className="flex justify-between items-start gap-2">
+              <div className="min-w-0">
+                <div className="flex items-center gap-2 mb-1 text-slate-800 font-semibold">
+                  <Monitor className="w-4 h-4 text-slate-400 flex-shrink-0" />
+                  <span className="truncate">{machine.model}</span>
+                </div>
+                <div className="text-xs text-slate-500 font-mono">SN: {machine.serial_number}</div>
+              </div>
+              <Badge className={`border-0 px-2.5 py-1 text-[10px] uppercase tracking-wider text-center ${
+                status === "active" ? "bg-emerald-100 text-emerald-800" : 
+                status === "pending_signature" ? "bg-amber-100 text-amber-800" : 
+                status === "rejected" ? "bg-red-100 text-red-800" : 
+                "bg-slate-100 text-slate-600"
+              }`}>
+                {status === "active" ? "Aktivt" : status === "pending_signature" ? "Under signering" : status === "rejected" ? "Nekat" : "Inaktivt/Utgånget"}
+              </Badge>
+            </div>
+
+            <div className="space-y-2 text-sm text-slate-700 bg-slate-50 p-3 rounded-lg border border-slate-100 flex-1">
+              <div className="flex items-center gap-2 mb-2 pb-2 border-b border-slate-200">
+                <Building2 className="w-4 h-4 text-slate-400 flex-shrink-0" />
+                <div className="min-w-0 flex-1">
+                  <div className="font-medium truncate text-slate-800">{cust?.company_name || "–"}</div>
+                  {cust?.contact_person && <div className="text-xs text-slate-500 truncate">{cust.contact_person}</div>}
+                </div>
+              </div>
+              <div className="flex justify-between items-center py-1">
+                <span className="text-slate-500">Avtalstyp:</span>
+                <span className="font-medium truncate max-w-[150px] text-right">{machine.service_contract === "basic" ? "BAS – Astomed 3.0" : machine.service_contract}</span>
+              </div>
+              <div className="flex justify-between items-center py-1">
+                <span className="text-slate-500">Bindningstid:</span>
+                <span className="font-medium">{machine.contract_binding_months ? (bindingLabel[machine.contract_binding_months] || (machine.contract_binding_months + " mån")) : "–"}</span>
+              </div>
+              <div className="flex justify-between items-center py-1">
+                <span className="text-slate-500">Slutdatum:</span>
+                <span className="font-medium">{end ? format(end, "d MMM yyyy", { locale: sv }) : "–"}</span>
+              </div>
+            </div>
+
+            <div className="pt-2 space-y-3">
+              <Select 
+                value={machine.contract_status || "active"} 
+                onValueChange={(val) => handleStatusChange(machine, val)}
+              >
+                <SelectTrigger className="w-full h-11 bg-white">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="active">Aktivt</SelectItem>
+                  <SelectItem value="inactive">Inaktivt</SelectItem>
+                  <SelectItem value="pending_signature">Under signering</SelectItem>
+                  <SelectItem value="rejected">Nekat signering</SelectItem>
+                </SelectContent>
+              </Select>
+              <div className="flex gap-2">
+                <Button className="flex-1 h-11" variant="outline" onClick={() => setEditingMachine(machine)} disabled={status !== "active"}>
+                  <Pencil className="w-4 h-4 mr-2 text-slate-500" /> Redigera
+                </Button>
+                <Button className="h-11 px-4 border border-slate-200 hover:bg-slate-100 text-slate-600" variant="ghost" onClick={() => handleDownloadContract(machine)}>
+                  <Download className="w-5 h-5" />
+                </Button>
+                <Button className="h-11 px-4 text-red-500 hover:bg-red-50 hover:text-red-700 border border-transparent hover:border-red-100" variant="ghost" onClick={() => handleRemoveContract(machine)}>
+                  <Trash2 className="w-5 h-5" />
+                </Button>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </CarouselItem>
+    );
+  };
 
   const renderRow = (machine) => {
     const cust = customerMap[machine.customer_id];
@@ -355,26 +446,43 @@ export default function ServiceContracts() {
         {active.length === 0 ? (
           <div className="text-center py-10 text-slate-400 text-sm">Inga aktiva serviceavtal</div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b bg-slate-50 text-xs text-slate-500 uppercase tracking-wide">
-                  <th className="py-2 px-4 text-left font-medium">Kund</th>
-                  <th className="py-2 px-4 text-left font-medium">Maskin</th>
-                  <th className="py-2 px-4 text-left font-medium">Avtal</th>
-                  <th className="py-2 px-4 text-left font-medium">Skapat</th>
-                  <th className="py-2 px-4 text-left font-medium">Startdatum</th>
-                  <th className="py-2 px-4 text-left font-medium">Bindningstid</th>
-                  <th className="py-2 px-4 text-left font-medium">Slutdatum</th>
-                  <th className="py-2 px-4 text-left font-medium">Status</th>
-                  <th className="py-2 px-4 text-left font-medium"></th>
-                </tr>
-              </thead>
-              <tbody>
-                {active.map(renderRow)}
-              </tbody>
-            </table>
-          </div>
+          <>
+            {/* Desktop Table View */}
+            <div className="hidden md:block overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b bg-slate-50 text-xs text-slate-500 uppercase tracking-wide">
+                    <th className="py-2 px-4 text-left font-medium">Kund</th>
+                    <th className="py-2 px-4 text-left font-medium">Maskin</th>
+                    <th className="py-2 px-4 text-left font-medium">Avtal</th>
+                    <th className="py-2 px-4 text-left font-medium">Skapat</th>
+                    <th className="py-2 px-4 text-left font-medium">Startdatum</th>
+                    <th className="py-2 px-4 text-left font-medium">Bindningstid</th>
+                    <th className="py-2 px-4 text-left font-medium">Slutdatum</th>
+                    <th className="py-2 px-4 text-left font-medium">Status</th>
+                    <th className="py-2 px-4 text-left font-medium"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {active.map(renderRow)}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Mobile Carousel View */}
+            <div className="md:hidden p-4 bg-slate-50">
+              {active.length > 1 && (
+                <div className="text-center text-xs text-slate-400 mb-3 flex items-center justify-center gap-2">
+                  <span>←</span> Svep för fler aktiva avtal ({active.length} st) <span>→</span>
+                </div>
+              )}
+              <Carousel className="w-full" opts={{ align: "start" }}>
+                <CarouselContent>
+                  {active.map(renderMobileCard)}
+                </CarouselContent>
+              </Carousel>
+            </div>
+          </>
         )}
       </div>
 
@@ -403,25 +511,42 @@ export default function ServiceContracts() {
             <span className="font-semibold text-slate-700 text-sm">Övriga / Inaktiva serviceavtal</span>
             <Badge className="bg-slate-100 text-slate-600 border-0 ml-1">{expired.length}</Badge>
           </div>
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b bg-slate-50 text-xs text-slate-500 uppercase tracking-wide">
-                  <th className="py-2 px-4 text-left font-medium">Kund</th>
-                  <th className="py-2 px-4 text-left font-medium">Maskin</th>
-                  <th className="py-2 px-4 text-left font-medium">Avtal</th>
-                  <th className="py-2 px-4 text-left font-medium">Skapat</th>
-                  <th className="py-2 px-4 text-left font-medium">Startdatum</th>
-                  <th className="py-2 px-4 text-left font-medium">Bindningstid</th>
-                  <th className="py-2 px-4 text-left font-medium">Slutdatum</th>
-                  <th className="py-2 px-4 text-left font-medium">Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {expired.map(renderRow)}
-              </tbody>
-            </table>
-          </div>
+          <>
+            {/* Desktop Table View */}
+            <div className="hidden md:block overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b bg-slate-50 text-xs text-slate-500 uppercase tracking-wide">
+                    <th className="py-2 px-4 text-left font-medium">Kund</th>
+                    <th className="py-2 px-4 text-left font-medium">Maskin</th>
+                    <th className="py-2 px-4 text-left font-medium">Avtal</th>
+                    <th className="py-2 px-4 text-left font-medium">Skapat</th>
+                    <th className="py-2 px-4 text-left font-medium">Startdatum</th>
+                    <th className="py-2 px-4 text-left font-medium">Bindningstid</th>
+                    <th className="py-2 px-4 text-left font-medium">Slutdatum</th>
+                    <th className="py-2 px-4 text-left font-medium">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {expired.map(renderRow)}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Mobile Carousel View */}
+            <div className="md:hidden p-4 bg-slate-50">
+              {expired.length > 1 && (
+                <div className="text-center text-xs text-slate-400 mb-3 flex items-center justify-center gap-2">
+                  <span>←</span> Svep för fler övriga avtal ({expired.length} st) <span>→</span>
+                </div>
+              )}
+              <Carousel className="w-full" opts={{ align: "start" }}>
+                <CarouselContent>
+                  {expired.map(renderMobileCard)}
+                </CarouselContent>
+              </Carousel>
+            </div>
+          </>
         </div>
       )}
     </div>
