@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
 import CustomerForm from "@/components/customers/CustomerForm.jsx";
 import DeleteCustomerDialog from "@/components/gdpr/DeleteCustomerDialog.jsx";
 import CustomerLatestInteraction from "@/components/customers/CustomerLatestInteraction.jsx";
@@ -215,6 +216,106 @@ export default function Customers() {
     }
   };
 
+  const renderCard = (customer, isMobile = false) => (
+    <Card key={customer.id} className={`astomed-card h-full flex flex-col ${isMobile ? 'mx-1' : ''}`}>
+      <CardContent className="p-5 flex-1 flex flex-col">
+        <div className="flex flex-col sm:flex-row items-start justify-between gap-4 mb-4">
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2 mb-1">
+              <Building2 className="w-4 h-4 astomed-muted flex-shrink-0" />
+              <Link to={createPageUrl(`CustomerDetails?id=${customer.id}`)} className="font-semibold astomed-title truncate hover:text-[#3a9e9e] hover:underline">
+                {customer.company_name}
+              </Link>
+              {customer.is_imported && (
+                <span title="Importerad via CSV" className="text-xs bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded font-medium flex-shrink-0">⭐ Import</span>
+              )}
+            </div>
+            {userRole === "admin" && (
+              <div className="ml-6 mb-2">
+                <Button
+                  size="sm"
+                  variant={customer.is_deleted ? "destructive" : "outline"}
+                  onClick={() => handleToggleDelete(customer, !customer.is_deleted)}
+                >
+                  {customer.is_deleted ? "🗑️ Markerad för radering" : "Aktiv kund"}
+                </Button>
+              </div>
+            )}
+            {customer.org_number && <p className="text-xs astomed-muted ml-6 mb-2">Org.nr: {customer.org_number}</p>}
+            <div className="grid sm:grid-cols-3 gap-2 ml-6">
+              {customer.contact_person && <div className="text-sm astomed-subtitle">👤 {customer.contact_person}</div>}
+              {customer.phone && <div className="text-sm astomed-subtitle flex items-center gap-1"><Phone className="w-3 h-3" /> {customer.phone}</div>}
+              {customer.email && <div className="text-sm astomed-subtitle flex items-center gap-1"><Mail className="w-3 h-3" /> {customer.email}</div>}
+            </div>
+            {(customer.address || customer.city) && (
+              <div className="text-xs astomed-muted ml-6 mt-1">{customer.address}{customer.city ? `, ${customer.city}` : ""}</div>
+            )}
+            <div className="mt-3">
+              <CustomerLatestInteraction customerId={customer.id} />
+            </div>
+          </div>
+        </div>
+        <div className="mt-auto pt-4 border-t border-slate-100 flex flex-col items-start sm:items-end gap-2 flex-shrink-0">
+          <div className="flex gap-2 flex-wrap justify-start sm:justify-end w-full mb-1">
+            <Link to={createPageUrl(`Machines?customer=${customer.id}`)}>
+              <Badge variant="secondary" className="bg-[#e8f2f2] text-[#1b3a3a] cursor-pointer hover:bg-[#d0e8e8] transition-colors">
+                {getMachineCount(customer.id)} maskin{getMachineCount(customer.id) !== 1 ? "er" : ""}
+              </Badge>
+            </Link>
+            {getContractCount(customer.id) > 0 && (
+              <Link to={createPageUrl(`Machines?customer=${customer.id}`)}>
+                <Badge variant="secondary" className="bg-[#f0f7f0] text-[#1a5c2a] cursor-pointer hover:bg-[#d8eddb] transition-colors">
+                  {getContractCount(customer.id)} serviceavtal
+                </Badge>
+              </Link>
+            )}
+          </div>
+          <div className="flex flex-wrap justify-start sm:justify-end w-full gap-2 mt-1">
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => generateAndCopyPortalLink(customer)}
+              disabled={!customer.email || generatingLink === customer.id}
+              title={customer.email ? "Generera och kopiera portal-länk" : "Kunden saknar e-post"}
+            >
+              {generatingLink === customer.id ? (
+                <Loader2 className="w-3 h-3 animate-spin" />
+              ) : copiedId === customer.id ? (
+                <Check className="w-3 h-3 text-green-500" />
+              ) : (
+                <Copy className="w-3 h-3" />
+              )}
+              <span className="ml-1 text-xs hidden sm:inline">
+                {copiedId === customer.id ? "Kopierad" : "Kopiera länk"}
+              </span>
+            </Button>
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => inviteCustomer(customer)}
+              disabled={inviting === customer.id || !customer.email}
+              title={customer.email ? "Bjud in kunden att skapa konto" : "Kunden saknar e-post"}
+            >
+              {inviting === customer.id ? <Check className="w-3 h-3 text-green-500" /> : <UserPlus className="w-3 h-3" />}
+              <span className="ml-1 text-xs hidden sm:inline">{inviting === customer.id ? "Skickat!" : "Bjud in"}</span>
+            </Button>
+            <Link to={createPageUrl(`Machines?customer=${customer.id}`)}>
+              <Button size="sm" variant="outline">
+                <ExternalLink className="w-3 h-3" /><span className="ml-1 hidden sm:inline">Maskiner</span>
+              </Button>
+            </Link>
+            <Button size="sm" variant="ghost" onClick={() => { setEditing(customer); setShowForm(true); }}>
+              <span className="hidden sm:inline">Redigera</span><span className="sm:hidden">✏️</span>
+            </Button>
+            <Button size="sm" variant="ghost" className="text-red-500 hover:text-red-700 hover:bg-red-50" onClick={() => setDeletingCustomer(customer)}>
+              <Trash2 className="w-3 h-3" />
+            </Button>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+
   return (
     <div className="p-6 space-y-6">
       <div className="flex items-center justify-between">
@@ -251,111 +352,37 @@ export default function Customers() {
         <Input placeholder="Sök kund, org.nr eller kontaktperson..." className="pl-9" value={search} onChange={e => setSearch(e.target.value)} />
       </div>
 
-      <div className="grid gap-4">
-        {filtered.map(customer => (
-          <Card key={customer.id} className="astomed-card">
-            <CardContent className="p-5">
-              <div className="flex items-start justify-between gap-4">
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 mb-1">
-                    <Building2 className="w-4 h-4 astomed-muted flex-shrink-0" />
-                    <Link to={createPageUrl(`CustomerDetails?id=${customer.id}`)} className="font-semibold astomed-title truncate hover:text-[#3a9e9e] hover:underline">
-                      {customer.company_name}
-                    </Link>
-                    {customer.is_imported && (
-                      <span title="Importerad via CSV" className="text-xs bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded font-medium flex-shrink-0">⭐ Import</span>
-                    )}
-                  </div>
-                  {userRole === "admin" && (
-                    <div className="ml-6 mb-2">
-                      <Button
-                        size="sm"
-                        variant={customer.is_deleted ? "destructive" : "outline"}
-                        onClick={() => handleToggleDelete(customer, !customer.is_deleted)}
-                      >
-                        {customer.is_deleted ? "🗑️ Markerad för radering" : "Aktiv kund"}
-                      </Button>
-                    </div>
-                  )}
-                  {customer.org_number && <p className="text-xs astomed-muted ml-6 mb-2">Org.nr: {customer.org_number}</p>}
-                  <div className="grid sm:grid-cols-3 gap-2 ml-6">
-                    {customer.contact_person && <div className="text-sm astomed-subtitle">👤 {customer.contact_person}</div>}
-                    {customer.phone && <div className="text-sm astomed-subtitle flex items-center gap-1"><Phone className="w-3 h-3" /> {customer.phone}</div>}
-                    {customer.email && <div className="text-sm astomed-subtitle flex items-center gap-1"><Mail className="w-3 h-3" /> {customer.email}</div>}
-                  </div>
-                  {(customer.address || customer.city) && (
-                    <div className="text-xs astomed-muted ml-6 mt-1">{customer.address}{customer.city ? `, ${customer.city}` : ""}</div>
-                  )}
-                  <CustomerLatestInteraction customerId={customer.id} />
-                </div>
-                <div className="flex flex-col items-end gap-2 flex-shrink-0">
-                  <div className="flex gap-2 flex-wrap justify-end">
-                    <Link to={createPageUrl(`Machines?customer=${customer.id}`)}>
-                      <Badge variant="secondary" className="bg-[#e8f2f2] text-[#1b3a3a] cursor-pointer hover:bg-[#d0e8e8] transition-colors">
-                        {getMachineCount(customer.id)} maskin{getMachineCount(customer.id) !== 1 ? "er" : ""}
-                      </Badge>
-                    </Link>
-                    {getContractCount(customer.id) > 0 && (
-                      <Link to={createPageUrl(`Machines?customer=${customer.id}`)}>
-                        <Badge variant="secondary" className="bg-[#f0f7f0] text-[#1a5c2a] cursor-pointer hover:bg-[#d8eddb] transition-colors">
-                          {getContractCount(customer.id)} serviceavtal
-                        </Badge>
-                      </Link>
-                    )}
-                  </div>
-                  <div className="flex flex-wrap justify-end gap-2">
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() => generateAndCopyPortalLink(customer)}
-                      disabled={!customer.email || generatingLink === customer.id}
-                      title={customer.email ? "Generera och kopiera portal-länk" : "Kunden saknar e-post"}
-                    >
-                      {generatingLink === customer.id ? (
-                        <Loader2 className="w-3 h-3 animate-spin" />
-                      ) : copiedId === customer.id ? (
-                        <Check className="w-3 h-3 text-green-500" />
-                      ) : (
-                        <Copy className="w-3 h-3" />
-                      )}
-                      <span className="ml-1 text-xs hidden sm:inline">
-                        {copiedId === customer.id ? "Kopierad" : "Kopiera länk"}
-                      </span>
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() => inviteCustomer(customer)}
-                      disabled={inviting === customer.id || !customer.email}
-                      title={customer.email ? "Bjud in kunden att skapa konto" : "Kunden saknar e-post"}
-                    >
-                      {inviting === customer.id ? <Check className="w-3 h-3 text-green-500" /> : <UserPlus className="w-3 h-3" />}
-                      <span className="ml-1 text-xs hidden sm:inline">{inviting === customer.id ? "Skickat!" : "Bjud in"}</span>
-                    </Button>
-                    <Link to={createPageUrl(`Machines?customer=${customer.id}`)}>
-                      <Button size="sm" variant="outline">
-                        <ExternalLink className="w-3 h-3" /><span className="ml-1 hidden sm:inline">Maskiner</span>
-                      </Button>
-                    </Link>
-                    <Button size="sm" variant="ghost" onClick={() => { setEditing(customer); setShowForm(true); }}>
-                      <span className="hidden sm:inline">Redigera</span><span className="sm:hidden">✏️</span>
-                    </Button>
-                    <Button size="sm" variant="ghost" className="text-red-500 hover:text-red-700 hover:bg-red-50" onClick={() => setDeletingCustomer(customer)}>
-                      <Trash2 className="w-3 h-3" />
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-        {filtered.length === 0 && (
-          <div className="text-center py-12 text-slate-400">
-            <Building2 className="w-12 h-12 mx-auto mb-3 opacity-30" />
-            <p>Inga kunder hittades</p>
+      {filtered.length === 0 ? (
+        <div className="text-center py-12 text-slate-400">
+          <Building2 className="w-12 h-12 mx-auto mb-3 opacity-30" />
+          <p>Inga kunder hittades</p>
+        </div>
+      ) : (
+        <>
+          {/* Desktop Grid View */}
+          <div className="hidden md:grid gap-4">
+            {filtered.map(customer => renderCard(customer))}
           </div>
-        )}
-      </div>
+
+          {/* Mobile Carousel View */}
+          <div className="md:hidden">
+            {filtered.length > 1 && (
+              <div className="text-center text-xs text-slate-400 mb-3 flex items-center justify-center gap-2">
+                <span>←</span> Svep för fler kunder ({filtered.length} st) <span>→</span>
+              </div>
+            )}
+            <Carousel className="w-full" opts={{ align: "start" }}>
+              <CarouselContent>
+                {filtered.map(customer => (
+                  <CarouselItem key={customer.id} className="basis-11/12 sm:basis-8/12">
+                    {renderCard(customer, true)}
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+            </Carousel>
+          </div>
+        </>
+      )}
 
       {showForm && (
         <CustomerForm
