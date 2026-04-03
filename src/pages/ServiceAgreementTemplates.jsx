@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
+import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
@@ -94,6 +95,54 @@ export default function ServiceAgreementTemplates() {
     loadTemplates();
   };
 
+  const renderCard = (t, isMobile = false) => (
+    <div key={t.id} className={`bg-white border border-gray-200 rounded-xl p-5 flex flex-col shadow-sm hover:shadow-md transition-shadow h-full ${isMobile ? 'mx-1' : ''}`}>
+      <div className="flex items-start justify-between gap-4 mb-3">
+        <div className="flex-1 min-w-0">
+          <div className="flex flex-wrap items-center gap-2 mb-1">
+            <span className="font-semibold text-gray-900">{t.name}</span>
+            <Badge style={{ background: "#e8f2f2", color: "#1b3a3a" }}>{t.agreement_type}</Badge>
+            <Badge variant="outline">{t.binding_months || 12} mån</Badge>
+            {t.price_per_month && (
+              <Badge variant="outline">{t.price_per_month} kr/mån</Badge>
+            )}
+          </div>
+          {t.description && <p className="text-sm text-gray-500">{t.description}</p>}
+        </div>
+        <div className="flex gap-1 flex-shrink-0">
+          <Button size="icon" variant="ghost" onClick={() => openEdit(t)}>
+            <Pencil className="w-4 h-4 text-gray-500" />
+          </Button>
+          <Button size="icon" variant="ghost" onClick={() => handleDelete(t.id)}>
+            <Trash2 className="w-4 h-4 text-red-400" />
+          </Button>
+        </div>
+      </div>
+      
+      <div className="flex-1 flex flex-col">
+        {t.included_services && t.included_services.length > 0 && (
+          <ul className="space-y-1 mb-3 bg-slate-50 p-3 rounded-lg border border-slate-100 flex-1">
+            {t.included_services.map((s, i) => (
+              <li key={i} className="flex items-start gap-2 text-xs text-gray-600">
+                <CheckCircle className="w-3.5 h-3.5 text-teal-500 flex-shrink-0 mt-0.5" />
+                <span>{s}</span>
+              </li>
+            ))}
+          </ul>
+        )}
+        
+        {t.price_per_month && (
+          <div className="mt-auto pt-3 border-t border-gray-100 text-right opacity-90">
+            <p className="text-[11px] text-gray-500 mb-0.5">Jämförspris vid Engångsservice (utan avtal):</p>
+            <p className="text-sm font-medium text-gray-600 mb-1">{Math.round(t.price_per_month * 12 * 1.30).toLocaleString('sv-SE')} kr / gång</p>
+            <p className="text-[10px] text-gray-400 italic">* Inkluderar ej 20% rabatt på reservdelar, arbetskostnader och resor.</p>
+            <p className="text-[10px] text-gray-400 italic">* Engångsservice kan ej prioriteras på samma sätt som avtalskunder då vi har över 1200 maskinkunder i Sverige.</p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+
   return (
     <div className="p-6 max-w-4xl mx-auto">
       <div className="flex items-center justify-between mb-6">
@@ -116,49 +165,30 @@ export default function ServiceAgreementTemplates() {
           <p>Inga serviceavtalsmallar skapade ännu.</p>
         </div>
       ) : (
-        <div className="grid gap-4">
-          {templates.map(t => (
-            <div key={t.id} className="bg-white border border-gray-200 rounded-xl p-5 flex items-start justify-between gap-4 shadow-sm hover:shadow-md transition-shadow">
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 mb-1">
-                  <span className="font-semibold text-gray-900">{t.name}</span>
-                  <Badge style={{ background: "#e8f2f2", color: "#1b3a3a" }}>{t.agreement_type}</Badge>
-                  <Badge variant="outline">{t.binding_months || 12} mån</Badge>
-                  {t.price_per_month && (
-                    <Badge variant="outline">{t.price_per_month} kr/mån</Badge>
-                  )}
-                </div>
-                {t.description && <p className="text-sm text-gray-500 mb-2">{t.description}</p>}
-                {t.included_services && t.included_services.length > 0 && (
-                  <ul className="space-y-0.5 mb-3">
-                    {t.included_services.map((s, i) => (
-                      <li key={i} className="flex items-center gap-1.5 text-xs text-gray-600">
-                        <CheckCircle className="w-3 h-3 text-teal-500 flex-shrink-0" />
-                        {s}
-                      </li>
-                    ))}
-                  </ul>
-                )}
-                {t.price_per_month && (
-                  <div className="mt-3 pt-3 border-t border-gray-100 text-right opacity-90">
-                    <p className="text-[11px] text-gray-500 mb-0.5">Jämförspris vid Engångsservice (utan avtal):</p>
-                    <p className="text-sm font-medium text-gray-600 mb-1">{Math.round(t.price_per_month * 12 * 1.30).toLocaleString('sv-SE')} kr / gång</p>
-                    <p className="text-[10px] text-gray-400 mt-1 italic">* Inkluderar ej 20% rabatt på reservdelar, arbetskostnader och resor.</p>
-                    <p className="text-[10px] text-gray-400 mt-0.5 italic">* Engångsservice kan ej prioriteras på samma sätt som avtalskunder då vi har över 1200 maskinkunder i Sverige.</p>
-                  </div>
-                )}
+        <>
+          {/* Desktop Grid View */}
+          <div className="hidden md:grid gap-4">
+            {templates.map(t => renderCard(t))}
+          </div>
+
+          {/* Mobile Carousel View */}
+          <div className="md:hidden">
+            {templates.length > 1 && (
+              <div className="text-center text-xs text-slate-400 mb-3 flex items-center justify-center gap-2">
+                <span>←</span> Svep för fler mallar ({templates.length} st) <span>→</span>
               </div>
-              <div className="flex gap-2 flex-shrink-0">
-                <Button size="icon" variant="ghost" onClick={() => openEdit(t)}>
-                  <Pencil className="w-4 h-4 text-gray-500" />
-                </Button>
-                <Button size="icon" variant="ghost" onClick={() => handleDelete(t.id)}>
-                  <Trash2 className="w-4 h-4 text-red-400" />
-                </Button>
-              </div>
-            </div>
-          ))}
-        </div>
+            )}
+            <Carousel className="w-full" opts={{ align: "start" }}>
+              <CarouselContent>
+                {templates.map(t => (
+                  <CarouselItem key={t.id} className="basis-11/12 sm:basis-8/12">
+                    {renderCard(t, true)}
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+            </Carousel>
+          </div>
+        </>
       )}
 
       <Dialog open={showModal} onOpenChange={setShowModal}>
