@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
 import { format } from "date-fns";
 import MultiMachineContractModal from "@/components/contracts/MultiMachineContractModal";
 import NewLeadModal from "@/components/leads/NewLeadModal";
@@ -475,11 +476,19 @@ export default function ServiceContractLeads() {
             </div>
 
             {/* Mobile Card View */}
-            <div className="md:hidden space-y-4 p-4 bg-slate-50">
-              {filteredLeads.map(lead => {
-                const contact = getLeadContact(lead);
-                return (
-                  <Card key={lead.id} className="bg-white shadow-sm border-slate-200">
+            <div className="md:hidden p-4 bg-slate-50">
+              {filteredLeads.length > 1 && (
+                <div className="text-center text-xs text-slate-400 mb-3 flex items-center justify-center gap-2">
+                  <span>←</span> Svep för fler prospekt ({filteredLeads.length} st) <span>→</span>
+                </div>
+              )}
+              <Carousel className="w-full" opts={{ align: "start" }}>
+                <CarouselContent>
+                  {filteredLeads.map(lead => {
+                    const contact = getLeadContact(lead);
+                    return (
+                      <CarouselItem key={lead.id} className="basis-full">
+                        <Card className="bg-white shadow-sm border-slate-200 mx-1">
                     <CardContent className="p-4 space-y-4">
                       <div className="flex justify-between items-start gap-2">
                         <div>
@@ -599,8 +608,11 @@ export default function ServiceContractLeads() {
                       </div>
                     </CardContent>
                   </Card>
-                );
-              })}
+                      </CarouselItem>
+                    );
+                  })}
+                </CarouselContent>
+              </Carousel>
             </div>
           </>
         )}
