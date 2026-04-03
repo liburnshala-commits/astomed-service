@@ -422,15 +422,15 @@ export default function ServiceRecordForm({ record, machines, customers, presele
               </div>
             </div>
 
-            <div className="space-y-1 col-span-2 md:col-span-1 mt-2">
+            <div className="space-y-1 col-span-1 mt-2">
               <Label>Rabatt (%)</Label>
               <Input type="number" min="0" max="100" value={form.discount_percent} onChange={e => set("discount_percent", e.target.value === "" ? "" : parseFloat(e.target.value))} placeholder="0" />
             </div>
-
-            <div className="col-span-2 space-y-1">
+            <div className="space-y-1 col-span-1 mt-2">
               <Label>Faktisk kostnad (kr)</Label>
               <Input type="number" value={form.manual_price} onChange={e => set("manual_price", e.target.value === "" ? "" : parseFloat(e.target.value))} placeholder="0" />
             </div>
+
             <div className="col-span-2 p-3 bg-slate-50 rounded-lg flex items-center justify-between mt-2">
               <span className="text-sm text-slate-600">Beräknad totalkostnad</span>
               <span className="font-bold text-lg text-slate-900">{calcTotal().toLocaleString("sv-SE")} kr</span>
