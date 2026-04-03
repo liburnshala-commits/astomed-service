@@ -12,6 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
 import { sv } from "date-fns/locale";
 import MobileTechnicianCard from "../components/service/MobileTechnicianCard.jsx";
+import PullToRefresh from "@/components/ui/pull-to-refresh.jsx";
 
 const statusColor = {
   pending: "bg-yellow-100 text-yellow-800 border-yellow-200",
@@ -164,6 +165,7 @@ export default function TechnicianMobile() {
   });
 
   return (
+    <PullToRefresh onRefresh={load}>
     <div className="min-h-screen bg-slate-50 pb-24">
       {/* Header */}
       <div className="sticky top-0 z-30 bg-white border-b border-slate-200 shadow-sm">
@@ -285,5 +287,6 @@ export default function TechnicianMobile() {
         </a>
       </div>
     </div>
+    </PullToRefresh>
   );
 }

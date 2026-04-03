@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge";
 import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
 import { Card, CardContent } from "@/components/ui/card";
+import PullToRefresh from "@/components/ui/pull-to-refresh.jsx";
 
 export default function Tasks() {
   const [tasks, setTasks] = useState([]);
@@ -93,6 +94,7 @@ export default function Tasks() {
   };
 
   return (
+    <PullToRefresh onRefresh={fetchData}>
     <div className="p-6 max-w-5xl mx-auto space-y-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
@@ -274,5 +276,6 @@ export default function Tasks() {
         </>
       )}
     </div>
+    </PullToRefresh>
   );
 }

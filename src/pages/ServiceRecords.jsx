@@ -14,6 +14,7 @@ import ServiceRecordForm from "@/components/service/ServiceRecordForm.jsx";
 import ServiceRecordDetail from "@/components/service/ServiceRecordDetail.jsx";
 import CustomerServiceRequestForm from "@/components/service/CustomerServiceRequestForm.jsx";
 import AdvancedFilters from "@/components/service/AdvancedFilters.jsx";
+import PullToRefresh from "@/components/ui/pull-to-refresh.jsx";
 
 const statusColor = {
   pending: "bg-yellow-100 text-yellow-800",
@@ -205,6 +206,7 @@ export default function ServiceRecords() {
   };
 
   return (
+    <PullToRefresh onRefresh={load}>
     <div className="p-6 space-y-6">
       <div className="flex items-center justify-between">
         <div>
@@ -412,5 +414,6 @@ export default function ServiceRecords() {
         />
       )}
     </div>
+    </PullToRefresh>
   );
 }
