@@ -72,8 +72,8 @@ export default function ServiceRecordForm({ record, machines, customers, presele
     if (v === "completed" || v === "invoiced") {
       const missing = [];
       if (!form.technician_name) missing.push("Tekniker");
-      // Only require labor hours and cost if no service contract
-      if (currentContract === "none") {
+      // Only require labor hours and cost if no service contract and it's a repair
+      if (currentContract === "none" && selectedTemplate === "only_repair") {
         if (!form.labor_hours && form.labor_hours !== 0) missing.push("Arbetstimmar");
         if (!form.labor_cost && form.labor_cost !== 0) missing.push("Arbetskostnad");
       }
@@ -97,7 +97,7 @@ export default function ServiceRecordForm({ record, machines, customers, presele
   const [serialMatch, setSerialMatch] = useState(null); // null | "found" | "not_found"
   const [uploading, setUploading] = useState(false);
   const [templates, setTemplates] = useState([]);
-  const [selectedTemplate, setSelectedTemplate] = useState("");
+  const [selectedTemplate, setSelectedTemplate] = useState("only_repair");
 
   useEffect(() => {
     base44.entities.ServiceAgreementTemplate.list().then(setTemplates).catch(console.error);
@@ -140,8 +140,6 @@ export default function ServiceRecordForm({ record, machines, customers, presele
         parts_used: [...manualParts, ...newParts]
       };
     });
-    
-    setSelectedTemplate("");
   };
 
   const set = (field, value) => {
@@ -227,9 +225,12 @@ export default function ServiceRecordForm({ record, machines, customers, presele
   };
 
   const calcTotal = () => {
-    const partsTotal = form.parts_used.reduce((sum, p) => sum + ((p.unit_price || 0) * (p.quantity || 1)), 0);
+    const partsTotal = selectedTemplate === "only_repair" 
+      ? form.parts_used.reduce((sum, p) => sum + ((p.unit_price || 0) * (p.quantity || 1)), 0)
+      : 0;
     const additionalTotal = form.additional_costs.reduce((sum, c) => sum + (parseFloat(c.cost) || 0), 0);
-    const baseTotal = partsTotal + additionalTotal + (parseFloat(form.labor_cost) || 0);
+    const laborTotal = selectedTemplate === "only_repair" ? (parseFloat(form.labor_cost) || 0) : 0;
+    const baseTotal = partsTotal + additionalTotal + laborTotal;
     const discount = parseFloat(form.discount_percent) || 0;
     return Math.round(baseTotal * (1 - (discount / 100)));
   };
@@ -362,8 +363,10 @@ export default function ServiceRecordForm({ record, machines, customers, presele
             <div className="space-y-2">
               {form.parts_used.map((part, i) => (
                 <div key={i} className="grid grid-cols-12 gap-2 items-center">
-                  <Input className="col-span-8" placeholder="Namn/Moment" value={part.part_name} onChange={e => updatePart(i, "part_name", e.target.value)} />
-                  <Input className="col-span-3" type="number" placeholder="Pris (kr)" value={part.unit_price} onChange={e => updatePart(i, "unit_price", parseFloat(e.target.value))} />
+                  <Input className={selectedTemplate === "only_repair" ? "col-span-8" : "col-span-11"} placeholder="Namn/Moment" value={part.part_name} onChange={e => updatePart(i, "part_name", e.target.value)} />
+                  {selectedTemplate === "only_repair" && (
+                    <Input className="col-span-3" type="number" placeholder="Pris (kr)" value={part.unit_price} onChange={e => updatePart(i, "unit_price", parseFloat(e.target.value))} />
+                  )}
                   <Button size="icon" variant="ghost" className="col-span-1 text-red-400 hover:text-red-600" onClick={() => removePart(i)}><Trash2 className="w-3 h-3" /></Button>
                 </div>
               ))}
@@ -373,25 +376,29 @@ export default function ServiceRecordForm({ record, machines, customers, presele
 
           {/* Costs */}
           <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-1">
-              <Label>Arbetstimmar{currentContract === "none" && " *"}</Label>
-              <Input type="number" value={form.labor_hours} onChange={e => set("labor_hours", e.target.value === "" ? "" : parseFloat(e.target.value))} placeholder="0" />
-              {currentContract === "none" && (
-                <p className="text-xs text-slate-500">Oblig. utan avtal</p>
-              )}
-            </div>
-            <div className="space-y-1">
-              <Label>Timpris (kr/h){currentContract === "none" && " *"}</Label>
-              <Input type="number" value={form.hourly_rate} onChange={e => set("hourly_rate", e.target.value === "" ? "" : parseFloat(e.target.value))} placeholder="0" />
-              {currentContract === "none" && (
-                <p className="text-xs text-slate-500">Oblig. utan avtal</p>
-              )}
-            </div>
-            <div className="col-span-2 space-y-1">
-              <Label>Arbetskostnad (kr)</Label>
-              <Input type="number" value={form.labor_cost} readOnly className="bg-slate-50 text-slate-600 font-medium" placeholder="0" />
-              <p className="text-xs text-slate-500">Beräknas automatiskt (Timmar × Timpris)</p>
-            </div>
+            {selectedTemplate === "only_repair" && (
+              <>
+                <div className="space-y-1">
+                  <Label>Arbetstimmar{currentContract === "none" && " *"}</Label>
+                  <Input type="number" value={form.labor_hours} onChange={e => set("labor_hours", e.target.value === "" ? "" : parseFloat(e.target.value))} placeholder="0" />
+                  {currentContract === "none" && (
+                    <p className="text-xs text-slate-500">Oblig. utan avtal</p>
+                  )}
+                </div>
+                <div className="space-y-1">
+                  <Label>Timpris (kr/h){currentContract === "none" && " *"}</Label>
+                  <Input type="number" value={form.hourly_rate} onChange={e => set("hourly_rate", e.target.value === "" ? "" : parseFloat(e.target.value))} placeholder="0" />
+                  {currentContract === "none" && (
+                    <p className="text-xs text-slate-500">Oblig. utan avtal</p>
+                  )}
+                </div>
+                <div className="col-span-2 space-y-1">
+                  <Label>Arbetskostnad (kr)</Label>
+                  <Input type="number" value={form.labor_cost} readOnly className="bg-slate-50 text-slate-600 font-medium" placeholder="0" />
+                  <p className="text-xs text-slate-500">Beräknas automatiskt (Timmar × Timpris)</p>
+                </div>
+              </>
+            )}
 
             <div className="col-span-2 mt-2">
               <div className="flex items-center justify-between mb-3">
