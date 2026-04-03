@@ -171,11 +171,6 @@ export default function ServiceContracts() {
       );
     });
 
-  const renderRow = (machine) => {
-    const cust = customerMap[machine.customer_id];
-    const status = contractStatus(machine);
-    const end = endDate(machine);
-
   const renderMobileCard = (machine) => {
     const cust = customerMap[machine.customer_id];
     const status = contractStatus(machine);
