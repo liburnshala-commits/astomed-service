@@ -33,6 +33,7 @@ export default function MultiMachineContractModal({ onClose, onSave, initialCust
   const [discountType, setDiscountType] = useState("percent");
   const [startDate, setStartDate] = useState(new Date().toISOString().split("T")[0]);
   const [bindingMonths, setBindingMonths] = useState("12");
+  const [contractStatus, setContractStatus] = useState("inactive");
   
   const [saving, setSaving] = useState(false);
 
@@ -72,13 +73,13 @@ export default function MultiMachineContractModal({ onClose, onSave, initialCust
           discount_type: discountType,
           start_date: startDate,
           binding_months: Number(bindingMonths),
-          status: "active"
+          status: contractStatus
         });
 
         for (const machineId of selectedMachines) {
           await base44.entities.Machine.update(machineId, {
             service_contract: "basic",
-            contract_status: "active",
+            contract_status: contractStatus === "active" ? "active" : "pending_signature",
             service_agreement_template_id: templateId,
             service_agreement_instance_id: instance.id,
             contract_start_date: startDate,
@@ -348,7 +349,7 @@ export default function MultiMachineContractModal({ onClose, onSave, initialCust
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="space-y-2">
                   <Label>Startdatum</Label>
                   <Input type="date" value={startDate} onChange={e => setStartDate(e.target.value)} />
@@ -361,6 +362,16 @@ export default function MultiMachineContractModal({ onClose, onSave, initialCust
                       <SelectItem value="6">6 månader</SelectItem>
                       <SelectItem value="12">12 månader</SelectItem>
                       <SelectItem value="24">24 månader</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label>Status</Label>
+                  <Select value={contractStatus} onValueChange={setContractStatus}>
+                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="inactive">Inaktiv (Väntar på signering)</SelectItem>
+                      <SelectItem value="active">Aktiv</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
