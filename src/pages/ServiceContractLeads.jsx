@@ -180,8 +180,12 @@ export default function ServiceContractLeads() {
       await base44.entities.ServiceContractLead.update(lead.id, { machine_ids: createdMachineIds });
     }
 
-    setConvertingLead({ ...lead, customer_id: customerId, machine_ids: createdMachineIds });
-    setConvertingCustomerId(customerId);
+    await base44.entities.ServiceContractLead.update(lead.id, { status: "accepted" });
+    toast({
+      title: "Prospekt konverterat",
+      description: "Kund och maskiner har skapats."
+    });
+    fetchData();
   };
 
   const handleConversionComplete = async () => {
