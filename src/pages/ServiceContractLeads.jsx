@@ -296,7 +296,12 @@ export default function ServiceContractLeads() {
       l.notes?.toLowerCase().includes(searchLower) ||
       customer?.company_name?.toLowerCase().includes(searchLower) ||
       customer?.org_number?.toLowerCase().includes(searchLower) ||
-      customer?.contact_person?.toLowerCase().includes(searchLower);
+      customer?.contact_person?.toLowerCase().includes(searchLower) ||
+      l.proposed_machines?.some(m => m.serial_number?.toLowerCase().includes(searchLower) || m.model?.toLowerCase().includes(searchLower)) ||
+      l.machine_ids?.some(id => {
+        const m = machines.find(mac => mac.id === id);
+        return m?.serial_number?.toLowerCase().includes(searchLower) || m?.model?.toLowerCase().includes(searchLower);
+      });
 
     const matchesStatus = statusFilter === "all" || l.status === statusFilter;
     return matchesSearch && matchesStatus;
