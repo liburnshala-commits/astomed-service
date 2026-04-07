@@ -78,7 +78,9 @@
         "not_interested",
         "other_service_contract",
         "wrong_phone",
-        "wrong_email"
+        "wrong_email",
+        "handpiece",
+        "no_serial_number"
       ],
       "default": "new",
       "description": "Status p\u00e5 prospektet"

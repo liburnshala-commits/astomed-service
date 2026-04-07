@@ -28,6 +28,8 @@ const statusMap = {
   other_service_contract: { label: "Annat Serviceavtal", color: "bg-orange-100 text-orange-800" },
   wrong_phone: { label: "Fel telefonnummer", color: "bg-red-50 text-red-600 border border-red-200" },
   wrong_email: { label: "Fel mail", color: "bg-red-50 text-red-600 border border-red-200" },
+  handpiece: { label: "Handenhet", color: "bg-slate-100 text-slate-800" },
+  no_serial_number: { label: "Inget serienummer", color: "bg-stone-100 text-stone-800" },
 };
 
 export default function ServiceContractLeads() {
