@@ -222,6 +222,13 @@ export default function CustomerDashboard() {
                             );
                           })()}
                         </div>
+                        <div className="mt-3 pt-3 border-t border-slate-200/60">
+                           <Button size="sm" variant="outline" className="w-full sm:w-auto text-xs h-8" asChild>
+                             <Link to={createPageUrl(`ServiceRecords`)}>
+                               <Wrench className="w-3 h-3 mr-1.5" /> Boka service
+                             </Link>
+                           </Button>
+                        </div>
                       </div>
                     </div>
                   </CardContent>
@@ -336,6 +343,21 @@ export default function CustomerDashboard() {
           </CardContent>
           </Card>
           </div>
+
+      {/* Catalog Link */}
+      <Card className="astomed-card overflow-hidden border-0 bg-gradient-to-r from-[#1b3a3a] to-[#2a5a5a] text-white">
+        <CardContent className="p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div>
+            <h2 className="text-lg font-bold mb-1">Uppgradera din klinik?</h2>
+            <p className="text-sm text-slate-200">Upptäck vårt senaste utbud av maskiner och utrustning på astomed.se</p>
+          </div>
+          <Button variant="secondary" asChild className="shrink-0 bg-white text-[#1b3a3a] hover:bg-slate-100">
+            <a href="https://astomed.se/maskiner/" target="_blank" rel="noopener noreferrer">
+              Visa utbud
+            </a>
+          </Button>
+        </CardContent>
+      </Card>
 
       {showOtherMachineForm && (
         <OtherMachineServiceForm
