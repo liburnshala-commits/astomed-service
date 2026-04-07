@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
-import { Plus, Search, Calendar as CalendarIcon, Trash2, ArrowRight, User, Building2, Phone, Mail, Copy, Pencil, Send, MessageSquare } from "lucide-react";
+import { Plus, Search, Calendar as CalendarIcon, Trash2, ArrowRight, User, Building2, Phone, Mail, Copy, Pencil, Send, MessageSquare, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { Input } from "@/components/ui/input";
@@ -421,9 +421,15 @@ export default function ServiceContractLeads() {
                             const m = machines.find(m => m.id === id);
                             return m ? <div key={id} title={`${m.model} (SN: ${m.serial_number})`}>{m.model} <span className="text-slate-400 text-[10px]">({m.serial_number})</span></div> : null;
                           })}
-                          {lead.proposed_machines?.map((m, idx) => (
-                            <div key={`prop-${idx}`} title={`${m.model} (SN: ${m.serial_number})`}>{m.model} <span className="text-slate-400 text-[10px]">({m.serial_number})</span></div>
-                          ))}
+                          {lead.proposed_machines?.map((m, idx) => {
+                            const isRegistered = machines.some(machine => machine.serial_number === m.serial_number);
+                            return (
+                              <div key={`prop-${idx}`} title={`${m.model} (SN: ${m.serial_number})`} className="flex items-center gap-1">
+                                {m.model} <span className="text-slate-400 text-[10px]">({m.serial_number})</span>
+                                {isRegistered && <CheckCircle2 className="w-3 h-3 text-emerald-500" title="Registrerad i maskinlistan" />}
+                              </div>
+                            );
+                          })}
                         </div>
                       </td>
                       <td className="px-2 py-3">
@@ -548,9 +554,15 @@ export default function ServiceContractLeads() {
                               const m = machines.find(m => m.id === id);
                               return m ? <li key={id}>{m.model} <span className="text-xs text-slate-400">({m.serial_number})</span></li> : null;
                             })}
-                            {lead.proposed_machines?.map((m, idx) => (
-                              <li key={`prop-${idx}`}>{m.model} <span className="text-xs text-slate-400">({m.serial_number})</span></li>
-                            ))}
+                            {lead.proposed_machines?.map((m, idx) => {
+                              const isRegistered = machines.some(machine => machine.serial_number === m.serial_number);
+                              return (
+                                <li key={`prop-${idx}`} className="flex items-center gap-1">
+                                  {m.model} <span className="text-xs text-slate-400">({m.serial_number})</span>
+                                  {isRegistered && <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" title="Registrerad i maskinlistan" />}
+                                </li>
+                              );
+                            })}
                           </ul>
                         </div>
                       )}
