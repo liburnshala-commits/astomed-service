@@ -1,0 +1,28 @@
+{
+  "name": "ClinicAnalysis",
+  "type": "object",
+  "properties": {
+    "customer_id": {
+      "type": "string",
+      "description": "L\u00e4nk till kund"
+    },
+    "focus_areas": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Fokusomr\u00e5den"
+    },
+    "goal": {
+      "type": "string",
+      "description": "Prim\u00e4rt m\u00e5l"
+    },
+    "investment": {
+      "type": "string",
+      "description": "Investeringstyp"
+    }
+  },
+  "required": [
+    "customer_id"
+  ]
+}

@@ -23,6 +23,7 @@ export default function ClinicDevelopment() {
   const [selectedUpgrade, setSelectedUpgrade] = useState(null);
   const [analysisData, setAnalysisData] = useState(null);
   const [showAnalyzer, setShowAnalyzer] = useState(true);
+  const [pastAnalyses, setPastAnalyses] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -48,6 +49,17 @@ export default function ClinicDevelopment() {
         if (custId) {
             const customerMachines = await base44.entities.Machine.filter({ customer_id: custId });
             setMachines(customerMachines);
+            
+            const analyses = await base44.entities.ClinicAnalysis.filter({ customer_id: custId }, "-created_date");
+            setPastAnalyses(analyses);
+            if (analyses.length > 0) {
+                setAnalysisData({
+                    focusAreas: analyses[0].focus_areas || [],
+                    goal: analyses[0].goal || "",
+                    investment: analyses[0].investment || ""
+                });
+                setShowAnalyzer(false);
+            }
         }
         
         const allProducts = await base44.entities.Product.list();
@@ -220,7 +232,16 @@ export default function ClinicDevelopment() {
       </div>
 
       {showAnalyzer ? (
-          <ClinicAnalyzer onComplete={(data) => {
+          <ClinicAnalyzer onComplete={async (data) => {
+              if (customer) {
+                  const saved = await base44.entities.ClinicAnalysis.create({
+                      customer_id: customer.id,
+                      focus_areas: data.focusAreas,
+                      goal: data.goal,
+                      investment: data.investment
+                  });
+                  setPastAnalyses(prev => [saved, ...prev]);
+              }
               setAnalysisData(data);
               setShowAnalyzer(false);
               window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -432,6 +453,43 @@ export default function ClinicDevelopment() {
                 );
             })}
         </Tabs>
+      )}
+
+      {!showAnalyzer && pastAnalyses.length > 0 && (
+        <div className="mt-12 space-y-4">
+            <h3 className="text-xl font-bold text-slate-800 flex items-center gap-2">
+                <Target className="w-5 h-5 text-emerald-500" /> Historiska Analyser
+            </h3>
+            <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
+                {pastAnalyses.map(analysis => (
+                    <Card key={analysis.id} className="bg-slate-50 border-slate-200">
+                        <CardHeader className="pb-2 border-b border-slate-100">
+                            <CardTitle className="text-sm text-slate-500 font-normal">
+                                {format(new Date(analysis.created_date), "d MMM yyyy HH:mm")}
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent className="pt-4 space-y-3">
+                            <div>
+                                <p className="text-xs text-slate-500 mb-1">Mål</p>
+                                <p className="text-sm font-medium text-slate-800">{analysis.goal}</p>
+                            </div>
+                            <div>
+                                <p className="text-xs text-slate-500 mb-1">Investering</p>
+                                <p className="text-sm font-medium text-slate-800">{analysis.investment}</p>
+                            </div>
+                            <div>
+                                <p className="text-xs text-slate-500 mb-1">Fokusområden</p>
+                                <div className="flex flex-wrap gap-1">
+                                    {analysis.focus_areas?.map((area, i) => (
+                                        <Badge key={i} variant="outline" className="text-[10px] bg-white">{area}</Badge>
+                                    ))}
+                                </div>
+                            </div>
+                        </CardContent>
+                    </Card>
+                ))}
+            </div>
+        </div>
       )}
     </div>
   );
