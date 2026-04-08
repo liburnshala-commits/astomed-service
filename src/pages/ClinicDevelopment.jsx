@@ -370,7 +370,7 @@ export default function ClinicDevelopment() {
 
                                 <div className="space-y-3">
                                     <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2 mt-4">
-                                        <PackageOpen className="w-5 h-5 text-blue-500" /> Kringprodukter & Merförsäljning
+                                        <PackageOpen className="w-5 h-5 text-blue-500" /> Optimera Ditt Erbjudande
                                     </h3>
                                     {accessories.length > 0 ? (
                                         <div className="grid sm:grid-cols-2 gap-4">
