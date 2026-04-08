@@ -1,0 +1,62 @@
+{
+  "name": "Product",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Produktnamn"
+    },
+    "description": {
+      "type": "string",
+      "description": "Detaljerad beskrivning av produkten"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "Kringprodukt",
+        "Sk\u00f6nhetsprodukt",
+        "Ny utrustning",
+        "Uppgradering",
+        "Reservdel"
+      ],
+      "description": "Typ av produkt"
+    },
+    "related_machine_models": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Maskinmodeller som produkten \u00e4r kompatibel med"
+    },
+    "suggested_retail_price": {
+      "type": "number",
+      "description": "Rekommenderat utpris"
+    },
+    "cost_price": {
+      "type": "number",
+      "description": "Ink\u00f6pspris"
+    },
+    "image_url": {
+      "type": "string",
+      "description": "URL till produktbild"
+    },
+    "benefits": {
+      "type": "string",
+      "description": "F\u00f6rdelar f\u00f6r kunden"
+    },
+    "min_machine_age_for_upgrade_years": {
+      "type": "number",
+      "description": "Minsta maskin\u00e5lder i \u00e5r f\u00f6r att f\u00f6resl\u00e5s som uppgradering"
+    },
+    "estimated_trade_in_value_multiplier": {
+      "type": "number",
+      "description": "Multiplikator f\u00f6r inbytesv\u00e4rde"
+    }
+  },
+  "required": [
+    "name",
+    "category",
+    "suggested_retail_price",
+    "cost_price"
+  ]
+}

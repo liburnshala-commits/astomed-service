@@ -32,12 +32,15 @@ import { cn } from "@/lib/utils";
 import NotificationBell from "@/components/notifications/NotificationBell";
 import PrivacyPolicyModal from "@/components/PrivacyPolicyModal";
 
+import { TrendingUp } from "lucide-react";
+
 const navSections = [
   {
     title: null,
     items: [
       { label: "Dashboard", page: "Dashboard", icon: LayoutDashboard, roles: ["admin", "technician"] },
       { label: "Min översikt", page: "CustomerDashboard", icon: LayoutDashboard, roles: ["customer"] },
+      { label: "Klinikutveckling", page: "ClinicDevelopment", icon: TrendingUp, roles: ["customer", "admin", "technician"] },
     ]
   },
   {
