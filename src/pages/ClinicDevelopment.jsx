@@ -6,7 +6,8 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Sparkles, TrendingUp, Monitor, Wrench, Calculator, ChevronRight, PackageOpen, ArrowRightCircle, Gift, CheckCircle2, ExternalLink, BookOpen } from "lucide-react";
+import { Sparkles, TrendingUp, Monitor, Wrench, Calculator, ChevronRight, PackageOpen, ArrowRightCircle, Gift, CheckCircle2, ExternalLink, BookOpen, Target } from "lucide-react";
+import ClinicAnalyzer from "@/components/clinic/ClinicAnalyzer";
 import { format, differenceInYears, differenceInMonths } from "date-fns";
 
 export default function ClinicDevelopment() {
@@ -20,6 +21,8 @@ export default function ClinicDevelopment() {
   const [pricePerTreatment, setPricePerTreatment] = useState(1500);
   const [costPerTreatment, setCostPerTreatment] = useState(200);
   const [selectedUpgrade, setSelectedUpgrade] = useState(null);
+  const [analysisData, setAnalysisData] = useState(null);
+  const [showAnalyzer, setShowAnalyzer] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -88,7 +91,18 @@ export default function ClinicDevelopment() {
 
     const accessories = relatedProducts.filter(p => p.category === "Kringprodukt" || p.category === "Skönhetsprodukt");
 
-    const packages = products.filter(p => p.category === "Paket" && (p.related_machine_models?.includes(machine.model) || p.related_machine_models?.includes("Alla")));
+    // If analysis data exists, we boost packages that match their focus areas
+    let packages = products.filter(p => p.category === "Paket" && (p.related_machine_models?.includes(machine.model) || p.related_machine_models?.includes("Alla") || !p.related_machine_models || p.related_machine_models.length === 0));
+
+    if (analysisData) {
+        packages = packages.sort((a, b) => {
+            const aMatch = analysisData.focusAreas.some(f => a.name.toLowerCase().includes(f.toLowerCase().split(' ')[0]) || a.description?.toLowerCase().includes(f.toLowerCase().split(' ')[0]));
+            const bMatch = analysisData.focusAreas.some(f => b.name.toLowerCase().includes(f.toLowerCase().split(' ')[0]) || b.description?.toLowerCase().includes(f.toLowerCase().split(' ')[0]));
+            if (aMatch && !bMatch) return -1;
+            if (!aMatch && bMatch) return 1;
+            return 0;
+        });
+    }
 
     return { upgrades, accessories, packages, age };
   };
@@ -193,15 +207,58 @@ export default function ClinicDevelopment() {
                 Välkommen till din tillväxtportal, {customer.company_name}. Här analyserar vi din maskinpark och föreslår nästa steg för att maximera din lönsamhet och behandlingskvalitet.
             </p>
         </div>
+        {!showAnalyzer && (
+            <Button variant="outline" className="relative z-10 bg-white/10 text-white border-white/20 hover:bg-white/20" onClick={() => setShowAnalyzer(true)}>
+                <Target className="w-4 h-4 mr-2" /> Gör om klinikanalys
+            </Button>
+        )}
         <Sparkles className="absolute -right-4 -top-4 w-32 h-32 text-white/5" />
       </div>
 
-      {machines.length === 0 ? (
-        <Card>
-            <CardContent className="p-8 text-center">
-                <p className="text-slate-500">Vi hittade inga registrerade maskiner för att kunna ge rekommendationer.</p>
-            </CardContent>
-        </Card>
+      {showAnalyzer ? (
+          <ClinicAnalyzer onComplete={(data) => {
+              setAnalysisData(data);
+              setShowAnalyzer(false);
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+          }} />
+      ) : machines.length === 0 ? (
+        <div className="space-y-6">
+            <Card>
+                <CardContent className="p-8 text-center">
+                    <p className="text-slate-500 mb-4">Vi hittade inga registrerade maskiner, men baserat på din analys rekommenderar vi följande paket:</p>
+                </CardContent>
+            </Card>
+            {analysisData && products.filter(p => p.category === "Paket").length > 0 && (
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {products.filter(p => p.category === "Paket").map(pkg => {
+                        const isAiRecommended = analysisData.focusAreas.some(f => 
+                            pkg.name.toLowerCase().includes(f.toLowerCase().split(' ')[0]) || 
+                            pkg.description?.toLowerCase().includes(f.toLowerCase().split(' ')[0])
+                        );
+                        return (
+                            <Card key={pkg.id} className={`bg-purple-50/50 border-purple-100 shadow-sm transition-all ${isAiRecommended ? 'ring-2 ring-purple-400 scale-[1.02]' : ''}`}>
+                                <CardContent className="p-5 flex flex-col h-full">
+                                    <div className="flex gap-2 mb-3">
+                                        <Badge className="bg-purple-100 text-purple-800 hover:bg-purple-200 border-0 w-fit">Paketerbjudande</Badge>
+                                        {isAiRecommended && <Badge className="bg-emerald-100 text-emerald-800 hover:bg-emerald-200 border-0 w-fit"><Sparkles className="w-3 h-3 mr-1"/> AI Match</Badge>}
+                                    </div>
+                                    <h4 className="font-bold text-slate-900 text-lg mb-1">{pkg.name}</h4>
+                                    <p className="text-sm text-slate-600 mb-4 flex-grow">{pkg.description}</p>
+                                    <div className="flex items-center justify-between mt-auto pt-4 border-t border-purple-100">
+                                        <span className="font-bold text-slate-900">{pkg.suggested_retail_price?.toLocaleString()} kr</span>
+                                        {pkg.education_url && (
+                                            <Button variant="outline" size="sm" asChild className="text-purple-700 border-purple-200 hover:bg-purple-100">
+                                                <a href={pkg.education_url} target="_blank" rel="noreferrer">Läs mer <ExternalLink className="w-3.5 h-3.5 ml-1"/></a>
+                                            </Button>
+                                        )}
+                                    </div>
+                                </CardContent>
+                            </Card>
+                        )
+                    })}
+                </div>
+            )}
+        </div>
       ) : (
         <Tabs defaultValue={machines[0]?.id} className="w-full">
             <TabsList className="w-full flex justify-start overflow-x-auto bg-slate-100/50 p-1 rounded-xl mb-6">
@@ -329,10 +386,18 @@ export default function ClinicDevelopment() {
                                             <Gift className="w-5 h-5 text-purple-500" /> Skräddarsydda Paket
                                         </h3>
                                         <div className="grid sm:grid-cols-2 gap-4">
-                                            {packages.map(pkg => (
-                                                <Card key={pkg.id} className="bg-purple-50/50 border-purple-100 shadow-sm">
+                                            {packages.map(pkg => {
+                                                const isAiRecommended = analysisData && analysisData.focusAreas.some(f => 
+                                                    pkg.name.toLowerCase().includes(f.toLowerCase().split(' ')[0]) || 
+                                                    pkg.description?.toLowerCase().includes(f.toLowerCase().split(' ')[0])
+                                                );
+                                                return (
+                                                <Card key={pkg.id} className={`bg-purple-50/50 border-purple-100 shadow-sm transition-all ${isAiRecommended ? 'ring-2 ring-purple-400 scale-[1.02]' : ''}`}>
                                                     <CardContent className="p-5 flex flex-col h-full">
-                                                        <Badge className="bg-purple-100 text-purple-800 hover:bg-purple-200 mb-3 border-0 w-fit">Paketerbjudande</Badge>
+                                                        <div className="flex gap-2 mb-3">
+                                                            <Badge className="bg-purple-100 text-purple-800 hover:bg-purple-200 border-0 w-fit">Paketerbjudande</Badge>
+                                                            {isAiRecommended && <Badge className="bg-emerald-100 text-emerald-800 hover:bg-emerald-200 border-0 w-fit"><Sparkles className="w-3 h-3 mr-1"/> AI Match</Badge>}
+                                                        </div>
                                                         <h4 className="font-bold text-slate-900 text-lg mb-1">{pkg.name}</h4>
                                                         <p className="text-sm text-slate-600 mb-4 flex-grow">{pkg.description}</p>
                                                         {pkg.package_items?.length > 0 && (
@@ -350,7 +415,7 @@ export default function ClinicDevelopment() {
                                                         </div>
                                                     </CardContent>
                                                 </Card>
-                                            ))}
+                                            )})}
                                         </div>
                                     </div>
                                 )}
