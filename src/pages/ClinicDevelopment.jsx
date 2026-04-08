@@ -96,8 +96,8 @@ export default function ClinicDevelopment() {
     );
 
     const upgrades = products.filter(p => 
-        p.category === "Ny utrustning" && 
-        (p.related_machine_models?.includes(machine.model) || p.related_machine_models?.length === 0) &&
+        (p.category === "Ny utrustning" || p.category === "Uppgradering") && 
+        (p.related_machine_models?.includes(machine.model) || p.related_machine_models?.includes("Alla") || !p.related_machine_models || p.related_machine_models.length === 0) &&
         (p.min_machine_age_for_upgrade_years ? age.years >= p.min_machine_age_for_upgrade_years : true)
     );
 
@@ -347,11 +347,11 @@ export default function ClinicDevelopment() {
                             {/* Recommendations Space */}
                             <div className="md:col-span-2 space-y-6">
                                 
-                                {upgrades.length > 0 && (
-                                    <div className="space-y-3">
-                                        <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2">
-                                            <Sparkles className="w-5 h-5 text-amber-500" /> Rekommenderade Uppgraderingar
-                                        </h3>
+                                <div className="space-y-3">
+                                    <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2">
+                                        <Sparkles className="w-5 h-5 text-amber-500" /> Rekommenderade Uppgraderingar
+                                    </h3>
+                                    {upgrades.length > 0 ? (
                                         <div className="grid sm:grid-cols-2 gap-4">
                                             {upgrades.map(upgrade => (
                                                 <Card key={upgrade.id} className={`border-2 transition-all cursor-pointer ${selectedUpgrade?.id === upgrade.id ? 'border-emerald-500 shadow-md' : 'border-amber-100 hover:border-amber-300'}`} onClick={() => setSelectedUpgrade(upgrade)}>
@@ -377,8 +377,14 @@ export default function ClinicDevelopment() {
                                                 </Card>
                                             ))}
                                         </div>
-                                    </div>
-                                )}
+                                    ) : (
+                                        <Card className="bg-slate-50 border-dashed">
+                                            <CardContent className="p-6 text-center text-slate-500 text-sm">
+                                                För närvarande har vi inga specifika maskinuppgraderingar inlagda för denna maskinmodell.
+                                            </CardContent>
+                                        </Card>
+                                    )}
+                                </div>
 
                                 <div className="space-y-3">
                                     <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2 mt-4">
