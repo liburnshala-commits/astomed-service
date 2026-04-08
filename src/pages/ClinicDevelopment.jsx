@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Sparkles, TrendingUp, Monitor, Wrench, Calculator, ChevronRight, PackageOpen, ArrowRightCircle, Gift, CheckCircle2, ExternalLink, BookOpen, Target } from "lucide-react";
+import { Sparkles, TrendingUp, Monitor, Wrench, Calculator, ChevronRight, PackageOpen, ArrowRightCircle, Gift, CheckCircle2, ExternalLink, BookOpen, Target, Info } from "lucide-react";
 import ClinicAnalyzer from "@/components/clinic/ClinicAnalyzer";
 import { format, differenceInYears, differenceInMonths } from "date-fns";
 
@@ -141,6 +141,18 @@ export default function ClinicDevelopment() {
                 <CardDescription>Beräkna täckningsbidrag och återbetalningstid för ny utrustning.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
+                <div className="bg-emerald-900/5 border border-emerald-100 rounded-lg p-4 text-sm text-emerald-800 flex gap-3">
+                    <Info className="w-5 h-5 shrink-0 mt-0.5" />
+                    <div>
+                        <p className="font-semibold mb-1">Hur fungerar kalkylen?</p>
+                        <p>
+                            Kalkylen baseras på det beräknade täckningsbidraget per år (räknat på 48 arbetsveckor). 
+                            Jämförelser och ROI-beräkningar (Return on Investment) görs uteslutande mot Astomeds 
+                            aktuella utrustning och priser, som kontinuerligt hämtas in och uppdateras. Välj en maskin under "Rekommenderade Uppgraderingar" 
+                            för att se den exakta kalkylen för just den utrustningen, inklusive estimerat inbytesvärde.
+                        </p>
+                    </div>
+                </div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div className="space-y-2">
                         <Label>Behandlingar per vecka</Label>
