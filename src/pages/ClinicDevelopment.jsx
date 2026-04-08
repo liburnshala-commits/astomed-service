@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Sparkles, TrendingUp, Monitor, Wrench, Calculator, ChevronRight, PackageOpen, ArrowRightCircle } from "lucide-react";
+import { Sparkles, TrendingUp, Monitor, Wrench, Calculator, ChevronRight, PackageOpen, ArrowRightCircle, Gift, CheckCircle2, ExternalLink, BookOpen } from "lucide-react";
 import { format, differenceInYears, differenceInMonths } from "date-fns";
 
 export default function ClinicDevelopment() {
@@ -88,7 +88,9 @@ export default function ClinicDevelopment() {
 
     const accessories = relatedProducts.filter(p => p.category === "Kringprodukt" || p.category === "Skönhetsprodukt");
 
-    return { upgrades, accessories, age };
+    const packages = products.filter(p => p.category === "Paket" && (p.related_machine_models?.includes(machine.model) || p.related_machine_models?.includes("Alla")));
+
+    return { upgrades, accessories, packages, age };
   };
 
   const renderCalculator = () => {
@@ -211,7 +213,7 @@ export default function ClinicDevelopment() {
             </TabsList>
 
             {machines.map(machine => {
-                const { upgrades, accessories, age } = getRecommendations(machine);
+                const { upgrades, accessories, packages, age } = getRecommendations(machine);
                 const health = getMachineHealthStatus(age.years);
 
                 return (
@@ -266,9 +268,16 @@ export default function ClinicDevelopment() {
                                                         
                                                         <div className="flex items-center justify-between mt-auto pt-4 border-t border-slate-100">
                                                             <span className="font-bold text-slate-900">{upgrade.suggested_retail_price?.toLocaleString()} kr</span>
-                                                            <Button variant={selectedUpgrade?.id === upgrade.id ? "default" : "ghost"} size="sm" className={selectedUpgrade?.id === upgrade.id ? "bg-emerald-600 hover:bg-emerald-700" : "text-emerald-600"}>
-                                                                Räkna på ROI <ChevronRight className="w-4 h-4 ml-1" />
-                                                            </Button>
+                                                            <div className="flex gap-2">
+                                                              {upgrade.education_url && (
+                                                                  <Button variant="outline" size="icon" asChild className="h-8 w-8 text-slate-500">
+                                                                      <a href={upgrade.education_url} target="_blank" rel="noreferrer" title="Läs mer / Utbildning"><BookOpen className="w-4 h-4"/></a>
+                                                                  </Button>
+                                                              )}
+                                                              <Button variant={selectedUpgrade?.id === upgrade.id ? "default" : "ghost"} size="sm" className={selectedUpgrade?.id === upgrade.id ? "bg-emerald-600 hover:bg-emerald-700" : "text-emerald-600"}>
+                                                                  Räkna på ROI <ChevronRight className="w-4 h-4 ml-1" />
+                                                              </Button>
+                                                            </div>
                                                         </div>
                                                     </CardContent>
                                                 </Card>
@@ -292,7 +301,14 @@ export default function ClinicDevelopment() {
                                                         <div>
                                                             <h4 className="font-semibold text-slate-900">{acc.name}</h4>
                                                             <p className="text-xs text-slate-500 line-clamp-1">{acc.benefits}</p>
-                                                            <p className="text-sm font-bold text-blue-600 mt-1">{acc.suggested_retail_price?.toLocaleString()} kr</p>
+                                                            <div className="flex items-center justify-between mt-1">
+                                                              <p className="text-sm font-bold text-blue-600">{acc.suggested_retail_price?.toLocaleString()} kr</p>
+                                                              {acc.education_url && (
+                                                                  <a href={acc.education_url} target="_blank" rel="noreferrer" className="text-xs text-blue-500 hover:underline flex items-center">
+                                                                      Utbildning <ExternalLink className="w-3 h-3 ml-0.5"/>
+                                                                  </a>
+                                                              )}
+                                                            </div>
                                                         </div>
                                                     </CardContent>
                                                 </Card>
@@ -306,6 +322,38 @@ export default function ClinicDevelopment() {
                                         </Card>
                                     )}
                                 </div>
+
+                                {packages?.length > 0 && (
+                                    <div className="space-y-3">
+                                        <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2 mt-4">
+                                            <Gift className="w-5 h-5 text-purple-500" /> Skräddarsydda Paket
+                                        </h3>
+                                        <div className="grid sm:grid-cols-2 gap-4">
+                                            {packages.map(pkg => (
+                                                <Card key={pkg.id} className="bg-purple-50/50 border-purple-100 shadow-sm">
+                                                    <CardContent className="p-5 flex flex-col h-full">
+                                                        <Badge className="bg-purple-100 text-purple-800 hover:bg-purple-200 mb-3 border-0 w-fit">Paketerbjudande</Badge>
+                                                        <h4 className="font-bold text-slate-900 text-lg mb-1">{pkg.name}</h4>
+                                                        <p className="text-sm text-slate-600 mb-4 flex-grow">{pkg.description}</p>
+                                                        {pkg.package_items?.length > 0 && (
+                                                            <ul className="text-sm text-slate-700 space-y-1 mb-4">
+                                                                {pkg.package_items.map((item, i) => <li key={i} className="flex items-start gap-2"><CheckCircle2 className="w-4 h-4 text-purple-500 shrink-0 mt-0.5"/> <span className="leading-tight">{item}</span></li>)}
+                                                            </ul>
+                                                        )}
+                                                        <div className="flex items-center justify-between mt-auto pt-4 border-t border-purple-100">
+                                                            <span className="font-bold text-slate-900">{pkg.suggested_retail_price?.toLocaleString()} kr</span>
+                                                            {pkg.education_url && (
+                                                                <Button variant="outline" size="sm" asChild className="text-purple-700 border-purple-200 hover:bg-purple-100">
+                                                                    <a href={pkg.education_url} target="_blank" rel="noreferrer">Läs mer <ExternalLink className="w-3.5 h-3.5 ml-1"/></a>
+                                                                </Button>
+                                                            )}
+                                                        </div>
+                                                    </CardContent>
+                                                </Card>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
                             </div>
                         </div>
 

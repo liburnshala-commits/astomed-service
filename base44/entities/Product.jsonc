@@ -17,7 +17,8 @@
         "Sk\u00f6nhetsprodukt",
         "Ny utrustning",
         "Uppgradering",
-        "Reservdel"
+        "Reservdel",
+        "Paket"
       ],
       "description": "Typ av produkt"
     },
@@ -51,6 +52,22 @@
     "estimated_trade_in_value_multiplier": {
       "type": "number",
       "description": "Multiplikator f\u00f6r inbytesv\u00e4rde"
+    },
+    "education_url": {
+      "type": "string",
+      "description": "L\u00e4nk till utbildning, kurs eller produktblad"
+    },
+    "is_package": {
+      "type": "boolean",
+      "default": false,
+      "description": "\u00c4r detta ett paketerbjudande?"
+    },
+    "package_items": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Vilka produkter/tj\u00e4nster som ing\u00e5r (f\u00f6r paket)"
     }
   },
   "required": [
