@@ -203,9 +203,13 @@ export default function ClinicDevelopment() {
                 <TrendingUp className="w-8 h-8 text-emerald-400" />
                 Klinikutveckling & Affärsmöjligheter
             </h1>
-            <p className="text-slate-300 max-w-2xl text-lg">
+            <p className="text-slate-300 max-w-2xl text-lg mb-4">
                 Välkommen till din tillväxtportal, {customer.company_name}. Här analyserar vi din maskinpark och föreslår nästa steg för att maximera din lönsamhet och behandlingskvalitet.
             </p>
+            <div className="flex items-start md:items-center gap-3 text-emerald-300 bg-emerald-900/30 p-3 rounded-xl border border-emerald-800/50 w-fit">
+                <Sparkles className="w-5 h-5 shrink-0 mt-0.5 md:mt-0" />
+                <p className="text-sm leading-snug">Våra rekommendationer och investeringskalkylatorn är direktkopplade till Astomeds mest aktuella erbjudanden och utbildningar, anpassade för just er verksamhet.</p>
+            </div>
         </div>
         {!showAnalyzer && (
             <Button variant="outline" className="relative z-10 bg-white/10 text-white border-white/20 hover:bg-white/20" onClick={() => setShowAnalyzer(true)}>
