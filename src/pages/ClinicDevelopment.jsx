@@ -349,45 +349,6 @@ export default function ClinicDevelopment() {
                                 
                                 <div className="space-y-3">
                                     <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2">
-                                        <Sparkles className="w-5 h-5 text-amber-500" /> Rekommenderade Uppgraderingar
-                                    </h3>
-                                    {upgrades.length > 0 ? (
-                                        <div className="grid sm:grid-cols-2 gap-4">
-                                            {upgrades.map(upgrade => (
-                                                <Card key={upgrade.id} className={`border-2 transition-all cursor-pointer ${selectedUpgrade?.id === upgrade.id ? 'border-emerald-500 shadow-md' : 'border-amber-100 hover:border-amber-300'}`} onClick={() => setSelectedUpgrade(upgrade)}>
-                                                    <CardContent className="p-5">
-                                                        <Badge className="bg-amber-100 text-amber-800 hover:bg-amber-200 mb-3 border-0">Nästa generation</Badge>
-                                                        <h4 className="font-bold text-slate-900 text-lg mb-1">{upgrade.name}</h4>
-                                                        <p className="text-sm text-slate-600 mb-4 line-clamp-2">{upgrade.benefits || upgrade.description}</p>
-                                                        
-                                                        <div className="flex items-center justify-between mt-auto pt-4 border-t border-slate-100">
-                                                            <span className="font-bold text-slate-900">{upgrade.suggested_retail_price?.toLocaleString()} kr</span>
-                                                            <div className="flex gap-2">
-                                                              {upgrade.education_url && (
-                                                                  <Button variant="outline" size="icon" asChild className="h-8 w-8 text-slate-500">
-                                                                      <a href={upgrade.education_url} target="_blank" rel="noreferrer" title="Läs mer / Utbildning"><BookOpen className="w-4 h-4"/></a>
-                                                                  </Button>
-                                                              )}
-                                                              <Button variant={selectedUpgrade?.id === upgrade.id ? "default" : "ghost"} size="sm" className={selectedUpgrade?.id === upgrade.id ? "bg-emerald-600 hover:bg-emerald-700" : "text-emerald-600"}>
-                                                                  Räkna på ROI <ChevronRight className="w-4 h-4 ml-1" />
-                                                              </Button>
-                                                            </div>
-                                                        </div>
-                                                    </CardContent>
-                                                </Card>
-                                            ))}
-                                        </div>
-                                    ) : (
-                                        <Card className="bg-slate-50 border-dashed">
-                                            <CardContent className="p-6 text-center text-slate-500 text-sm">
-                                                För närvarande har vi inga specifika maskinuppgraderingar inlagda för denna maskinmodell.
-                                            </CardContent>
-                                        </Card>
-                                    )}
-                                </div>
-
-                                <div className="space-y-3">
-                                    <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2 mt-4">
                                         <PackageOpen className="w-5 h-5 text-blue-500" /> Optimera Ditt Erbjudande
                                     </h3>
                                     {accessories.length > 0 ? (
@@ -465,7 +426,59 @@ export default function ClinicDevelopment() {
                             </div>
                         </div>
 
-                        {renderCalculator()}
+                        <div className="mt-12 space-y-6 pt-10 border-t-2 border-slate-100">
+                            <div className="text-center max-w-2xl mx-auto mb-10">
+                                <h2 className="text-2xl font-bold text-slate-900">Nästa Steg: Uppgradera din klinik</h2>
+                                <p className="text-slate-500 mt-2">Välj en rekommenderad uppgradering nedan för att direkt se hur den påverkar din lönsamhet i investeringskalkylatorn.</p>
+                            </div>
+                            
+                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+                                <div className="space-y-4">
+                                    <h3 className="text-xl font-bold text-slate-800 flex items-center gap-2">
+                                        <Sparkles className="w-6 h-6 text-amber-500" /> Rekommenderade Uppgraderingar
+                                    </h3>
+                                    {upgrades.length > 0 ? (
+                                        <div className="grid sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-4">
+                                            {upgrades.map(upgrade => (
+                                                <Card key={upgrade.id} className={`border-2 transition-all cursor-pointer ${selectedUpgrade?.id === upgrade.id ? 'border-emerald-500 shadow-md ring-4 ring-emerald-500/10' : 'border-amber-100 hover:border-amber-300'}`} onClick={() => setSelectedUpgrade(upgrade)}>
+                                                    <CardContent className="p-5 flex flex-col h-full">
+                                                        <div className="flex items-start justify-between mb-3">
+                                                            <Badge className="bg-amber-100 text-amber-800 hover:bg-amber-200 border-0">Nästa generation</Badge>
+                                                        </div>
+                                                        <h4 className="font-bold text-slate-900 text-lg mb-1">{upgrade.name}</h4>
+                                                        <p className="text-sm text-slate-600 mb-4 line-clamp-2 flex-grow">{upgrade.benefits || upgrade.description}</p>
+                                                        
+                                                        <div className="flex items-center justify-between mt-auto pt-4 border-t border-slate-100">
+                                                            <span className="font-bold text-slate-900">{upgrade.suggested_retail_price?.toLocaleString()} kr</span>
+                                                            <div className="flex gap-2">
+                                                              {upgrade.education_url && (
+                                                                  <Button variant="outline" size="icon" asChild className="h-8 w-8 text-slate-500">
+                                                                      <a href={upgrade.education_url} target="_blank" rel="noreferrer" title="Läs mer / Utbildning"><BookOpen className="w-4 h-4"/></a>
+                                                                  </Button>
+                                                              )}
+                                                              <Button variant={selectedUpgrade?.id === upgrade.id ? "default" : "ghost"} size="sm" className={selectedUpgrade?.id === upgrade.id ? "bg-emerald-600 hover:bg-emerald-700" : "text-emerald-600"}>
+                                                                  {selectedUpgrade?.id === upgrade.id ? "Vald för ROI" : "Räkna på ROI"} <ChevronRight className="w-4 h-4 ml-1" />
+                                                              </Button>
+                                                            </div>
+                                                        </div>
+                                                    </CardContent>
+                                                </Card>
+                                            ))}
+                                        </div>
+                                    ) : (
+                                        <Card className="bg-slate-50 border-dashed">
+                                            <CardContent className="p-6 text-center text-slate-500 text-sm">
+                                                För närvarande har vi inga specifika maskinuppgraderingar inlagda för denna maskinmodell.
+                                            </CardContent>
+                                        </Card>
+                                    )}
+                                </div>
+
+                                <div className="lg:sticky lg:top-24">
+                                    {renderCalculator()}
+                                </div>
+                            </div>
+                        </div>
 
                     </TabsContent>
                 );
