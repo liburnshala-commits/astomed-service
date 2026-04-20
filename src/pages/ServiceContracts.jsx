@@ -11,6 +11,7 @@ import { createPageUrl } from "@/utils";
 import { addMonths, format, isPast, parseISO } from "date-fns";
 import { sv } from "date-fns/locale";
 import { FileCheck, Search, Building2, Monitor, Pencil, Clock, Download, Trash2 } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ServiceContractModal from "@/components/machines/ServiceContractModal";
 import PendingContractApproval from "@/components/contracts/PendingContractApproval";
 import MultiMachineContractModal from "@/components/contracts/MultiMachineContractModal";
@@ -127,7 +128,7 @@ export default function ServiceContracts() {
     }
   };
 
-  const contracted = machines
+  const allContracted = machines
     .filter(m => m.service_contract && m.service_contract !== "none")
     .filter(m => {
       if (!search) return true;
@@ -142,14 +143,18 @@ export default function ServiceContracts() {
         cust?.email?.toLowerCase().includes(q) ||
         cust?.phone?.toLowerCase().includes(q)
       );
-    })
-    .filter(m => {
-      if (statusFilter === "all") return true;
-      return contractStatus(m) === statusFilter;
     });
 
-  const active = contracted.filter(m => contractStatus(m) === "active");
-  const expired = contracted.filter(m => contractStatus(m) !== "active");
+  const contracted = allContracted.filter(m => {
+    if (statusFilter === "all") return true;
+    return contractStatus(m) === statusFilter;
+  });
+
+  const activeCount = allContracted.filter(m => contractStatus(m) === "active").length;
+  const pendingCount = allContracted.filter(m => contractStatus(m) === "pending_signature").length;
+  const inactiveCount = allContracted.filter(m => contractStatus(m) === "inactive").length;
+  const rejectedCount = allContracted.filter(m => contractStatus(m) === "rejected").length;
+  const expiredCount = allContracted.filter(m => contractStatus(m) === "expired").length;
 
   const pendingRequests = machines
     .filter(m => m.service_contract_status === "pending")
@@ -395,10 +400,10 @@ export default function ServiceContracts() {
       {/* Summary cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
         {[
-          { label: "Under signering", value: contracted.filter(m => contractStatus(m) === "pending_signature").length },
-          { label: "Signerade avtal", value: active.length },
-          { label: "Offert", value: contracted.filter(m => contractStatus(m) === "inactive").length },
-          { label: "Nekat signering", value: contracted.filter(m => contractStatus(m) === "rejected").length, highlight: contracted.filter(m => contractStatus(m) === "rejected").length > 0 },
+          { label: "Under signering", value: pendingCount },
+          { label: "Signerade avtal", value: activeCount },
+          { label: "Offert", value: inactiveCount },
+          { label: "Nekat signering", value: rejectedCount, highlight: rejectedCount > 0 },
         ].map(stat => (
           <div key={stat.label} className={`astomed-card p-4 rounded-xl border ${stat.highlight ? "border-amber-300 bg-amber-50" : "bg-white"}`}>
             <div className={`text-2xl font-bold ${stat.highlight ? "text-amber-800" : "astomed-title"}`}>{stat.value}</div>
@@ -429,56 +434,75 @@ export default function ServiceContracts() {
         </div>
       )}
 
-      {/* Active contracts table */}
-      <div className="bg-white rounded-xl border border-slate-200 mb-6 overflow-hidden">
-        <div className="px-5 py-3 border-b bg-slate-50 flex items-center gap-2">
-          <span className="font-semibold text-slate-700 text-sm">Aktiva serviceavtal</span>
-          <Badge className="bg-emerald-100 text-emerald-800 border-0 ml-1">{active.length}</Badge>
-        </div>
-        {active.length === 0 ? (
-          <div className="text-center py-10 text-slate-400 text-sm">Inga aktiva serviceavtal</div>
-        ) : (
-          <>
-            {/* Desktop Table View */}
-            <div className="hidden md:block overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b bg-slate-50 text-xs text-slate-500 uppercase tracking-wide">
-                    <th className="py-2 px-4 text-left font-medium">Kund</th>
-                    <th className="py-2 px-4 text-left font-medium">Maskin</th>
-                    <th className="py-2 px-4 text-left font-medium">Avtal</th>
-                    <th className="py-2 px-4 text-left font-medium">Skapat</th>
-                    <th className="py-2 px-4 text-left font-medium">Startdatum</th>
-                    <th className="py-2 px-4 text-left font-medium">Bindningstid</th>
-                    <th className="py-2 px-4 text-left font-medium">Slutdatum</th>
-                    <th className="py-2 px-4 text-left font-medium">Status</th>
-                    <th className="py-2 px-4 text-left font-medium"></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {active.map(renderRow)}
-                </tbody>
-              </table>
+      {/* Contracts table with Tabs */}
+      <Tabs value={statusFilter} onValueChange={setStatusFilter} className="w-full mb-6">
+        <TabsList className="flex flex-wrap h-auto justify-start mb-4 bg-slate-100/50 p-1">
+          <TabsTrigger value="all" className="data-[state=active]:bg-white data-[state=active]:shadow-sm">Alla ({allContracted.length})</TabsTrigger>
+          <TabsTrigger value="active" className="data-[state=active]:bg-white data-[state=active]:shadow-sm">Aktiva ({activeCount})</TabsTrigger>
+          <TabsTrigger value="pending_signature" className="data-[state=active]:bg-white data-[state=active]:shadow-sm">Under signering ({pendingCount})</TabsTrigger>
+          <TabsTrigger value="inactive" className="data-[state=active]:bg-white data-[state=active]:shadow-sm">Offert / Inaktiva ({inactiveCount})</TabsTrigger>
+          <TabsTrigger value="rejected" className="data-[state=active]:bg-white data-[state=active]:shadow-sm">Nekade ({rejectedCount})</TabsTrigger>
+          <TabsTrigger value="expired" className="data-[state=active]:bg-white data-[state=active]:shadow-sm">Utgångna ({expiredCount})</TabsTrigger>
+        </TabsList>
+        
+        <TabsContent value={statusFilter} className="mt-0">
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="px-5 py-3 border-b bg-slate-50 flex items-center gap-2">
+              <span className="font-semibold text-slate-700 text-sm">
+                {statusFilter === "all" && "Alla serviceavtal"}
+                {statusFilter === "active" && "Aktiva serviceavtal"}
+                {statusFilter === "pending_signature" && "Avtal under signering"}
+                {statusFilter === "inactive" && "Offert / Inaktiva avtal"}
+                {statusFilter === "rejected" && "Nekade serviceavtal"}
+                {statusFilter === "expired" && "Utgångna serviceavtal"}
+              </span>
+              <Badge className="bg-slate-200 text-slate-700 border-0 ml-1">{contracted.length}</Badge>
             </div>
-
-            {/* Mobile Carousel View */}
-            <div className="md:hidden p-4 bg-slate-50">
-              {active.length > 1 && (
-                <div className="text-center text-xs text-slate-400 mb-3 flex items-center justify-center gap-2">
-                  <span>←</span> Svep för fler aktiva avtal ({active.length} st) <span>→</span>
+            {contracted.length === 0 ? (
+              <div className="text-center py-10 text-slate-400 text-sm">Inga serviceavtal hittades</div>
+            ) : (
+              <>
+                {/* Desktop Table View */}
+                <div className="hidden md:block overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="border-b bg-slate-50 text-xs text-slate-500 uppercase tracking-wide">
+                        <th className="py-2 px-4 text-left font-medium">Kund</th>
+                        <th className="py-2 px-4 text-left font-medium">Maskin</th>
+                        <th className="py-2 px-4 text-left font-medium">Avtal</th>
+                        <th className="py-2 px-4 text-left font-medium">Skapat</th>
+                        <th className="py-2 px-4 text-left font-medium">Startdatum</th>
+                        <th className="py-2 px-4 text-left font-medium">Bindningstid</th>
+                        <th className="py-2 px-4 text-left font-medium">Slutdatum</th>
+                        <th className="py-2 px-4 text-left font-medium">Status</th>
+                        <th className="py-2 px-4 text-left font-medium"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {contracted.map(renderRow)}
+                    </tbody>
+                  </table>
                 </div>
-              )}
-              <Carousel className="w-full" opts={{ align: "start" }}>
-                <CarouselContent>
-                  {active.map(renderMobileCard)}
-                </CarouselContent>
-              </Carousel>
-            </div>
-          </>
-        )}
-      </div>
 
-      {/* Expired contracts table */}
+                {/* Mobile Carousel View */}
+                <div className="md:hidden p-4 bg-slate-50">
+                  {contracted.length > 1 && (
+                    <div className="text-center text-xs text-slate-400 mb-3 flex items-center justify-center gap-2">
+                      <span>←</span> Svep för fler avtal ({contracted.length} st) <span>→</span>
+                    </div>
+                  )}
+                  <Carousel className="w-full" opts={{ align: "start" }}>
+                    <CarouselContent>
+                      {contracted.map(renderMobileCard)}
+                    </CarouselContent>
+                  </Carousel>
+                </div>
+              </>
+            )}
+          </div>
+        </TabsContent>
+      </Tabs>
+
       {editingMachine && (
         <ServiceContractModal
           machine={editingMachine}
@@ -503,51 +527,6 @@ export default function ServiceContracts() {
           onClose={() => setMachineToRemove(null)}
           onConfirm={handleConfirmRemove}
         />
-      )}
-
-      {expired.length > 0 && (
-        <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
-          <div className="px-5 py-3 border-b bg-slate-50 flex items-center gap-2">
-            <span className="font-semibold text-slate-700 text-sm">Övriga / Inaktiva serviceavtal</span>
-            <Badge className="bg-slate-100 text-slate-600 border-0 ml-1">{expired.length}</Badge>
-          </div>
-          <>
-            {/* Desktop Table View */}
-            <div className="hidden md:block overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b bg-slate-50 text-xs text-slate-500 uppercase tracking-wide">
-                    <th className="py-2 px-4 text-left font-medium">Kund</th>
-                    <th className="py-2 px-4 text-left font-medium">Maskin</th>
-                    <th className="py-2 px-4 text-left font-medium">Avtal</th>
-                    <th className="py-2 px-4 text-left font-medium">Skapat</th>
-                    <th className="py-2 px-4 text-left font-medium">Startdatum</th>
-                    <th className="py-2 px-4 text-left font-medium">Bindningstid</th>
-                    <th className="py-2 px-4 text-left font-medium">Slutdatum</th>
-                    <th className="py-2 px-4 text-left font-medium">Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {expired.map(renderRow)}
-                </tbody>
-              </table>
-            </div>
-
-            {/* Mobile Carousel View */}
-            <div className="md:hidden p-4 bg-slate-50">
-              {expired.length > 1 && (
-                <div className="text-center text-xs text-slate-400 mb-3 flex items-center justify-center gap-2">
-                  <span>←</span> Svep för fler övriga avtal ({expired.length} st) <span>→</span>
-                </div>
-              )}
-              <Carousel className="w-full" opts={{ align: "start" }}>
-                <CarouselContent>
-                  {expired.map(renderMobileCard)}
-                </CarouselContent>
-              </Carousel>
-            </div>
-          </>
-        </div>
       )}
     </div>
   );
