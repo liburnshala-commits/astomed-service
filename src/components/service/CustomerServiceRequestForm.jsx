@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { X, Wrench, Upload, CheckCircle } from "lucide-react";
+import { createPortal } from "react-dom";
 
 export default function CustomerServiceRequestForm({ machines, customer, onClose, onSaved }) {
   const [serialNumber, setSerialNumber] = useState("");
@@ -50,10 +51,10 @@ export default function CustomerServiceRequestForm({ machines, customer, onClose
     if (onSaved) onSaved();
   };
 
-  return (
-    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-xl shadow-xl w-full max-w-md">
-        <div className="flex items-center justify-between p-5 border-b">
+  return createPortal(
+    <div className="fixed inset-0 bg-black/50 z-[100] flex items-start sm:items-center justify-center p-4 py-10 overflow-y-auto">
+      <div className="bg-white rounded-xl shadow-xl w-full max-w-md my-auto shrink-0 relative">
+        <div className="flex items-center justify-between p-5 border-b sticky top-0 bg-white z-10 rounded-t-xl">
           <div className="flex items-center gap-2">
             <Wrench className="w-5 h-5" style={{ color: "#1b3a3a" }} />
             <h2 className="font-bold" style={{ color: "#1b3a3a" }}>Nytt serviceärende</h2>
@@ -143,6 +144,7 @@ export default function CustomerServiceRequestForm({ machines, customer, onClose
           </div>
         )}
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
