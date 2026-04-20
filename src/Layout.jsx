@@ -46,14 +46,14 @@ const navSections = [
   {
     title: "Service",
     items: [
-      { label: "Serviceförfrågningar", page: "PublicServiceLeads", icon: ClipboardList, roles: ["admin", "technician"] },
-      { label: "Uppföljningar (To-Do)", page: "Tasks", icon: CheckSquare, roles: ["admin", "technician"] },
+      { label: "Serviceförfrågningar", page: "PublicServiceLeads", icon: ClipboardList, roles: ["admin"] },
+      { label: "Uppföljningar (To-Do)", page: "Tasks", icon: CheckSquare, roles: ["admin"] },
       { label: "Chattsupport", page: "ChatSupport", icon: MessageSquare, roles: ["admin", "technician"] },
       { label: "Serviceärenden", page: "ServiceRecords", icon: Wrench, roles: ["admin", "technician", "customer"] },
       { label: "Servicekalender", page: "Calendar", icon: CalendarDays, roles: ["admin", "technician"] },
       { label: "Serviceavtal", page: "ServiceContracts", icon: FileCheck, roles: ["admin", "technician"] },
-      { label: "Avtalsprospekt", page: "ServiceContractLeads", icon: UsersIcon, roles: ["admin", "technician"] },
-      { label: "Avslutade prospekt", page: "ClosedLeads", icon: Archive, roles: ["admin", "technician"] },
+      { label: "Avtalsprospekt", page: "ServiceContractLeads", icon: UsersIcon, roles: ["admin"] },
+      { label: "Avslutade prospekt", page: "ClosedLeads", icon: Archive, roles: ["admin"] },
       { label: "Serviceavtalsmallar", page: "ServiceAgreementTemplates", icon: FileCheck, roles: ["admin"] },
     ]
   },
