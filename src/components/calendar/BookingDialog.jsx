@@ -55,9 +55,9 @@ export default function BookingDialog({ date, record, records, machines, custome
     : "Välj datum";
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md">
-        <div className="flex items-center justify-between p-5 border-b">
+    <div className="fixed inset-0 z-50 flex items-start sm:items-center justify-center bg-black/40 p-4 sm:p-6 py-10">
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md max-h-full flex flex-col overflow-hidden">
+        <div className="flex items-center justify-between p-5 border-b shrink-0">
           <div className="flex items-center gap-2">
             <CalendarDays className="w-5 h-5 text-[#3a9e9e]" />
             <h2 className="font-bold text-slate-800">
@@ -67,7 +67,7 @@ export default function BookingDialog({ date, record, records, machines, custome
           <Button variant="ghost" size="icon" onClick={onClose}><X className="w-4 h-4" /></Button>
         </div>
 
-        <div className="p-5 space-y-4">
+        <div className="p-5 space-y-4 overflow-y-auto flex-1">
           {/* Show record info if booking specific record */}
           {isBooking && (
             <div className="bg-[#f4f9f9] border border-[#dce8e8] rounded-xl p-4">

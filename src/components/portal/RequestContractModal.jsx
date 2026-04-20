@@ -19,9 +19,9 @@ export default function RequestContractModal({ machine, onClose, onSubmit }) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-      <div className="bg-white rounded-xl shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto">
-        <div className="sticky top-0 bg-white border-b px-6 py-4 flex items-center justify-between">
+    <div className="fixed inset-0 z-50 flex items-start sm:items-center justify-center bg-black/50 p-4 sm:p-6 py-10">
+      <div className="bg-white rounded-xl shadow-xl max-w-md w-full max-h-full flex flex-col overflow-hidden">
+        <div className="bg-white border-b px-6 py-4 flex items-center justify-between shrink-0">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ background: "#e8f2f2" }}>
               <FileCheck className="w-5 h-5" style={{ color: "#1b3a3a" }} />
@@ -36,7 +36,7 @@ export default function RequestContractModal({ machine, onClose, onSubmit }) {
           </Button>
         </div>
 
-        <div className="p-6 space-y-6">
+        <div className="p-6 space-y-6 overflow-y-auto flex-1">
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
             <h3 className="font-semibold text-sm text-blue-900 mb-2">Basic serviceavtal – Astomed 3.0</h3>
             <ul className="text-xs text-blue-800 space-y-1">
@@ -73,7 +73,7 @@ export default function RequestContractModal({ machine, onClose, onSubmit }) {
           </div>
         </div>
 
-        <div className="sticky bottom-0 bg-white border-t px-6 py-4 flex gap-3">
+        <div className="bg-white border-t px-6 py-4 flex gap-3 shrink-0">
           <Button variant="outline" onClick={onClose} className="flex-1">
             Avbryt
           </Button>
