@@ -21,55 +21,209 @@ Deno.serve(async (req) => {
 
         const doc = new jsPDF();
         
-        doc.setFontSize(20);
-        doc.text('Serviceprotokoll', 20, 20);
-        
-        doc.setFontSize(12);
-        doc.text(`Datum: ${record.service_date || ''}`, 20, 30);
-        doc.text(`Tekniker: ${record.technician_name || ''}`, 20, 40);
-        
-        doc.setFontSize(14);
-        doc.text('Kundinformation', 20, 55);
-        doc.setFontSize(12);
-        doc.text(`Företag: ${customer?.company_name || ''}`, 20, 65);
-        doc.text(`Kontaktperson: ${customer?.contact_person || ''}`, 20, 75);
-        
-        doc.setFontSize(14);
-        doc.text('Maskininformation', 20, 90);
-        doc.setFontSize(12);
-        doc.text(`Modell: ${machine?.model || ''}`, 20, 100);
-        doc.text(`Serienummer: ${machine?.serial_number || ''}`, 20, 110);
-        doc.text(`Serviceavtal: ${machine?.service_contract === 'basic' ? 'Basic' : 'Inget'}`, 20, 120);
-        
-        doc.setFontSize(14);
-        doc.text('Servicebeskrivning & Mätvärden', 20, 135);
-        doc.setFontSize(10);
-        const splitDesc = doc.splitTextToSize(record.description || 'Ingen beskrivning', 170);
-        doc.text(splitDesc, 20, 145);
+        // Colors
+        const primaryColor = '#1b3a3a';
+        const slate500 = '#64748b';
+        const slate800 = '#1e293b';
+        const slate200 = '#e2e8f0';
 
-        let y = 145 + (splitDesc.length * 5) + 5;
+        let y = 20;
+
+        // Header / Logo
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(24);
+        doc.setTextColor(primaryColor);
+        doc.text('ASTOMED', 20, y);
         
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(10);
+        doc.setTextColor(slate500);
+        doc.text('Klinikutrustning Sverige AB', 20, y + 6);
+
+        // Header Meta (Date)
+        doc.setFontSize(10);
+        doc.text(record.service_date || new Date().toISOString().split('T')[0], 190, y, { align: 'right' });
+        doc.text('Serviceprotokoll', 190, y + 6, { align: 'right' });
+
+        y += 20;
+
+        // Line
+        doc.setDrawColor(slate200);
+        doc.line(20, y, 190, y);
+        y += 15;
+
+        // Title
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(18);
+        doc.setTextColor(slate800);
+        doc.text('SERVICERAPPORT', 20, y);
+        y += 10;
+
+        // Sub meta
+        doc.setFontSize(10);
+        doc.setFont('helvetica', 'normal');
+        doc.setTextColor(slate500);
+        doc.text(`Datum: ${record.service_date || ''}`, 20, y);
+        if (customer?.city) {
+            doc.text(`Plats: ${customer.city}`, 20, y + 6);
+        }
+        y += 15;
+        doc.line(20, y, 190, y);
+        y += 10;
+
+        // Two column layout for Customer and Machine
+        doc.setFontSize(12);
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(slate800);
+        doc.text('Kundinformation', 20, y);
+        doc.text('Utrustning', 110, y);
+        
+        y += 8;
+        doc.setFontSize(10);
+        doc.setFont('helvetica', 'normal');
+        doc.setTextColor(slate800);
+        doc.text(`Företag: ${customer?.company_name || ''}`, 20, y);
+        doc.text(`Kontakt: ${customer?.contact_person || ''}`, 20, y + 6);
+        if (customer?.org_number) {
+            doc.text(`Org.nr: ${customer.org_number}`, 20, y + 12);
+        }
+
+        doc.text(`Modell: ${machine?.model || ''}`, 110, y);
+        doc.text(`Tillverkare: Alma`, 110, y + 6);
+        doc.text(`SN: ${machine?.serial_number || ''}`, 110, y + 12);
+        
+        y += 20;
+        doc.setDrawColor(slate200);
+        doc.line(20, y, 190, y);
+        y += 10;
+
+        // Service Assessment
+        doc.setFontSize(12);
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(slate800);
+        doc.text('Teknisk bedömning & Mätvärden', 20, y);
+        
+        y += 8;
+        doc.setFontSize(10);
+        doc.setFont('helvetica', 'normal');
+        
+        const splitDesc = doc.splitTextToSize(record.description || 'Ingen bedömning angiven.', 170);
+        doc.text(splitDesc, 20, y);
+        y += (splitDesc.length * 5) + 5;
+
         if (record.measured_laser_power) {
-            doc.text(`Uppmätt lasereffekt: ${record.measured_laser_power}`, 20, y);
+            doc.setFont('helvetica', 'bold');
+            doc.text('Uppmätt lasereffekt:', 20, y);
+            doc.setFont('helvetica', 'normal');
+            doc.text(record.measured_laser_power, 60, y);
             y += 6;
         }
         if (record.pulse_count) {
-            doc.text(`Antal pulser: ${record.pulse_count}`, 20, y);
+            doc.setFont('helvetica', 'bold');
+            doc.text('Antal pulser:', 20, y);
+            doc.setFont('helvetica', 'normal');
+            doc.text(record.pulse_count.toString(), 60, y);
             y += 6;
         }
         
-        y += 5;
-        
+        y += 4;
+        doc.setDrawColor(slate200);
+        doc.line(20, y, 190, y);
+        y += 10;
+
+        // Parts / Cost
+        doc.setFontSize(12);
+        doc.setFont('helvetica', 'bold');
+        doc.text('Åtgärder och material', 20, y);
+        y += 8;
+
         if (record.parts_used && record.parts_used.length > 0) {
-            doc.setFontSize(14);
-            doc.text('Utbytta delar', 20, y);
-            y += 10;
             doc.setFontSize(10);
+            doc.setFont('helvetica', 'bold');
+            doc.text('Benämning', 20, y);
+            doc.text('Antal', 140, y);
+            doc.text('Summa', 170, y);
+            y += 6;
+            
+            doc.setFont('helvetica', 'normal');
             record.parts_used.forEach(part => {
-                doc.text(`- ${part.part_name} (Art: ${part.part_number}) x${part.quantity}`, 20, y);
-                y += 7;
+                doc.text(part.part_name || '', 20, y);
+                doc.text((part.quantity || 1).toString(), 140, y);
+                const sum = ((part.unit_price || 0) * (part.quantity || 1)).toLocaleString('sv-SE') + ' kr';
+                doc.text(sum, 170, y);
+                y += 6;
+                
+                if (y > 270) {
+                    doc.addPage();
+                    y = 20;
+                }
             });
+            y += 4;
+        } else {
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'normal');
+            doc.setTextColor(slate500);
+            doc.text('Inga reservdelar registrerade.', 20, y);
+            y += 10;
         }
+
+        // Totals
+        if (record.total_cost > 0) {
+            doc.setFont('helvetica', 'bold');
+            doc.setTextColor(slate800);
+            y += 4;
+            doc.text('Totalt:', 140, y);
+            doc.text(record.total_cost.toLocaleString('sv-SE') + ' kr', 170, y);
+            y += 10;
+        }
+
+        // Footer setup
+        if (y > 220) {
+            doc.addPage();
+            y = 20;
+        } else {
+            y = 220;
+        }
+
+        doc.setDrawColor(slate200);
+        doc.line(20, y, 190, y);
+        y += 10;
+
+        // Signatures
+        doc.setFontSize(10);
+        doc.setFont('helvetica', 'bold');
+        doc.text('Signaturer', 20, y);
+        y += 10;
+
+        doc.setFont('helvetica', 'normal');
+        doc.text('_________________________________', 20, y);
+        doc.text('_________________________________', 110, y);
+        y += 6;
+        doc.setFontSize(8);
+        doc.setTextColor(slate500);
+        doc.text(`Tekniker: ${record.technician_name || ''}`, 20, y);
+        doc.text(`Kund: ${customer?.contact_person || customer?.company_name || ''}`, 110, y);
+
+        // Very bottom footer
+        y = 275;
+        doc.setDrawColor(slate200);
+        doc.line(20, y, 190, y);
+        
+        y += 5;
+        doc.setFontSize(7);
+        doc.setTextColor(slate500);
+        
+        doc.text('Astomed Klinikutrustning Sverige AB', 20, y);
+        doc.text('Jägerhorns väg 3-5', 20, y + 4);
+        doc.text('141 75 Kungens Kurva', 20, y + 8);
+        
+        doc.text('08 - 410 779 00', 80, y);
+        doc.text('info@astomed.se', 80, y + 4);
+        doc.text('www.astomed.se', 80, y + 8);
+        
+        doc.text('Org.nr: 556709-9964', 140, y);
+        doc.text('Momsregnr: SE556709996401', 140, y + 4);
+        doc.text('Godkänd för F-skatt', 140, y + 8);
 
         const pdfArrayBuffer = doc.output('arraybuffer');
         const uint8Array = new Uint8Array(pdfArrayBuffer);
