@@ -81,19 +81,18 @@ export default function ServiceRecordDetail({ record, machine, customer, onClose
                   )}
                 </>
               )}
-              {!record.protocol_uri && (userRole === "admin" || userRole === "technician") && record.status === "completed" && (
+              {(userRole === "admin" || userRole === "technician") && (record.status === "completed" || record.status === "invoiced") && (
                 <Button size="sm" variant="outline" disabled={loading} onClick={async () => {
                   setLoading(true);
                   try {
                     await base44.functions.invoke("generateServiceProtocol", { recordId: record.id });
                     onUpdated?.();
-                    onClose();
                   } catch(e) {
                     alert("Kunde inte generera protokoll.");
                   }
                   setLoading(false);
                 }}>
-                  <FileText className="w-4 h-4 mr-1" /> {loading ? "Genererar..." : "Generera protokoll"}
+                  <FileText className="w-4 h-4 mr-1" /> {loading ? "Genererar..." : (record.protocol_uri ? "Uppdatera protokoll" : "Generera protokoll")}
                 </Button>
               )}
               <Button size="sm" variant="outline" onClick={() => setShowReport(true)}>
