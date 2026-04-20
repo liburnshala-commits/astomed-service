@@ -6,6 +6,7 @@ import { Monitor, Users, Wrench, CheckCircle, Clock, Phone, Mail, FileText, Star
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
+import TechnicianDashboard from "@/components/dashboard/TechnicianDashboard";
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -84,6 +85,18 @@ export default function Dashboard() {
   const newLeads = leads.filter(l => l.status === "new").length;
   const interestedLeads = leads.filter(l => l.status === "interested").length;
   const proposalSentLeads = leads.filter(l => l.status === "proposal_sent").length;
+
+  if (userRole === "technician") {
+    return (
+      <div className="p-6 space-y-6">
+        <div>
+          <h1 className="text-2xl font-bold astomed-title">Teknikeröversikt</h1>
+          <p className="astomed-subtitle text-sm">Din dagliga serviceöversikt</p>
+        </div>
+        <TechnicianDashboard machines={machines} customers={customers} records={records} />
+      </div>
+    );
+  }
 
   return (
     <div className="p-6 space-y-6">
