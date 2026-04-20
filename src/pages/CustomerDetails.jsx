@@ -9,10 +9,13 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import CustomerInteractions from "@/components/customers/CustomerInteractions";
 import ServiceContractModal from "@/components/machines/ServiceContractModal";
+import { useAuth } from "@/lib/AuthContext";
 
 export default function CustomerDetails() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const { user } = useAuth();
+  const isTechnician = user?.role === "technician";
 
   const urlParams = new URLSearchParams(window.location.search);
   const customerId = urlParams.get("id");
@@ -169,15 +172,17 @@ export default function CustomerDetails() {
                           {m.status === 'service' ? 'På service' : 'Aktiv'}
                         </Badge>
                         <div className="flex items-center gap-1 shrink-0">
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="h-6 w-6 text-slate-400 hover:text-slate-600 hover:bg-slate-100"
-                            onClick={() => setContractMachine(m)}
-                            title="Hantera serviceavtal"
-                          >
-                            <FileCheck className="w-3.5 h-3.5" />
-                          </Button>
+                          {!isTechnician && (
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-6 w-6 text-slate-400 hover:text-slate-600 hover:bg-slate-100"
+                              onClick={() => setContractMachine(m)}
+                              title="Hantera serviceavtal"
+                            >
+                              <FileCheck className="w-3.5 h-3.5" />
+                            </Button>
+                          )}
                           <Button
                             variant="ghost"
                             size="icon"

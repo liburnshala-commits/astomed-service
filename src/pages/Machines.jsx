@@ -280,7 +280,7 @@ export default function Machines() {
                   <Wrench className="w-3 h-3 mr-1" /> Starta service
                 </Button>
               </Link>
-              {userRole !== "customer" && (
+              {userRole !== "customer" && userRole !== "technician" && (
                 <Button size="sm" variant="outline" onClick={() => setContractMachine(machine)} title="Hantera serviceavtal">
                   <FileCheck className="w-3 h-3 mr-1" /> Avtal
                 </Button>
