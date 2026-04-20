@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { createPortal } from "react-dom";
 import { X, Monitor } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -41,14 +42,14 @@ export default function CustomerForm({ customer, onSave, onClose }) {
     onSave(form, machineData);
   };
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
-        <div className="flex items-center justify-between p-6 border-b sticky top-0 bg-white">
+  return createPortal(
+    <div className="fixed inset-0 z-[100] flex items-start sm:items-center justify-center bg-black/40 p-4 sm:p-6 py-10">
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-full flex flex-col overflow-hidden">
+        <div className="flex items-center justify-between p-6 border-b bg-white shrink-0">
           <h2 className="text-lg font-bold text-slate-900">{customer ? "Redigera kund" : "Ny kund"}</h2>
           <Button variant="ghost" size="icon" onClick={onClose}><X className="w-4 h-4" /></Button>
         </div>
-        <div className="p-6 space-y-4">
+        <div className="p-6 space-y-4 overflow-y-auto flex-1">
           <div className="grid grid-cols-2 gap-4">
             <div className="col-span-2 space-y-1">
               <Label>Företagsnamn *</Label>
@@ -122,13 +123,14 @@ export default function CustomerForm({ customer, onSave, onClose }) {
             </div>
           )}
         </div>
-        <div className="flex justify-end gap-3 p-6 border-t bg-slate-50 rounded-b-2xl">
+        <div className="flex justify-end gap-3 p-6 border-t bg-slate-50 shrink-0 rounded-b-2xl">
           <Button variant="outline" onClick={onClose}>Avbryt</Button>
           <Button onClick={handleSubmit} className="bg-blue-600 hover:bg-blue-700" disabled={!form.company_name}>
             {customer ? "Spara ändringar" : "Skapa kund"}
           </Button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

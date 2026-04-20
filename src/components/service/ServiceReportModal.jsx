@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
 import { sv } from "date-fns/locale";
 import { useState } from "react";
+import { createPortal } from "react-dom";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 
@@ -68,12 +69,12 @@ export default function ServiceReportModal({ record, machine, customer, onClose 
     }
   };
 
-  return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50 p-4">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-y-auto">
+  return createPortal(
+    <div className="fixed inset-0 z-[100] flex items-start sm:items-center justify-center bg-black/50 p-4 sm:p-6 py-10">
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-3xl max-h-full flex flex-col overflow-hidden">
 
         {/* Toolbar */}
-        <div className="flex items-center justify-between p-4 border-b sticky top-0 bg-white z-10 print:hidden">
+        <div className="flex items-center justify-between p-4 border-b bg-white z-10 shrink-0 print:hidden">
           <h2 className="font-bold text-slate-900">Servicerapport</h2>
           <div className="flex gap-2">
             <Button size="sm" variant="outline" onClick={() => window.print()} title="Skriv ut">
@@ -88,7 +89,7 @@ export default function ServiceReportModal({ record, machine, customer, onClose 
         </div>
 
         {/* Report content */}
-        <div id="service-report" className="p-10 font-sans text-slate-800 text-sm print:p-2 print:text-[11px] leading-snug">
+        <div id="service-report" className="p-10 font-sans text-slate-800 text-sm print:p-2 print:text-[11px] leading-snug overflow-y-auto flex-1">
 
           {/* Top meta */}
           <div className="text-xs text-slate-400 mb-1">{format(new Date(), "yyyyMMdd")}</div>
@@ -243,6 +244,7 @@ export default function ServiceReportModal({ record, machine, customer, onClose 
 
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

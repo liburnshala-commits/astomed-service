@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { X, Wrench, CalendarDays, User, Clock, Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -54,8 +55,8 @@ export default function BookingDialog({ date, record, records, machines, custome
     ? format(new Date(selectedDate), "EEEE d MMMM yyyy", { locale: sv })
     : "Välj datum";
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-start sm:items-center justify-center bg-black/40 p-4 sm:p-6 py-10">
+  return createPortal(
+    <div className="fixed inset-0 z-[100] flex items-start sm:items-center justify-center bg-black/40 p-4 sm:p-6 py-10">
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md max-h-full flex flex-col overflow-hidden">
         <div className="flex items-center justify-between p-5 border-b shrink-0">
           <div className="flex items-center gap-2">
@@ -191,6 +192,7 @@ export default function BookingDialog({ date, record, records, machines, custome
           )}
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

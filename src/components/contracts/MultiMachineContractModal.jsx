@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { X, Check, ChevronsUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -172,10 +173,10 @@ export default function MultiMachineContractModal({ onClose, onSave, initialCust
   }
   totalPrice = Math.max(0, totalPrice);
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-        <div className="flex items-center justify-between p-6 border-b sticky top-0 bg-white z-10">
+  return createPortal(
+    <div className="fixed inset-0 z-[100] flex items-start sm:items-center justify-center bg-black/40 p-4 sm:p-6 py-10">
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-full flex flex-col overflow-hidden">
+        <div className="flex items-center justify-between p-6 border-b bg-white z-10 shrink-0">
           <div>
             <h2 className="text-lg font-bold text-slate-900">Nytt Serviceavtal (Flera maskiner)</h2>
             <p className="text-sm text-slate-500">Skapa ett avtal för en eller flera maskiner med eventuell rabatt.</p>
@@ -183,7 +184,7 @@ export default function MultiMachineContractModal({ onClose, onSave, initialCust
           <Button variant="ghost" size="icon" onClick={onClose}><X className="w-4 h-4" /></Button>
         </div>
 
-        <div className="p-6 space-y-6">
+        <div className="p-6 space-y-6 overflow-y-auto flex-1">
           <div className="space-y-2 flex flex-col">
             <Label>Välj Kund</Label>
             <Popover open={openCustomerPopover} onOpenChange={setOpenCustomerPopover}>
@@ -418,7 +419,7 @@ export default function MultiMachineContractModal({ onClose, onSave, initialCust
           )}
         </div>
 
-        <div className="flex justify-end gap-3 p-6 border-t bg-slate-50 rounded-b-2xl">
+        <div className="flex justify-end gap-3 p-6 border-t bg-slate-50 shrink-0 rounded-b-2xl">
           <Button variant="outline" onClick={onClose} disabled={saving}>Avbryt</Button>
           <Button 
             className="astomed-btn-primary" 
@@ -429,6 +430,7 @@ export default function MultiMachineContractModal({ onClose, onSave, initialCust
           </Button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

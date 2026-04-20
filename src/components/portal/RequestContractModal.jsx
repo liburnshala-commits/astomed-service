@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { createPortal } from "react-dom";
 import { Button } from "@/components/ui/button";
 import { X, FileCheck } from "lucide-react";
 import { Label } from "@/components/ui/label";
@@ -18,8 +19,8 @@ export default function RequestContractModal({ machine, onClose, onSubmit }) {
     onClose();
   };
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-start sm:items-center justify-center bg-black/50 p-4 sm:p-6 py-10">
+  return createPortal(
+    <div className="fixed inset-0 z-[100] flex items-start sm:items-center justify-center bg-black/50 p-4 sm:p-6 py-10">
       <div className="bg-white rounded-xl shadow-xl max-w-md w-full max-h-full flex flex-col overflow-hidden">
         <div className="bg-white border-b px-6 py-4 flex items-center justify-between shrink-0">
           <div className="flex items-center gap-3">
@@ -82,6 +83,7 @@ export default function RequestContractModal({ machine, onClose, onSubmit }) {
           </Button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

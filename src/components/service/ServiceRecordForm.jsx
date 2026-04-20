@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { X, Plus, Trash2, Upload, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -254,8 +255,8 @@ export default function ServiceRecordForm({ record, machines, customers, presele
     return Math.round(baseTotal * (1 - (discount / 100)));
   };
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-start sm:items-center justify-center bg-black/40 p-4 sm:p-6 py-10">
+  return createPortal(
+    <div className="fixed inset-0 z-[100] flex items-start sm:items-center justify-center bg-black/40 p-4 sm:p-6 py-10">
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-full flex flex-col overflow-hidden">
         <div className="flex items-center justify-between p-6 border-b bg-white z-10 shrink-0">
           <h2 className="text-lg font-bold text-slate-900">{record ? "Redigera serviceärende" : "Nytt serviceärende"}</h2>
@@ -509,6 +510,7 @@ export default function ServiceRecordForm({ record, machines, customers, presele
           </Button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

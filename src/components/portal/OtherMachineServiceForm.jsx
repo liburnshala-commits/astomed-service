@@ -66,7 +66,7 @@ export default function OtherMachineServiceForm({ onClose, onSubmitted }) {
           <Button variant="ghost" size="icon" onClick={onClose}><X className="w-4 h-4" /></Button>
         </div>
 
-        <div className="p-6 space-y-5">
+        <div className="p-6 space-y-5 overflow-y-auto flex-1">
           {/* Kunduppgifter */}
           <div>
             <h3 className="text-sm font-semibold astomed-label mb-3 uppercase tracking-wide">Dina uppgifter</h3>
@@ -149,7 +149,7 @@ export default function OtherMachineServiceForm({ onClose, onSubmitted }) {
           </p>
         </div>
 
-        <div className="flex justify-end gap-3 p-6 border-t bg-slate-50 rounded-b-2xl">
+        <div className="flex justify-end gap-3 p-6 border-t bg-slate-50 shrink-0 rounded-b-2xl">
           <Button variant="outline" onClick={onClose}>Avbryt</Button>
           <Button
             onClick={handleSubmit}
@@ -160,6 +160,7 @@ export default function OtherMachineServiceForm({ onClose, onSubmitted }) {
           </Button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

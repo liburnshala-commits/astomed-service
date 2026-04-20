@@ -6,6 +6,7 @@ import { format } from "date-fns";
 import { sv } from "date-fns/locale";
 import ServiceReportModal from "./ServiceReportModal.jsx";
 import { useState } from "react";
+import { createPortal } from "react-dom";
 import { base44 } from "@/api/base44Client";
 
 const statusColor = {
@@ -35,9 +36,9 @@ export default function ServiceRecordDetail({ record, machine, customer, onClose
     if (onDeleted) onDeleted();
   };
 
-  return (
+  return createPortal(
     <>
-      <div className="fixed inset-0 z-50 flex items-start sm:items-center justify-center bg-black/40 p-4 sm:p-6 py-10">
+      <div className="fixed inset-0 z-[100] flex items-start sm:items-center justify-center bg-black/40 p-4 sm:p-6 py-10">
         <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-full flex flex-col overflow-hidden">
           <div className="flex items-center justify-between p-6 border-b bg-white z-10 shrink-0">
             <div className="flex items-center gap-3">
@@ -242,6 +243,7 @@ export default function ServiceRecordDetail({ record, machine, customer, onClose
       {showReport && (
         <ServiceReportModal record={record} machine={machine} customer={customer} onClose={() => setShowReport(false)} />
       )}
-    </>
+    </>,
+    document.body
   );
 }
