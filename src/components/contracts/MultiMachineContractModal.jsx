@@ -242,7 +242,9 @@ export default function MultiMachineContractModal({ onClose, onSave, initialCust
                 </Button>
               </div>
 
-              {machines.length > 0 && (
+              {machines.length > 0 && (() => {
+                const currentCustomer = customers.find(c => c.id === selectedCustomer);
+                return (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-2">
                   {machines.map(m => (
                     <label key={m.id} className="flex items-start gap-3 p-3 border rounded-lg cursor-pointer hover:bg-slate-50">
@@ -251,14 +253,29 @@ export default function MultiMachineContractModal({ onClose, onSave, initialCust
                         onCheckedChange={() => toggleMachine(m.id)} 
                         className="mt-1"
                       />
-                      <div>
+                      <div className="flex-1">
                         <div className="font-semibold text-sm">{m.model}</div>
-                        <div className="text-xs text-slate-500">SN: {m.serial_number}</div>
+                        <div className="text-xs text-slate-500 mb-2">SN: {m.serial_number}</div>
+                        
+                        <div className="bg-white border rounded p-2 text-[10px] space-y-1">
+                           <div className="flex justify-between">
+                             <span className="text-slate-400">Senaste service:</span>
+                             <span className="font-medium text-slate-700">{m.service_date || "Ingen"}</span>
+                           </div>
+                           <div className="flex justify-between">
+                             <span className="text-slate-400">Avtal:</span>
+                             <span className="font-medium text-slate-700">{m.service_contract === "none" ? "Inget" : (m.service_contract === "basic" ? "Basic" : m.service_contract)}</span>
+                           </div>
+                           <div className="flex justify-between">
+                             <span className="text-slate-400">Ort:</span>
+                             <span className="font-medium text-slate-700">{currentCustomer?.city || "Ej angiven"}</span>
+                           </div>
+                        </div>
                       </div>
                     </label>
                   ))}
                 </div>
-              )}
+              )})()}
 
               {machines.length === 0 && !showAddMachine && (
                 <div className="p-4 bg-amber-50 text-amber-800 rounded-lg text-sm">

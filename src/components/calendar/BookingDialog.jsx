@@ -75,9 +75,27 @@ export default function BookingDialog({ date, record, records, machines, custome
                 <div className="w-9 h-9 rounded-lg bg-[#e8f2f2] flex items-center justify-center flex-shrink-0">
                   <Wrench className="w-4 h-4 text-[#1b3a3a]" />
                 </div>
-                <div className="min-w-0">
+                <div className="min-w-0 w-full pr-2">
                   <div className="font-semibold text-slate-800">{getMachine(record.machine_id)?.model || "Okänd maskin"}</div>
-                  <div className="text-xs text-slate-400 font-mono">SN: {getMachine(record.machine_id)?.serial_number || "–"}</div>
+                  <div className="text-xs text-slate-400 font-mono mb-2">SN: {getMachine(record.machine_id)?.serial_number || "–"}</div>
+                  
+                  <div className="bg-white border rounded p-2 text-[10px] space-y-1 mb-2">
+                     <div className="flex justify-between">
+                       <span className="text-slate-400">Senaste service:</span>
+                       <span className="font-medium text-slate-700">{getMachine(record.machine_id)?.service_date || "Ingen"}</span>
+                     </div>
+                     <div className="flex justify-between">
+                       <span className="text-slate-400">Avtal:</span>
+                       <span className="font-medium text-slate-700">
+                         {getMachine(record.machine_id)?.service_contract === "none" ? "Inget" : (getMachine(record.machine_id)?.service_contract === "basic" ? "Basic" : getMachine(record.machine_id)?.service_contract || "Inget")}
+                       </span>
+                     </div>
+                     <div className="flex justify-between">
+                       <span className="text-slate-400">Ort:</span>
+                       <span className="font-medium text-slate-700">{getCustomer(record.customer_id)?.city || "Ej angiven"}</span>
+                     </div>
+                  </div>
+
                   <div className="text-sm text-slate-500 mt-0.5">{getCustomer(record.customer_id)?.company_name || "Okänd kund"}</div>
                   <Badge className={`mt-1 text-xs ${statusColor[record.status]}`}>{statusLabel[record.status]}</Badge>
                 </div>

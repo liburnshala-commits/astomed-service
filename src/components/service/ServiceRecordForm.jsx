@@ -71,6 +71,7 @@ export default function ServiceRecordForm({ record, machines, customers, presele
 
   const currentMachine = machines.find(m => m.id === form.machine_id);
   const currentContract = currentMachine?.service_contract || "none";
+  const currentCustomer = customers.find(c => c.id === form.customer_id);
 
   const handleStatusChange = (v) => {
     if (v === "completed" || v === "invoiced") {
@@ -310,6 +311,23 @@ export default function ServiceRecordForm({ record, machines, customers, presele
                 </SelectContent>
               </Select>
             </div>
+
+            {currentMachine && (
+              <div className="col-span-2 bg-slate-50 border border-slate-200 rounded-lg p-3 text-sm grid grid-cols-3 gap-2">
+                <div>
+                  <span className="block text-[10px] font-semibold text-slate-500 uppercase tracking-wide mb-0.5">Senaste service</span>
+                  <span className="font-medium text-slate-800">{currentMachine.service_date || "Ingen"}</span>
+                </div>
+                <div>
+                  <span className="block text-[10px] font-semibold text-slate-500 uppercase tracking-wide mb-0.5">Serviceavtal</span>
+                  <span className="font-medium text-slate-800">{currentContract === "none" ? "Inget" : (SERVICE_CONTRACTS.find(c => c.value === currentContract)?.label || currentContract)}</span>
+                </div>
+                <div>
+                  <span className="block text-[10px] font-semibold text-slate-500 uppercase tracking-wide mb-0.5">Ort</span>
+                  <span className="font-medium text-slate-800">{currentCustomer?.city || "Ej angiven"}</span>
+                </div>
+              </div>
+            )}
             <div className="space-y-1">
               <Label>Status</Label>
               <Select value={form.status} onValueChange={handleStatusChange}>
