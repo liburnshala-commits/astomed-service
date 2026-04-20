@@ -8,6 +8,7 @@ import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carouse
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
+import { useQuery } from "@tanstack/react-query";
 import { addMonths, format, isPast, parseISO } from "date-fns";
 import { sv } from "date-fns/locale";
 import { FileCheck, Search, Building2, Monitor, Pencil, Clock, Download, Trash2 } from "lucide-react";
@@ -37,6 +38,15 @@ function endDate(machine) {
 export default function ServiceContracts() {
   const urlParams = new URLSearchParams(window.location.search);
   const initialStatusFilter = urlParams.get("status") || "all";
+
+  const { data: user } = useQuery({
+    queryKey: ["me"],
+    queryFn: () => base44.auth.me(),
+    staleTime: 5 * 60 * 1000,
+  });
+
+  const userRole = user?.role;
+  const isTechnician = userRole === "technician";
 
   const [machines, setMachines] = useState([]);
   const [customers, setCustomers] = useState([]);
@@ -131,6 +141,7 @@ export default function ServiceContracts() {
   const allContracted = machines
     .filter(m => m.service_contract && m.service_contract !== "none")
     .filter(m => {
+      if (isTechnician && contractStatus(m) !== "active") return false;
       if (!search) return true;
       const cust = customerMap[m.customer_id];
       const q = search.toLowerCase();
@@ -230,6 +241,7 @@ export default function ServiceContracts() {
               <Select 
                 value={machine.contract_status || "active"} 
                 onValueChange={(val) => handleStatusChange(machine, val)}
+                disabled={isTechnician}
               >
                 <SelectTrigger className="w-full h-11 bg-white">
                   <SelectValue />
@@ -324,6 +336,7 @@ export default function ServiceContracts() {
           <Select 
             value={machine.contract_status || "active"} 
             onValueChange={(val) => handleStatusChange(machine, val)}
+            disabled={isTechnician}
           >
             <SelectTrigger className={`h-8 w-32 text-xs font-semibold border-0 ${
               status === "active" ? "bg-emerald-100 text-emerald-800" : 
@@ -395,12 +408,15 @@ export default function ServiceContracts() {
               onChange={e => setSearch(e.target.value)}
             />
           </div>
-          <Button onClick={() => setShowMultiContract(true)} className="astomed-btn-primary">Nytt Serviceavtal</Button>
+          {!isTechnician && (
+            <Button onClick={() => setShowMultiContract(true)} className="astomed-btn-primary">Nytt Serviceavtal</Button>
+          )}
         </div>
       </div>
 
       {/* Summary cards */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+      {!isTechnician && (
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
         {[
           { label: "Under signering", value: pendingCount },
           { label: "Signerade avtal", value: activeCount },
@@ -412,10 +428,11 @@ export default function ServiceContracts() {
             <div className={`text-xs mt-0.5 ${stat.highlight ? "text-amber-700 font-semibold" : "astomed-muted"}`}>{stat.label}</div>
           </div>
         ))}
-      </div>
+        </div>
+        )}
 
-      {/* Pending requests section */}
-      {pendingRequests.length > 0 && (
+        {/* Pending requests section */}
+        {!isTechnician && pendingRequests.length > 0 && (
         <div className="mb-8">
           <div className="flex items-center gap-2 mb-4">
             <Clock className="w-5 h-5 text-amber-600" />
@@ -437,17 +454,19 @@ export default function ServiceContracts() {
       )}
 
       {/* Contracts table with Tabs */}
-      <Tabs value={statusFilter} onValueChange={setStatusFilter} className="w-full mb-6">
-        <TabsList className="flex flex-wrap h-auto justify-start mb-4 bg-slate-100/50 p-1">
-          <TabsTrigger value="all" className="data-[state=active]:bg-white data-[state=active]:shadow-sm">Alla ({allContracted.length})</TabsTrigger>
-          <TabsTrigger value="active" className="data-[state=active]:bg-white data-[state=active]:shadow-sm">Aktiva ({activeCount})</TabsTrigger>
-          <TabsTrigger value="pending_signature" className="data-[state=active]:bg-white data-[state=active]:shadow-sm">Under signering ({pendingCount})</TabsTrigger>
-          <TabsTrigger value="inactive" className="data-[state=active]:bg-white data-[state=active]:shadow-sm">Offert / Inaktiva ({inactiveCount})</TabsTrigger>
-          <TabsTrigger value="rejected" className="data-[state=active]:bg-white data-[state=active]:shadow-sm">Nekade ({rejectedCount})</TabsTrigger>
-          <TabsTrigger value="expired" className="data-[state=active]:bg-white data-[state=active]:shadow-sm">Utgångna ({expiredCount})</TabsTrigger>
-        </TabsList>
+      <Tabs value={isTechnician ? "all" : statusFilter} onValueChange={setStatusFilter} className="w-full mb-6">
+        {!isTechnician && (
+          <TabsList className="flex flex-wrap h-auto justify-start mb-4 bg-slate-100/50 p-1">
+            <TabsTrigger value="all" className="data-[state=active]:bg-white data-[state=active]:shadow-sm">Alla ({allContracted.length})</TabsTrigger>
+            <TabsTrigger value="active" className="data-[state=active]:bg-white data-[state=active]:shadow-sm">Aktiva ({activeCount})</TabsTrigger>
+            <TabsTrigger value="pending_signature" className="data-[state=active]:bg-white data-[state=active]:shadow-sm">Under signering ({pendingCount})</TabsTrigger>
+            <TabsTrigger value="inactive" className="data-[state=active]:bg-white data-[state=active]:shadow-sm">Offert / Inaktiva ({inactiveCount})</TabsTrigger>
+            <TabsTrigger value="rejected" className="data-[state=active]:bg-white data-[state=active]:shadow-sm">Nekade ({rejectedCount})</TabsTrigger>
+            <TabsTrigger value="expired" className="data-[state=active]:bg-white data-[state=active]:shadow-sm">Utgångna ({expiredCount})</TabsTrigger>
+          </TabsList>
+        )}
         
-        <TabsContent value={statusFilter} className="mt-0">
+        <TabsContent value={isTechnician ? "all" : statusFilter} className="mt-0">
           <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
             <div className="px-5 py-3 border-b bg-slate-50 flex items-center gap-2">
               <span className="font-semibold text-slate-700 text-sm">
