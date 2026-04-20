@@ -11,18 +11,27 @@ import {
   Archive,
   ChevronRight
 } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { base44 } from "@/api/base44Client";
 
 export default function MobileMenu() {
+  const { data: user } = useQuery({
+    queryKey: ["me"],
+    queryFn: () => base44.auth.me(),
+    staleTime: 5 * 60 * 1000,
+  });
+
+  const userRole = user?.role || "technician";
   const menuItems = [
-    { label: "Serviceförfrågningar", page: "PublicServiceLeads", icon: ClipboardList, color: "text-blue-500", bg: "bg-blue-100" },
-    { label: "Uppföljningar (To-Do)", page: "Tasks", icon: CheckSquare, color: "text-orange-500", bg: "bg-orange-100" },
-    { label: "Serviceärenden", page: "ServiceRecords", icon: Wrench, color: "text-teal-600", bg: "bg-teal-100" },
-    { label: "Servicekalender", page: "Calendar", icon: CalendarDays, color: "text-purple-500", bg: "bg-purple-100" },
-    { label: "Serviceavtal", page: "ServiceContracts", icon: FileCheck, color: "text-emerald-500", bg: "bg-emerald-100" },
-    { label: "Avtalsprospekt", page: "ServiceContractLeads", icon: UsersIcon, color: "text-indigo-500", bg: "bg-indigo-100" },
-    { label: "Avslutade prospekt", page: "ClosedLeads", icon: Archive, color: "text-slate-500", bg: "bg-slate-100" },
-    { label: "Serviceavtalsmallar", page: "ServiceAgreementTemplates", icon: FileCheck, color: "text-cyan-600", bg: "bg-cyan-100" },
-  ];
+    { label: "Serviceförfrågningar", page: "PublicServiceLeads", icon: ClipboardList, color: "text-blue-500", bg: "bg-blue-100", roles: ["admin"] },
+    { label: "Uppföljningar (To-Do)", page: "Tasks", icon: CheckSquare, color: "text-orange-500", bg: "bg-orange-100", roles: ["admin"] },
+    { label: "Serviceärenden", page: "ServiceRecords", icon: Wrench, color: "text-teal-600", bg: "bg-teal-100", roles: ["admin", "technician"] },
+    { label: "Servicekalender", page: "Calendar", icon: CalendarDays, color: "text-purple-500", bg: "bg-purple-100", roles: ["admin", "technician"] },
+    { label: "Serviceavtal", page: "ServiceContracts", icon: FileCheck, color: "text-emerald-500", bg: "bg-emerald-100", roles: ["admin", "technician"] },
+    { label: "Avtalsprospekt", page: "ServiceContractLeads", icon: UsersIcon, color: "text-indigo-500", bg: "bg-indigo-100", roles: ["admin"] },
+    { label: "Avslutade prospekt", page: "ClosedLeads", icon: Archive, color: "text-slate-500", bg: "bg-slate-100", roles: ["admin"] },
+    { label: "Serviceavtalsmallar", page: "ServiceAgreementTemplates", icon: FileCheck, color: "text-cyan-600", bg: "bg-cyan-100", roles: ["admin"] },
+  ].filter(item => item.roles.includes(userRole));
 
   useEffect(() => {
     // Om användaren är på desktop, skicka tillbaka till dashboard
