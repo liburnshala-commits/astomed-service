@@ -25,7 +25,8 @@ import {
   FileCheck,
   MessageSquare,
   Archive,
-  CheckSquare
+  CheckSquare,
+  MapPin
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -52,6 +53,7 @@ const navSections = [
       { label: "Serviceärenden", page: "ServiceRecords", icon: Wrench, roles: ["admin", "technician", "customer"] },
       { label: "Servicekalender", page: "Calendar", icon: CalendarDays, roles: ["admin", "technician"] },
       { label: "Serviceavtal", page: "ServiceContracts", icon: FileCheck, roles: ["admin", "technician"] },
+      { label: "Avtal per stad", page: "ContractsByCity", icon: MapPin, roles: ["admin", "technician"] },
       { label: "Avtalsprospekt", page: "ServiceContractLeads", icon: UsersIcon, roles: ["admin"] },
       { label: "Avslutade prospekt", page: "ClosedLeads", icon: Archive, roles: ["admin"] },
       { label: "Serviceavtalsmallar", page: "ServiceAgreementTemplates", icon: FileCheck, roles: ["admin"] },
