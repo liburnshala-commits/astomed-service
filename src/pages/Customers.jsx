@@ -316,9 +316,11 @@ export default function Customers() {
             <Button size="sm" variant="ghost" onClick={() => { setEditing(customer); setShowForm(true); }}>
               <span className="hidden sm:inline">Redigera</span><span className="sm:hidden">✏️</span>
             </Button>
-            <Button size="sm" variant="ghost" className="text-red-500 hover:text-red-700 hover:bg-red-50" onClick={() => setDeletingCustomer(customer)}>
-              <Trash2 className="w-3 h-3" />
-            </Button>
+            {userRole !== "technician" && (
+              <Button size="sm" variant="ghost" className="text-red-500 hover:text-red-700 hover:bg-red-50" onClick={() => setDeletingCustomer(customer)}>
+                <Trash2 className="w-3 h-3" />
+              </Button>
+            )}
           </div>
         </div>
       </CardContent>
