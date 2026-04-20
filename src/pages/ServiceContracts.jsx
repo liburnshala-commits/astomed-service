@@ -141,7 +141,8 @@ export default function ServiceContracts() {
         cust?.org_number?.toLowerCase().includes(q) ||
         cust?.contact_person?.toLowerCase().includes(q) ||
         cust?.email?.toLowerCase().includes(q) ||
-        cust?.phone?.toLowerCase().includes(q)
+        cust?.phone?.toLowerCase().includes(q) ||
+        cust?.city?.toLowerCase().includes(q)
       );
     });
 
@@ -169,7 +170,8 @@ export default function ServiceContracts() {
         cust?.org_number?.toLowerCase().includes(q) ||
         cust?.contact_person?.toLowerCase().includes(q) ||
         cust?.email?.toLowerCase().includes(q) ||
-        cust?.phone?.toLowerCase().includes(q)
+        cust?.phone?.toLowerCase().includes(q) ||
+        cust?.city?.toLowerCase().includes(q)
       );
     });
 
@@ -387,8 +389,8 @@ export default function ServiceContracts() {
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
             <Input
-              className="pl-9 w-56"
-              placeholder="Sök kund, maskin, SN..."
+              className="pl-9 w-64"
+              placeholder="Sök kund, stad, maskin, SN..."
               value={search}
               onChange={e => setSearch(e.target.value)}
             />
