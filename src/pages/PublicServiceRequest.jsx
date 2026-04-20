@@ -178,7 +178,7 @@ export default function PublicServiceRequest() {
                 </Button>
               </a>
               <a href="#ssm-lagen">
-                <Button size="lg" variant="outline" className="text-white border-white/30 hover:bg-white/10 hover:text-white h-14 px-8">
+                <Button size="lg" variant="outline" className="bg-transparent text-white border-white/30 hover:bg-white/10 hover:text-white h-14 px-8">
                   Läs om nya lagen
                 </Button>
               </a>
