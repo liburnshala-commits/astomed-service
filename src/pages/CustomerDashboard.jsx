@@ -6,6 +6,7 @@ import { Monitor, Wrench, CheckCircle, Clock, Building2, Mail, Phone, MapPin, Us
 import QuoteApprovalCard from "@/components/portal/QuoteApprovalCard";
 import OtherMachineServiceForm from "@/components/portal/OtherMachineServiceForm";
 import RequestContractModal from "@/components/portal/RequestContractModal";
+import ServiceRecordDetail from "@/components/service/ServiceRecordDetail";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -27,6 +28,7 @@ export default function CustomerDashboard() {
   const [loading, setLoading] = useState(true);
   const [showOtherMachineForm, setShowOtherMachineForm] = useState(false);
   const [requestingContractFor, setRequestingContractFor] = useState(null);
+  const [viewingRecord, setViewingRecord] = useState(null);
 
   useEffect(() => {
     const load = async () => {
@@ -315,7 +317,12 @@ export default function CustomerDashboard() {
               {recent.map(r => {
                 const machine = machines.find(m => m.id === r.machine_id);
                 return (
-                  <div key={r.id} className="flex items-center justify-between p-3 rounded-lg flex-wrap gap-2" style={{ background: "#f4f9f9" }}>
+                  <div 
+                    key={r.id} 
+                    className="flex items-center justify-between p-3 rounded-lg flex-wrap gap-2 cursor-pointer hover:bg-slate-50 transition-colors border border-transparent hover:border-slate-200" 
+                    style={{ background: "#f4f9f9" }}
+                    onClick={() => setViewingRecord(r)}
+                  >
                     <div className="flex-1 min-w-0">
                       <div className="text-sm font-medium astomed-title">{machine?.model || "Okänd maskin"}</div>
                       <div className="text-xs astomed-muted">
@@ -378,6 +385,21 @@ export default function CustomerDashboard() {
             await base44.entities.Machine.update(requestingContractFor.id, contractData);
             const updated = await base44.entities.Machine.filter({ customer_id: customer.id });
             setMachines(updated);
+          }}
+        />
+      )}
+
+      {viewingRecord && (
+        <ServiceRecordDetail
+          record={viewingRecord}
+          machine={machines.find(m => m.id === viewingRecord.machine_id)}
+          customer={customer}
+          userRole="customer"
+          onClose={() => setViewingRecord(null)}
+          onUpdated={async () => {
+            const updated = await base44.entities.ServiceRecord.filter({ customer_id: customer.id }, "-service_date", 50);
+            setRecords(updated);
+            setViewingRecord(null);
           }}
         />
       )}
