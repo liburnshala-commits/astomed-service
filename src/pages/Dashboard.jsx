@@ -5,8 +5,6 @@ import { Link } from "react-router-dom";
 import { Monitor, Users, Wrench, CheckCircle, Clock, Phone, Mail, FileText, Star, ThumbsUp } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { format } from "date-fns";
-import { sv } from "date-fns/locale";
 import { useNavigate } from "react-router-dom";
 
 export default function Dashboard() {
@@ -57,8 +55,6 @@ export default function Dashboard() {
     };
     loadData();
   }, []);
-
-  const recent = records.slice(0, 5);
 
   const statusColor = {
     pending: "bg-yellow-100 text-yellow-800",
@@ -307,99 +303,7 @@ export default function Dashboard() {
         </>
       )}
 
-      <div className="grid lg:grid-cols-2 gap-6 mt-8">
-        <Card className="astomed-card" style={{ background: "#f4f9f9" }}>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-base font-semibold astomed-title">Senaste serviceärenden</CardTitle>
-          </CardHeader>
-          <CardContent>
-            {loading ? (
-              <div className="space-y-3">
-                {[1,2,3].map(i => <div key={i} className="h-10 rounded animate-pulse" style={{ background: "#e8f2f2" }} />)}
-              </div>
-            ) : recent.length === 0 ? (
-              <p className="astomed-muted text-sm text-center py-6">Inga serviceärenden ännu</p>
-            ) : (
-              <div className="space-y-2">
-                {recent.map(r => {
-                  const machine = machines.find(m => m.id === r.machine_id);
-                  return (
-                    <Link key={r.id} to={createPageUrl(`ServiceRecords?id=${r.id}`)} className="flex items-center justify-between p-3 rounded-lg transition-colors" style={{ background: "#f4f9f9" }} onMouseEnter={e => e.currentTarget.style.background="#e8f2f2"} onMouseLeave={e => e.currentTarget.style.background="#f4f9f9"}>
-                      <div>
-                        <div className="text-sm font-medium astomed-title">{machine?.model || "Okänd maskin"}</div>
-                        <div className="text-xs astomed-muted">{r.technician_name} · {r.service_date ? format(new Date(r.service_date), "d MMM yyyy", { locale: sv }) : ""}</div>
-                      </div>
-                      <Badge className={statusColor[r.status]}>{statusLabel[r.status]}</Badge>
-                    </Link>
-                  );
-                })}
-              </div>
-            )}
-          </CardContent>
-          </Card>
 
-          <Card className="astomed-card" style={{ background: "#f4f9f9" }}>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-base font-semibold astomed-title">Maskiner per modell</CardTitle>
-          </CardHeader>
-          <CardContent>
-            {loading ? (
-              <div className="space-y-3">
-                {[1,2,3].map(i => <div key={i} className="h-8 rounded animate-pulse" style={{ background: "#e8f2f2" }} />)}
-              </div>
-            ) : (
-              <div className="space-y-2">
-                {(() => {
-                  const billingByModel = records.reduce((acc, r) => {
-                    const machine = machines.find(m => m.id === r.machine_id);
-                    if (!machine) return acc;
-                    if (!acc[machine.model]) acc[machine.model] = { invoiced: 0, planned: 0 };
-                    if (r.status === "invoiced") {
-                      acc[machine.model].invoiced += r.total_cost || 0;
-                    } else if (r.status === "completed" || r.status === "in_progress") {
-                      acc[machine.model].planned += r.total_cost || 0;
-                    }
-                    return acc;
-                  }, {});
-
-                  return Object.entries(
-                    machines.reduce((acc, m) => {
-                      acc[m.model] = (acc[m.model] || 0) + 1;
-                      return acc;
-                    }, {})
-                  ).sort((a,b) => b[1]-a[1]).map(([model, count]) => {
-                    const billing = billingByModel[model] || { invoiced: 0, planned: 0 };
-                    return (
-                      <Link key={model} to={createPageUrl(`ServiceRecords?model=${encodeURIComponent(model)}`)} className="flex items-center gap-3 p-2 rounded-lg transition-colors cursor-pointer" style={{ background: "#f4f9f9" }} onMouseEnter={e => e.currentTarget.style.background="#e8f2f2"} onMouseLeave={e => e.currentTarget.style.background="#f4f9f9"}>
-                        <div className="flex-1 min-w-0">
-                          <div className="text-sm astomed-label truncate">{model}</div>
-                          <div className="flex gap-3 mt-0.5">
-                            {billing.invoiced > 0 && (
-                              <span className="text-xs" style={{ color: "#3a9e9e" }}>
-                                Fakturerat: {billing.invoiced.toLocaleString("sv-SE")} kr
-                              </span>
-                            )}
-                            {billing.planned > 0 && (
-                              <span className="text-xs text-amber-600">
-                                Planerat: {billing.planned.toLocaleString("sv-SE")} kr
-                              </span>
-                            )}
-                          </div>
-                        </div>
-                        <div className="text-sm font-semibold astomed-title flex-shrink-0">{count}</div>
-                        <div className="w-16 rounded-full h-2 flex-shrink-0" style={{ background: "#dce8e8" }}>
-                          <div className="h-2 rounded-full" style={{ width: `${(count / machines.length) * 100}%`, background: "#3a9e9e" }} />
-                        </div>
-                      </Link>
-                    );
-                  });
-                })()}
-                {machines.length === 0 && <p className="astomed-muted text-sm text-center py-6">Inga maskiner registrerade</p>}
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
     </div>
   );
 }
