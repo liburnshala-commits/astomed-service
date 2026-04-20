@@ -24,7 +24,7 @@ export default function ContractsByCity() {
   });
 
   const groupedContracts = useMemo(() => {
-    if (!data) return {};
+    if (!data) return [];
     const { customers, machines } = data;
     
     // Filtrera fram maskiner som har ett aktivt serviceavtal
@@ -41,32 +41,55 @@ export default function ContractsByCity() {
       if (!customer) return;
       
       const city = (customer.city || "Okänd stad").trim();
+      const postalCode = (customer.postal_code || "").replace(/\D/g, "");
       
-      if (!grouped[city]) {
-        grouped[city] = {
-          city,
+      // Gruppera på de 2 första siffrorna i postnumret
+      const prefix = postalCode.length >= 2 ? postalCode.substring(0, 2) : "Okänt";
+      const groupKey = prefix === "Okänt" ? city : prefix;
+      
+      if (!grouped[groupKey]) {
+        grouped[groupKey] = {
+          id: groupKey,
+          prefix: prefix,
+          cities: new Set(),
           contracts: [],
           customerCount: new Set()
         };
       }
       
-      grouped[city].contracts.push({ machine, customer });
-      grouped[city].customerCount.add(customer.id);
+      if (city !== "Okänd stad") {
+        grouped[groupKey].cities.add(city);
+      }
+      grouped[groupKey].contracts.push({ machine, customer });
+      grouped[groupKey].customerCount.add(customer.id);
     });
 
-    // Sortera städerna alfabetiskt
-    return Object.values(grouped).sort((a, b) => a.city.localeCompare(b.city));
+    return Object.values(grouped).map(g => {
+      const citiesList = Array.from(g.cities).sort();
+      const citiesStr = citiesList.length > 0 ? citiesList.join(", ") : "Okänd ort";
+      const label = g.prefix !== "Okänt" 
+        ? `Postnummerområde ${g.prefix} (${citiesStr})` 
+        : citiesStr;
+        
+      return {
+        id: g.id,
+        label: label,
+        searchStr: `${g.prefix} ${citiesStr}`.toLowerCase(),
+        contracts: g.contracts,
+        customerCount: g.customerCount
+      };
+    }).sort((a, b) => a.label.localeCompare(b.label));
   }, [data]);
 
   const filteredGroups = useMemo(() => {
     if (!search) return groupedContracts;
     const lowerSearch = search.toLowerCase();
     
-    // Filtrera antingen på staden, kundnamnet eller maskinmodellen/serienumret
+    // Filtrera antingen på området/staden, kundnamnet eller maskinmodellen/serienumret
     return groupedContracts.map(group => {
-      const isCityMatch = group.city.toLowerCase().includes(lowerSearch);
+      const isCityMatch = group.searchStr.includes(lowerSearch);
       
-      if (isCityMatch) return group; // Returnera hela staden om staden matchar
+      if (isCityMatch) return group; // Returnera hela området om det matchar
 
       // Annars returnera bara de avtal som matchar i staden
       const matchedContracts = group.contracts.filter(c => 
@@ -115,11 +138,11 @@ export default function ContractsByCity() {
       ) : (
         <Accordion type="multiple" className="space-y-4">
           {filteredGroups.map(group => (
-            <AccordionItem key={group.city} value={group.city} className="bg-white rounded-xl border border-slate-200 px-4">
+            <AccordionItem key={group.id} value={group.id} className="bg-white rounded-xl border border-slate-200 px-4">
               <AccordionTrigger className="hover:no-underline py-4">
                 <div className="flex items-center justify-between w-full pr-4">
                   <div className="flex items-center gap-3">
-                    <span className="font-semibold text-lg text-slate-800">{group.city}</span>
+                    <span className="font-semibold text-lg text-slate-800">{group.label}</span>
                     <Badge variant="secondary" className="bg-emerald-50 text-emerald-700">
                       {group.contracts.length} avtal
                     </Badge>
