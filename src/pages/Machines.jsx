@@ -51,7 +51,7 @@ export default function Machines() {
         if (cust) {
           const [m, r] = await Promise.all([
             base44.entities.Machine.filter({ customer_id: cust.id }, "-created_date"),
-            base44.entities.ServiceRecord.filter({ customer_id: cust.id }, "-service_date")
+            base44.entities.ServiceRecord.filter({ customer_id: cust.id }, "-created_date")
           ]);
           return { machines: m.filter(x => !x.is_deleted), records: r, customers: [cust] };
         }
@@ -60,7 +60,7 @@ export default function Machines() {
         const [m, c, r] = await Promise.all([
           base44.entities.Machine.list("-created_date"),
           base44.entities.Customer.list(),
-          base44.entities.ServiceRecord.list("-service_date")
+          base44.entities.ServiceRecord.list("-created_date")
         ]);
         return { machines: m.filter(x => !x.is_deleted), customers: c, records: r };
       }

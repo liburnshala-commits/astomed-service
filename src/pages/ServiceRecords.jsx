@@ -66,7 +66,7 @@ export default function ServiceRecords() {
         const cust = allCustomers[0] || null;
         if (cust) {
           const [r, m] = await Promise.all([
-            base44.entities.ServiceRecord.filter({ customer_id: cust.id }, "-service_date"),
+            base44.entities.ServiceRecord.filter({ customer_id: cust.id }, "-created_date"),
             base44.entities.Machine.filter({ customer_id: cust.id })
           ]);
           return { records: r, machines: m, customers: [cust], userCustomer: cust };
@@ -74,7 +74,7 @@ export default function ServiceRecords() {
         return { records: [], machines: [], customers: [], userCustomer: null };
       } else {
         const [r, m, c] = await Promise.all([
-          base44.entities.ServiceRecord.list("-service_date"),
+          base44.entities.ServiceRecord.list("-created_date"),
           base44.entities.Machine.list(),
           base44.entities.Customer.list()
         ]);
@@ -152,10 +152,10 @@ export default function ServiceRecords() {
     if (aNew && !bNew) return -1;
     if (!aNew && bNew) return 1;
 
-    if (filters.sortBy === "date_asc") return (a.service_date || "").localeCompare(b.service_date || "");
+    if (filters.sortBy === "date_asc") return (a.created_date || "").localeCompare(b.created_date || "");
     if (filters.sortBy === "cost_desc") return (b.total_cost || 0) - (a.total_cost || 0);
     if (filters.sortBy === "cost_asc") return (a.total_cost || 0) - (b.total_cost || 0);
-    return (b.service_date || "").localeCompare(a.service_date || ""); // date_desc default
+    return (b.created_date || "").localeCompare(a.created_date || ""); // date_desc default
   });
 
   const handleDelete = async (record, e) => {

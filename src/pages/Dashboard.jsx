@@ -45,7 +45,7 @@ export default function Dashboard() {
         const [m, c, r, l] = await Promise.all([
           base44.entities.Machine.list("-created_date"),
           base44.entities.Customer.list("-created_date"),
-          base44.entities.ServiceRecord.list("-service_date", 50),
+          base44.entities.ServiceRecord.list("-created_date", 50),
           base44.entities.ServiceContractLead.list()
         ]);
         setMachines(m);

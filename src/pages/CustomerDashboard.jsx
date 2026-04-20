@@ -39,7 +39,7 @@ export default function CustomerDashboard() {
       if (cust) {
         const [m, r] = await Promise.all([
           base44.entities.Machine.filter({ customer_id: cust.id }),
-          base44.entities.ServiceRecord.filter({ customer_id: cust.id }, "-service_date", 50)
+          base44.entities.ServiceRecord.filter({ customer_id: cust.id }, "-created_date", 50)
         ]);
         setMachines(m);
         setRecords(r);
@@ -347,7 +347,7 @@ export default function CustomerDashboard() {
           customerId={customer.id}
           onClose={() => setShowOtherMachineForm(false)}
           onSubmitted={async () => {
-            const updated = await base44.entities.ServiceRecord.filter({ customer_id: customer.id }, "-service_date", 50);
+            const updated = await base44.entities.ServiceRecord.filter({ customer_id: customer.id }, "-created_date", 50);
             setRecords(updated);
           }}
         />
@@ -373,7 +373,7 @@ export default function CustomerDashboard() {
           userRole="customer"
           onClose={() => setViewingRecord(null)}
           onUpdated={async () => {
-            const updated = await base44.entities.ServiceRecord.filter({ customer_id: customer.id }, "-service_date", 50);
+            const updated = await base44.entities.ServiceRecord.filter({ customer_id: customer.id }, "-created_date", 50);
             setRecords(updated);
             setViewingRecord(null);
           }}
