@@ -116,12 +116,15 @@ export default function PublicServiceRequest() {
     return (
       <div className="min-h-screen flex flex-col bg-slate-50">
         <header className="bg-[#1b3a3a] text-white py-4 px-6 md:px-12 flex justify-between items-center shadow-md">
-          <div className="flex items-center gap-3">
+          <button 
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} 
+            className="flex items-center gap-3 hover:opacity-90 transition-opacity"
+          >
             <div className="w-10 h-10 bg-white rounded-md flex items-center justify-center overflow-hidden">
                <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69a9446fcb1cd4ab529479ba/bc2852de1_channels4_profile-2.jpg" alt="Astomed" className="w-full h-full object-cover" />
             </div>
             <span className="font-bold text-xl tracking-wider">ASTOMED</span>
-          </div>
+          </button>
         </header>
         <div className="flex-1 flex items-center justify-center p-6">
           <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-10 text-center border-t-4 border-[#3a9e9e]">
@@ -141,12 +144,15 @@ export default function PublicServiceRequest() {
     <div className="min-h-screen bg-slate-50 font-sans text-slate-800">
       {/* Navbar */}
       <header className="bg-[#1b3a3a] text-white py-4 px-6 md:px-12 flex justify-between items-center sticky top-0 z-50 shadow-md">
-        <div className="flex items-center gap-3">
+        <button 
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} 
+          className="flex items-center gap-3 hover:opacity-90 transition-opacity"
+        >
           <div className="w-10 h-10 bg-white rounded-md flex items-center justify-center overflow-hidden">
              <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69a9446fcb1cd4ab529479ba/bc2852de1_channels4_profile-2.jpg" alt="Astomed" className="w-full h-full object-cover" />
           </div>
           <span className="font-bold text-xl tracking-wider">ASTOMED</span>
-        </div>
+        </button>
         <div className="hidden md:flex items-center gap-8 text-sm font-medium">
            <a href="#om-oss" className="hover:text-[#3a9e9e] transition-colors">Om oss</a>
            <a href="#tjanster" className="hover:text-[#3a9e9e] transition-colors">Våra tjänster</a>
