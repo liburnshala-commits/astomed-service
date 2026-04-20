@@ -195,15 +195,15 @@ export default function ContractsByCity() {
               <AccordionContent className="pb-4">
                 <div className="space-y-3 pt-2">
                   {group.contracts.map((contract, idx) => (
-                    <div key={`${contract.machine.id}-${idx}`} className="flex flex-col sm:flex-row sm:items-center justify-between p-3 rounded-lg bg-slate-50 border border-slate-100 gap-3 hover:bg-slate-100/50 transition-colors">
+                    <Link to={createPageUrl(`ServiceRecords?machine=${contract.machine.id}`)} key={`${contract.machine.id}-${idx}`} className="flex flex-col sm:flex-row sm:items-center justify-between p-3 rounded-lg bg-slate-50 border border-slate-100 gap-3 hover:bg-slate-100 transition-colors cursor-pointer group">
                       <div className="flex items-start sm:items-center gap-3">
-                        <div className="w-8 h-8 rounded-full bg-white border border-slate-200 flex items-center justify-center shrink-0 shadow-sm">
-                          <Building2 className="w-4 h-4 text-slate-400" />
+                        <div className="w-8 h-8 rounded-full bg-white border border-slate-200 flex items-center justify-center shrink-0 shadow-sm group-hover:border-[#3a9e9e]/30">
+                          <Building2 className="w-4 h-4 text-slate-400 group-hover:text-[#3a9e9e] transition-colors" />
                         </div>
                         <div>
-                          <Link to={createPageUrl(`CustomerDetails?id=${contract.customer.id}`)} className="font-medium text-slate-900 hover:text-[#3a9e9e] hover:underline">
+                          <div className="font-medium text-slate-900 group-hover:text-[#3a9e9e] group-hover:underline">
                             {contract.customer.company_name}
-                          </Link>
+                          </div>
                           <div className="flex items-center gap-2 text-xs text-slate-500 mt-0.5">
                             <Monitor className="w-3 h-3" />
                             <span>{contract.machine.model}</span>
@@ -227,7 +227,7 @@ export default function ContractsByCity() {
                            </Badge>
                         )}
                       </div>
-                    </div>
+                    </Link>
                   ))}
                 </div>
               </AccordionContent>
