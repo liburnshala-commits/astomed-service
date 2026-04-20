@@ -40,6 +40,18 @@ export default function PendingQueue({ records, machines, customers, onDragStart
                   <div className="font-medium text-sm text-slate-800 truncate">{machine?.model || "Okänd maskin"}</div>
                   <div className="text-xs text-slate-400 font-mono">SN: {machine?.serial_number || "–"}</div>
                   <div className="text-xs text-slate-500 mt-1 truncate">{customer?.company_name || "Okänd kund"}</div>
+                  
+                  <div className="bg-slate-50 border border-slate-100 rounded p-2 mt-2 text-[10px] space-y-1">
+                    <div className="flex justify-between items-center gap-2">
+                      <span className="text-slate-400">Ort:</span>
+                      <span className="font-medium text-slate-600 truncate">{customer?.city || "Ej angiven"}</span>
+                    </div>
+                    <div className="flex justify-between items-center gap-2">
+                      <span className="text-slate-400">Senaste service:</span>
+                      <span className="font-medium text-slate-600">{machine?.service_date || "Ingen"}</span>
+                    </div>
+                  </div>
+
                   <div className="flex items-center gap-1.5 mt-2">
                     <Badge className={`text-xs ${typeColor[r.service_type]}`}>{typeLabel[r.service_type]}</Badge>
                     {r.technician_name && (
@@ -89,7 +101,9 @@ export default function PendingQueue({ records, machines, customers, onDragStart
                         <div className="text-xs text-slate-400 font-mono mb-3">SN: {machine?.serial_number || "–"}</div>
                         <div className="text-sm text-slate-600 bg-slate-50 p-3 rounded-lg border border-slate-100 space-y-1">
                           <div className="font-medium text-slate-800">{customer?.company_name || "Okänd kund"}</div>
-                          <div className="text-xs text-slate-500">Tekniker: {r.technician_name || "Ej tilldelad"}</div>
+                          <div className="text-xs flex justify-between"><span className="text-slate-500">Ort:</span><span className="font-medium text-slate-700">{customer?.city || "Ej angiven"}</span></div>
+                          <div className="text-xs flex justify-between"><span className="text-slate-500">Senaste service:</span><span className="font-medium text-slate-700">{machine?.service_date || "Ingen"}</span></div>
+                          <div className="text-xs flex justify-between"><span className="text-slate-500">Tekniker:</span><span className="font-medium text-slate-700">{r.technician_name || "Ej tilldelad"}</span></div>
                         </div>
                       </div>
                       <Button
