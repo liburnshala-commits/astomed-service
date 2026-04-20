@@ -66,13 +66,22 @@ export default function Customers() {
 
   const load = () => queryClient.invalidateQueries({ queryKey: ["customersPage"] });
 
+  const urlParams = new URLSearchParams(window.location.search);
+  const filterParam = urlParams.get("filter");
+
   const filtered = customers.filter(c => {
     const searchLower = search.toLowerCase();
-    return c.company_name?.toLowerCase().includes(searchLower) ||
+    const matchSearch = c.company_name?.toLowerCase().includes(searchLower) ||
       c.org_number?.toLowerCase().includes(searchLower) ||
       c.contact_person?.toLowerCase().includes(searchLower) ||
       c.email?.toLowerCase().includes(searchLower) ||
       c.phone?.toLowerCase().includes(searchLower);
+
+    const matchFilter = filterParam === "signed" ? 
+      machines.some(m => m.customer_id === c.id && m.service_contract && m.service_contract !== "none" && (!m.contract_status || m.contract_status === "active")) 
+      : true;
+
+    return matchSearch && matchFilter;
   });
 
   const getMachineCount = (customerId) => machines.filter(m => m.customer_id === customerId).length;
@@ -320,8 +329,11 @@ export default function Customers() {
     <div className="p-6 space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold astomed-title">Kunder</h1>
-          <p className="astomed-subtitle text-sm">{customers.length} kunder registrerade</p>
+          <h1 className="text-2xl font-bold astomed-title flex items-center">
+            Kunder 
+            {filterParam === "signed" && <span className="ml-3 text-sm font-semibold bg-green-100 text-green-800 px-2 py-0.5 rounded-md">Signerade</span>}
+          </h1>
+          <p className="astomed-subtitle text-sm">{filtered.length} kunder {filterParam === "signed" ? "visas" : "registrerade"}</p>
         </div>
         <div className="flex gap-2">
           {userRole === "admin" && (

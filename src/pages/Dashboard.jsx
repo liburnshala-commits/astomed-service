@@ -123,7 +123,7 @@ export default function Dashboard() {
             </CardContent>
           </Card>
         </Link>
-        <Link to={createPageUrl("ServiceContracts") + "?status=active"} className="block">
+        <Link to={createPageUrl("Customers") + "?filter=signed"} className="block">
           <Card className="astomed-card cursor-pointer" style={{ background: "#f0fdf4" }}>
             <CardContent className="p-5">
               <div className="flex items-center justify-between">
