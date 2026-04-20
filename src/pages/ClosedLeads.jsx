@@ -37,11 +37,24 @@ export default function ClosedLeads() {
 
   const filteredLeads = leads.filter(lead => {
     const s = search.toLowerCase();
+    
+    const machineMatch = lead.proposed_machines?.some(m => 
+      m.model?.toLowerCase().includes(s) || 
+      m.serial_number?.toLowerCase().includes(s) ||
+      m.notes?.toLowerCase().includes(s)
+    ) || false;
+
+    const statusLabelMatch = (STATUS_LABELS[lead.status] || lead.status).toLowerCase().includes(s);
+
     return (
       lead.company_name?.toLowerCase().includes(s) ||
       lead.contact_person?.toLowerCase().includes(s) ||
       lead.email?.toLowerCase().includes(s) ||
-      lead.phone?.toLowerCase().includes(s)
+      lead.phone?.toLowerCase().includes(s) ||
+      lead.notes?.toLowerCase().includes(s) ||
+      lead.org_number?.toLowerCase().includes(s) ||
+      statusLabelMatch ||
+      machineMatch
     );
   });
 
