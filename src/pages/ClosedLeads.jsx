@@ -81,6 +81,20 @@ export default function ClosedLeads() {
           )}
         </div>
 
+        {lead.proposed_machines && lead.proposed_machines.length > 0 && (
+          <div className="text-xs text-slate-600 mb-4 space-y-1.5">
+            <span className="font-semibold text-slate-700 block">Föreslagna maskiner:</span>
+            {lead.proposed_machines.map((m, idx) => (
+              <div key={idx} className="bg-slate-50 p-2 rounded border border-slate-100 flex justify-between items-center">
+                <span className="font-medium truncate mr-2">{m.model}</span>
+                {m.serial_number && (
+                  <Badge variant="outline" className="text-[10px] bg-white whitespace-nowrap font-mono">SN: {m.serial_number}</Badge>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+
         {lead.notes && (
           <div className="text-xs text-slate-500 bg-amber-50/50 p-3 rounded-lg border border-amber-100 whitespace-pre-wrap max-h-24 overflow-y-auto mt-auto">
             <span className="font-medium text-slate-800 block mb-1">Anteckningar:</span>
