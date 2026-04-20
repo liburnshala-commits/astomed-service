@@ -21,7 +21,7 @@ const statusLabel = {
   pending: "Väntar", awaiting_approval: "Inv. godkänn.", in_progress: "Pågående", completed: "Slutförd", invoiced: "Fakturerad"
 };
 
-export default function BookingDialog({ date, record, records, machines, customers, onConfirm, onClose, onEdit }) {
+export default function BookingDialog({ date, record, records, machines, customers, onConfirm, onUnschedule, onClose, onEdit }) {
   const getMachine = (id) => machines.find(m => m.id === id);
   const getCustomer = (id) => customers.find(c => c.id === id);
 
@@ -144,15 +144,31 @@ export default function BookingDialog({ date, record, records, machines, custome
           )}
         </div>
 
-        <div className="flex gap-3 px-5 pb-5">
-          <Button variant="outline" className="flex-1" onClick={onClose}>Stäng</Button>
-          {isBooking && (
-            <Button
-              className="flex-1 bg-[#1b3a3a] hover:bg-[#254f4f] text-white"
-              onClick={handleConfirm}
-              disabled={!selectedDate || loading}
+        <div className="flex flex-col gap-3 px-5 pb-5">
+          <div className="flex gap-3">
+            <Button variant="outline" className="flex-1" onClick={onClose}>Stäng</Button>
+            {isBooking && (
+              <Button
+                className="flex-1 bg-[#1b3a3a] hover:bg-[#254f4f] text-white"
+                onClick={handleConfirm}
+                disabled={!selectedDate || loading}
+              >
+                {loading ? "Bokar..." : "Bekräfta bokning"}
+              </Button>
+            )}
+          </div>
+          {isBooking && onUnschedule && record.service_date && (
+            <Button 
+              variant="ghost" 
+              className="w-full text-red-500 hover:text-red-700 hover:bg-red-50 text-sm h-8"
+              onClick={async () => {
+                setLoading(true);
+                await onUnschedule(record);
+                setLoading(false);
+              }}
+              disabled={loading}
             >
-              {loading ? "Bokar..." : "Bekräfta bokning"}
+              Avboka och lägg tillbaka i kön
             </Button>
           )}
         </div>

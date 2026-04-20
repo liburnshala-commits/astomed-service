@@ -317,6 +317,15 @@ export default function Calendar() {
           machines={machines}
           customers={customers}
           onConfirm={handleBookingConfirm}
+          onUnschedule={async (r) => {
+            await base44.entities.ServiceRecord.update(r.id, {
+              service_date: "",
+              technician_name: "",
+              status: "pending"
+            });
+            setBookingDialog(null);
+            load();
+          }}
           onClose={() => setBookingDialog(null)}
           onEdit={(r) => { setBookingDialog(null); setEditing(r); setShowForm(true); }}
         />
