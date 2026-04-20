@@ -178,6 +178,19 @@ export default function ServiceRecordForm({ record, machines, customers, presele
     setForm(prev => ({ ...prev, machine_id: machineId, customer_id: machine?.customer_id || prev.customer_id }));
   };
 
+  const handleCustomerChange = (customerId) => {
+    setForm(prev => {
+      const next = { ...prev, customer_id: customerId };
+      if (prev.machine_id) {
+        const machine = machines.find(m => m.id === prev.machine_id);
+        if (machine && machine.customer_id !== customerId) {
+          next.machine_id = "";
+        }
+      }
+      return next;
+    });
+  };
+
   const addPart = () => {
     setForm(prev => ({
       ...prev,
@@ -282,13 +295,15 @@ export default function ServiceRecordForm({ record, machines, customers, presele
               <Select value={form.machine_id} onValueChange={handleMachineChange}>
                 <SelectTrigger><SelectValue placeholder="Välj maskin" /></SelectTrigger>
                 <SelectContent>
-                  {machines.map(m => <SelectItem key={m.id} value={m.id}>{m.model} – {m.serial_number}</SelectItem>)}
+                  {machines
+                    .filter(m => !form.customer_id || m.customer_id === form.customer_id)
+                    .map(m => <SelectItem key={m.id} value={m.id}>{m.model} – {m.serial_number}</SelectItem>)}
                 </SelectContent>
               </Select>
             </div>
             <div className="col-span-2 space-y-1">
               <Label>Kund</Label>
-              <Select value={form.customer_id} onValueChange={v => set("customer_id", v)}>
+              <Select value={form.customer_id} onValueChange={handleCustomerChange}>
                 <SelectTrigger><SelectValue placeholder="Välj kund" /></SelectTrigger>
                 <SelectContent>
                   {customers.map(c => <SelectItem key={c.id} value={c.id}>{c.company_name}</SelectItem>)}
