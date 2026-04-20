@@ -92,15 +92,7 @@ export default function ServiceRecordForm({ record, machines, customers, presele
     set("status", v);
   };
 
-  const [serialInput, setSerialInput] = useState(() => {
-    if (record?.machine_id) {
-      const m = machines.find(m => m.id === record.machine_id);
-      return m?.serial_number || "";
-    }
-    if (preselectedMachine) return preselectedMachine.serial_number || "";
-    return "";
-  });
-  const [serialMatch, setSerialMatch] = useState(null); // null | "found" | "not_found"
+
   const [uploading, setUploading] = useState(false);
   const [templates, setTemplates] = useState([]);
   const [selectedTemplate, setSelectedTemplate] = useState("only_repair");
@@ -160,23 +152,9 @@ export default function ServiceRecordForm({ record, machines, customers, presele
     });
   };
 
-  const handleSerialChange = (value) => {
-    setSerialInput(value);
-    const machine = machines.find(m => m.serial_number?.toLowerCase() === value.trim().toLowerCase());
-    if (machine) {
-      setSerialMatch("found");
-      setForm(prev => ({ ...prev, machine_id: machine.id, customer_id: machine.customer_id || prev.customer_id }));
-    } else {
-      setSerialMatch(value.trim().length > 0 ? "not_found" : null);
-      setForm(prev => ({ ...prev, machine_id: "", customer_id: "" }));
-    }
-  };
-
   // Auto-fill customer when machine is selected from dropdown
   const handleMachineChange = (machineId) => {
     const machine = machines.find(m => m.id === machineId);
-    setSerialInput(machine?.serial_number || "");
-    setSerialMatch(machine ? "found" : null);
     setForm(prev => ({ ...prev, machine_id: machineId, customer_id: machine?.customer_id || prev.customer_id }));
   };
 
@@ -278,19 +256,14 @@ export default function ServiceRecordForm({ record, machines, customers, presele
           })()}
           {/* Basic info */}
           <div className="grid grid-cols-2 gap-4">
-            {/* Serial number lookup */}
             <div className="col-span-2 space-y-1">
-              <Label>Serienummer</Label>
-              <div className="relative">
-                <Input
-                  value={serialInput}
-                  onChange={e => handleSerialChange(e.target.value)}
-                  placeholder="Ange serienummer..."
-                  className={serialMatch === "found" ? "border-green-400 focus-visible:ring-green-400" : serialMatch === "not_found" ? "border-orange-400 focus-visible:ring-orange-400" : ""}
-                />
-                {serialMatch === "found" && <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-green-600 font-medium">✓ Maskin hittad</span>}
-                {serialMatch === "not_found" && <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-orange-500 font-medium">Ej registrerad</span>}
-              </div>
+              <Label>Kund *</Label>
+              <Select value={form.customer_id} onValueChange={handleCustomerChange}>
+                <SelectTrigger><SelectValue placeholder="Välj kund" /></SelectTrigger>
+                <SelectContent>
+                  {customers.map(c => <SelectItem key={c.id} value={c.id}>{c.company_name}</SelectItem>)}
+                </SelectContent>
+              </Select>
             </div>
             <div className="col-span-2 space-y-1">
               <Label>Maskin *</Label>
@@ -300,15 +273,6 @@ export default function ServiceRecordForm({ record, machines, customers, presele
                   {machines
                     .filter(m => !form.customer_id || m.customer_id === form.customer_id)
                     .map(m => <SelectItem key={m.id} value={m.id}>{m.model} – {m.serial_number}</SelectItem>)}
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="col-span-2 space-y-1">
-              <Label>Kund</Label>
-              <Select value={form.customer_id} onValueChange={handleCustomerChange}>
-                <SelectTrigger><SelectValue placeholder="Välj kund" /></SelectTrigger>
-                <SelectContent>
-                  {customers.map(c => <SelectItem key={c.id} value={c.id}>{c.company_name}</SelectItem>)}
                 </SelectContent>
               </Select>
             </div>
