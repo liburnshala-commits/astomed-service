@@ -227,7 +227,7 @@ Deno.serve(async (req) => {
 
         const pdfArrayBuffer = doc.output('arraybuffer');
         const uint8Array = new Uint8Array(pdfArrayBuffer);
-        const file = new File([uint8Array], `Serviceprotokoll_${recordId}.pdf`, { type: 'application/pdf' });
+        const file = new File([uint8Array], `Serviceprotokoll_${recordId}_${Date.now()}.pdf`, { type: 'application/pdf' });
 
         const uploadRes = await base44.integrations.Core.UploadPrivateFile({ file: file });
         
