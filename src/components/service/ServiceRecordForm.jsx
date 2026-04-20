@@ -475,29 +475,6 @@ export default function ServiceRecordForm({ record, machines, customers, presele
 
         <div className="flex justify-end gap-3 p-6 border-t bg-slate-50 shrink-0 rounded-b-2xl">
           <Button variant="outline" onClick={onClose}>Avbryt</Button>
-          {record && calcTotal() > 0 && !record.quote_sent && (
-            <Button
-              variant="outline"
-              className="border-amber-400 text-amber-700 hover:bg-amber-50"
-              onClick={() => {
-                const { manual_price, ...submitForm } = form;
-                onSave({
-                  ...submitForm,
-                  labor_hours: form.labor_hours === "" ? undefined : Number(form.labor_hours),
-                  hourly_rate: form.hourly_rate === "" ? undefined : Number(form.hourly_rate),
-                  labor_cost: form.labor_cost === "" ? undefined : Number(form.labor_cost),
-                  total_cost: calcTotal(),
-                  discount_percent: form.discount_percent === "" ? 0 : Number(form.discount_percent),
-                  next_service_date: form.next_service_date || undefined,
-                  status: "awaiting_approval",
-                  quote_sent: true,
-                  quote_approved: "pending"
-                });
-              }}
-            >
-              Spara & skicka kostnadsförslag till kund
-            </Button>
-          )}
           <Button onClick={() => {
             const { manual_price, ...submitForm } = form;
             onSave({

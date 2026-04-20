@@ -3,7 +3,6 @@ import { base44 } from "@/api/base44Client";
 import { createPageUrl } from "@/utils";
 import { Link } from "react-router-dom";
 import { Monitor, Wrench, CheckCircle, Clock, Building2, Mail, Phone, MapPin, User, AlertTriangle, Plus, FileCheck } from "lucide-react";
-import QuoteApprovalCard from "@/components/portal/QuoteApprovalCard";
 import OtherMachineServiceForm from "@/components/portal/OtherMachineServiceForm";
 import RequestContractModal from "@/components/portal/RequestContractModal";
 import ServiceRecordDetail from "@/components/service/ServiceRecordDetail";
@@ -61,7 +60,6 @@ export default function CustomerDashboard() {
     return d;
   };
 
-  const awaitingQuoteApproval = records.filter(r => r.quote_sent && r.quote_approved === "pending");
   const pending = records.filter(r => r.status === "pending").length;
   const inProgress = records.filter(r => r.status === "in_progress").length;
   const completed = records.filter(r => r.status === "completed" || r.status === "invoiced").length;
@@ -129,28 +127,6 @@ export default function CustomerDashboard() {
             <p className="text-sm">Din kundprofil är inte kopplad till det här kontot ännu. Kontakta Astomed.</p>
           </CardContent>
         </Card>
-      )}
-
-      {/* Quote approval cards */}
-      {awaitingQuoteApproval.length > 0 && (
-        <div className="space-y-3">
-          <div className="flex items-center gap-2">
-            <AlertTriangle className="w-4 h-4" style={{ color: "#d97706" }} />
-            <h2 className="text-sm font-semibold astomed-label">Kräver ditt godkännande</h2>
-            <span className="text-xs px-2 py-0.5 rounded-full font-bold text-white" style={{ background: "#d97706" }}>{awaitingQuoteApproval.length}</span>
-          </div>
-          {awaitingQuoteApproval.map(r => (
-            <QuoteApprovalCard
-              key={r.id}
-              record={r}
-              machine={machines.find(m => m.id === r.machine_id)}
-              onUpdated={async () => {
-                const updated = await base44.entities.ServiceRecord.filter({ customer_id: customer.id }, "-service_date", 50);
-                setRecords(updated);
-              }}
-            />
-          ))}
-        </div>
       )}
 
       {/* Machines section */}

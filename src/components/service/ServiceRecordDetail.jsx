@@ -1,4 +1,4 @@
-import { X, Edit, FileText, Calendar, User, Building2, Monitor, Wrench, Trash2, CheckCircle, XCircle } from "lucide-react";
+import { X, Edit, FileText, Calendar, User, Building2, Monitor, Wrench, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
@@ -20,24 +20,7 @@ const typeLabel = { standard: "Standardservice", advanced: "Avancerad service" }
 
 export default function ServiceRecordDetail({ record, machine, customer, onClose, onEdit, onDeleted, onUpdated, userRole }) {
   const [showReport, setShowReport] = useState(false);
-  const [quoteNote, setQuoteNote] = useState("");
-  const [quoteLoading, setQuoteLoading] = useState(false);
-  const [quoteDone, setQuoteDone] = useState(false);
-
-  const handleQuoteRespond = async (answer) => {
-    setQuoteLoading(true);
-    await base44.entities.ServiceRecord.update(record.id, {
-      quote_approved: answer,
-      quote_note: quoteNote,
-      status: answer === "approved" ? "in_progress" : "pending",
-    });
-    if (answer === "approved") {
-      await base44.functions.invoke("sendQuoteConfirmation", { recordId: record.id });
-    }
-    setQuoteDone(answer);
-    setQuoteLoading(false);
-    onUpdated?.();
-  };
+  const [loading, setLoading] = useState(false);
 
   const handlePickUp = async () => {
     await base44.entities.ServiceRecord.update(record.id, { status: "in_progress" });
@@ -82,8 +65,8 @@ export default function ServiceRecordDetail({ record, machine, customer, onClose
                 </Button>
               )}
               {!record.protocol_uri && (userRole === "admin" || userRole === "technician") && record.status === "completed" && (
-                <Button size="sm" variant="outline" disabled={quoteLoading} onClick={async () => {
-                  setQuoteLoading(true);
+                <Button size="sm" variant="outline" disabled={loading} onClick={async () => {
+                  setLoading(true);
                   try {
                     await base44.functions.invoke("generateServiceProtocol", { recordId: record.id });
                     onUpdated?.();
@@ -91,9 +74,9 @@ export default function ServiceRecordDetail({ record, machine, customer, onClose
                   } catch(e) {
                     alert("Kunde inte generera protokoll.");
                   }
-                  setQuoteLoading(false);
+                  setLoading(false);
                 }}>
-                  <FileText className="w-4 h-4 mr-1" /> Generera protokoll
+                  <FileText className="w-4 h-4 mr-1" /> {loading ? "Genererar..." : "Generera protokoll"}
                 </Button>
               )}
               <Button size="sm" variant="outline" onClick={() => setShowReport(true)}>
@@ -242,53 +225,6 @@ export default function ServiceRecordDetail({ record, machine, customer, onClose
                     </a>
                   ))}
                 </div>
-              </div>
-            )}
-
-            {/* Quote approval for customers */}
-            {userRole === "customer" && record.quote_sent && record.quote_approved === "pending" && !quoteDone && (
-              <div className="border-2 rounded-xl p-4 space-y-3" style={{ borderColor: "#f59e0b", background: "#fffbeb" }}>
-                <div className="flex items-center gap-2">
-                  <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: "#fef3c7" }}>
-                    <Wrench className="w-3.5 h-3.5" style={{ color: "#d97706" }} />
-                  </div>
-                  <div>
-                    <p className="text-sm font-semibold" style={{ color: "#92400e" }}>Kostnadsförslag – godkännande krävs</p>
-                    <p className="text-xs" style={{ color: "#b45309" }}>Totalt: <span className="font-bold">{record.total_cost?.toLocaleString("sv-SE")} kr</span></p>
-                  </div>
-                </div>
-                <Textarea
-                  value={quoteNote}
-                  onChange={e => setQuoteNote(e.target.value)}
-                  placeholder="Valfritt meddelande till teknikern..."
-                  rows={2}
-                  className="text-sm"
-                />
-                <div className="flex gap-2">
-                  <Button
-                    size="sm"
-                    className="flex-1 bg-green-600 hover:bg-green-700 text-white"
-                    onClick={() => handleQuoteRespond("approved")}
-                    disabled={quoteLoading}
-                  >
-                    <CheckCircle className="w-3.5 h-3.5 mr-1" /> Godkänn
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    className="flex-1 border-red-300 text-red-600 hover:bg-red-50"
-                    onClick={() => handleQuoteRespond("rejected")}
-                    disabled={quoteLoading}
-                  >
-                    <XCircle className="w-3.5 h-3.5 mr-1" /> Avvisa
-                  </Button>
-                </div>
-              </div>
-            )}
-            {userRole === "customer" && quoteDone && (
-              <div className="rounded-xl p-4 flex items-center gap-2 bg-green-50 border border-green-200">
-                <CheckCircle className="w-4 h-4 text-green-600" />
-                <p className="text-sm text-green-800 font-medium">Ditt svar har skickats.</p>
               </div>
             )}
 
