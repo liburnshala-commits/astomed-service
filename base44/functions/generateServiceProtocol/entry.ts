@@ -42,12 +42,23 @@ Deno.serve(async (req) => {
         doc.text(`Serviceavtal: ${machine?.service_contract === 'basic' ? 'Basic' : 'Inget'}`, 20, 120);
         
         doc.setFontSize(14);
-        doc.text('Servicebeskrivning', 20, 135);
+        doc.text('Servicebeskrivning & Mätvärden', 20, 135);
         doc.setFontSize(10);
         const splitDesc = doc.splitTextToSize(record.description || 'Ingen beskrivning', 170);
         doc.text(splitDesc, 20, 145);
 
-        let y = 145 + (splitDesc.length * 5) + 10;
+        let y = 145 + (splitDesc.length * 5) + 5;
+        
+        if (record.measured_laser_power) {
+            doc.text(`Uppmätt lasereffekt: ${record.measured_laser_power}`, 20, y);
+            y += 6;
+        }
+        if (record.pulse_count) {
+            doc.text(`Antal pulser: ${record.pulse_count}`, 20, y);
+            y += 6;
+        }
+        
+        y += 5;
         
         if (record.parts_used && record.parts_used.length > 0) {
             doc.setFontSize(14);

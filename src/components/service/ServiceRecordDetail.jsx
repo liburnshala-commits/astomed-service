@@ -1,4 +1,4 @@
-import { X, Edit, FileText, Calendar, User, Building2, Monitor, Wrench, Trash2 } from "lucide-react";
+import { X, Edit, FileText, Calendar, User, Building2, Monitor, Wrench, Trash2, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
@@ -54,16 +54,32 @@ export default function ServiceRecordDetail({ record, machine, customer, onClose
                 </Button>
               )}
               {record.protocol_uri && (
-                <Button size="sm" variant="outline" onClick={async () => {
-                  try {
-                    const res = await base44.integrations.Core.CreateFileSignedUrl({ file_uri: record.protocol_uri });
-                    window.open(res.signed_url, '_blank');
-                  } catch(e) {
-                    alert("Kunde inte hämta protokoll.");
-                  }
-                }}>
-                  <FileText className="w-4 h-4 mr-1" /> Ladda ner protokoll
-                </Button>
+                <>
+                  <Button size="sm" variant="outline" onClick={async () => {
+                    try {
+                      const res = await base44.integrations.Core.CreateFileSignedUrl({ file_uri: record.protocol_uri });
+                      window.open(res.signed_url, '_blank');
+                    } catch(e) {
+                      alert("Kunde inte hämta protokoll.");
+                    }
+                  }}>
+                    <FileText className="w-4 h-4 mr-1" /> Ladda ner protokoll
+                  </Button>
+                  {(userRole === "admin" || userRole === "technician") && (
+                    <Button size="sm" variant="outline" disabled={loading} onClick={async () => {
+                      setLoading(true);
+                      try {
+                        await base44.functions.invoke("sendServiceProtocolEmail", { recordId: record.id });
+                        alert("Protokollet har skickats till kunden via e-post.");
+                      } catch(e) {
+                        alert("Kunde inte skicka e-post.");
+                      }
+                      setLoading(false);
+                    }}>
+                      <Mail className="w-4 h-4 mr-1" /> Skicka via E-post
+                    </Button>
+                  )}
+                </>
               )}
               {!record.protocol_uri && (userRole === "admin" || userRole === "technician") && record.status === "completed" && (
                 <Button size="sm" variant="outline" disabled={loading} onClick={async () => {
@@ -135,10 +151,29 @@ export default function ServiceRecordDetail({ record, machine, customer, onClose
             )}
 
             {/* Description */}
-            {record.description && (
+            {(record.description || record.measured_laser_power || record.pulse_count) && (
               <div>
-                <div className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">Utfört arbete</div>
-                <p className="text-sm text-slate-700 leading-relaxed bg-slate-50 rounded-lg p-3">{record.description}</p>
+                <div className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">Utfört arbete & Mätvärden</div>
+                <div className="bg-slate-50 rounded-lg p-4 space-y-4">
+                  {record.description && <p className="text-sm text-slate-700 leading-relaxed whitespace-pre-wrap">{record.description}</p>}
+                  
+                  {(record.measured_laser_power || record.pulse_count) && (
+                    <div className="flex gap-8 border-t border-slate-200 pt-3">
+                      {record.measured_laser_power && (
+                        <div>
+                          <div className="text-[10px] uppercase text-slate-500 font-semibold mb-1">Uppmätt lasereffekt</div>
+                          <div className="text-sm font-medium">{record.measured_laser_power}</div>
+                        </div>
+                      )}
+                      {record.pulse_count && (
+                        <div>
+                          <div className="text-[10px] uppercase text-slate-500 font-semibold mb-1">Antal pulser</div>
+                          <div className="text-sm font-medium">{record.pulse_count.toLocaleString("sv-SE")}</div>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
               </div>
             )}
 

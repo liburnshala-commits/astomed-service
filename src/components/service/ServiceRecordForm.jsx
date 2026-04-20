@@ -65,7 +65,9 @@ export default function ServiceRecordForm({ record, machines, customers, presele
     status: record?.status || "pending",
     next_service_date: record?.next_service_date || "",
     images: record?.images || [],
-    service_contract: record?.service_contract || ""
+    service_contract: record?.service_contract || "",
+    measured_laser_power: record?.measured_laser_power || "",
+    pulse_count: record?.pulse_count || ""
   });
 
   const [invoiceError, setInvoiceError] = useState(null);
@@ -78,6 +80,7 @@ export default function ServiceRecordForm({ record, machines, customers, presele
     if (v === "completed" || v === "invoiced") {
       const missing = [];
       if (!form.technician_name) missing.push("Tekniker");
+      if (!form.measured_laser_power) missing.push("Uppmätt lasereffekt");
       // Only require labor hours and cost if no service contract and it's a repair
       if (currentContract === "none" && selectedTemplate === "only_repair") {
         if (!form.labor_hours && form.labor_hours !== 0) missing.push("Arbetstimmar");
@@ -330,6 +333,18 @@ export default function ServiceRecordForm({ record, machines, customers, presele
               <Label>Beskrivning av utfört arbete</Label>
               <Textarea value={form.description} onChange={e => set("description", e.target.value)} placeholder="Beskriv vad som utfördes..." rows={4} />
             </div>
+            
+            <div className="col-span-2 grid grid-cols-2 gap-4 bg-slate-50 p-4 rounded-lg border border-slate-200">
+              <div className="col-span-2 text-sm font-semibold mb-1">Mätvärden</div>
+              <div className="space-y-1">
+                <Label>Uppmätt lasereffekt (W/J) {(form.status === "completed" || form.status === "invoiced") && <span className="text-red-500">*</span>}</Label>
+                <Input value={form.measured_laser_power} onChange={e => set("measured_laser_power", e.target.value)} placeholder="T.ex. 2000W" />
+              </div>
+              <div className="space-y-1">
+                <Label>Antal pulser</Label>
+                <Input type="number" value={form.pulse_count} onChange={e => set("pulse_count", e.target.value === "" ? "" : Number(e.target.value))} placeholder="T.ex. 1500000" />
+              </div>
+            </div>
           </div>
 
           {/* Apply Template */}
@@ -467,7 +482,9 @@ export default function ServiceRecordForm({ record, machines, customers, presele
               labor_cost: form.labor_cost === "" ? undefined : Number(form.labor_cost),
               total_cost: calcTotal(),
               discount_percent: form.discount_percent === "" ? 0 : Number(form.discount_percent),
-              next_service_date: form.next_service_date || undefined
+              next_service_date: form.next_service_date || undefined,
+              measured_laser_power: form.measured_laser_power || undefined,
+              pulse_count: form.pulse_count === "" ? undefined : Number(form.pulse_count)
             });
           }} className="bg-blue-600 hover:bg-blue-700" disabled={!form.machine_id || !form.customer_id || !form.service_date}>
             {record ? "Spara ändringar" : "Skapa ärende"}

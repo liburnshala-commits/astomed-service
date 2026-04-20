@@ -131,10 +131,16 @@ export default function ServiceReportModal({ record, machine, customer, onClose 
           <hr className="my-5 print:my-1 border-slate-200" />
 
           {/* Technical assessment */}
-          {record.description && (
+          {(record.description || record.measured_laser_power || record.pulse_count) && (
             <>
-              <h2 className="font-bold text-sm print:text-[11px] mb-2 print:mb-0.5">Teknisk bedömning</h2>
-              <p className="mb-3 text-slate-700 leading-relaxed whitespace-pre-line">{record.description}</p>
+              <h2 className="font-bold text-sm print:text-[11px] mb-2 print:mb-0.5">Teknisk bedömning & Mätvärden</h2>
+              {record.description && <p className="mb-3 text-slate-700 leading-relaxed whitespace-pre-line">{record.description}</p>}
+              {(record.measured_laser_power || record.pulse_count) && (
+                <ul className="list-disc list-inside space-y-1 mb-4 print:mb-1 text-slate-700">
+                  {record.measured_laser_power && <li><strong>Uppmätt lasereffekt:</strong> {record.measured_laser_power}</li>}
+                  {record.pulse_count && <li><strong>Antal pulser:</strong> {record.pulse_count.toLocaleString("sv-SE")}</li>}
+                </ul>
+              )}
               <hr className="my-5 print:my-1 border-slate-200" />
             </>
           )}

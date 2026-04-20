@@ -31,6 +31,14 @@
       "type": "string",
       "description": "Beskrivning av utf\u00f6rt arbete"
     },
+    "measured_laser_power": {
+      "type": "string",
+      "description": "Uppm\u00e4tt lasereffekt"
+    },
+    "pulse_count": {
+      "type": "number",
+      "description": "Antal pulser"
+    },
     "parts_used": {
       "type": "array",
       "description": "Anv\u00e4nda reservdelar",
