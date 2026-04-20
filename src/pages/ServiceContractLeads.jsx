@@ -153,6 +153,7 @@ export default function ServiceContractLeads() {
         contact_person: lead.contact_person || "",
         email: lead.email || "",
         phone: lead.phone || "",
+        notes: lead.notes || "",
       });
       customerId = newCustomer.id;
       await base44.entities.ServiceContractLead.update(lead.id, { customer_id: customerId });
