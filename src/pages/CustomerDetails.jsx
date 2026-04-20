@@ -3,11 +3,12 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { createPageUrl } from "@/utils";
 import { Link, useNavigate } from "react-router-dom";
-import { Building2, Phone, Mail, Monitor, ArrowLeft, ExternalLink, Shield, Trash2, Download } from "lucide-react";
+import { Building2, Phone, Mail, Monitor, ArrowLeft, ExternalLink, Shield, Trash2, Download, FileCheck } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import CustomerInteractions from "@/components/customers/CustomerInteractions";
+import ServiceContractModal from "@/components/machines/ServiceContractModal";
 
 export default function CustomerDetails() {
   const navigate = useNavigate();
@@ -34,6 +35,14 @@ export default function CustomerDetails() {
 
   const customer = data?.customer;
   const machines = data?.machines || [];
+  
+  const [contractMachine, setContractMachine] = useState(null);
+  
+  const handleContractSave = async (form) => {
+    await base44.entities.Machine.update(contractMachine.id, form);
+    queryClient.invalidateQueries({ queryKey: ["customerDetails", customerId] });
+    setContractMachine(null);
+  };
 
   const handleExportMachines = () => {
     const rows = [
@@ -159,15 +168,26 @@ export default function CustomerDetails() {
                         <Badge className={`text-[10px] px-1.5 py-0 border-0 shrink-0 ${m.status === 'service' ? 'bg-orange-100 text-orange-800' : 'bg-green-100 text-green-800'}`}>
                           {m.status === 'service' ? 'På service' : 'Aktiv'}
                         </Badge>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="h-5 w-5 text-red-400 hover:text-red-600 hover:bg-red-50 shrink-0"
-                          onClick={() => handleDeleteMachine(m)}
-                          title="Ta bort maskin"
-                        >
-                          <Trash2 className="w-3.5 h-3.5" />
-                        </Button>
+                        <div className="flex items-center gap-1 shrink-0">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-6 w-6 text-slate-400 hover:text-slate-600 hover:bg-slate-100"
+                            onClick={() => setContractMachine(m)}
+                            title="Hantera serviceavtal"
+                          >
+                            <FileCheck className="w-3.5 h-3.5" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-6 w-6 text-red-400 hover:text-red-600 hover:bg-red-50"
+                            onClick={() => handleDeleteMachine(m)}
+                            title="Ta bort maskin"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </Button>
+                        </div>
                       </div>
                       <div className="text-xs text-slate-500 font-mono">SN: {m.serial_number}</div>
                       {m.service_contract && m.service_contract !== 'none' && (
@@ -195,6 +215,14 @@ export default function CustomerDetails() {
         </div>
 
       </div>
+
+      {contractMachine && (
+        <ServiceContractModal
+          machine={contractMachine}
+          onSave={handleContractSave}
+          onClose={() => setContractMachine(null)}
+        />
+      )}
     </div>
   );
 }
