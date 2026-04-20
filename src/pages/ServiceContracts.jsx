@@ -251,15 +251,19 @@ export default function ServiceContracts() {
                 </SelectContent>
               </Select>
               <div className="flex gap-2">
-                <Button className="flex-1 h-11" variant="outline" onClick={() => setEditingMachine(machine)} disabled={status !== "active"}>
-                  <Pencil className="w-4 h-4 mr-2 text-slate-500" /> Redigera
+                {!isTechnician && (
+                  <Button className="flex-1 h-11" variant="outline" onClick={() => setEditingMachine(machine)} disabled={status !== "active"}>
+                    <Pencil className="w-4 h-4 mr-2 text-slate-500" /> Redigera
+                  </Button>
+                )}
+                <Button className={`h-11 px-4 border border-slate-200 hover:bg-slate-100 text-slate-600 ${isTechnician ? "flex-1" : ""}`} variant="ghost" onClick={() => handleDownloadContract(machine)}>
+                  <Download className="w-5 h-5 mr-2" /> {isTechnician && "Ladda ner avtal"}
                 </Button>
-                <Button className="h-11 px-4 border border-slate-200 hover:bg-slate-100 text-slate-600" variant="ghost" onClick={() => handleDownloadContract(machine)}>
-                  <Download className="w-5 h-5" />
-                </Button>
-                <Button className="h-11 px-4 text-red-500 hover:bg-red-50 hover:text-red-700 border border-transparent hover:border-red-100" variant="ghost" onClick={() => handleRemoveContract(machine)}>
-                  <Trash2 className="w-5 h-5" />
-                </Button>
+                {!isTechnician && (
+                  <Button className="h-11 px-4 text-red-500 hover:bg-red-50 hover:text-red-700 border border-transparent hover:border-red-100" variant="ghost" onClick={() => handleRemoveContract(machine)}>
+                    <Trash2 className="w-5 h-5" />
+                  </Button>
+                )}
               </div>
             </div>
           </CardContent>
@@ -363,7 +367,7 @@ export default function ServiceContracts() {
             >
               <Download className="w-4 h-4" />
             </button>
-            {status === "active" && (
+            {!isTechnician && status === "active" && (
               <button
                 onClick={() => setEditingMachine(machine)}
                 className="p-1.5 rounded hover:bg-slate-100 text-slate-400 hover:text-slate-700 transition-colors"
@@ -372,13 +376,15 @@ export default function ServiceContracts() {
                 <Pencil className="w-4 h-4" />
               </button>
             )}
-            <button
-              onClick={() => handleRemoveContract(machine)}
-              className="p-1.5 rounded hover:bg-red-100 text-red-400 hover:text-red-700 transition-colors"
-              title="Ta bort avtal"
-            >
-              <Trash2 className="w-4 h-4" />
-            </button>
+            {!isTechnician && (
+              <button
+                onClick={() => handleRemoveContract(machine)}
+                className="p-1.5 rounded hover:bg-red-100 text-red-400 hover:text-red-700 transition-colors"
+                title="Ta bort avtal"
+              >
+                <Trash2 className="w-4 h-4" />
+              </button>
+            )}
           </div>
         </td>
       </tr>
