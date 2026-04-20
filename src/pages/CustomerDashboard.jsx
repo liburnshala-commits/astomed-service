@@ -306,16 +306,6 @@ export default function CustomerDashboard() {
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
-                      {r.protocol_uri && (
-                        <Button size="sm" variant="outline" className="text-xs h-7 px-2" onClick={async () => {
-                          try {
-                            const res = await base44.integrations.Core.CreateFileSignedUrl({ file_uri: r.protocol_uri });
-                            window.open(res.signed_url, '_blank');
-                          } catch(e) {
-                            alert("Kunde inte hämta protokoll.");
-                          }
-                        }}>Ladda ner protokoll</Button>
-                      )}
                       <Badge className={statusColor[r.status]}>{statusLabel[r.status]}</Badge>
                     </div>
                   </div>

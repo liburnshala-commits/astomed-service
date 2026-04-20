@@ -53,48 +53,6 @@ export default function ServiceRecordDetail({ record, machine, customer, onClose
                   <Wrench className="w-4 h-4 mr-1" /> Ta upp ärende
                 </Button>
               )}
-              {record.protocol_uri && (
-                <>
-                  <Button size="sm" variant="outline" onClick={async () => {
-                    try {
-                      const res = await base44.integrations.Core.CreateFileSignedUrl({ file_uri: record.protocol_uri });
-                      window.open(res.signed_url, '_blank');
-                    } catch(e) {
-                      alert("Kunde inte hämta protokoll.");
-                    }
-                  }}>
-                    <FileText className="w-4 h-4 mr-1" /> Ladda ner protokoll
-                  </Button>
-                  {(userRole === "admin" || userRole === "technician") && (
-                    <Button size="sm" variant="outline" disabled={loading} onClick={async () => {
-                      setLoading(true);
-                      try {
-                        await base44.functions.invoke("sendServiceProtocolEmail", { recordId: record.id });
-                        alert("Protokollet har skickats till kunden via e-post.");
-                      } catch(e) {
-                        alert("Kunde inte skicka e-post.");
-                      }
-                      setLoading(false);
-                    }}>
-                      <Mail className="w-4 h-4 mr-1" /> Skicka via E-post
-                    </Button>
-                  )}
-                </>
-              )}
-              {(userRole === "admin" || userRole === "technician") && (record.status === "completed" || record.status === "invoiced") && (
-                <Button size="sm" variant="outline" disabled={loading} onClick={async () => {
-                  setLoading(true);
-                  try {
-                    await base44.functions.invoke("generateServiceProtocol", { recordId: record.id });
-                    onUpdated?.();
-                  } catch(e) {
-                    alert("Kunde inte generera protokoll.");
-                  }
-                  setLoading(false);
-                }}>
-                  <FileText className="w-4 h-4 mr-1" /> {loading ? "Genererar..." : (record.protocol_uri ? "Uppdatera protokoll" : "Generera protokoll")}
-                </Button>
-              )}
               <Button size="sm" variant="outline" onClick={() => setShowReport(true)}>
                 <FileText className="w-4 h-4 mr-1" /> Rapport
               </Button>
