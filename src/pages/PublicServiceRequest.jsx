@@ -248,7 +248,7 @@ export default function PublicServiceRequest() {
             <div className="flex items-start gap-4">
               <Info className="w-6 h-6 text-[#3a9e9e] shrink-0 mt-1" />
               <div>
-                <h4 className="font-semibold mb-2">Tips för din dialog med kunder:</h4>
+                <h4 className="font-semibold mb-2">När öppnar portalen för att anmäla sin verksamhet?</h4>
                 <blockquote className="text-slate-300 italic text-sm leading-relaxed">
                   "Just nu går det inte att anmäla sig – portalen hos SSM öppnar först den 4 maj 2026. Men det du <strong>kan</strong> och <strong>bör</strong> göra nu är att se till att din servicehistorik och dina tekniska protokoll är i ordning. När anmälan väl öppnar kommer de kräva bevis på att maskinerna underhålls korrekt, och där hjälper vi dig så att du är redo direkt."
                 </blockquote>
