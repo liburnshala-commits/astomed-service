@@ -107,6 +107,13 @@ export default function ServiceRecords() {
 
   const technicians = [...new Set(records.map(r => r.technician_name).filter(Boolean))].sort();
 
+  const isNyinkommen = (r) => {
+    if (!r.created_date) return false;
+    const d = new Date(r.created_date);
+    const today = new Date();
+    return d.getDate() === today.getDate() && d.getMonth() === today.getMonth() && d.getFullYear() === today.getFullYear() && r.status === "pending";
+  };
+
   const filtered = records.filter(r => {
     if (user?.role === "customer" && userCustomer && r.customer_id !== userCustomer.id) return false;
 
@@ -140,6 +147,11 @@ export default function ServiceRecords() {
 
     return true;
   }).sort((a, b) => {
+    const aNew = isNyinkommen(a);
+    const bNew = isNyinkommen(b);
+    if (aNew && !bNew) return -1;
+    if (!aNew && bNew) return 1;
+
     if (filters.sortBy === "date_asc") return (a.service_date || "").localeCompare(b.service_date || "");
     if (filters.sortBy === "cost_desc") return (b.total_cost || 0) - (a.total_cost || 0);
     if (filters.sortBy === "cost_asc") return (a.total_cost || 0) - (b.total_cost || 0);
@@ -268,6 +280,7 @@ export default function ServiceRecords() {
                     <div className="flex-1 min-w-0">
                       <div className="flex flex-wrap items-center gap-2 mb-1">
                         <span className="font-semibold astomed-title">{machine?.model || "Okänd maskin"}</span>
+                        {isNyinkommen(record) && <Badge className="bg-red-500 text-white hover:bg-red-600 border-0">Nyinkommen</Badge>}
                         <Badge className={typeColor[record.service_type]}>{typeLabel[record.service_type]}</Badge>
                         <Badge className={statusColor[record.status]}>{statusLabel[record.status]}</Badge>
                       </div>
@@ -322,6 +335,11 @@ export default function ServiceRecords() {
                             </div>
                           </div>
                           <div className="flex flex-col items-end gap-1 flex-shrink-0">
+                            {isNyinkommen(record) && (
+                              <Badge className="bg-red-500 text-white hover:bg-red-600 border-0 px-2.5 py-1 text-[10px] uppercase tracking-wider text-center">
+                                Nyinkommen
+                              </Badge>
+                            )}
                             <Badge className={`border-0 px-2.5 py-1 text-[10px] uppercase tracking-wider text-center ${statusColor[record.status]}`}>
                               {statusLabel[record.status]}
                             </Badge>
