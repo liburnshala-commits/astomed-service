@@ -15,6 +15,7 @@ import ServiceRecordDetail from "@/components/service/ServiceRecordDetail.jsx";
 import CustomerServiceRequestForm from "@/components/service/CustomerServiceRequestForm.jsx";
 import AdvancedFilters from "@/components/service/AdvancedFilters.jsx";
 import PullToRefresh from "@/components/ui/pull-to-refresh.jsx";
+import { useAuth } from "@/lib/AuthContext";
 
 const statusColor = {
   pending: "bg-yellow-100 text-yellow-800",
@@ -51,12 +52,7 @@ export default function ServiceRecords() {
   const [editing, setEditing] = useState(null);
   const [viewing, setViewing] = useState(null);
 
-  const { data: user } = useQuery({
-    queryKey: ["me"],
-    queryFn: () => base44.auth.me(),
-    staleTime: 5 * 60 * 1000,
-    retry: 3,
-  });
+  const { user } = useAuth();
 
   const { data: pageData } = useQuery({
     queryKey: ["serviceRecordsPage", user?.role, user?.email],

@@ -14,6 +14,7 @@ import CustomerForm from "@/components/customers/CustomerForm.jsx";
 import DeleteCustomerDialog from "@/components/gdpr/DeleteCustomerDialog.jsx";
 import CustomerLatestInteraction from "@/components/customers/CustomerLatestInteraction.jsx";
 import ImportCustomersModal from "@/components/customers/ImportCustomersModal.jsx";
+import { useAuth } from "@/lib/AuthContext";
 
 export default function Customers() {
   const queryClient = useQueryClient();
@@ -27,13 +28,7 @@ export default function Customers() {
   const [cleaningData, setCleaningData] = useState(false);
   const [showImport, setShowImport] = useState(false);
 
-  const { data: user } = useQuery({
-    queryKey: ["me"],
-    queryFn: () => base44.auth.me(),
-    staleTime: 5 * 60 * 1000,
-    retry: 3,
-  });
-
+  const { user } = useAuth();
   const userRole = user?.role;
 
   const { data: pageData } = useQuery({

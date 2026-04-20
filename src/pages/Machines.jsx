@@ -12,6 +12,7 @@ import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carouse
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import MachineForm from "@/components/machines/MachineForm.jsx";
 import ServiceContractModal from "@/components/machines/ServiceContractModal.jsx";
+import { useAuth } from "@/lib/AuthContext";
 
 const MODELS = [
   "Soprano Platinum", "Soprano Titanium", "Alma Harmony", "Aldix (Triodus)",
@@ -33,13 +34,7 @@ export default function Machines() {
   const urlParams = new URLSearchParams(window.location.search);
   const preselectedCustomer = urlParams.get("customer");
 
-  const { data: user } = useQuery({
-    queryKey: ["me"],
-    queryFn: () => base44.auth.me(),
-    staleTime: 5 * 60 * 1000,
-    retry: 3,
-  });
-
+  const { user } = useAuth();
   const userRole = user?.role;
 
   const { data: pageData } = useQuery({
