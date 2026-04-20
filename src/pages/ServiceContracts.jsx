@@ -8,7 +8,7 @@ import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carouse
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
-import { useQuery } from "@tanstack/react-query";
+import { useAuth } from "@/lib/AuthContext";
 import { addMonths, format, isPast, parseISO } from "date-fns";
 import { sv } from "date-fns/locale";
 import { FileCheck, Search, Building2, Monitor, Pencil, Clock, Download, Trash2 } from "lucide-react";
@@ -39,12 +39,7 @@ export default function ServiceContracts() {
   const urlParams = new URLSearchParams(window.location.search);
   const initialStatusFilter = urlParams.get("status") || "all";
 
-  const { data: user } = useQuery({
-    queryKey: ["me"],
-    queryFn: () => base44.auth.me(),
-    staleTime: 5 * 60 * 1000,
-  });
-
+  const { user } = useAuth();
   const userRole = user?.role;
   const isTechnician = userRole === "technician";
 
@@ -157,9 +152,11 @@ export default function ServiceContracts() {
       );
     });
 
+  const effectiveStatusFilter = isTechnician ? "active" : statusFilter;
+
   const contracted = allContracted.filter(m => {
-    if (statusFilter === "all") return true;
-    return contractStatus(m) === statusFilter;
+    if (effectiveStatusFilter === "all") return true;
+    return contractStatus(m) === effectiveStatusFilter;
   });
 
   const activeCount = allContracted.filter(m => contractStatus(m) === "active").length;
@@ -454,7 +451,7 @@ export default function ServiceContracts() {
       )}
 
       {/* Contracts table with Tabs */}
-      <Tabs value={isTechnician ? "all" : statusFilter} onValueChange={setStatusFilter} className="w-full mb-6">
+      <Tabs value={effectiveStatusFilter} onValueChange={setStatusFilter} className="w-full mb-6">
         {!isTechnician && (
           <TabsList className="flex flex-wrap h-auto justify-start mb-4 bg-slate-100/50 p-1">
             <TabsTrigger value="all" className="data-[state=active]:bg-white data-[state=active]:shadow-sm">Alla ({allContracted.length})</TabsTrigger>
@@ -466,16 +463,16 @@ export default function ServiceContracts() {
           </TabsList>
         )}
         
-        <TabsContent value={isTechnician ? "all" : statusFilter} className="mt-0">
+        <TabsContent value={effectiveStatusFilter} className="mt-0">
           <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
             <div className="px-5 py-3 border-b bg-slate-50 flex items-center gap-2">
               <span className="font-semibold text-slate-700 text-sm">
-                {statusFilter === "all" && "Alla serviceavtal"}
-                {statusFilter === "active" && "Aktiva serviceavtal"}
-                {statusFilter === "pending_signature" && "Avtal under signering"}
-                {statusFilter === "inactive" && "Offert / Inaktiva avtal"}
-                {statusFilter === "rejected" && "Nekade serviceavtal"}
-                {statusFilter === "expired" && "Utgångna serviceavtal"}
+                {effectiveStatusFilter === "all" && "Alla serviceavtal"}
+                {effectiveStatusFilter === "active" && "Aktiva serviceavtal"}
+                {effectiveStatusFilter === "pending_signature" && "Avtal under signering"}
+                {effectiveStatusFilter === "inactive" && "Offert / Inaktiva avtal"}
+                {effectiveStatusFilter === "rejected" && "Nekade serviceavtal"}
+                {effectiveStatusFilter === "expired" && "Utgångna serviceavtal"}
               </span>
               <Badge className="bg-slate-200 text-slate-700 border-0 ml-1">{contracted.length}</Badge>
             </div>
