@@ -211,33 +211,49 @@ export default function PublicServiceRequest() {
         </div>
       </section>
 
-      {/* Om oss Section */}
-      <section id="om-oss" className="py-20 px-6 md:px-12 max-w-7xl mx-auto">
-        <div className="grid md:grid-cols-2 gap-16 items-center">
-          <div>
-            <h2 className="text-sm font-bold tracking-widest uppercase text-[#3a9e9e] mb-3">Om Astomed</h2>
-            <h3 className="text-3xl md:text-4xl font-bold text-[#1b3a3a] mb-6">Nordens ledande leverantör sedan 2005</h3>
-            <p className="text-lg text-slate-600 mb-6 leading-relaxed">
-              Vi på Astomed har funnits på marknaden sedan 2005 och var på den tiden ganska ensamma om att erbjuda utrustning till hälso- och skönhetsbranschen. Idag är vi ledande leverantör i Norden och erbjuder professionell estetisk och medicinteknisk utrustning.
-            </p>
-            <p className="text-lg text-slate-600 mb-8 leading-relaxed">
-              Astomed säkerställer alltid att maskinerna vi arbetar med är säkra, effektiva och att det finns forskning som stödjer maskinernas funktion. Vi har kontor i Sverige, Finland och Norge, och i huset har vi en serviceverkstad med tekniker på heltid.
-            </p>
-            <ul className="space-y-4 mb-8">
-              <li className="flex items-center gap-3 text-slate-700 font-medium">
-                <CheckCircle2 className="w-5 h-5 text-[#3a9e9e]" /> Över 15 års erfarenhet i branschen
-              </li>
-              <li className="flex items-center gap-3 text-slate-700 font-medium">
-                <CheckCircle2 className="w-5 h-5 text-[#3a9e9e]" /> Egen serviceverkstad med tekniker
-              </li>
-              <li className="flex items-center gap-3 text-slate-700 font-medium">
-                <CheckCircle2 className="w-5 h-5 text-[#3a9e9e]" /> Komplett utbud för kliniker
-              </li>
-            </ul>
+      {/* Nya föreskrifter från Strålsäkerhetsmyndigheten */}
+      <section id="ssm-lagen" className="py-24 px-6 md:px-12 bg-[#002B3C] text-white">
+        <div className="max-w-4xl mx-auto">
+          <Badge className="bg-red-500 hover:bg-red-600 text-white mb-6 px-3 py-1 border-0">Viktig Laguppdatering</Badge>
+          <h2 className="text-3xl md:text-4xl font-bold mb-6 leading-tight">Nya föreskrifter från Strålsäkerhetsmyndigheten (SSMFS 2026:1)</h2>
+          <p className="text-lg text-slate-300 mb-8 leading-relaxed">
+            Den 4 maj 2026 inför Strålsäkerhetsmyndigheten (SSM) anmälningsplikt för alla verksamheter som utför estetiska behandlingar med laser och IPL. Är din klinik redo?
+          </p>
+          
+          <div className="space-y-6 mb-8">
+            <div className="flex gap-4">
+              <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0 font-bold text-[#3a9e9e]">1</div>
+              <div>
+                <h4 className="text-lg font-semibold mb-2">Startdatum: 4 maj 2026</h4>
+                <p className="text-slate-400">De nya reglerna och anmälningsportalen börjar gälla. Du kan inte anmäla din verksamhet före detta datum.</p>
+              </div>
+            </div>
+            <div className="flex gap-4">
+              <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0 font-bold text-[#3a9e9e]">2</div>
+              <div>
+                <h4 className="text-lg font-semibold mb-2">Övergångsperiod: 4 juli 2026</h4>
+                <p className="text-slate-400">För verksamheter som redan är igång den 4 maj finns en tidsfrist. Dessa ska anmälas senast den 4 juli 2026.</p>
+              </div>
+            </div>
+            <div className="flex gap-4">
+              <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0 font-bold text-[#3a9e9e]">3</div>
+              <div>
+                <h4 className="text-lg font-semibold mb-2">Dokumentation krävs</h4>
+                <p className="text-slate-400">Vid anmälan krävs bevis på rutiner för funktionskontroll och underhåll, metodbeskrivningar, riskbedömningar och kompetensbevis.</p>
+              </div>
+            </div>
           </div>
-          <div className="relative">
-            <img src="https://wp.klinikutrustning.se/wp-content/uploads/2025/12/maskiner-astomed.jpg" alt="Astomed Klinikutrustning" className="rounded-2xl shadow-2xl relative z-10 w-full" />
-            <div className="absolute -inset-4 bg-gradient-to-tr from-[#e8f2f2] to-transparent rounded-3xl -z-10 transform translate-x-4 translate-y-4"></div>
+
+          <div className="bg-[#1b3a3a] p-6 rounded-2xl border border-white/10 shadow-inner">
+            <div className="flex items-start gap-4">
+              <Info className="w-6 h-6 text-[#3a9e9e] shrink-0 mt-1" />
+              <div>
+                <h4 className="font-semibold mb-2">Tips för din dialog med kunder:</h4>
+                <blockquote className="text-slate-300 italic text-sm leading-relaxed">
+                  "Just nu går det inte att anmäla sig – portalen hos SSM öppnar först den 4 maj 2026. Men det du <strong>kan</strong> och <strong>bör</strong> göra nu är att se till att din servicehistorik och dina tekniska protokoll är i ordning. När anmälan väl öppnar kommer de kräva bevis på att maskinerna underhålls korrekt, och där hjälper vi dig så att du är redo direkt."
+                </blockquote>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -285,97 +301,51 @@ export default function PublicServiceRequest() {
         </div>
       </section>
 
-      {/* Nya Lagen (SSM) */}
-      <section id="ssm-lagen" className="py-24 px-6 md:px-12 bg-[#002B3C] text-white">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-16 items-start">
-            <div>
-              <Badge className="bg-red-500 hover:bg-red-600 text-white mb-6 px-3 py-1 border-0">Viktig Laguppdatering</Badge>
-              <h2 className="text-3xl md:text-4xl font-bold mb-6 leading-tight">Nya föreskrifter från Strålsäkerhetsmyndigheten (SSMFS 2026:1)</h2>
-              <p className="text-lg text-slate-300 mb-8 leading-relaxed">
-                Den 4 maj 2026 inför Strålsäkerhetsmyndigheten (SSM) anmälningsplikt för alla verksamheter som utför estetiska behandlingar med laser och IPL. Är din klinik redo?
-              </p>
-              
-              <div className="space-y-6 mb-8">
-                <div className="flex gap-4">
-                  <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0 font-bold text-[#3a9e9e]">1</div>
-                  <div>
-                    <h4 className="text-lg font-semibold mb-2">Startdatum: 4 maj 2026</h4>
-                    <p className="text-slate-400">De nya reglerna och anmälningsportalen börjar gälla. Du kan inte anmäla din verksamhet före detta datum.</p>
-                  </div>
-                </div>
-                <div className="flex gap-4">
-                  <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0 font-bold text-[#3a9e9e]">2</div>
-                  <div>
-                    <h4 className="text-lg font-semibold mb-2">Övergångsperiod: 4 juli 2026</h4>
-                    <p className="text-slate-400">För verksamheter som redan är igång den 4 maj finns en tidsfrist. Dessa ska anmälas senast den 4 juli 2026.</p>
-                  </div>
-                </div>
-                <div className="flex gap-4">
-                  <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0 font-bold text-[#3a9e9e]">3</div>
-                  <div>
-                    <h4 className="text-lg font-semibold mb-2">Dokumentation krävs</h4>
-                    <p className="text-slate-400">Vid anmälan krävs bevis på rutiner för funktionskontroll och underhåll, metodbeskrivningar, riskbedömningar och kompetensbevis.</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-[#1b3a3a] p-6 rounded-2xl border border-white/10 shadow-inner">
-                <div className="flex items-start gap-4">
-                  <Info className="w-6 h-6 text-[#3a9e9e] shrink-0 mt-1" />
-                  <div>
-                    <h4 className="font-semibold mb-2">Tips för din dialog med kunder:</h4>
-                    <blockquote className="text-slate-300 italic text-sm leading-relaxed">
-                      "Just nu går det inte att anmäla sig – portalen hos SSM öppnar först den 4 maj 2026. Men det du <strong>kan</strong> och <strong>bör</strong> göra nu är att se till att din servicehistorik och dina tekniska protokoll är i ordning. När anmälan väl öppnar kommer de kräva bevis på att maskinerna underhålls korrekt, och där hjälper vi dig så att du är redo direkt."
-                    </blockquote>
-                  </div>
-                </div>
-              </div>
-            </div>
+      {/* Vad kommer att krävas i anmälan */}
+      <section id="anmalan-krav" className="py-24 px-6 md:px-12 bg-slate-50">
+        <div className="max-w-4xl mx-auto">
+          <div className="bg-white text-slate-800 rounded-3xl p-8 md:p-12 shadow-sm border border-slate-100">
+            <h3 className="text-3xl font-bold mb-6 text-[#1b3a3a]">Vad kommer att krävas i anmälan?</h3>
+            <p className="text-lg text-slate-600 mb-8">
+              Även om formuläret inte är uppe ännu, vet vi från föreskrifterna vad myndigheten kommer att kräva att klinikerna har på plats. Våra serviceavtal hjälper dig att uppfylla dessa krav automatiskt.
+            </p>
             
-            <div className="bg-white text-slate-800 rounded-3xl p-8 md:p-10 shadow-2xl">
-              <h3 className="text-2xl font-bold mb-6 text-[#1b3a3a]">Vad kommer att krävas i anmälan?</h3>
-              <p className="text-slate-600 mb-8">
-                Även om formuläret inte är uppe ännu, vet vi från föreskrifterna vad myndigheten kommer att kräva att klinikerna har på plats. Våra serviceavtal hjälper dig att uppfylla dessa krav automatiskt.
-              </p>
-              
-              <ul className="space-y-6 mb-8">
-                <li className="flex gap-4">
-                  <CheckCircle2 className="w-6 h-6 text-[#3a9e9e] shrink-0" />
-                  <div>
-                    <h5 className="font-bold text-slate-900">1. Dokumenterade rutiner</h5>
-                    <p className="text-sm text-slate-600 mt-1">Rutiner för funktionskontroll och underhåll av lasermaskiner. <em>(Vårt serviceavtal täcker detta!)</em></p>
-                  </div>
-                </li>
-                <li className="flex gap-4">
-                  <CheckCircle2 className="w-6 h-6 text-[#3a9e9e] shrink-0" />
-                  <div>
-                    <h5 className="font-bold text-slate-900">2. Metodbeskrivningar</h5>
-                    <p className="text-sm text-slate-600 mt-1">Skriftliga instruktioner för hur varje behandling utförs säkert.</p>
-                  </div>
-                </li>
-                <li className="flex gap-4">
-                  <CheckCircle2 className="w-6 h-6 text-[#3a9e9e] shrink-0" />
-                  <div>
-                    <h5 className="font-bold text-slate-900">3. Riskbedömning</h5>
-                    <p className="text-sm text-slate-600 mt-1">En dokumenterad bedömning av riskerna för varje behandlingstyp.</p>
-                  </div>
-                </li>
-                <li className="flex gap-4">
-                  <CheckCircle2 className="w-6 h-6 text-[#3a9e9e] shrink-0" />
-                  <div>
-                    <h5 className="font-bold text-slate-900">4. Kompetensbevis</h5>
-                    <p className="text-sm text-slate-600 mt-1">Dokumentation som styrker att personalen har den kunskap som krävs. <em>(Vi erbjuder utbildningar)</em></p>
-                  </div>
-                </li>
-              </ul>
-
-              <a href="https://www.stralsakerhetsmyndigheten.se/omraden/kroppsbehandlingar/for-dig-som-utfor-kroppsbehandlingar-med-icke-joniserande-stralning/" target="_blank" rel="noopener noreferrer">
-                <Button className="w-full bg-[#fcf8f2] hover:bg-[#f5ebd8] text-[#1b3a3a] border border-[#e8dcc5]">
-                  Läs mer på SSM:s hemsida <ExternalLink className="w-4 h-4 ml-2" />
-                </Button>
-              </a>
+            <div className="grid sm:grid-cols-2 gap-8 mb-10">
+              <div className="flex gap-4">
+                <CheckCircle2 className="w-8 h-8 text-[#3a9e9e] shrink-0" />
+                <div>
+                  <h5 className="font-bold text-lg text-slate-900 mb-2">1. Dokumenterade rutiner</h5>
+                  <p className="text-slate-600">Rutiner för funktionskontroll och underhåll av lasermaskiner. <em>(Vårt serviceavtal täcker detta!)</em></p>
+                </div>
+              </div>
+              <div className="flex gap-4">
+                <CheckCircle2 className="w-8 h-8 text-[#3a9e9e] shrink-0" />
+                <div>
+                  <h5 className="font-bold text-lg text-slate-900 mb-2">2. Metodbeskrivningar</h5>
+                  <p className="text-slate-600">Skriftliga instruktioner för hur varje behandling utförs säkert.</p>
+                </div>
+              </div>
+              <div className="flex gap-4">
+                <CheckCircle2 className="w-8 h-8 text-[#3a9e9e] shrink-0" />
+                <div>
+                  <h5 className="font-bold text-lg text-slate-900 mb-2">3. Riskbedömning</h5>
+                  <p className="text-slate-600">En dokumenterad bedömning av riskerna för varje behandlingstyp.</p>
+                </div>
+              </div>
+              <div className="flex gap-4">
+                <CheckCircle2 className="w-8 h-8 text-[#3a9e9e] shrink-0" />
+                <div>
+                  <h5 className="font-bold text-lg text-slate-900 mb-2">4. Kompetensbevis</h5>
+                  <p className="text-slate-600">Dokumentation som styrker att personalen har den kunskap som krävs. <em>(Vi erbjuder utbildningar)</em></p>
+                </div>
+              </div>
             </div>
+
+            <a href="https://www.stralsakerhetsmyndigheten.se/omraden/kroppsbehandlingar/for-dig-som-utfor-kroppsbehandlingar-med-icke-joniserande-stralning/" target="_blank" rel="noopener noreferrer">
+              <Button size="lg" className="bg-[#1b3a3a] hover:bg-[#122727] text-white">
+                Läs mer på SSM:s hemsida <ExternalLink className="w-4 h-4 ml-2" />
+              </Button>
+            </a>
           </div>
         </div>
       </section>
@@ -395,7 +365,7 @@ export default function PublicServiceRequest() {
             <div>
               <h3 className="text-lg font-bold text-[#1b3a3a] border-b border-slate-100 pb-3 mb-6 flex items-center gap-2">
                 <span className="w-8 h-8 rounded-full bg-[#e8f2f2] text-[#3a9e9e] flex items-center justify-center text-sm">1</span> 
-                Dina företagsuppgifter
+                Dina företaguppgifter
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 <div className="space-y-1.5">
@@ -547,6 +517,37 @@ export default function PublicServiceRequest() {
                 Logga in i kundportalen här
               </button>
             </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Om oss Section */}
+      <section id="om-oss" className="py-20 px-6 md:px-12 max-w-7xl mx-auto bg-white">
+        <div className="grid md:grid-cols-2 gap-16 items-center">
+          <div>
+            <h2 className="text-sm font-bold tracking-widest uppercase text-[#3a9e9e] mb-3">Om Astomed</h2>
+            <h3 className="text-3xl md:text-4xl font-bold text-[#1b3a3a] mb-6">Nordens ledande leverantör sedan 2005</h3>
+            <p className="text-lg text-slate-600 mb-6 leading-relaxed">
+              Vi på Astomed har funnits på marknaden sedan 2005 och var på den tiden ganska ensamma om att erbjuda utrustning till hälso- och skönhetsbranschen. Idag är vi ledande leverantör i Norden och erbjuder professionell estetisk och medicinteknisk utrustning.
+            </p>
+            <p className="text-lg text-slate-600 mb-8 leading-relaxed">
+              Astomed säkerställer alltid att maskinerna vi arbetar med är säkra, effektiva och att det finns forskning som stödjer maskinernas funktion. Vi har kontor i Sverige, Finland och Norge, och i huset har vi en serviceverkstad med tekniker på heltid.
+            </p>
+            <ul className="space-y-4 mb-8">
+              <li className="flex items-center gap-3 text-slate-700 font-medium">
+                <CheckCircle2 className="w-5 h-5 text-[#3a9e9e]" /> Över 15 års erfarenhet i branschen
+              </li>
+              <li className="flex items-center gap-3 text-slate-700 font-medium">
+                <CheckCircle2 className="w-5 h-5 text-[#3a9e9e]" /> Egen serviceverkstad med tekniker
+              </li>
+              <li className="flex items-center gap-3 text-slate-700 font-medium">
+                <CheckCircle2 className="w-5 h-5 text-[#3a9e9e]" /> Komplett utbud för kliniker
+              </li>
+            </ul>
+          </div>
+          <div className="relative">
+            <img src="https://wp.klinikutrustning.se/wp-content/uploads/2025/12/maskiner-astomed.jpg" alt="Astomed Klinikutrustning" className="rounded-2xl shadow-2xl relative z-10 w-full" />
+            <div className="absolute -inset-4 bg-gradient-to-tr from-[#e8f2f2] to-transparent rounded-3xl -z-10 transform translate-x-4 translate-y-4"></div>
           </div>
         </div>
       </section>
