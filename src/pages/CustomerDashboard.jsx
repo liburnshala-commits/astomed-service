@@ -332,10 +332,10 @@ export default function CustomerDashboard() {
         <CardContent className="p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div>
             <h2 className="text-lg font-bold mb-1">Uppgradera din klinik?</h2>
-            <p className="text-sm text-slate-200">Upptäck vårt senaste utbud av maskiner och utrustning på astomed.se</p>
+            <p className="text-sm text-slate-200">Upptäck vårt senaste utbud av maskiner och utrustning på klinikutrustning.se</p>
           </div>
           <Button variant="secondary" asChild className="shrink-0 bg-white text-[#1b3a3a] hover:bg-slate-100">
-            <a href="https://astomed.se/maskiner/" target="_blank" rel="noopener noreferrer">
+            <a href="https://klinikutrustning.se/" target="_blank" rel="noopener noreferrer">
               Visa utbud
             </a>
           </Button>
