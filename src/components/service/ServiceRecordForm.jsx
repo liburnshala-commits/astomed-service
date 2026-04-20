@@ -255,12 +255,12 @@ export default function ServiceRecordForm({ record, machines, customers, presele
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-        <div className="flex items-center justify-between p-6 border-b sticky top-0 bg-white z-10">
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col">
+        <div className="flex items-center justify-between p-6 border-b bg-white z-10 shrink-0 rounded-t-2xl">
           <h2 className="text-lg font-bold text-slate-900">{record ? "Redigera serviceärende" : "Nytt serviceärende"}</h2>
           <Button variant="ghost" size="icon" onClick={onClose}><X className="w-4 h-4" /></Button>
         </div>
-        <div className="p-6 space-y-6">
+        <div className="p-6 space-y-6 overflow-y-auto flex-1">
           {currentContract && currentContract !== "none" && (() => {
             const contractInfo = SERVICE_CONTRACTS.find(c => c.value === currentContract);
             if (!contractInfo) return null;
@@ -473,7 +473,7 @@ export default function ServiceRecordForm({ record, machines, customers, presele
           </div>
         </div>
 
-        <div className="flex justify-end gap-3 p-6 border-t bg-slate-50 rounded-b-2xl">
+        <div className="flex justify-end gap-3 p-6 border-t bg-slate-50 shrink-0 rounded-b-2xl">
           <Button variant="outline" onClick={onClose}>Avbryt</Button>
           {record && calcTotal() > 0 && !record.quote_sent && (
             <Button
