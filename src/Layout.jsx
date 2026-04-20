@@ -96,11 +96,13 @@ export default function Layout({ children, currentPageName }) {
   const [showUserInfo, setShowUserInfo] = useState(false);
   const [showPrivacyModal, setShowPrivacyModal] = useState(false);
   const [newServiceLeadsCount, setNewServiceLeadsCount] = useState(0);
+  const [newServiceRecordsCount, setNewServiceRecordsCount] = useState(0);
   const [logoError, setLogoError] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     let unsubscribe;
+    let unsubscribeRecords;
     base44.auth.me().then(u => {
       setUser(u);
       if (u && !u.privacy_policy_accepted) {
@@ -110,6 +112,10 @@ export default function Layout({ children, currentPageName }) {
         const loadLeads = () => base44.entities.PublicServiceLead.filter({ status: 'new' }).then(res => setNewServiceLeadsCount(res.length));
         loadLeads();
         unsubscribe = base44.entities.PublicServiceLead.subscribe(() => loadLeads());
+
+        const loadRecords = () => base44.entities.ServiceRecord.filter({ status: 'pending' }).then(res => setNewServiceRecordsCount(res.length));
+        loadRecords();
+        unsubscribeRecords = base44.entities.ServiceRecord.subscribe(() => loadRecords());
       }
     }).catch(() => {
       base44.auth.redirectToLogin(window.location.href);
@@ -117,6 +123,7 @@ export default function Layout({ children, currentPageName }) {
 
     return () => {
       if (unsubscribe) unsubscribe();
+      if (unsubscribeRecords) unsubscribeRecords();
     };
   }, []);
 
@@ -203,6 +210,11 @@ export default function Layout({ children, currentPageName }) {
                         {item.page === "PublicServiceLeads" && newServiceLeadsCount > 0 && (
                           <span className="bg-destructive text-destructive-foreground text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[20px] text-center shadow-sm">
                             {newServiceLeadsCount}
+                          </span>
+                        )}
+                        {item.page === "ServiceRecords" && newServiceRecordsCount > 0 && (
+                          <span className="bg-destructive text-destructive-foreground text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[20px] text-center shadow-sm">
+                            {newServiceRecordsCount}
                           </span>
                         )}
                         {active && <ChevronRight className="w-3 h-3 ml-auto" />}

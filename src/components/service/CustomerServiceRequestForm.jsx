@@ -37,18 +37,28 @@ export default function CustomerServiceRequestForm({ machines, customer, onClose
   const handleSubmit = async () => {
     if (!machineId || !description.trim()) return;
     setLoading(true);
-    await base44.entities.ServiceRecord.create({
-      machine_id: machineId,
-      customer_id: customer.id,
-      service_type: "standard",
-      service_date: new Date().toISOString().split("T")[0],
-      description: description.trim(),
-      status: "pending",
-      images: image ? [image] : []
-    });
-    setDone(true);
-    setLoading(false);
-    if (onSaved) onSaved();
+    try {
+      const newRecord = await base44.entities.ServiceRecord.create({
+        machine_id: machineId,
+        customer_id: customer.id,
+        service_type: "standard",
+        service_date: new Date().toISOString().split("T")[0],
+        description: description.trim(),
+        status: "pending",
+        images: image ? [image] : []
+      });
+      
+      // Notifiera admin om det nya ärendet (både e-post och i appen)
+      await base44.functions.invoke('notifyCustomerServiceRecord', { serviceRecordId: newRecord.id });
+      
+      setDone(true);
+      if (onSaved) onSaved();
+    } catch (error) {
+      console.error(error);
+      alert("Något gick fel när ärendet skulle skapas. Försök igen.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return createPortal(
