@@ -71,6 +71,7 @@ export default function Dashboard() {
   };
 
   const activeContractsCount = machines.filter(m => m.service_contract && m.service_contract !== 'none' && (!m.contract_status || m.contract_status === 'active')).length;
+  const signedCustomersCount = new Set(machines.filter(m => m.service_contract && m.service_contract !== 'none' && (!m.contract_status || m.contract_status === 'active')).map(m => m.customer_id)).size;
   const pendingContractsCount = machines.filter(m => m.service_contract && m.service_contract !== 'none' && m.contract_status === 'pending_signature').length;
   const inactiveContractsCount = machines.filter(m => m.service_contract && m.service_contract !== 'none' && m.contract_status === 'inactive').length;
   const rejectedContractsCount = machines.filter(m => m.service_contract && m.service_contract !== 'none' && m.contract_status === 'rejected').length;
@@ -91,7 +92,7 @@ export default function Dashboard() {
         <p className="astomed-subtitle text-sm">Översikt av serviceverksamheten</p>
       </div>
 
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
         <Link to={createPageUrl("Machines")} className="block">
           <Card className="astomed-card cursor-pointer" style={{ background: "#f4f9f9" }}>
             <CardContent className="p-5">
@@ -117,6 +118,21 @@ export default function Dashboard() {
                 </div>
                 <div className="w-10 h-10 astomed-icon-box" style={{ width: 40, height: 40 }}>
                   <Users className="w-5 h-5" style={{ color: "#1b3a3a" }} />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </Link>
+        <Link to={createPageUrl("ServiceContracts") + "?status=active"} className="block">
+          <Card className="astomed-card cursor-pointer" style={{ background: "#f0fdf4" }}>
+            <CardContent className="p-5">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-xs astomed-muted font-medium uppercase tracking-wide">Signerade Kunder</p>
+                  <p className="text-3xl font-bold astomed-title mt-1">{signedCustomersCount}</p>
+                </div>
+                <div className="w-10 h-10 astomed-icon-box" style={{ width: 40, height: 40, background: "#dcfce7" }}>
+                  <CheckCircle className="w-5 h-5" style={{ color: "#166534" }} />
                 </div>
               </div>
             </CardContent>
