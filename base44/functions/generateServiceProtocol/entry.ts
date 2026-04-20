@@ -73,15 +73,9 @@ Deno.serve(async (req) => {
 
         const pdfArrayBuffer = doc.output('arraybuffer');
         const uint8Array = new Uint8Array(pdfArrayBuffer);
-        
-        let binary = '';
-        for (let i = 0; i < uint8Array.byteLength; i++) {
-            binary += String.fromCharCode(uint8Array[i]);
-        }
-        const base64 = btoa(binary);
-        const dataUri = `data:application/pdf;base64,${base64}`;
+        const file = new File([uint8Array], `Serviceprotokoll_${recordId}.pdf`, { type: 'application/pdf' });
 
-        const uploadRes = await base44.integrations.Core.UploadPrivateFile({ file: dataUri });
+        const uploadRes = await base44.integrations.Core.UploadPrivateFile({ file: file });
         
         await base44.entities.ServiceRecord.update(recordId, {
             protocol_uri: uploadRes.file_uri
