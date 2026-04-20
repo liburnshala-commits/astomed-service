@@ -148,16 +148,32 @@ export default function Customers() {
       const token = response.data.token;
       const portalUrl = `${window.location.origin}/customer-portal?token=${token}`;
       
-      try {
-        await navigator.clipboard.writeText(portalUrl);
-      } catch {
-        const textarea = document.createElement("textarea");
-        textarea.value = portalUrl;
-        document.body.appendChild(textarea);
-        textarea.select();
-        document.execCommand("copy");
-        document.body.removeChild(textarea);
-      }
+      const copyToClipboard = async (text) => {
+        try {
+          if (navigator?.clipboard?.writeText) {
+            await navigator.clipboard.writeText(text);
+            return;
+          }
+        } catch (e) {
+          console.warn("Clipboard API failed, falling back to execCommand", e);
+        }
+        
+        const textArea = document.createElement("textarea");
+        textArea.value = text;
+        textArea.style.position = "fixed";
+        textArea.style.left = "-999999px";
+        textArea.style.top = "-999999px";
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        try {
+          document.execCommand("copy");
+        } finally {
+          textArea.remove();
+        }
+      };
+
+      await copyToClipboard(portalUrl);
       
       setCopiedId(customer.id);
       toast.success("Portal-länk kopierad!");
