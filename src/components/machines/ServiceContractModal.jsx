@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { base44 } from "@/api/base44Client";
+import RemoveContractDialog from "@/components/contracts/RemoveContractDialog";
 
 export default function ServiceContractModal({ machine, onSave, onClose }) {
   const [templates, setTemplates] = useState([]);
@@ -25,6 +26,7 @@ export default function ServiceContractModal({ machine, onSave, onClose }) {
   const set = (field, value) => setForm(prev => ({ ...prev, [field]: value }));
 
   const selectedTemplate = templates.find(t => t.id === form.service_agreement_template_id);
+  const [confirmRemove, setConfirmRemove] = useState(false);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
@@ -128,19 +130,7 @@ export default function ServiceContractModal({ machine, onSave, onClose }) {
               type="button"
               variant="outline" 
               className="text-red-600 border-red-200 hover:bg-red-50 hover:text-red-700" 
-              onClick={() => {
-                if(window.confirm("Är du säker på att du vill ta bort serviceavtalet?")) {
-                  onSave({
-                    ...form,
-                    service_contract: "none",
-                    contract_status: "inactive",
-                    contract_start_date: null,
-                    contract_created_date: null,
-                    contract_binding_months: null,
-                    service_agreement_template_id: null
-                  });
-                }
-              }}
+              onClick={() => setConfirmRemove(true)}
             >
               Ta bort avtal
             </Button>
@@ -174,6 +164,16 @@ export default function ServiceContractModal({ machine, onSave, onClose }) {
           </div>
         </div>
       </div>
+      {confirmRemove && (
+        <RemoveContractDialog
+          machine={machine}
+          onClose={() => setConfirmRemove(false)}
+          onConfirm={(updateData) => {
+            setConfirmRemove(false);
+            onSave(updateData);
+          }}
+        />
+      )}
     </div>
   );
 }

@@ -14,6 +14,7 @@ import { FileCheck, Search, Building2, Monitor, Pencil, Clock, Download, Trash2 
 import ServiceContractModal from "@/components/machines/ServiceContractModal";
 import PendingContractApproval from "@/components/contracts/PendingContractApproval";
 import MultiMachineContractModal from "@/components/contracts/MultiMachineContractModal";
+import RemoveContractDialog from "@/components/contracts/RemoveContractDialog";
 
 const bindingLabel = { 6: "6 mån", 12: "12 mån", 24: "24 mån" };
 
@@ -66,21 +67,17 @@ export default function ServiceContracts() {
     setMachines(prev => prev.map(m => m.id === machine.id ? { ...m, contract_status: newStatus } : m));
   };
 
-  const handleRemoveContract = async (machine) => {
-    if (!window.confirm("Är du säker på att du vill ta bort serviceavtalet för denna maskin?")) return;
-    
-    const updateData = {
-      service_contract: "none",
-      service_contract_status: null,
-      contract_start_date: null,
-      contract_created_date: null,
-      contract_binding_months: null,
-      service_agreement_template_id: null,
-      contract_status: "inactive"
-    };
-    
-    await base44.entities.Machine.update(machine.id, updateData);
-    setMachines(prev => prev.map(m => m.id === machine.id ? { ...m, ...updateData } : m));
+  const [machineToRemove, setMachineToRemove] = useState(null);
+
+  const handleRemoveContract = (machine) => {
+    setMachineToRemove(machine);
+  };
+
+  const handleConfirmRemove = async (updateData) => {
+    if (!machineToRemove) return;
+    await base44.entities.Machine.update(machineToRemove.id, updateData);
+    setMachines(prev => prev.map(m => m.id === machineToRemove.id ? { ...m, ...updateData } : m));
+    setMachineToRemove(null);
   };
 
   const handleApproveRequest = async (machine) => {
@@ -497,6 +494,14 @@ export default function ServiceContracts() {
             setShowMultiContract(false);
             base44.entities.Machine.list().then(setMachines);
           }}
+        />
+      )}
+
+      {machineToRemove && (
+        <RemoveContractDialog
+          machine={machineToRemove}
+          onClose={() => setMachineToRemove(null)}
+          onConfirm={handleConfirmRemove}
         />
       )}
 
