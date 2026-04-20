@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { Send, Wrench, ArrowLeft, ExternalLink, AlertCircle, LogIn } from "lucide-react";
+import { Send, Wrench, ArrowLeft, ExternalLink, AlertCircle, LogIn, CheckCircle2, Shield, Settings, Info, CalendarClock, BookOpen, AlertTriangle, ChevronDown, Monitor } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -113,291 +114,460 @@ export default function PublicServiceRequest() {
 
   if (success) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-6" style={{ background: "#002B3C" }}>
-        <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-10 text-center">
-          <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-5" style={{ background: "#e8f2f2" }}>
-            <Send className="w-8 h-8" style={{ color: "#3a9e9e" }} />
+      <div className="min-h-screen flex flex-col bg-slate-50">
+        <header className="bg-[#1b3a3a] text-white py-4 px-6 md:px-12 flex justify-between items-center shadow-md">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-white rounded-md flex items-center justify-center overflow-hidden">
+               <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69a9446fcb1cd4ab529479ba/bc2852de1_channels4_profile-2.jpg" alt="Astomed" className="w-full h-full object-cover" />
+            </div>
+            <span className="font-bold text-xl tracking-wider">ASTOMED</span>
           </div>
-          <h2 className="text-2xl font-bold mb-3" style={{ color: "#1b3a3a" }}>Förfrågan skickad!</h2>
-          <p className="text-gray-500">Tack! Vi har tagit emot din serviceförfrågan och återkommer till dig så snart som möjligt.</p>
+        </header>
+        <div className="flex-1 flex items-center justify-center p-6">
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-10 text-center border-t-4 border-[#3a9e9e]">
+            <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-5 bg-[#e8f2f2]">
+              <CheckCircle2 className="w-8 h-8 text-[#3a9e9e]" />
+            </div>
+            <h2 className="text-2xl font-bold mb-3 text-[#1b3a3a]">Förfrågan skickad!</h2>
+            <p className="text-gray-500 mb-6">Tack! Vi har tagit emot din serviceförfrågan och återkommer till dig så snart som möjligt för att lägga upp en smidig plan för din klinik.</p>
+            <Button onClick={() => setSuccess(false)} variant="outline" className="w-full">Gå tillbaka</Button>
+          </div>
         </div>
-      </div>);
-
+      </div>
+    );
   }
 
   return (
-    <div className="min-h-screen py-10 px-4" style={{ background: "#002B3C" }}>
-      <div className="max-w-2xl mx-auto">
-        
-        <div className="flex justify-between items-start mb-8">
-          <a href="https://astomed.se/service/" className="inline-flex items-center text-sm text-slate-300 hover:text-white transition-colors mt-2">
-            <ArrowLeft className="w-4 h-4 mr-2" /> Tillbaka till astomed.se/service
-          </a>
-          
-          <Button 
-            onClick={() => base44.auth.redirectToLogin()} 
-            className="bg-[#3a9e9e] hover:bg-[#2c7a7a] text-white border-0 shadow-md"
-          >
-            <LogIn className="w-4 h-4 mr-2" /> Logga in
-          </Button>
-        </div>
-
-        {/* Header */}
-        <div className="text-center mb-10">
-          <div className="w-20 h-20 rounded-xl overflow-hidden mx-auto mb-6 shadow-lg border-2 border-white/10" style={{ background: "#1b3a3a" }}>
-            <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69a9446fcb1cd4ab529479ba/bc2852de1_channels4_profile-2.jpg" alt="Astomed" className="w-full h-full object-cover" />
+    <div className="min-h-screen bg-slate-50 font-sans text-slate-800">
+      {/* Navbar */}
+      <header className="bg-[#1b3a3a] text-white py-4 px-6 md:px-12 flex justify-between items-center sticky top-0 z-50 shadow-md">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 bg-white rounded-md flex items-center justify-center overflow-hidden">
+             <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69a9446fcb1cd4ab529479ba/bc2852de1_channels4_profile-2.jpg" alt="Astomed" className="w-full h-full object-cover" />
           </div>
-          <h1 className="text-3xl font-bold mb-4" style={{ color: "#ffffff" }}>Astomed Serviceavtal - kostnadsfri konsultation</h1>
-          <p className="text-lg text-slate-200 mb-8">Fyll i formuläret nedan så kontaktar vi dig för kostnadsfri konsultation av serviceavtal för din/dina maskiner.</p>
+          <span className="font-bold text-xl tracking-wider">ASTOMED</span>
         </div>
-
-        <div className="mb-10 space-y-8">
-          {/* Info Grid */}
-          <div className="grid md:grid-cols-2 gap-6">
-            
-            {/* Card 1 */}
-            <div className="p-8 rounded-2xl bg-[#fcf8f2] border-l-4 border-[#3a9e9e] shadow-sm hover:shadow-md transition-shadow flex flex-col">
-              <h3 className="text-xl font-bold mb-3 text-[#1b3a3a]">1. Anmälningsplikt & Myndighetskrav from 4 maj 2026.</h3>
-              <p className="text-[#1b3a3a]/80 mb-4 leading-relaxed">Från och med 4 maj inför Strålsäkerhetsmyndigheten anmälningsplikt för alla laserverksamheter. Med Astomeds serviceavtal är din klinik 'inspektionsredo' från dag ett – vi säkrar din dokumentation så att du kan fokusera på dina kunder.
-
-              </p>
-              <p className="text-[#1b3a3a]/80 font-medium italic flex-grow">
-                "Myndighetskraven skärps: Snart är skriftliga rutiner och teknisk historik ett krav för att få driva klinik. Vi digitaliserar din egenkontroll och ser till att du alltid ligger steget före lagen."
-              </p>
-              <div className="mt-6 pt-4 border-t border-[#3a9e9e]/20">
-                <a href="https://www.stralsakerhetsmyndigheten.se/omraden/laser/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center text-sm font-semibold text-[#002B3C] hover:text-[#002B3C]/80 transition-colors">
-                  Läs mer om regelverket för laser <ExternalLink className="w-4 h-4 ml-1.5" />
-                </a>
-              </div>
-            </div>
-
-            {/* Card 2 */}
-            <div className="p-8 rounded-2xl bg-[#fcf8f2] border-l-4 border-[#3a9e9e] shadow-sm hover:shadow-md transition-shadow">
-              <h3 className="text-xl font-bold mb-3 text-[#1b3a3a]">2. Krav på Lokalen & Säkerhetsmiljö</h3>
-              <p className="text-[#1b3a3a]/80 mb-4 leading-relaxed">
-                En säker behandling kräver en säker miljö. Vi hjälper dig att säkerställa att din lokal uppfyller kraven för lasersäkerhet, från korrekta varningsskyltar till fungerande interlock-system och dörrspärrar.
-              </p>
-              <p className="text-[#1b3a3a]/80 font-medium italic">
-                "Strålsäkerhet handlar om mer än bara maskinen. Vi besiktigar din behandlingsmiljö vid varje servicebesök för att garantera att både personal och kunder vistas i en godkänd och riskfri lokal."
-              </p>
-            </div>
-
-            {/* Card 3 */}
-            <div className="p-8 rounded-2xl bg-[#fcf8f2] border-l-4 border-[#3a9e9e] shadow-sm hover:shadow-md transition-shadow flex flex-col">
-              <h3 className="text-xl font-bold mb-3 text-[#1b3a3a]">3. Regelbunden Service & Tekniskt Underhåll</h3>
-              <p className="text-[#1b3a3a]/80 mb-4 leading-relaxed">Strålskyddslagen är tydlig: fungerande skyddsfunktioner är ditt ansvar som ägare. Genom årlig service garanterar vi att laserns effekt och säkerhetsspärrar levererar exakt det de lovar.
-
-              </p>
-              <p className="text-[#1b3a3a]/80 font-medium italic flex-grow">
-                "Slumpmässig effekt eller instabil stråle är den största orsaken till brännskador. Vår precisionskalibrering minimerar riskerna och maximerar dina behandlingsresultat – dokumenterat och klart."
-              </p>
-              <div className="mt-6 pt-4 border-t border-[#3a9e9e]/20">
-                <a href="https://www.stralsakerhetsmyndigheten.se/publikationer/foreskrifter/ssmfs-2014/ssmfs-20144/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center text-sm font-semibold text-[#002B3C] hover:text-[#002B3C]/80 transition-colors">
-                  Läs föreskriften SSMFS 2014:4 (kap 3-4) <ExternalLink className="w-4 h-4 ml-1.5" />
-                </a>
-              </div>
-            </div>
-
-            {/* Card 4 */}
-            <div className="p-8 rounded-2xl bg-[#fcf8f2] border-l-4 border-[#3a9e9e] shadow-sm hover:shadow-md transition-shadow">
-              <h3 className="text-xl font-bold mb-3 text-[#1b3a3a]">4.  Fackmässig Service & CE-märkning (MDR) </h3>
-              <p className="text-[#1b3a3a]/80 mb-4 leading-relaxed">Visste du att din CE-märkning kan upphöra om någon som inte har kunskap öppnar maskinen? Som din servicepartner skyddar vi din investering, din försäkring och din juridiska trygghet.
-
-              </p>
-              <p className="text-[#1b3a3a]/80 font-medium italic">"Det finns ingen genväg till säkerhet. Genom att anlita Astomeds erfarna tekniker säkerställer du att endast originaldelar och kalibrerad mätutrustning används – ett krav för att uppfylla kraven på medicintekniska produkter (MDR)."
-
-              </p>
-            </div>
-          </div>
-
-          {/* Included Services List */}
-          <div className="p-8 md:p-12 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20 text-white">
-            <h2 className="text-3xl font-light mb-2">Serviceavtal</h2>
-            <p className="font-bold mb-8 text-lg text-slate-300">Detta ingår när du väljer Astomeds serviceavtal:</p>
-            
-            <div className="grid md:grid-cols-2 gap-x-12 gap-y-4 text-base leading-relaxed text-slate-200">
-              <ul className="space-y-3 list-disc pl-5 marker:text-[#3a9e9e]">
-                <li>Fri teknisk rådgivning via telefon och fjärrsupport under avtalstiden.</li>
-                <li>Årlig service på 12 månader.</li>
-                <li>Prestandakontroll. Mätning av uteffekt och kalibrering för att minimera risk för skador.</li>
-                <li>Rådgivning kring lokalens lasersäkerhet.</li>
-                <li>Rabatter och förmåner: Du får 20% rabatt på resekostnader och övriga maskinreparationer.</li>
-                <li>Byte av pneumatisk avjoniseringsfilter A och B.</li>
-                <li>Byte av snabbkopplingar till filter.</li>
-                <li>Läckagekontroll.</li>
-              </ul>
-              <ul className="space-y-3 list-disc pl-5 marker:text-[#3a9e9e]">
-                <li>Kontroll av luftintagsfilter.</li>
-                <li>Lasereffektmätning.</li>
-                <li>Rengöring av värmeväxlare.</li>
-                <li>Rengörning av Switchade nätaggregat.</li>
-                <li>Kontroll av nödstopp och interlock.</li>
-                <li>Upprättande av serviceprotokoll i webportal.</li>
-                <li>Serviceuppmärkning av utrustning.</li>
-                <li>Kontroll av säkerhetsrem.</li>
-                <li>Påfyllning av destillerat avjoniserad kylvätska.</li>
-                <li>Spolning av pneumatisk krets.</li>
-              </ul>
-            </div>
-          </div>
+        <div className="hidden md:flex items-center gap-8 text-sm font-medium">
+           <a href="#om-oss" className="hover:text-[#3a9e9e] transition-colors">Om oss</a>
+           <a href="#tjanster" className="hover:text-[#3a9e9e] transition-colors">Våra tjänster</a>
+           <a href="#ssm-lagen" className="hover:text-[#3a9e9e] transition-colors">Nya SSM-lagen</a>
+           <a href="#anmalan" className="hover:text-[#3a9e9e] transition-colors">Anmälan</a>
         </div>
+        <Button onClick={() => base44.auth.redirectToLogin()} variant="outline" className="text-[#1b3a3a] bg-white hover:bg-slate-100 border-0 hidden sm:flex">
+          <LogIn className="w-4 h-4 mr-2" /> Kundportal
+        </Button>
+      </header>
 
-        <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-lg p-8 space-y-6">
-          {/* Kunduppgifter */}
+      {/* Hero Section */}
+      <section className="relative bg-[#002B3C] text-white py-24 px-6 md:px-12 overflow-hidden">
+        <div className="absolute inset-0 opacity-20 bg-[url('https://wp.klinikutrustning.se/wp-content/uploads/2024/04/full-image-desktop-1024x465.jpg')] bg-cover bg-center"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-[#002B3C] 60% to-transparent hidden md:block"></div>
+        <div className="relative max-w-7xl mx-auto z-10 grid md:grid-cols-2 gap-12 items-center">
           <div>
-            <h2 className="text-sm font-semibold uppercase tracking-wide mb-4" style={{ color: "#254f4f" }}>Dina uppgifter</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="space-y-1">
-                <Label>Företagsnamn *</Label>
-                <Input value={form.company_name} onChange={(e) => set("company_name", e.target.value)} placeholder="Ditt företag AB" required />
-              </div>
-              <div className="space-y-1">
-                <Label>Organisationsnummer</Label>
-                <Input value={form.org_number} onChange={(e) => set("org_number", e.target.value)} placeholder="XXXXXX-XXXX" />
-                {orgNumberWarning && (
-                  <p className="text-amber-600 text-xs font-medium flex items-start gap-1 pt-1">
-                    <AlertCircle className="w-3.5 h-3.5 shrink-0 mt-0.5" />
-                    <span>{orgNumberWarning}</span>
-                  </p>
-                )}
-              </div>
-              <div className="space-y-1">
-                <Label>Kontaktperson *</Label>
-                <Input value={form.contact_person} onChange={(e) => set("contact_person", e.target.value)} placeholder="För- och efternamn" required />
-              </div>
-              <div className="space-y-1">
-                <Label>Telefon *</Label>
-                <Input value={form.phone} onChange={(e) => set("phone", e.target.value)} placeholder="07XXXXXXXX" required />
-              </div>
-              <div className="sm:col-span-2 space-y-1">
-                <Label>E-post *</Label>
-                <Input type="email" value={form.email} onChange={(e) => set("email", e.target.value)} placeholder="din@email.se" required />
-              </div>
+            <Badge className="bg-[#3a9e9e] hover:bg-[#2c7a7a] text-white mb-6 border-0">Service & Trygghet</Badge>
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6">
+              Säkra din klinik inför <span className="text-[#3a9e9e]">framtiden</span>
+            </h1>
+            <p className="text-lg md:text-xl text-slate-300 mb-8 leading-relaxed max-w-xl">
+              Med Astomeds månatliga serviceavtal får du en smidig, flexibel lösning som säkrar din servicehistorik, eliminerar oväntade utgifter och gör din klinik redo för de nya lagkraven 2026.
+            </p>
+            <div className="flex flex-wrap gap-4">
+              <a href="#anmalan">
+                <Button size="lg" className="bg-[#3a9e9e] hover:bg-[#2c7a7a] text-white border-0 shadow-lg text-base h-14 px-8">
+                  Teckna Serviceavtal
+                </Button>
+              </a>
+              <a href="#ssm-lagen">
+                <Button size="lg" variant="outline" className="text-white border-white/30 hover:bg-white/10 hover:text-white h-14 px-8">
+                  Läs om nya lagen
+                </Button>
+              </a>
             </div>
           </div>
-
-          <hr className="border-gray-100" />
-
-          {/* Maskinuppgifter */}
-          <div>
-            <h2 className="text-sm font-semibold uppercase tracking-wide mb-4" style={{ color: "#254f4f" }}>Maskinuppgifter</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="space-y-1">
-                <Label>Maskintyp *</Label>
-                <Select value={form.machine_name} onValueChange={(v) => set("machine_name", v)} required>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Välj maskintyp" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {Object.keys(machineServiceDetails).map((machine) =>
-                      <SelectItem key={machine} value={machine}>{machine}</SelectItem>
-                    )}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="space-y-1">
-                <Label>Serienummer (kan skickas in senare)</Label>
-                <Input value={form.serial_number || ""} onChange={(e) => set("serial_number", e.target.value)} placeholder="Ange serienummer" />
-              </div>
-              
-              {form.machine_name === "Annan" &&
-              <div className="sm:col-span-2 space-y-1">
-                  <Label>Maskinnamn *</Label>
-                  <Input value={form.other_machine_name || ""} onChange={(e) => set("other_machine_name", e.target.value)} placeholder="Ange maskinens namn" required />
+          <div className="hidden md:block">
+            {/* Visual element */}
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-4">
+                <div className="bg-white/10 backdrop-blur-md p-6 rounded-2xl border border-white/20 shadow-xl">
+                  <Shield className="w-10 h-10 text-[#3a9e9e] mb-4" />
+                  <h3 className="text-xl font-semibold mb-2">SSM Redo</h3>
+                  <p className="text-sm text-slate-300">Dokumenterad historik och rutiner på plats innan lagen träder i kraft.</p>
                 </div>
-              }
+                <div className="bg-white/10 backdrop-blur-md p-6 rounded-2xl border border-white/20 shadow-xl">
+                  <CalendarClock className="w-10 h-10 text-[#3a9e9e] mb-4" />
+                  <h3 className="text-xl font-semibold mb-2">Inget glapp</h3>
+                  <p className="text-sm text-slate-300">Regelbunden service enligt tillverkarens krav utan att du behöver tänka på det.</p>
+                </div>
+              </div>
+              <div className="space-y-4 pt-12">
+                <div className="bg-white/10 backdrop-blur-md p-6 rounded-2xl border border-white/20 shadow-xl">
+                  <Wrench className="w-10 h-10 text-[#3a9e9e] mb-4" />
+                  <h3 className="text-xl font-semibold mb-2">Fast månadskostnad</h3>
+                  <p className="text-sm text-slate-300">Slipp stora klumpsummor. Dela upp kostnaden för enklare budgetering.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
-              {form.machine_name && machineServiceDetails[form.machine_name] &&
-              <div className="sm:col-span-2 p-4 bg-blue-50 rounded-lg border border-blue-200">
-                  <h3 className="font-semibold text-blue-900 mb-2">
-                    {machineServiceDetails[form.machine_name].title}
-                  </h3>
-                  <ul className="space-y-2 text-sm text-blue-800">
-                    {machineServiceDetails[form.machine_name].details.map((detail, idx) =>
-                  <li key={idx} className="flex gap-2">
-                       <span className="text-blue-600">•</span>
-                       <span dangerouslySetInnerHTML={{ __html: detail }} />
-                     </li>
+      {/* Om oss Section */}
+      <section id="om-oss" className="py-20 px-6 md:px-12 max-w-7xl mx-auto">
+        <div className="grid md:grid-cols-2 gap-16 items-center">
+          <div>
+            <h2 className="text-sm font-bold tracking-widest uppercase text-[#3a9e9e] mb-3">Om Astomed</h2>
+            <h3 className="text-3xl md:text-4xl font-bold text-[#1b3a3a] mb-6">Nordens ledande leverantör sedan 2005</h3>
+            <p className="text-lg text-slate-600 mb-6 leading-relaxed">
+              Vi på Astomed har funnits på marknaden sedan 2005 och var på den tiden ganska ensamma om att erbjuda utrustning till hälso- och skönhetsbranschen. Idag är vi ledande leverantör i Norden och erbjuder professionell estetisk och medicinteknisk utrustning.
+            </p>
+            <p className="text-lg text-slate-600 mb-8 leading-relaxed">
+              Astomed säkerställer alltid att maskinerna vi arbetar med är säkra, effektiva och att det finns forskning som stödjer maskinernas funktion. Vi har kontor i Sverige, Finland och Norge, och i huset har vi en serviceverkstad med tekniker på heltid.
+            </p>
+            <ul className="space-y-4 mb-8">
+              <li className="flex items-center gap-3 text-slate-700 font-medium">
+                <CheckCircle2 className="w-5 h-5 text-[#3a9e9e]" /> Över 15 års erfarenhet i branschen
+              </li>
+              <li className="flex items-center gap-3 text-slate-700 font-medium">
+                <CheckCircle2 className="w-5 h-5 text-[#3a9e9e]" /> Egen serviceverkstad med tekniker
+              </li>
+              <li className="flex items-center gap-3 text-slate-700 font-medium">
+                <CheckCircle2 className="w-5 h-5 text-[#3a9e9e]" /> Komplett utbud för kliniker
+              </li>
+            </ul>
+          </div>
+          <div className="relative">
+            <img src="https://wp.klinikutrustning.se/wp-content/uploads/2025/12/maskiner-astomed.jpg" alt="Astomed Klinikutrustning" className="rounded-2xl shadow-2xl relative z-10 w-full" />
+            <div className="absolute -inset-4 bg-gradient-to-tr from-[#e8f2f2] to-transparent rounded-3xl -z-10 transform translate-x-4 translate-y-4"></div>
+          </div>
+        </div>
+      </section>
+
+      {/* Våra tjänster / Serviceavtal */}
+      <section id="tjanster" className="py-24 px-6 md:px-12 bg-white">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center max-w-3xl mx-auto mb-16">
+            <h2 className="text-sm font-bold tracking-widest uppercase text-[#3a9e9e] mb-3">Våra tjänster</h2>
+            <h3 className="text-3xl md:text-4xl font-bold text-[#1b3a3a] mb-6">Ett smartare sätt att driva klinik</h3>
+            <p className="text-lg text-slate-600 leading-relaxed">
+              Vi erbjuder allt du behöver till din klinik – från de senaste maskinerna på marknaden till produkter, utbildning och förstklassig service. Vårt månatliga serviceavtal är skapat för att ge dig trygghet och flexibilitet.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8 mb-16">
+            <div className="bg-slate-50 rounded-2xl p-8 border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+              <div className="w-14 h-14 bg-[#e8f2f2] rounded-xl flex items-center justify-center mb-6">
+                <Settings className="w-7 h-7 text-[#3a9e9e]" />
+              </div>
+              <h4 className="text-xl font-bold text-[#1b3a3a] mb-4">Smidigt Serviceavtal</h4>
+              <p className="text-slate-600 leading-relaxed">
+                Dela upp kostnaden månadsvis. Få förtur till service, regelbundet underhåll, kalibrering och bibehållen servicehistorik utan att det svider i kassan.
+              </p>
+            </div>
+            <div className="bg-slate-50 rounded-2xl p-8 border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+              <div className="w-14 h-14 bg-[#e8f2f2] rounded-xl flex items-center justify-center mb-6">
+                <Monitor className="w-7 h-7 text-[#3a9e9e]" />
+              </div>
+              <h4 className="text-xl font-bold text-[#1b3a3a] mb-4">Utrustning & Produkter</h4>
+              <p className="text-slate-600 leading-relaxed">
+                Vi har utrustningen för alla typer av behandlingar samt förbrukningsmaterial, hudvård, fillers och klinikmöbler på astomedshop.se.
+              </p>
+            </div>
+            <div className="bg-slate-50 rounded-2xl p-8 border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+              <div className="w-14 h-14 bg-[#e8f2f2] rounded-xl flex items-center justify-center mb-6">
+                <BookOpen className="w-7 h-7 text-[#3a9e9e]" />
+              </div>
+              <h4 className="text-xl font-bold text-[#1b3a3a] mb-4">Klinikutbildning</h4>
+              <p className="text-slate-600 leading-relaxed">
+                Kunskap är nyckeln till framgång. Vi erbjuder omfattande utbildningar för att du och din personal ska känna er trygga i ert arbete.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Nya Lagen (SSM) */}
+      <section id="ssm-lagen" className="py-24 px-6 md:px-12 bg-[#002B3C] text-white">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid lg:grid-cols-2 gap-16 items-start">
+            <div>
+              <Badge className="bg-red-500 hover:bg-red-600 text-white mb-6 px-3 py-1 border-0">Viktig Laguppdatering</Badge>
+              <h2 className="text-3xl md:text-4xl font-bold mb-6 leading-tight">Nya föreskrifter från Strålsäkerhetsmyndigheten (SSMFS 2026:1)</h2>
+              <p className="text-lg text-slate-300 mb-8 leading-relaxed">
+                Den 4 maj 2026 inför Strålsäkerhetsmyndigheten (SSM) anmälningsplikt för alla verksamheter som utför estetiska behandlingar med laser och IPL. Är din klinik redo?
+              </p>
+              
+              <div className="space-y-6 mb-8">
+                <div className="flex gap-4">
+                  <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0 font-bold text-[#3a9e9e]">1</div>
+                  <div>
+                    <h4 className="text-lg font-semibold mb-2">Startdatum: 4 maj 2026</h4>
+                    <p className="text-slate-400">De nya reglerna och anmälningsportalen börjar gälla. Du kan inte anmäla din verksamhet före detta datum.</p>
+                  </div>
+                </div>
+                <div className="flex gap-4">
+                  <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0 font-bold text-[#3a9e9e]">2</div>
+                  <div>
+                    <h4 className="text-lg font-semibold mb-2">Övergångsperiod: 4 juli 2026</h4>
+                    <p className="text-slate-400">För verksamheter som redan är igång den 4 maj finns en tidsfrist. Dessa ska anmälas senast den 4 juli 2026.</p>
+                  </div>
+                </div>
+                <div className="flex gap-4">
+                  <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0 font-bold text-[#3a9e9e]">3</div>
+                  <div>
+                    <h4 className="text-lg font-semibold mb-2">Dokumentation krävs</h4>
+                    <p className="text-slate-400">Vid anmälan krävs bevis på rutiner för funktionskontroll och underhåll, metodbeskrivningar, riskbedömningar och kompetensbevis.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-[#1b3a3a] p-6 rounded-2xl border border-white/10 shadow-inner">
+                <div className="flex items-start gap-4">
+                  <Info className="w-6 h-6 text-[#3a9e9e] shrink-0 mt-1" />
+                  <div>
+                    <h4 className="font-semibold mb-2">Tips för din dialog med kunder:</h4>
+                    <blockquote className="text-slate-300 italic text-sm leading-relaxed">
+                      "Just nu går det inte att anmäla sig – portalen hos SSM öppnar först den 4 maj 2026. Men det du <strong>kan</strong> och <strong>bör</strong> göra nu är att se till att din servicehistorik och dina tekniska protokoll är i ordning. När anmälan väl öppnar kommer de kräva bevis på att maskinerna underhålls korrekt, och där hjälper vi dig så att du är redo direkt."
+                    </blockquote>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div className="bg-white text-slate-800 rounded-3xl p-8 md:p-10 shadow-2xl">
+              <h3 className="text-2xl font-bold mb-6 text-[#1b3a3a]">Vad kommer att krävas i anmälan?</h3>
+              <p className="text-slate-600 mb-8">
+                Även om formuläret inte är uppe ännu, vet vi från föreskrifterna vad myndigheten kommer att kräva att klinikerna har på plats. Våra serviceavtal hjälper dig att uppfylla dessa krav automatiskt.
+              </p>
+              
+              <ul className="space-y-6 mb-8">
+                <li className="flex gap-4">
+                  <CheckCircle2 className="w-6 h-6 text-[#3a9e9e] shrink-0" />
+                  <div>
+                    <h5 className="font-bold text-slate-900">1. Dokumenterade rutiner</h5>
+                    <p className="text-sm text-slate-600 mt-1">Rutiner för funktionskontroll och underhåll av lasermaskiner. <em>(Vårt serviceavtal täcker detta!)</em></p>
+                  </div>
+                </li>
+                <li className="flex gap-4">
+                  <CheckCircle2 className="w-6 h-6 text-[#3a9e9e] shrink-0" />
+                  <div>
+                    <h5 className="font-bold text-slate-900">2. Metodbeskrivningar</h5>
+                    <p className="text-sm text-slate-600 mt-1">Skriftliga instruktioner för hur varje behandling utförs säkert.</p>
+                  </div>
+                </li>
+                <li className="flex gap-4">
+                  <CheckCircle2 className="w-6 h-6 text-[#3a9e9e] shrink-0" />
+                  <div>
+                    <h5 className="font-bold text-slate-900">3. Riskbedömning</h5>
+                    <p className="text-sm text-slate-600 mt-1">En dokumenterad bedömning av riskerna för varje behandlingstyp.</p>
+                  </div>
+                </li>
+                <li className="flex gap-4">
+                  <CheckCircle2 className="w-6 h-6 text-[#3a9e9e] shrink-0" />
+                  <div>
+                    <h5 className="font-bold text-slate-900">4. Kompetensbevis</h5>
+                    <p className="text-sm text-slate-600 mt-1">Dokumentation som styrker att personalen har den kunskap som krävs. <em>(Vi erbjuder utbildningar)</em></p>
+                  </div>
+                </li>
+              </ul>
+
+              <a href="https://www.stralsakerhetsmyndigheten.se/omraden/kroppsbehandlingar/for-dig-som-utfor-kroppsbehandlingar-med-icke-joniserande-stralning/" target="_blank" rel="noopener noreferrer">
+                <Button className="w-full bg-[#fcf8f2] hover:bg-[#f5ebd8] text-[#1b3a3a] border border-[#e8dcc5]">
+                  Läs mer på SSM:s hemsida <ExternalLink className="w-4 h-4 ml-2" />
+                </Button>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Form Section */}
+      <section id="anmalan" className="py-24 px-4 md:px-12 bg-[#fcf8f2] relative">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-[#1b3a3a] mb-4">Säkra din klinik redan idag</h2>
+            <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+              Fyll i formuläret nedan för en kostnadsfri konsultation om hur våra flexibla serviceavtal kan skydda din investering och göra dig redo för lagen.
+            </p>
+          </div>
+
+          <form onSubmit={handleSubmit} className="bg-white rounded-3xl shadow-xl p-8 md:p-12 space-y-8 border border-slate-100">
+            {/* Kunduppgifter */}
+            <div>
+              <h3 className="text-lg font-bold text-[#1b3a3a] border-b border-slate-100 pb-3 mb-6 flex items-center gap-2">
+                <span className="w-8 h-8 rounded-full bg-[#e8f2f2] text-[#3a9e9e] flex items-center justify-center text-sm">1</span> 
+                Dina företagsuppgifter
+              </h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <div className="space-y-1.5">
+                  <Label className="text-slate-700">Företagsnamn *</Label>
+                  <Input className="h-11 bg-slate-50/50" value={form.company_name} onChange={(e) => set("company_name", e.target.value)} placeholder="Ditt företag AB" required />
+                </div>
+                <div className="space-y-1.5">
+                  <Label className="text-slate-700">Organisationsnummer</Label>
+                  <Input className="h-11 bg-slate-50/50" value={form.org_number} onChange={(e) => set("org_number", e.target.value)} placeholder="XXXXXX-XXXX" />
+                  {orgNumberWarning && (
+                    <p className="text-amber-600 text-xs font-medium flex items-start gap-1 pt-1">
+                      <AlertCircle className="w-3.5 h-3.5 shrink-0 mt-0.5" />
+                      <span>{orgNumberWarning}</span>
+                    </p>
                   )}
-                  </ul>
-                  {machineServiceDetails[form.machine_name].additionalInfo &&
-                <div className="mt-3 pt-3 border-t border-blue-300">
-                      {(() => {
-                        const info = machineServiceDetails[form.machine_name].additionalInfo;
-                        const match = info.match(/(\d+)/);
-                        const price = match ? parseInt(match[0], 10) : null;
-                        
-                        return (
-                          <>
-                            <p className="text-sm font-semibold text-blue-900">
-                              {info}
-                            </p>
-                            {price && (
-                              <div className="mt-3 pt-3 border-t border-blue-200/60 text-right opacity-90">
-                                <p className="text-[11px] text-blue-800/80 mb-0.5">Jämförspris vid Engångsservice (utan avtal):</p>
-                                <p className="text-sm font-medium text-blue-800/90 mb-1">{Math.round(price * 12 * 1.30).toLocaleString('sv-SE')} kr / gång</p>
-                                <p className="text-[10px] text-blue-700/80 mt-1 italic">* Inkluderar ej 20% rabatt på reservdelar, arbetskostnader och resor.</p>
-                                <p className="text-[10px] text-blue-700/80 mt-0.5 italic">* Engångsservice kan ej prioriteras på samma sätt som avtalskunder då vi har över 1200 maskinkunder i Sverige.</p>
-                              </div>
-                            )}
-                          </>
-                        );
-                      })()}
-                    </div>
-                }
                 </div>
-              }
-
+                <div className="space-y-1.5">
+                  <Label className="text-slate-700">Kontaktperson *</Label>
+                  <Input className="h-11 bg-slate-50/50" value={form.contact_person} onChange={(e) => set("contact_person", e.target.value)} placeholder="För- och efternamn" required />
+                </div>
+                <div className="space-y-1.5">
+                  <Label className="text-slate-700">Telefon *</Label>
+                  <Input className="h-11 bg-slate-50/50" value={form.phone} onChange={(e) => set("phone", e.target.value)} placeholder="07XXXXXXXX" required />
+                </div>
+                <div className="sm:col-span-2 space-y-1.5">
+                  <Label className="text-slate-700">E-post *</Label>
+                  <Input className="h-11 bg-slate-50/50" type="email" value={form.email} onChange={(e) => set("email", e.target.value)} placeholder="din@email.se" required />
+                </div>
+              </div>
             </div>
+
+            {/* Maskinuppgifter */}
+            <div>
+              <h3 className="text-lg font-bold text-[#1b3a3a] border-b border-slate-100 pb-3 mb-6 flex items-center gap-2">
+                <span className="w-8 h-8 rounded-full bg-[#e8f2f2] text-[#3a9e9e] flex items-center justify-center text-sm">2</span> 
+                Maskinuppgifter
+              </h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <div className="space-y-1.5">
+                  <Label className="text-slate-700">Maskintyp *</Label>
+                  <Select value={form.machine_name} onValueChange={(v) => set("machine_name", v)} required>
+                    <SelectTrigger className="h-11 bg-slate-50/50">
+                      <SelectValue placeholder="Välj maskintyp" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {Object.keys(machineServiceDetails).map((machine) =>
+                        <SelectItem key={machine} value={machine}>{machine}</SelectItem>
+                      )}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="space-y-1.5">
+                  <Label className="text-slate-700">Serienummer (frivilligt)</Label>
+                  <Input className="h-11 bg-slate-50/50" value={form.serial_number || ""} onChange={(e) => set("serial_number", e.target.value)} placeholder="Kan fyllas i senare" />
+                </div>
+                
+                {form.machine_name === "Annan" &&
+                  <div className="sm:col-span-2 space-y-1.5">
+                    <Label className="text-slate-700">Maskinnamn *</Label>
+                    <Input className="h-11 bg-slate-50/50" value={form.other_machine_name || ""} onChange={(e) => set("other_machine_name", e.target.value)} placeholder="Vilken maskin gäller det?" required />
+                  </div>
+                }
+
+                {form.machine_name && machineServiceDetails[form.machine_name] &&
+                  <div className="sm:col-span-2 p-5 bg-[#f0f7f7] rounded-xl border border-[#d2e8e8]">
+                    <h4 className="font-bold text-[#1b3a3a] mb-3 flex items-center gap-2">
+                      <Wrench className="w-4 h-4 text-[#3a9e9e]" />
+                      {machineServiceDetails[form.machine_name].title}
+                    </h4>
+                    <ul className="space-y-2.5 text-sm text-slate-700">
+                      {machineServiceDetails[form.machine_name].details.map((detail, idx) =>
+                        <li key={idx} className="flex gap-2.5 items-start">
+                          <CheckCircle2 className="w-4 h-4 text-[#3a9e9e] shrink-0 mt-0.5" />
+                          <span dangerouslySetInnerHTML={{ __html: detail }} />
+                        </li>
+                      )}
+                    </ul>
+                    {machineServiceDetails[form.machine_name].additionalInfo &&
+                      <div className="mt-4 pt-4 border-t border-[#d2e8e8]">
+                        {(() => {
+                          const info = machineServiceDetails[form.machine_name].additionalInfo;
+                          const match = info.match(/(\d+)/);
+                          const price = match ? parseInt(match[0], 10) : null;
+                          
+                          return (
+                            <>
+                              <p className="text-sm font-semibold text-[#1b3a3a]">
+                                {info}
+                              </p>
+                              {price && (
+                                <div className="mt-4 pt-4 border-t border-slate-200 text-right">
+                                  <p className="text-xs text-slate-500 mb-1">Jämförspris vid Engångsservice (utan avtal):</p>
+                                  <p className="text-lg font-bold text-[#1b3a3a] mb-2">{Math.round(price * 12 * 1.30).toLocaleString('sv-SE')} kr / gång</p>
+                                  <p className="text-xs text-slate-500 italic">* Inkluderar ej rabatt på reservdelar, arbetskostnader eller resor.</p>
+                                  <p className="text-xs text-slate-500 italic">* Engångsservice kan ej prioriteras vid hög belastning.</p>
+                                </div>
+                              )}
+                            </>
+                          );
+                        })()}
+                      </div>
+                    }
+                  </div>
+                }
+              </div>
+            </div>
+
+            <div className="pt-2">
+              <label className="flex items-start gap-3 cursor-pointer group">
+                <div className={`mt-0.5 flex-shrink-0 w-5 h-5 rounded border ${privacyAccepted ? 'bg-[#3a9e9e] border-[#3a9e9e]' : 'bg-white border-slate-300'} flex items-center justify-center transition-colors group-hover:border-[#3a9e9e]`}>
+                   <input
+                    type="checkbox"
+                    checked={privacyAccepted}
+                    onChange={(e) => setPrivacyAccepted(e.target.checked)}
+                    className="opacity-0 absolute" 
+                  />
+                  {privacyAccepted && <CheckCircle2 className="w-3.5 h-3.5 text-white" />}
+                </div>
+                
+                <span className="text-sm text-slate-600 leading-relaxed">
+                  Jag godkänner att mina uppgifter hanteras säkert enligt Astomeds{" "}
+                  <button
+                    type="button"
+                    onClick={() => setShowPrivacyDialog(true)}
+                    className="text-[#3a9e9e] hover:underline font-semibold">
+                    integritetspolicy
+                  </button>
+                  .
+                </span>
+              </label>
+            </div>
+
+            <Button
+              type="submit"
+              size="lg"
+              className="w-full h-14 text-lg font-medium bg-[#1b3a3a] hover:bg-[#122727] text-white shadow-lg transition-all"
+              disabled={!isValid || submitting}>
+              {submitting ? "Skickar förfrågan..." : "Skicka intresseanmälan"}
+              {!submitting && <Send className="w-5 h-5 ml-2" />}
+            </Button>
+          </form>
+
+          {/* Footer inside anmalan */}
+          <div className="mt-8 text-center">
+            <p className="text-slate-500">
+              Har du redan ett aktivt serviceavtal?{" "}
+              <button onClick={() => base44.auth.redirectToLogin()} className="text-[#3a9e9e] font-semibold hover:underline">
+                Logga in i kundportalen här
+              </button>
+            </p>
           </div>
-
-          <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
-            <label className="flex items-start gap-3 cursor-pointer select-none">
-              <input
-                type="checkbox"
-                checked={privacyAccepted}
-                onChange={(e) => setPrivacyAccepted(e.target.checked)}
-                className="mt-0.5 w-4 h-4 accent-teal-700 flex-shrink-0" />
-              
-              <span className="text-sm text-gray-700">
-                Jag har läst och godkänner{" "}
-                <button
-                  type="button"
-                  onClick={() => setShowPrivacyDialog(true)}
-                  className="text-blue-600 hover:underline font-medium">
-                  
-                  integritetspolicyn
-                </button>
-                .
-              </span>
-            </label>
-          </div>
-
-          <Button
-            type="submit"
-            className="w-full h-12 text-base"
-            style={{ background: "#1b3a3a" }}
-            disabled={!isValid || submitting}>
-            
-            {submitting ? "Skickar..." : "Skicka serviceförfrågan"}
-          </Button>
-
-          <p className="text-xs text-center text-gray-400">
-            Dina uppgifter hanteras säkert och används enbart för att kunna kontakta dig angående din serviceförfrågan.
-          </p>
-        </form>
-
-        {/* Login link bottom */}
-        <div className="text-center mt-6 p-4 bg-white rounded-lg border border-gray-200">
-          <p className="text-sm text-gray-600">
-            Har du redan ett konto hos Astomed Service och vill beställa service,{" "}
-            <a href="/login" className="text-blue-600 hover:underline font-medium">
-              klicka på denna länk för att logga in på ditt konto
-            </a>. (För att få ett konto måste du ha ett aktivt serviceavtal hos oss.)
-          </p>
         </div>
-      </div>
+      </section>
+
+      {/* Main Footer */}
+      <footer className="bg-[#112424] text-slate-400 py-12 px-6 md:px-12 text-sm text-center">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+          <div className="flex items-center gap-3">
+             <div className="w-8 h-8 bg-white/10 rounded-md flex items-center justify-center overflow-hidden">
+                 <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69a9446fcb1cd4ab529479ba/bc2852de1_channels4_profile-2.jpg" alt="Astomed" className="w-full h-full object-cover opacity-80 grayscale" />
+             </div>
+             <span className="font-bold text-lg tracking-widest text-slate-300">ASTOMED</span>
+          </div>
+          <p>© {new Date().getFullYear()} Astomed AB. Alla rättigheter förbehållna.</p>
+          <div className="flex gap-6 justify-center">
+             <a href="https://astomed.se" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">astomed.se</a>
+             <a href="https://klinikutrustning.se" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">klinikutrustning.se</a>
+             <a href="https://astomedshop.se" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">astomedshop.se</a>
+          </div>
+        </div>
+      </footer>
 
       {/* Privacy Policy Dialog */}
       <Dialog open={showPrivacyDialog} onOpenChange={setShowPrivacyDialog}>
@@ -405,15 +575,15 @@ export default function PublicServiceRequest() {
           <PrivacyPolicyContent />
           <div className="p-6 border-t border-slate-100 flex-shrink-0">
             <Button
-              className="w-full astomed-btn-primary"
+              className="w-full bg-[#1b3a3a] hover:bg-[#122727] text-white"
               onClick={() => setShowPrivacyDialog(false)}>
-              
               Stäng
             </Button>
           </div>
         </DialogContent>
       </Dialog>
+      
       <ChatWidget />
-    </div>);
-
+    </div>
+  );
 }
