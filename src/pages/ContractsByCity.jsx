@@ -2,7 +2,7 @@ import React, { useState, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { Card, CardContent } from "@/components/ui/card";
-import { MapPin, Building2, Monitor, Search } from "lucide-react";
+import { MapPin, Building2, Monitor, Search, Calendar } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Input } from "@/components/ui/input";
@@ -35,11 +35,34 @@ export default function ContractsByCity() {
     );
 
     const grouped = {};
+    const today = new Date();
     
     activeContracts.forEach(machine => {
       const customer = customers.find(c => c.id === machine.customer_id);
       if (!customer) return;
       
+      let nextDate = machine.next_service_date ? new Date(machine.next_service_date) : null;
+      if (!nextDate && machine.service_date) {
+        nextDate = new Date(machine.service_date);
+        nextDate.setMonth(nextDate.getMonth() + (machine.service_interval || 12));
+      }
+
+      let statusColor = "bg-slate-100 text-slate-700";
+      let statusText = "Planerad";
+      if (nextDate) {
+        const daysUntil = Math.ceil((nextDate - today) / (1000 * 60 * 60 * 24));
+        if (daysUntil < 0) {
+          statusColor = "bg-red-100 text-red-700";
+          statusText = "Försenad";
+        } else if (daysUntil <= 45) {
+          statusColor = "bg-orange-100 text-orange-700";
+          statusText = "Snart dags";
+        } else {
+          statusColor = "bg-emerald-100 text-emerald-700";
+          statusText = "I fas";
+        }
+      }
+
       const city = (customer.city || "Okänd stad").trim();
       const postalCode = (customer.postal_code || "").replace(/\D/g, "");
       
@@ -60,25 +83,37 @@ export default function ContractsByCity() {
       if (city !== "Okänd stad") {
         grouped[groupKey].cities.add(city);
       }
-      grouped[groupKey].contracts.push({ machine, customer });
+      grouped[groupKey].contracts.push({ machine, customer, nextDate, statusColor, statusText });
       grouped[groupKey].customerCount.add(customer.id);
     });
 
     return Object.values(grouped).map(g => {
+      g.contracts.sort((a, b) => {
+        if (!a.nextDate) return 1;
+        if (!b.nextDate) return -1;
+        return a.nextDate - b.nextDate;
+      });
+
       const citiesList = Array.from(g.cities).sort();
       const citiesStr = citiesList.length > 0 ? citiesList.join(", ") : "Okänd ort";
       const label = g.prefix !== "Okänt" 
         ? `Postnummerområde ${g.prefix} (${citiesStr})` 
         : citiesStr;
         
+      const urgentCount = g.contracts.filter(c => c.statusText === "Försenad" || c.statusText === "Snart dags").length;
+
       return {
         id: g.id,
         label: label,
         searchStr: `${g.prefix} ${citiesStr}`.toLowerCase(),
         contracts: g.contracts,
-        customerCount: g.customerCount
+        customerCount: g.customerCount,
+        urgentCount: urgentCount
       };
-    }).sort((a, b) => a.label.localeCompare(b.label));
+    }).sort((a, b) => {
+      if (b.urgentCount !== a.urgentCount) return b.urgentCount - a.urgentCount;
+      return a.label.localeCompare(b.label);
+    });
   }, [data]);
 
   const filteredGroups = useMemo(() => {
@@ -146,6 +181,11 @@ export default function ContractsByCity() {
                     <Badge variant="secondary" className="bg-emerald-50 text-emerald-700">
                       {group.contracts.length} avtal
                     </Badge>
+                    {group.urgentCount > 0 && (
+                      <Badge variant="secondary" className="bg-red-50 text-red-600 border-red-200">
+                        {group.urgentCount} {group.urgentCount === 1 ? "snart/försenad" : "snart/försenade"}
+                      </Badge>
+                    )}
                   </div>
                   <div className="text-sm text-slate-500 font-normal hidden sm:block">
                     {group.customerCount.size} unika {group.customerCount.size === 1 ? "kund" : "kunder"}
@@ -169,12 +209,23 @@ export default function ContractsByCity() {
                             <span>{contract.machine.model}</span>
                             <span className="font-mono text-[10px] bg-slate-200 px-1 rounded">SN: {contract.machine.serial_number}</span>
                           </div>
+                          {contract.nextDate && (
+                            <div className="text-xs text-slate-500 mt-1 flex items-center gap-1">
+                              <Calendar className="w-3 h-3" />
+                              Nästa service: <span className="font-medium text-slate-700">{contract.nextDate.toLocaleDateString("sv-SE")}</span>
+                            </div>
+                          )}
                         </div>
                       </div>
-                      <div className="flex items-center gap-2 self-start sm:self-auto">
+                      <div className="flex flex-col items-end gap-2 self-start sm:self-auto">
                         <Badge className="bg-teal-100 text-teal-800 border-0 text-xs font-semibold px-2 py-0.5">
                           {contract.machine.service_contract === "basic" ? "BAS – Astomed 3.0" : contract.machine.service_contract}
                         </Badge>
+                        {contract.nextDate && (
+                           <Badge className={`${contract.statusColor} border-0 text-[10px] font-semibold px-2 py-0.5`}>
+                             {contract.statusText}
+                           </Badge>
+                        )}
                       </div>
                     </div>
                   ))}
