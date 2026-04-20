@@ -28,9 +28,9 @@ const LayoutWrapper = ({ children, currentPageName }) => Layout ?
   : <>{children}</>;
 
 const AuthenticatedApp = () => {
-  const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
+  const { user, isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
   const location = useLocation();
-  const currentPath = window.location.pathname;
+  const currentPath = location.pathname;
 
   // Public routes that don't require authentication
   const isPublicRoute = currentPath === '/' || currentPath === '/PublicServiceRequest';
@@ -52,6 +52,14 @@ const AuthenticatedApp = () => {
       // Redirect to login automatically
       navigateToLogin();
       return null;
+    }
+  }
+
+  // Strict routing for customers
+  if (user && user.role === 'customer' && !isPublicRoute) {
+    const allowedCustomerPaths = ['/CustomerDashboard', '/ClinicDevelopment', '/ServiceRecords', '/Machines'];
+    if (!allowedCustomerPaths.includes(currentPath)) {
+      return <Navigate to="/CustomerDashboard" replace />;
     }
   }
 

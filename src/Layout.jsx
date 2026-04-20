@@ -128,12 +128,6 @@ export default function Layout({ children, currentPageName }) {
     return <PrivacyPolicyModal onAccepted={() => { setShowPrivacyModal(false); setUser(u => u ? { ...u, privacy_policy_accepted: true } : u); }} />;
   }
 
-  // Redirect customers to their own dashboard
-  if (userLoaded && user?.role === "customer" && currentPageName === "Dashboard") {
-    window.location.replace(createPageUrl("CustomerDashboard"));
-    return null;
-  }
-
   const userRole = user?.role || "technician";
   const isRootScreen = ["Dashboard", "ServiceRecords", "Customers", "MobileMenu"].includes(currentPageName);
 
@@ -320,9 +314,12 @@ export default function Layout({ children, currentPageName }) {
       {/* Bottom Navigation */}
       <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-card border-t border-border z-40 flex items-center justify-around pb-[env(safe-area-inset-bottom)] h-[calc(4rem+env(safe-area-inset-bottom))] shadow-[0_-4px_10px_rgba(0,0,0,0.05)]">
         <Link 
-          to={createPageUrl("Dashboard")} 
-          onClick={(e) => { if (currentPageName === 'Dashboard') { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); navigate('/Dashboard', { replace: true }); } }}
-          className={`flex flex-col items-center justify-center w-full h-full ${currentPageName === 'Dashboard' ? 'text-primary' : 'text-muted-foreground'}`}
+          to={createPageUrl(user?.role === "customer" ? "CustomerDashboard" : "Dashboard")} 
+          onClick={(e) => { 
+            const target = user?.role === "customer" ? "CustomerDashboard" : "Dashboard";
+            if (currentPageName === target) { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); navigate(`/${target}`, { replace: true }); } 
+          }}
+          className={`flex flex-col items-center justify-center w-full h-full ${["Dashboard", "CustomerDashboard"].includes(currentPageName) ? 'text-primary' : 'text-muted-foreground'}`}
         >
           <LayoutDashboard className="w-5 h-5 mb-1" />
           <span className="text-[10px] font-medium">Översikt</span>
@@ -335,14 +332,25 @@ export default function Layout({ children, currentPageName }) {
           <Wrench className="w-5 h-5 mb-1" />
           <span className="text-[10px] font-medium">Service</span>
         </Link>
-        <Link 
-          to={createPageUrl("Customers")} 
-          onClick={(e) => { if (currentPageName === 'Customers') { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); navigate('/Customers', { replace: true }); } }}
-          className={`flex flex-col items-center justify-center w-full h-full ${currentPageName === 'Customers' ? 'text-primary' : 'text-muted-foreground'}`}
-        >
-          <Users className="w-5 h-5 mb-1" />
-          <span className="text-[10px] font-medium">Kunder</span>
-        </Link>
+        {user?.role === "customer" ? (
+          <Link 
+            to={createPageUrl("Machines")} 
+            onClick={(e) => { if (currentPageName === 'Machines') { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); navigate('/Machines', { replace: true }); } }}
+            className={`flex flex-col items-center justify-center w-full h-full ${currentPageName === 'Machines' ? 'text-primary' : 'text-muted-foreground'}`}
+          >
+            <Monitor className="w-5 h-5 mb-1" />
+            <span className="text-[10px] font-medium">Maskiner</span>
+          </Link>
+        ) : (
+          <Link 
+            to={createPageUrl("Customers")} 
+            onClick={(e) => { if (currentPageName === 'Customers') { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); navigate('/Customers', { replace: true }); } }}
+            className={`flex flex-col items-center justify-center w-full h-full ${currentPageName === 'Customers' ? 'text-primary' : 'text-muted-foreground'}`}
+          >
+            <Users className="w-5 h-5 mb-1" />
+            <span className="text-[10px] font-medium">Kunder</span>
+          </Link>
+        )}
       </div>
     </div>
   );
