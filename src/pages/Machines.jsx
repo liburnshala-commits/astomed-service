@@ -3,7 +3,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { createPageUrl } from "@/utils";
 import { Link, useLocation } from "react-router-dom";
-import { Plus, Search, Monitor, Wrench, Building2, FileCheck, Download, Trash2 } from "lucide-react";
+import { Plus, Search, Monitor, Wrench, Building2, FileCheck, Download, Trash2, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
@@ -12,6 +12,7 @@ import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carouse
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import MachineForm from "@/components/machines/MachineForm.jsx";
 import ServiceContractModal from "@/components/machines/ServiceContractModal.jsx";
+import ServiceReportModal from "@/components/service/ServiceReportModal.jsx";
 import { useAuth } from "@/lib/AuthContext";
 
 const MODELS = [
@@ -36,6 +37,7 @@ export default function Machines() {
   const [showForm, setShowForm] = useState(false);
   const [editing, setEditing] = useState(null);
   const [contractMachine, setContractMachine] = useState(null);
+  const [reportData, setReportData] = useState(null);
 
   useEffect(() => {
     const searchParam = new URLSearchParams(location.search).get("search");
@@ -285,6 +287,11 @@ export default function Machines() {
                   <Wrench className="w-3 h-3 mr-1" /> Starta service
                 </Button>
               </Link>
+              {lastService && (lastService.status === "completed" || lastService.status === "invoiced") && (
+                <Button size="sm" variant="outline" onClick={() => setReportData({ record: lastService, machine, customer })} title="Ladda ner senaste rapport">
+                  <FileText className="w-3 h-3 mr-1" /> Rapport
+                </Button>
+              )}
               {userRole !== "customer" && userRole !== "technician" && (
                 <Button size="sm" variant="outline" onClick={() => setContractMachine(machine)} title="Hantera serviceavtal">
                   <FileCheck className="w-3 h-3 mr-1" /> Avtal
@@ -391,6 +398,15 @@ export default function Machines() {
           machine={contractMachine}
           onSave={handleContractSave}
           onClose={() => setContractMachine(null)}
+        />
+      )}
+
+      {reportData && (
+        <ServiceReportModal
+          record={reportData.record}
+          machine={reportData.machine}
+          customer={reportData.customer}
+          onClose={() => setReportData(null)}
         />
       )}
 
