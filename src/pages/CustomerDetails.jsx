@@ -24,11 +24,12 @@ export default function CustomerDetails() {
     queryKey: ["customerDetails", customerId],
     queryFn: async () => {
       if (!customerId) return null;
-      const [c, m] = await Promise.all([
+      const [c, m, sr] = await Promise.all([
         base44.entities.Customer.get(customerId),
-        base44.entities.Machine.filter({ customer_id: customerId })
+        base44.entities.Machine.filter({ customer_id: customerId }),
+        base44.entities.ServiceRecord.filter({ customer_id: customerId })
       ]);
-      return { customer: c, machines: m };
+      return { customer: c, machines: m, serviceRecords: sr };
     },
     enabled: !!customerId,
     retry: 3,
@@ -38,6 +39,7 @@ export default function CustomerDetails() {
 
   const customer = data?.customer;
   const machines = data?.machines || [];
+  const serviceRecords = data?.serviceRecords || [];
   
   const [contractMachine, setContractMachine] = useState(null);
   
@@ -167,7 +169,9 @@ export default function CustomerDetails() {
                 {machines.length === 0 ? (
                   <p className="text-sm text-slate-400">Inga maskiner registrerade.</p>
                 ) : (
-                  machines.map(m => (
+                  machines.map(m => {
+                    const hasCompletedService = serviceRecords.some(r => r.machine_id === m.id && (r.status === 'completed' || r.status === 'invoiced'));
+                    return (
                     <div key={m.id} className="p-3 border rounded-lg bg-slate-50/50 flex flex-col gap-1">
                       <div className="flex justify-between items-start gap-2">
                         <div className="flex-1">
@@ -200,13 +204,19 @@ export default function CustomerDetails() {
                         </div>
                       </div>
                       <div className="text-xs text-slate-500 font-mono">SN: {m.serial_number}</div>
+                      {hasCompletedService && (
+                        <div className="text-[10px] text-emerald-700 font-medium mt-0.5 flex items-center gap-1.5">
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                          Service slutförd
+                        </div>
+                      )}
                       {m.service_contract && m.service_contract !== 'none' && (
                          <div className="text-[10px] text-teal-700 font-medium mt-1">
                            Serviceavtal: {m.service_contract === 'basic' ? 'BAS' : m.service_contract}
                          </div>
                       )}
                     </div>
-                  ))
+                  )})
                 )}
                 
                 <Link to={createPageUrl(`Machines?customer=${customer.id}`)} className="block mt-4">
