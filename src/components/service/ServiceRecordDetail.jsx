@@ -8,7 +8,6 @@ import ServiceReportModal from "./ServiceReportModal.jsx";
 import { useState } from "react";
 import { createPortal } from "react-dom";
 import { base44 } from "@/api/base44Client";
-import DistanceDisplay from "@/components/customers/DistanceDisplay";
 
 const statusColor = {
   pending: "bg-yellow-100 text-yellow-800",
@@ -99,13 +98,10 @@ export default function ServiceRecordDetail({ record, machine, customer, onClose
                 <div className="font-semibold text-slate-900">{customer?.company_name}</div>
                 <div className="text-sm text-slate-500">{customer?.contact_person}</div>
                 {(customer?.address || customer?.city) && (
-                  <div className="mt-1 pt-1 border-t border-slate-200">
-                    <div className="text-sm text-slate-500">
-                      {customer.address}
-                      {customer.address && customer.city ? ", " : ""}
-                      {customer.postal_code} {customer.city}
-                    </div>
-                    <DistanceDisplay address={customer.address} postalCode={customer.postal_code} city={customer.city} />
+                  <div className="text-sm text-slate-500 mt-1 pt-1 border-t border-slate-200">
+                    {customer.address}
+                    {customer.address && customer.city ? ", " : ""}
+                    {customer.postal_code} {customer.city}
                   </div>
                 )}
               </div>

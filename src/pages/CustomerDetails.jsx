@@ -9,7 +9,6 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import CustomerInteractions from "@/components/customers/CustomerInteractions";
 import ServiceContractModal from "@/components/machines/ServiceContractModal";
-import DistanceDisplay from "@/components/customers/DistanceDisplay";
 import { useAuth } from "@/lib/AuthContext";
 
 export default function CustomerDetails() {
@@ -144,7 +143,6 @@ export default function CustomerDetails() {
                       {customer.address}<br />
                       {customer.postal_code} {customer.city}
                     </div>
-                    <DistanceDisplay address={customer.address} postalCode={customer.postal_code} city={customer.city} />
                   </div>
                 )}
               </div>
