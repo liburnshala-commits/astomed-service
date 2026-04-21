@@ -32,6 +32,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import NotificationBell from "@/components/notifications/NotificationBell";
 import PrivacyPolicyModal from "@/components/PrivacyPolicyModal";
+import GlobalSearch from "@/components/GlobalSearch";
 
 import { TrendingUp } from "lucide-react";
 
@@ -316,6 +317,9 @@ export default function Layout({ children, currentPageName }) {
             </div>
             
             <span className="font-semibold hidden" style={{ color: "#1b3a3a" }}>Astomed Pro</span>
+          </div>
+          <div className="flex-1 flex justify-end px-2 sm:px-4 max-w-md">
+            {user && user.role !== "customer" && <GlobalSearch />}
           </div>
           <NotificationBell />
         </header>
