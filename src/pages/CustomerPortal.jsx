@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
-import { Wrench, Monitor, Calendar, FileText, AlertCircle, ChevronDown, ChevronUp, LogOut, PlusCircle } from "lucide-react";
+import { Wrench, Monitor, Calendar, FileText, AlertCircle, ChevronDown, ChevronUp, LogOut, PlusCircle, Download } from "lucide-react";
 import RequestServiceModal from "@/components/portal/RequestServiceModal";
+import ServiceReportModal from "@/components/service/ServiceReportModal";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -26,6 +27,7 @@ export default function CustomerPortal() {
   const [error, setError] = useState(null);
   const [expandedRecord, setExpandedRecord] = useState(null);
   const [showServiceModal, setShowServiceModal] = useState(false);
+  const [reportData, setReportData] = useState(null);
 
   useEffect(() => {
     // Kontrollera om det finns en token i URL:en (för portal-länk)
@@ -35,29 +37,9 @@ export default function CustomerPortal() {
     base44.auth.me().then(async (u) => {
       // Om det finns en token och ingen inloggad användare, hämta kund baserat på token
       if (token && !u) {
-        try {
-          const customers = await base44.asServiceRole.entities.Customer.filter({ portal_token: token });
-          if (!customers || customers.length === 0) {
-            setError("Ogiltig portal-länk. Kontakta Astomed.");
-            setLoading(false);
-            return;
-          }
-          const c = customers[0];
-          setCustomer(c);
-          setUser({ email: c.email, role: 'customer', full_name: c.company_name });
-          const [m, r] = await Promise.all([
-            base44.asServiceRole.entities.Machine.filter({ customer_id: c.id }),
-            base44.asServiceRole.entities.ServiceRecord.filter({ customer_id: c.id }, "-service_date")
-          ]);
-          setMachines(m);
-          setRecords(r);
-          setLoading(false);
-          return;
-        } catch (err) {
-          setError("Fel vid validering av länk.");
-          setLoading(false);
-          return;
-        }
+        // Avaktiverat temporär inloggning via token - tvinga användare att logga in/skapa konto
+        base44.auth.redirectToLogin(window.location.href);
+        return;
       }
 
       if (!u) {
@@ -255,8 +237,23 @@ export default function CustomerPortal() {
                           {record.total_cost && <div><span className="text-slate-500">Totalt:</span> <span className="font-bold text-slate-900">{record.total_cost.toLocaleString("sv-SE")} kr</span></div>}
                         </div>
                         {record.technician_name && <div className="text-sm text-slate-500">Tekniker: <span className="text-slate-700">{record.technician_name}</span></div>}
+                        
+                        {(record.status === 'completed' || record.status === 'invoiced') && (
+                          <div className="pt-2">
+                            <Button 
+                              variant="outline" 
+                              size="sm" 
+                              className="text-blue-600 border-blue-200 hover:bg-blue-50"
+                              onClick={(e) => { e.stopPropagation(); setReportData({ record, machine, customer }); }}
+                            >
+                              <Download className="w-4 h-4 mr-2" />
+                              Ladda ner serviceprotokoll
+                            </Button>
+                          </div>
+                        )}
+
                         {record.images?.length > 0 && (
-                          <div>
+                          <div className="pt-2">
                             <div className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">Bilder</div>
                             <div className="flex flex-wrap gap-2">
                               {record.images.map((img, i) => (
@@ -290,6 +287,15 @@ export default function CustomerPortal() {
           customer={customer}
           user={user}
           onClose={() => setShowServiceModal(false)}
+        />
+      )}
+
+      {reportData && (
+        <ServiceReportModal
+          record={reportData.record}
+          machine={reportData.machine}
+          customer={reportData.customer}
+          onClose={() => setReportData(null)}
         />
       )}
 
