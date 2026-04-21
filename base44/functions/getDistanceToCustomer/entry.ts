@@ -28,9 +28,9 @@ Deno.serve(async (req) => {
 
         const llmResponse = await base44.asServiceRole.integrations.Core.InvokeLLM({
             prompt: prompt,
-            add_context_from_internet: true,
+            add_context_from_internet: false,
             response_json_schema: response_json_schema,
-            model: "gemini_3_1_pro"
+            model: "automatic"
         });
 
         if (llmResponse && llmResponse.distance_km !== undefined) {

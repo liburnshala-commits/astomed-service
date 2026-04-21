@@ -144,6 +144,7 @@ export default function CustomerDetails() {
                       {customer.address}<br />
                       {customer.postal_code} {customer.city}
                     </div>
+                    <div className="text-red-500 font-bold">TEST TEST TEST</div>
                     <DistanceDisplay address={customer.address} postalCode={customer.postal_code} city={customer.city} />
                   </div>
                 )}
