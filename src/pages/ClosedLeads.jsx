@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { Search, Archive, Phone, Mail, Building2, User } from "lucide-react";
+import { useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
@@ -25,7 +26,14 @@ const CLOSED_STATUSES = [
 ];
 
 export default function ClosedLeads() {
-  const [search, setSearch] = useState("");
+  const location = useLocation();
+  const initialSearch = new URLSearchParams(location.search).get("search") || "";
+  const [search, setSearch] = useState(initialSearch);
+
+  useEffect(() => {
+    const param = new URLSearchParams(location.search).get("search");
+    if (param !== null) setSearch(param);
+  }, [location.search]);
 
   const { data: leads = [], isLoading } = useQuery({
     queryKey: ["closedLeads"],

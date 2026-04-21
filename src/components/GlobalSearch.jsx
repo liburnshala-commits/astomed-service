@@ -113,7 +113,7 @@ export default function GlobalSearch() {
                     <button 
                       key={m.id}
                       className="w-full text-left px-4 py-2 hover:bg-slate-50 flex items-start gap-3 transition-colors"
-                      onClick={() => { setIsOpen(false); navigate(createPageUrl(`ServiceRecords?machine=${m.id}`)); }}
+                      onClick={() => { setIsOpen(false); navigate(createPageUrl(`Machines?search=${encodeURIComponent(searchTerm)}`)); }}
                     >
                       <Monitor className="w-4 h-4 text-slate-400 mt-0.5 flex-shrink-0" />
                       <div>
@@ -132,7 +132,7 @@ export default function GlobalSearch() {
                     <button 
                       key={l.id}
                       className="w-full text-left px-4 py-2 hover:bg-indigo-50/50 flex items-start gap-3 transition-colors"
-                      onClick={() => { setIsOpen(false); navigate(createPageUrl(`ServiceContractLeads`)); }}
+                      onClick={() => { setIsOpen(false); navigate(createPageUrl(`ServiceContractLeads?search=${encodeURIComponent(searchTerm)}`)); }}
                     >
                       <Building2 className="w-4 h-4 text-indigo-400 mt-0.5 flex-shrink-0" />
                       <div>
@@ -153,7 +153,7 @@ export default function GlobalSearch() {
                     <button 
                       key={l.id}
                       className="w-full text-left px-4 py-2 hover:bg-slate-50 flex items-start gap-3 transition-colors"
-                      onClick={() => { setIsOpen(false); navigate(createPageUrl(`ClosedLeads`)); }}
+                      onClick={() => { setIsOpen(false); navigate(createPageUrl(`ClosedLeads?search=${encodeURIComponent(searchTerm)}`)); }}
                     >
                       <Archive className="w-4 h-4 text-slate-400 mt-0.5 flex-shrink-0" />
                       <div>

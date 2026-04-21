@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { Plus, Search, Calendar as CalendarIcon, Trash2, ArrowRight, User, Building2, Phone, Mail, Copy, Pencil, Send, MessageSquare, CheckCircle2 } from "lucide-react";
+import { useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { Input } from "@/components/ui/input";
@@ -33,16 +34,23 @@ const statusMap = {
 };
 
 export default function ServiceContractLeads() {
+  const location = useLocation();
   const { toast } = useToast();
-  const urlParams = new URLSearchParams(window.location.search);
+  const urlParams = new URLSearchParams(location.search);
   const initialStatus = urlParams.get("status") || "all";
+  const initialSearch = urlParams.get("search") || "";
 
   const [leads, setLeads] = useState([]);
   const [customers, setCustomers] = useState([]);
   const [machines, setMachines] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showNewLeadModal, setShowNewLeadModal] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState(initialSearch);
+
+  useEffect(() => {
+    const param = new URLSearchParams(location.search).get("search");
+    if (param !== null) setSearchTerm(param);
+  }, [location.search]);
   const [statusFilter, setStatusFilter] = useState(initialStatus);
   const [convertingLead, setConvertingLead] = useState(null);
   const [convertingCustomerId, setConvertingCustomerId] = useState(null);

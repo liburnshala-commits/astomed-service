@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { createPageUrl } from "@/utils";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Plus, Search, Monitor, Wrench, Building2, FileCheck, Download, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -23,16 +23,26 @@ const statusColor = { active: "bg-green-100 text-green-700", inactive: "bg-slate
 const statusLabel = { active: "Aktiv", inactive: "Inaktiv", service: "På service" };
 
 export default function Machines() {
+  const location = useLocation();
   const queryClient = useQueryClient();
-  const [search, setSearch] = useState("");
+  
+  const urlParams = new URLSearchParams(location.search);
+  const preselectedCustomer = urlParams.get("customer");
+  const preselectedSearch = urlParams.get("search") || "";
+
+  const [search, setSearch] = useState(preselectedSearch);
   const [filterModel, setFilterModel] = useState("all");
   const [filterCustomer, setFilterCustomer] = useState("all");
   const [showForm, setShowForm] = useState(false);
   const [editing, setEditing] = useState(null);
   const [contractMachine, setContractMachine] = useState(null);
 
-  const urlParams = new URLSearchParams(window.location.search);
-  const preselectedCustomer = urlParams.get("customer");
+  useEffect(() => {
+    const searchParam = new URLSearchParams(location.search).get("search");
+    if (searchParam !== null) {
+      setSearch(searchParam);
+    }
+  }, [location.search]);
 
   const { user } = useAuth();
   const userRole = user?.role;
