@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { createPageUrl } from "@/utils";
-import { Plus, Search, Wrench, Trash2 } from "lucide-react";
+import { Plus, Search, Wrench, Trash2, Copy } from "lucide-react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -169,6 +170,13 @@ export default function ServiceRecords() {
     return (b.created_date || "").localeCompare(a.created_date || ""); // date_desc default
   });
 
+  const handleCopyLink = (record, e) => {
+    e.stopPropagation();
+    const url = window.location.origin + createPageUrl(`ServiceRecords?id=${record.id}`);
+    navigator.clipboard.writeText(url);
+    toast.success("Länk kopierad till urklipp!");
+  };
+
   const handleDelete = async (record, e) => {
     e.stopPropagation();
     if (!window.confirm(`Radera serviceärendet för ${getMachine(record.machine_id)?.model || "maskinen"}? Detta kan inte ångras.`)) return;
@@ -319,6 +327,9 @@ export default function ServiceRecords() {
                       )}
                     </div>
                     <div className="flex gap-2 flex-shrink-0 self-start" onClick={e => e.stopPropagation()}>
+                      <Button size="sm" variant="outline" onClick={(e) => handleCopyLink(record, e)} title="Kopiera länk till ärende">
+                        <Copy className="w-4 h-4" />
+                      </Button>
                       <Button size="sm" variant="outline" onClick={() => { setEditing(record); setShowForm(true); }}>
                         Redigera
                       </Button>
@@ -396,6 +407,9 @@ export default function ServiceRecords() {
 
                         <div className="pt-2 space-y-2">
                           <div className="flex gap-2" onClick={e => e.stopPropagation()}>
+                            <Button className="h-11 px-4 text-slate-500" variant="outline" onClick={(e) => handleCopyLink(record, e)} title="Kopiera länk">
+                              <Copy className="w-5 h-5" />
+                            </Button>
                             <Button className="flex-1 h-11" variant="outline" onClick={() => { setEditing(record); setShowForm(true); }}>
                               Redigera
                             </Button>
