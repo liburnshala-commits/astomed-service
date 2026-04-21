@@ -97,6 +97,13 @@ export default function ServiceRecordDetail({ record, machine, customer, onClose
                 </div>
                 <div className="font-semibold text-slate-900">{customer?.company_name}</div>
                 <div className="text-sm text-slate-500">{customer?.contact_person}</div>
+                {(customer?.address || customer?.city) && (
+                  <div className="text-sm text-slate-500 mt-1 pt-1 border-t border-slate-200">
+                    {customer.address}
+                    {customer.address && customer.city ? ", " : ""}
+                    {customer.postal_code} {customer.city}
+                  </div>
+                )}
               </div>
             </div>
 

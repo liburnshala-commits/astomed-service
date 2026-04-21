@@ -93,10 +93,15 @@ export default function CustomerDetails() {
             {customer.company_name}
             {customer.is_deleted && <Badge variant="destructive" className="ml-2">Markerad för radering</Badge>}
           </h1>
-          <p className="text-sm astomed-muted flex items-center gap-2">
-            Kundprofil och historik
+          <div className="text-sm astomed-muted flex flex-wrap items-center gap-2 mt-1">
+            <span>Kundprofil och historik</span>
             {customer.org_number && <span>• Org.nr: {customer.org_number}</span>}
-          </p>
+            {(customer.address || customer.city) && (
+              <span>
+                • {customer.address}{customer.address && customer.city ? ", " : ""}{customer.postal_code} {customer.city}
+              </span>
+            )}
+          </div>
         </div>
       </div>
 
