@@ -20,12 +20,13 @@ import { useAuth } from "@/lib/AuthContext";
 
 const statusColor = {
   pending: "bg-yellow-100 text-yellow-800",
+  planned: "bg-blue-100 text-blue-800",
   awaiting_approval: "bg-orange-100 text-orange-800",
   in_progress: "bg-yellow-400 text-yellow-900",
   completed: "bg-green-100 text-green-800",
   invoiced: "bg-purple-100 text-purple-800"
 };
-const statusLabel = { pending: "Väntar", awaiting_approval: "Inväntar godkännande", in_progress: "Pågående", completed: "Slutförd", invoiced: "Fakturerad" };
+const statusLabel = { pending: "Väntar", planned: "Planerad", awaiting_approval: "Inväntar godkännande", in_progress: "Pågående", completed: "Slutförd", invoiced: "Fakturerad" };
 const typeLabel = { standard: "Standard", advanced: "Avancerad" };
 const typeColor = { standard: "bg-slate-100 text-slate-700", advanced: "bg-indigo-100 text-indigo-700" };
 
@@ -150,7 +151,8 @@ export default function ServiceRecords() {
     if (!aNew && bNew) return 1;
 
     const getStatusWeight = (status) => {
-      if (status === "in_progress") return 2;
+      if (status === "in_progress") return 3;
+      if (status === "planned") return 2;
       if (status === "pending") return 1;
       return 0;
     };
@@ -278,6 +280,7 @@ export default function ServiceRecords() {
           <TabsList className="h-auto p-1 bg-slate-100/50 flex w-max min-w-full">
             <TabsTrigger value="all" className="flex-1 whitespace-nowrap">Alla</TabsTrigger>
             <TabsTrigger value="in_progress" className="flex-1 whitespace-nowrap">Pågående</TabsTrigger>
+            <TabsTrigger value="planned" className="flex-1 whitespace-nowrap">Planerad</TabsTrigger>
             <TabsTrigger value="pending" className="flex-1 whitespace-nowrap">Väntande</TabsTrigger>
             <TabsTrigger value="awaiting_approval" className="flex-1 whitespace-nowrap">Inväntar godkännande</TabsTrigger>
             <TabsTrigger value="completed" className="flex-1 whitespace-nowrap">Slutförd</TabsTrigger>

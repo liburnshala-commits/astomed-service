@@ -107,6 +107,7 @@
       "type": "string",
       "enum": [
         "pending",
+        "planned",
         "awaiting_approval",
         "in_progress",
         "completed",

@@ -11,12 +11,13 @@ import { base44 } from "@/api/base44Client";
 
 const statusColor = {
   pending: "bg-yellow-100 text-yellow-800",
+  planned: "bg-blue-100 text-blue-800",
   awaiting_approval: "bg-orange-100 text-orange-800",
   in_progress: "bg-yellow-400 text-yellow-900",
   completed: "bg-green-100 text-green-800",
   invoiced: "bg-purple-100 text-purple-800"
 };
-const statusLabel = { pending: "Väntar", awaiting_approval: "Inväntar godkännande", in_progress: "Pågående", completed: "Slutförd", invoiced: "Fakturerad" };
+const statusLabel = { pending: "Väntar", planned: "Planerad", awaiting_approval: "Inväntar godkännande", in_progress: "Pågående", completed: "Slutförd", invoiced: "Fakturerad" };
 const typeLabel = { standard: "Standardservice", advanced: "Avancerad service" };
 
 export default function ServiceRecordDetail({ record, machine, customer, onClose, onEdit, onDeleted, onUpdated, userRole }) {
