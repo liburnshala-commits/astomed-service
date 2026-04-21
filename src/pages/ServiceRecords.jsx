@@ -310,7 +310,7 @@ export default function ServiceRecords() {
                       </div>
                       <div className="text-xs astomed-muted font-mono mb-1">SN: {machine?.serial_number}</div>
                       <div className="flex flex-wrap gap-4 text-sm astomed-subtitle">
-                        <span>{customer?.company_name || "Okänd kund"}</span>
+                        <span>{customer?.company_name || "Okänd kund"}{customer?.city ? ` (${customer.city})` : ""}</span>
                         <span>Tekniker: {record.technician_name}</span>
                         <span>{record.service_date ? format(new Date(record.service_date), "d MMM yyyy", { locale: sv }) : ""}</span>
                       </div>
@@ -376,7 +376,7 @@ export default function ServiceRecords() {
                         <div className="space-y-2 text-sm text-slate-700 bg-slate-50 p-3 rounded-lg border border-slate-100 flex-1">
                           <div className="flex justify-between items-center py-1">
                             <span className="text-slate-500">Kund:</span>
-                            <span className="font-medium truncate max-w-[150px] text-right">{customer?.company_name || "Okänd kund"}</span>
+                            <span className="font-medium truncate max-w-[150px] text-right" title={customer?.city ? `${customer.company_name} (${customer.city})` : customer?.company_name}>{customer?.company_name || "Okänd kund"}{customer?.city ? ` (${customer.city})` : ""}</span>
                           </div>
                           <div className="flex justify-between items-center py-1">
                             <span className="text-slate-500">Tekniker:</span>
