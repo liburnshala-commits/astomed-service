@@ -360,9 +360,17 @@ export default function PublicServiceRequest() {
       <section id="anmalan" className="py-24 px-4 md:px-12 bg-[#fcf8f2] relative">
         <div className="max-w-4xl mx-auto">
           <div className="flex flex-col items-center text-center mb-12">
-            <div className="flex items-center gap-4 mb-6">
-              <img src="https://astomed.se/wp-content/uploads/2026/04/Liburn-2026.jpg" alt="Kontakta oss på Astomed" className="w-28 h-28 rounded-full object-cover shadow-lg border-4 border-white" />
-              <img src="https://cdn.shopify.com/s/files/1/0548/7348/9459/files/Astomed_2025-11-25_kl._10.53.12.png?v=1764064622" alt="Kontakta oss" className="w-28 h-28 rounded-full object-cover shadow-lg border-4 border-white" />
+            <div className="flex items-start gap-8 mb-8">
+              <div className="flex flex-col items-center">
+                <img src="https://astomed.se/wp-content/uploads/2026/04/Liburn-2026.jpg" alt="Liburn" className="w-28 h-28 rounded-full object-cover shadow-lg border-4 border-white mb-3" />
+                <span className="font-bold text-[#1b3a3a]">Liburn</span>
+                <span className="text-sm text-slate-500">Produktspecialist Service</span>
+              </div>
+              <div className="flex flex-col items-center">
+                <img src="https://cdn.shopify.com/s/files/1/0548/7348/9459/files/Astomed_2025-11-25_kl._10.53.12.png?v=1764064622" alt="Elman" className="w-28 h-28 rounded-full object-cover shadow-lg border-4 border-white mb-3" />
+                <span className="font-bold text-[#1b3a3a]">Elman</span>
+                <span className="text-sm text-slate-500">Produktspecialist Service</span>
+              </div>
             </div>
             <h2 className="text-3xl md:text-4xl font-bold text-[#1b3a3a] mb-4">Säkra din klinik redan idag</h2>
             <p className="text-lg text-slate-600 max-w-2xl mx-auto">
