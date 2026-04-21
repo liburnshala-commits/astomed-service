@@ -5,6 +5,7 @@ import { base44 } from "@/api/base44Client";
 export default function DistanceDisplay({ address, postalCode, city }) {
   const [distance, setDistance] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [errorDetails, setErrorDetails] = useState(null);
 
   useEffect(() => {
     if (!address && !city) {
@@ -21,10 +22,12 @@ export default function DistanceDisplay({ address, postalCode, city }) {
           setDistance(res.data.distance_km);
         } else {
           setDistance("Ingen data");
+          setErrorDetails("Funktionen gav inget avstånd tillbaka.");
         }
       } catch (err) {
         console.error("Failed to fetch distance", err);
         setDistance("Fel vid hämtning");
+        setErrorDetails(err.response?.data?.error || err.message || "Okänt fel");
       } finally {
         setLoading(false);
       }
@@ -43,8 +46,11 @@ export default function DistanceDisplay({ address, postalCode, city }) {
   
   if (distance === null || distance === "Ingen data" || distance === "Fel vid hämtning") {
     return (
-      <div className="text-xs text-red-500 mt-2 flex items-center gap-1 bg-red-50 p-1.5 rounded-md w-fit border border-red-200">
-        <MapPin className="w-3.5 h-3.5" /> <span className="font-medium">{distance || "Kunde inte beräkna"}</span>
+      <div className="text-xs text-red-500 mt-2 flex flex-col gap-1 bg-red-50 p-1.5 rounded-md w-fit border border-red-200">
+        <div className="flex items-center gap-1">
+          <MapPin className="w-3.5 h-3.5" /> <span className="font-medium">{distance || "Kunde inte beräkna"}</span>
+        </div>
+        {errorDetails && <div className="text-[10px] text-red-400">Detalj: {errorDetails}</div>}
       </div>
     );
   }
