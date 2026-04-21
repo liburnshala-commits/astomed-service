@@ -88,16 +88,23 @@ Deno.serve(async (req) => {
       <p>Ett heltäckande system för att hantera serviceärenden på maskiner. Spåra all servicehistorik, kundinformation, maskindetaljer och betalningar. Generera professionella servicerapporter med uppladdade bilder och annan dokumentation.</p>
 
       <div class="instructions">
-        <h3>📋 Så här kommer du igång:</h3>
+        <h3>📋 Kom igång med din kundportal:</h3>
         <p style="margin: 12px 0; color: #92400e; line-height: 1.6;">
-          När du loggar in för första gången klickar du på knappen <strong>"Access App"</strong> här nedan. 
-          Därefter, när du kommer till inloggningssidan klickar du på <strong>"Glömt Lösenord"</strong> 
+          Klicka på knappen <strong>"Logga in på portalen"</strong> nedan för att komma till inloggningssidan. Där behöver du skapa ett konto eller logga in om du redan har ett för att få tillgång till:
+        </p>
+        <ul style="margin: 8px 0; padding-left: 20px; color: #92400e; line-height: 1.6;">
+          <li>En översikt över dina maskiner och servicehistorik</li>
+          <li>Nedladdning av dina senaste serviceprotokoll</li>
+          <li>Beställning av ny service</li>
+        </ul>
+        <p style="margin: 12px 0; color: #92400e; line-height: 1.6;">
+          När du kommer till inloggningssidan för första gången klickar du på <strong>"Glömt Lösenord"</strong> 
           så får du välja ett nytt lösenord i nästa steg.
         </p>
       </div>
 
       <center>
-        <a href="${appUrl}" class="cta-btn">Access App →</a>
+        <a href="${appUrl}" class="cta-btn">Logga in på portalen →</a>
       </center>
 
       <p style="margin-top: 24px;">Har du frågor? Kontakta oss på <a href="mailto:liburn@astomed.se" style="color: #3a9e9e; text-decoration: none;">liburn@astomed.se</a> eller ring <strong>08 – 410 779 00</strong>.</p>
