@@ -3,12 +3,15 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { createPageUrl } from "@/utils";
 import { Link, useNavigate } from "react-router-dom";
-import { Building2, Phone, Mail, Monitor, ArrowLeft, ExternalLink, Shield, Trash2, Download, FileCheck } from "lucide-react";
+import { Building2, Phone, Mail, Monitor, ArrowLeft, ExternalLink, Shield, Trash2, Download, FileCheck, FileText } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import CustomerInteractions from "@/components/customers/CustomerInteractions";
 import ServiceContractModal from "@/components/machines/ServiceContractModal";
+import ServiceReportModal from "@/components/service/ServiceReportModal.jsx";
+import { format } from "date-fns";
+import { sv } from "date-fns/locale";
 import { useAuth } from "@/lib/AuthContext";
 
 export default function CustomerDetails() {
@@ -42,6 +45,7 @@ export default function CustomerDetails() {
   const serviceRecords = data?.serviceRecords || [];
   
   const [contractMachine, setContractMachine] = useState(null);
+  const [reportData, setReportData] = useState(null);
   
   const handleContractSave = async (form) => {
     await base44.entities.Machine.update(contractMachine.id, form);
@@ -170,7 +174,8 @@ export default function CustomerDetails() {
                   <p className="text-sm text-slate-400">Inga maskiner registrerade.</p>
                 ) : (
                   machines.map(m => {
-                    const hasCompletedService = serviceRecords.some(r => r.machine_id === m.id && (r.status === 'completed' || r.status === 'invoiced'));
+                    const completedServices = serviceRecords.filter(r => r.machine_id === m.id && (r.status === 'completed' || r.status === 'invoiced')).sort((a, b) => new Date(b.service_date || 0) - new Date(a.service_date || 0));
+                    const lastCompletedService = completedServices[0];
                     return (
                     <div key={m.id} className="p-3 border rounded-lg bg-slate-50/50 flex flex-col gap-1">
                       <div className="flex justify-between items-start gap-2">
@@ -204,10 +209,20 @@ export default function CustomerDetails() {
                         </div>
                       </div>
                       <div className="text-xs text-slate-500 font-mono">SN: {m.serial_number}</div>
-                      {hasCompletedService && (
-                        <div className="text-[10px] text-emerald-700 font-medium mt-0.5 flex items-center gap-1.5">
-                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                          Service slutförd
+                      {lastCompletedService && (
+                        <div className="flex items-center justify-between mt-2 pt-2 border-t border-slate-200 border-dashed">
+                          <div className="text-[10px] text-emerald-700 font-medium flex flex-col">
+                            <div className="flex items-center gap-1.5">
+                              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                              Service slutförd
+                            </div>
+                            <span className="text-slate-500 font-normal mt-0.5">
+                              {lastCompletedService.service_date ? format(new Date(lastCompletedService.service_date), "d MMM yyyy", { locale: sv }) : ""}
+                            </span>
+                          </div>
+                          <Button variant="outline" size="sm" className="h-6 px-2 text-[10px] bg-white hover:bg-slate-50" onClick={() => setReportData({ record: lastCompletedService, machine: m, customer })}>
+                            <FileText className="w-3 h-3 mr-1" /> Rapport
+                          </Button>
                         </div>
                       )}
                       {m.service_contract && m.service_contract !== 'none' && (
@@ -241,6 +256,15 @@ export default function CustomerDetails() {
           machine={contractMachine}
           onSave={handleContractSave}
           onClose={() => setContractMachine(null)}
+        />
+      )}
+
+      {reportData && (
+        <ServiceReportModal
+          record={reportData.record}
+          machine={reportData.machine}
+          customer={reportData.customer}
+          onClose={() => setReportData(null)}
         />
       )}
     </div>
