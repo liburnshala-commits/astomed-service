@@ -192,7 +192,12 @@ export default function Customers() {
    }
    setInviting(customer.id);
    try {
-     await base44.users.inviteUser(customer.email, "customer");
+     const currentUser = await base44.auth.me();
+     await base44.functions.invoke("inviteUser", {
+       email: customer.email,
+       role: "customer",
+       inviterName: currentUser?.full_name || currentUser?.email
+     });
      toast.success(`Inbjudan skickad till ${customer.email}`);
    } catch (e) {
      toast.error("Kunde inte skicka inbjudan: " + (e.message || "okänt fel"));
