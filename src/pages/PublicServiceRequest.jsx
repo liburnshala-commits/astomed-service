@@ -359,7 +359,8 @@ export default function PublicServiceRequest() {
       {/* Form Section */}
       <section id="anmalan" className="py-24 px-4 md:px-12 bg-[#fcf8f2] relative">
         <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-12">
+          <div className="flex flex-col items-center text-center mb-12">
+            <img src="https://astomed.se/wp-content/uploads/2026/04/Liburn-2026.jpg" alt="Kontakta oss på Astomed" className="w-28 h-28 rounded-full object-cover shadow-lg border-4 border-white mb-6" />
             <h2 className="text-3xl md:text-4xl font-bold text-[#1b3a3a] mb-4">Säkra din klinik redan idag</h2>
             <p className="text-lg text-slate-600 max-w-2xl mx-auto">
               Fyll i formuläret nedan för en kostnadsfri konsultation om hur våra flexibla serviceavtal kan skydda din investering och göra dig redo för lagen.
