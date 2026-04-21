@@ -328,7 +328,7 @@ export default function ServiceRecords() {
                     </div>
                     <div className="flex gap-2 flex-shrink-0 self-start" onClick={e => e.stopPropagation()}>
                       <Button size="sm" variant="outline" onClick={(e) => handleCopyLink(record, e)} title="Kopiera länk till ärende">
-                        <Copy className="w-4 h-4" />
+                        <Copy className="w-4 h-4 mr-2" /> Kopiera länk
                       </Button>
                       <Button size="sm" variant="outline" onClick={() => { setEditing(record); setShowForm(true); }}>
                         Redigera
@@ -408,7 +408,7 @@ export default function ServiceRecords() {
                         <div className="pt-2 space-y-2">
                           <div className="flex gap-2" onClick={e => e.stopPropagation()}>
                             <Button className="h-11 px-4 text-slate-500" variant="outline" onClick={(e) => handleCopyLink(record, e)} title="Kopiera länk">
-                              <Copy className="w-5 h-5" />
+                              <Copy className="w-4 h-4 mr-2" /> Länk
                             </Button>
                             <Button className="flex-1 h-11" variant="outline" onClick={() => { setEditing(record); setShowForm(true); }}>
                               Redigera
