@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { format } from "date-fns";
 import { sv } from "date-fns/locale";
 import ServiceRecordForm from "@/components/service/ServiceRecordForm.jsx";
@@ -148,6 +149,18 @@ export default function ServiceRecords() {
     if (aNew && !bNew) return -1;
     if (!aNew && bNew) return 1;
 
+    const getStatusWeight = (status) => {
+      if (status === "in_progress") return 2;
+      if (status === "pending") return 1;
+      return 0;
+    };
+    
+    const aWeight = getStatusWeight(a.status);
+    const bWeight = getStatusWeight(b.status);
+    
+    if (aWeight > bWeight) return -1;
+    if (aWeight < bWeight) return 1;
+
     if (filters.sortBy === "date_asc") return (a.created_date || "").localeCompare(b.created_date || "");
     if (filters.sortBy === "cost_desc") return (b.total_cost || 0) - (a.total_cost || 0);
     if (filters.sortBy === "cost_asc") return (a.total_cost || 0) - (b.total_cost || 0);
@@ -260,8 +273,20 @@ export default function ServiceRecords() {
         />
       </div>
 
-      <>
-        {/* Desktop List View */}
+      <Tabs value={filters.status} onValueChange={(val) => setFilters(f => ({ ...f, status: val }))} className="w-full mt-6">
+        <div className="overflow-x-auto pb-2 -mx-6 px-6 md:mx-0 md:px-0">
+          <TabsList className="h-auto p-1 bg-slate-100/50 flex w-max min-w-full">
+            <TabsTrigger value="all" className="flex-1 whitespace-nowrap">Alla</TabsTrigger>
+            <TabsTrigger value="in_progress" className="flex-1 whitespace-nowrap">Pågående</TabsTrigger>
+            <TabsTrigger value="pending" className="flex-1 whitespace-nowrap">Väntande</TabsTrigger>
+            <TabsTrigger value="awaiting_approval" className="flex-1 whitespace-nowrap">Inväntar godkännande</TabsTrigger>
+            <TabsTrigger value="completed" className="flex-1 whitespace-nowrap">Slutförd</TabsTrigger>
+            <TabsTrigger value="invoiced" className="flex-1 whitespace-nowrap">Fakturerad</TabsTrigger>
+          </TabsList>
+        </div>
+        
+        <TabsContent value={filters.status} className="mt-4 focus-visible:outline-none focus-visible:ring-0">
+          {/* Desktop List View */}
         <div className="hidden md:flex flex-col space-y-3">
           {filtered.map(record => {
             const machine = getMachine(record.machine_id);
@@ -393,7 +418,8 @@ export default function ServiceRecords() {
             <p>Inga serviceärenden hittades</p>
           </div>
         )}
-      </>
+        </TabsContent>
+      </Tabs>
 
       {showForm && user?.role === "customer" && (
         <CustomerServiceRequestForm
