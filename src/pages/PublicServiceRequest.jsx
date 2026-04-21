@@ -556,7 +556,9 @@ export default function PublicServiceRequest() {
             </ul>
           </div>
           <div className="relative">
-            <img src="https://wp.klinikutrustning.se/wp-content/uploads/2025/12/maskiner-astomed.jpg" alt="Astomed Klinikutrustning" className="rounded-2xl shadow-2xl relative z-10 w-full" />
+            <a href="https://klinikutrustning.se/utrustning/aldix-smart-diodlaser" target="_blank" rel="noopener noreferrer" className="relative z-10 block hover:opacity-95 transition-opacity">
+              <img src="https://wp.klinikutrustning.se/wp-content/uploads/2025/12/maskiner-astomed.jpg" alt="Astomed Klinikutrustning" className="rounded-2xl shadow-2xl w-full" />
+            </a>
             <div className="absolute -inset-4 bg-gradient-to-tr from-[#e8f2f2] to-transparent rounded-3xl -z-10 transform translate-x-4 translate-y-4"></div>
           </div>
         </div>
