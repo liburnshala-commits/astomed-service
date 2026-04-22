@@ -62,6 +62,8 @@ export default function ServiceRecordForm({ record, machines, customers, presele
   const currentCustomer = customers.find(c => c.id === form.customer_id);
 
   const [machineServiceDate, setMachineServiceDate] = useState("");
+  const [customerContact, setCustomerContact] = useState("");
+  const [customerPhone, setCustomerPhone] = useState("");
 
   useEffect(() => {
     base44.entities.ServiceAgreementTemplate.list().then(setTemplates).catch(console.error);
@@ -74,6 +76,16 @@ export default function ServiceRecordForm({ record, machines, customers, presele
       setMachineServiceDate("");
     }
   }, [currentMachine?.id]);
+
+  useEffect(() => {
+    if (currentCustomer) {
+      setCustomerContact(currentCustomer.contact_person || "");
+      setCustomerPhone(currentCustomer.phone || "");
+    } else {
+      setCustomerContact("");
+      setCustomerPhone("");
+    }
+  }, [currentCustomer?.id]);
 
   const applyTemplate = (templateId) => {
     const template = templates.find(t => t.id === templateId);
@@ -219,6 +231,13 @@ export default function ServiceRecordForm({ record, machines, customers, presele
     if (currentMachine && currentMachine.service_date !== machineServiceDate) {
       base44.entities.Machine.update(currentMachine.id, { service_date: machineServiceDate || null }).catch(console.error);
     }
+    
+    if (currentCustomer && (currentCustomer.contact_person !== customerContact || currentCustomer.phone !== customerPhone)) {
+      base44.entities.Customer.update(currentCustomer.id, { 
+        contact_person: customerContact || null, 
+        phone: customerPhone || null 
+      }).catch(console.error);
+    }
 
     let finalStatus = form.status;
     
@@ -292,6 +311,32 @@ export default function ServiceRecordForm({ record, machines, customers, presele
                   </SelectContent>
                 </Select>
               </div>
+
+              {currentCustomer && (
+                <div className="col-span-2 bg-slate-50 border border-slate-200 rounded-lg p-3 text-sm grid grid-cols-2 gap-2 items-center">
+                  <div>
+                    <span className="block text-[10px] font-semibold text-slate-500 uppercase tracking-wide mb-0.5">Kontaktperson (Kund)</span>
+                    <Input 
+                      type="text" 
+                      className="h-7 text-xs px-2 w-full bg-white" 
+                      placeholder="Saknas"
+                      value={customerContact} 
+                      onChange={e => setCustomerContact(e.target.value)} 
+                    />
+                  </div>
+                  <div>
+                    <span className="block text-[10px] font-semibold text-slate-500 uppercase tracking-wide mb-0.5">Telefon (Kund)</span>
+                    <Input 
+                      type="text" 
+                      className="h-7 text-xs px-2 w-full bg-white" 
+                      placeholder="Saknas"
+                      value={customerPhone} 
+                      onChange={e => setCustomerPhone(e.target.value)} 
+                    />
+                  </div>
+                </div>
+              )}
+
               <div className="col-span-2 space-y-1">
                 <Label>Maskin *</Label>
                 <Select value={form.machine_id} onValueChange={handleMachineChange} disabled={!form.customer_id}>

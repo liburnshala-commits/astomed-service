@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { machineServiceDetails } from "../MachineServiceDetails";
+import { base44 } from "@/api/base44Client";
 import { MACHINE_MODELS } from "@/lib/constants";
 
 const isCustomModel = (model) => model && !MACHINE_MODELS.includes(model);
@@ -27,9 +28,30 @@ export default function MachineForm({ machine, customers, preselectedCustomerId,
     notes: machine?.notes || ""
   });
 
+  const currentCustomer = customers.find(c => c.id === form.customer_id);
+  const [customerContact, setCustomerContact] = useState("");
+  const [customerEmail, setCustomerEmail] = useState("");
+
+  useEffect(() => {
+    if (currentCustomer) {
+      setCustomerContact(currentCustomer.contact_person || "");
+      setCustomerEmail(currentCustomer.email || "");
+    } else {
+      setCustomerContact("");
+      setCustomerEmail("");
+    }
+  }, [currentCustomer?.id]);
+
   const set = (field, value) => setForm(prev => ({ ...prev, [field]: value }));
 
   const handleSave = () => {
+    if (currentCustomer && (currentCustomer.contact_person !== customerContact || currentCustomer.email !== customerEmail)) {
+      base44.entities.Customer.update(currentCustomer.id, { 
+        contact_person: customerContact || null, 
+        email: customerEmail || null 
+      }).catch(console.error);
+    }
+
     const saveData = { ...form };
     if (form.model === "Annan") {
       saveData.model = form.custom_model;
@@ -104,6 +126,30 @@ export default function MachineForm({ machine, customers, preselectedCustomerId,
                 </SelectContent>
               </Select>
             </div>
+            {currentCustomer && (
+              <div className="col-span-2 bg-slate-50 border border-slate-200 rounded-lg p-3 text-sm grid grid-cols-2 gap-2 items-center">
+                <div>
+                  <span className="block text-[10px] font-semibold text-slate-500 uppercase tracking-wide mb-0.5">Referensperson (Kund)</span>
+                  <Input 
+                    type="text" 
+                    className="h-7 text-xs px-2 w-full bg-white" 
+                    placeholder="T.ex. Anna Andersson"
+                    value={customerContact} 
+                    onChange={e => setCustomerContact(e.target.value)} 
+                  />
+                </div>
+                <div>
+                  <span className="block text-[10px] font-semibold text-slate-500 uppercase tracking-wide mb-0.5">E-postadress (Kund)</span>
+                  <Input 
+                    type="email" 
+                    className="h-7 text-xs px-2 w-full bg-white" 
+                    placeholder="anna@exempel.se"
+                    value={customerEmail} 
+                    onChange={e => setCustomerEmail(e.target.value)} 
+                  />
+                </div>
+              </div>
+            )}
             <div className="space-y-1">
               <Label>Senaste servicedatum</Label>
               <Input type="date" value={form.service_date} onChange={e => set("service_date", e.target.value)} />
