@@ -8,7 +8,6 @@ import { X, Wrench, Upload, CheckCircle } from "lucide-react";
 import { createPortal } from "react-dom";
 
 export default function CustomerServiceRequestForm({ machines, customer, onClose, onSaved }) {
-  const [serialNumber, setSerialNumber] = useState("");
   const [machineId, setMachineId] = useState(machines.length === 1 ? machines[0].id : "");
   const [description, setDescription] = useState("");
   const [preferredDate, setPreferredDate] = useState("");
@@ -20,11 +19,8 @@ export default function CustomerServiceRequestForm({ machines, customer, onClose
 
   const selectedMachine = machines.find(m => m.id === machineId);
 
-  // Auto-fill serial number when machine is selected
   const handleMachineChange = (id) => {
     setMachineId(id);
-    const m = machines.find(m => m.id === id);
-    if (m?.serial_number) setSerialNumber(m.serial_number);
   };
 
   const handleImageChange = async (e) => {
@@ -110,15 +106,7 @@ export default function CustomerServiceRequestForm({ machines, customer, onClose
               </Select>
             </div>
 
-            {/* Serial number */}
-            <div>
-              <label className="text-sm font-medium mb-1 block" style={{ color: "#254f4f" }}>Serienummer *</label>
-              <Input
-                placeholder="T.ex. SN-123456"
-                value={serialNumber}
-                onChange={e => setSerialNumber(e.target.value)}
-              />
-            </div>
+
 
             {/* Information about SSM */}
             <div className="bg-slate-50 p-3 rounded-lg border border-slate-200 text-sm text-slate-600">
