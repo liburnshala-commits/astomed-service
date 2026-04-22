@@ -13,6 +13,7 @@ export default function CustomerServiceRequestForm({ machines, customer, onClose
   const [preferredDate, setPreferredDate] = useState("");
   const [lastServiceDate, setLastServiceDate] = useState("");
   const [image, setImage] = useState(null);
+  const [isRepair, setIsRepair] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [loading, setLoading] = useState(false);
   const [done, setDone] = useState(false);
@@ -34,21 +35,22 @@ export default function CustomerServiceRequestForm({ machines, customer, onClose
 
   const handleSubmit = async () => {
     if (!machineId) return;
+    if (isRepair && !description.trim()) return;
     setLoading(true);
     try {
-      let finalDescription = description.trim();
-      if (preferredDate) {
+      let finalDescription = isRepair ? description.trim() : "Beställning av årlig standardservice.";
+      if (!isRepair && preferredDate) {
         finalDescription += `\n\nÖnskat datum för service: ${preferredDate}`;
       }
-      if (lastServiceDate) {
+      if (!isRepair && lastServiceDate) {
         finalDescription += `\nKänd senaste servicedatum: ${lastServiceDate}`;
       }
 
       const newRecord = await base44.entities.ServiceRecord.create({
         machine_id: machineId,
         customer_id: customer.id,
-        service_type: "standard",
-        service_date: preferredDate || new Date().toISOString().split("T")[0],
+        service_type: isRepair ? "advanced" : "standard",
+        service_date: (!isRepair && preferredDate) ? preferredDate : new Date().toISOString().split("T")[0],
         description: finalDescription,
         status: "pending",
         images: image ? [image] : []
@@ -108,71 +110,99 @@ export default function CustomerServiceRequestForm({ machines, customer, onClose
 
 
 
-            {/* Information about SSM */}
-            <div className="bg-slate-50 p-3 rounded-lg border border-slate-200 text-sm text-slate-600">
-              <p><strong>Viktig information angående service:</strong></p>
-              <p className="mt-1">SSM (Strålsäkerhetsmyndigheten) kräver att lasermaskiner servas en gång om året.</p>
-              <p className="mt-1">Du hittar ditt senaste servicedatum i det protokoll du fått senast, eller på en klisterlapp på baksidan av maskinen.</p>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {/* Senaste service */}
-              <div>
-                <label className="text-sm font-medium mb-1 block" style={{ color: "#254f4f" }}>Senaste servicedatum (om känt)</label>
-                <Input
-                  type="date"
-                  value={lastServiceDate}
-                  onChange={e => setLastServiceDate(e.target.value)}
-                />
-              </div>
-
-              {/* Önskat datum */}
-              <div>
-                <label className="text-sm font-medium mb-1 block" style={{ color: "#254f4f" }}>Önskat datum för nästa service</label>
-                <Input
-                  type="date"
-                  value={preferredDate}
-                  onChange={e => setPreferredDate(e.target.value)}
-                />
-              </div>
-            </div>
-
-            {/* Description */}
-            <div>
-              <label className="text-sm font-medium mb-1 block" style={{ color: "#254f4f" }}>Beskriv problemet eller ärendet (frivilligt)</label>
-              <Textarea
-                placeholder="Vad är det för problem? Beskriv så detaljerat som möjligt..."
-                value={description}
-                onChange={e => setDescription(e.target.value)}
-                rows={4}
-              />
-            </div>
-
-            {/* Image upload */}
-            <div>
-              <label className="text-sm font-medium mb-1 block" style={{ color: "#254f4f" }}>Bild (valfritt)</label>
-              {image ? (
-                <div className="relative inline-block">
-                  <img src={image} alt="Uppladdad" className="h-24 rounded-lg object-cover border" />
-                  <button
-                    onClick={() => setImage(null)}
-                    className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
-                  >×</button>
+            {/* Ärendetyp */}
+            <div className="space-y-2 mt-4">
+              <label className="text-sm font-medium block" style={{ color: "#254f4f" }}>Ärendetyp *</label>
+              <div className="grid grid-cols-2 gap-3">
+                <div 
+                  onClick={() => setIsRepair(false)}
+                  className={`p-4 border rounded-xl cursor-pointer transition-colors ${!isRepair ? 'border-[#3a9e9e] bg-[#e8f2f2]' : 'border-slate-200 hover:border-[#3a9e9e]'}`}
+                >
+                  <div className="font-semibold text-slate-900 mb-1">Standardservice</div>
+                  <div className="text-xs text-slate-500">Årlig service enligt avtal. Planera datum.</div>
                 </div>
-              ) : (
-                <label className="flex items-center gap-2 p-3 border-2 border-dashed border-slate-200 rounded-lg cursor-pointer hover:border-slate-300 transition-colors">
-                  <Upload className="w-4 h-4 text-slate-400" />
-                  <span className="text-sm text-slate-500">{uploading ? "Laddar upp..." : "Klicka för att ladda upp bild"}</span>
-                  <input type="file" accept="image/*" className="hidden" onChange={handleImageChange} disabled={uploading} />
-                </label>
-              )}
+                <div 
+                  onClick={() => setIsRepair(true)}
+                  className={`p-4 border rounded-xl cursor-pointer transition-colors ${isRepair ? 'border-[#3a9e9e] bg-[#e8f2f2]' : 'border-slate-200 hover:border-[#3a9e9e]'}`}
+                >
+                  <div className="font-semibold text-slate-900 mb-1">Reparation</div>
+                  <div className="text-xs text-slate-500">Felsökning och reparation av uppstått problem.</div>
+                </div>
+              </div>
             </div>
 
-            <div className="flex gap-3 pt-1">
+            {!isRepair ? (
+              <>
+                {/* Information about SSM */}
+                <div className="bg-slate-50 p-3 rounded-lg border border-slate-200 text-sm text-slate-600">
+                  <p><strong>Viktig information angående service:</strong></p>
+                  <p className="mt-1">SSM (Strålsäkerhetsmyndigheten) kräver att lasermaskiner servas en gång om året.</p>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {/* Önskat datum */}
+                  <div>
+                    <label className="text-sm font-medium mb-1 block" style={{ color: "#254f4f" }}>Önskat datum för service</label>
+                    <Input
+                      type="date"
+                      value={preferredDate}
+                      onChange={e => setPreferredDate(e.target.value)}
+                    />
+                  </div>
+
+                  {/* Senaste service (only if not already set on machine) */}
+                  {!selectedMachine?.service_date && (
+                    <div>
+                      <label className="text-sm font-medium mb-1 block" style={{ color: "#254f4f" }}>Senaste servicedatum (om känt)</label>
+                      <Input
+                        type="date"
+                        value={lastServiceDate}
+                        onChange={e => setLastServiceDate(e.target.value)}
+                      />
+                    </div>
+                  )}
+                </div>
+              </>
+            ) : (
+              <div className="space-y-4 mt-2">
+                {/* Description */}
+                <div>
+                  <label className="text-sm font-medium mb-1 block" style={{ color: "#254f4f" }}>Beskriv problemet *</label>
+                  <Textarea
+                    placeholder="Vad är det för problem? Beskriv så detaljerat som möjligt..."
+                    value={description}
+                    onChange={e => setDescription(e.target.value)}
+                    rows={4}
+                  />
+                </div>
+
+                {/* Image upload */}
+                <div>
+                  <label className="text-sm font-medium mb-1 block" style={{ color: "#254f4f" }}>Bild (valfritt)</label>
+                  {image ? (
+                    <div className="relative inline-block">
+                      <img src={image} alt="Uppladdad" className="h-24 rounded-lg object-cover border" />
+                      <button
+                        onClick={() => setImage(null)}
+                        className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
+                      >×</button>
+                    </div>
+                  ) : (
+                    <label className="flex items-center gap-2 p-3 border-2 border-dashed border-slate-200 rounded-lg cursor-pointer hover:border-slate-300 transition-colors">
+                      <Upload className="w-4 h-4 text-slate-400" />
+                      <span className="text-sm text-slate-500">{uploading ? "Laddar upp..." : "Klicka för att ladda upp bild"}</span>
+                      <input type="file" accept="image/*" className="hidden" onChange={handleImageChange} disabled={uploading} />
+                    </label>
+                  )}
+                </div>
+              </div>
+            )}
+
+            <div className="flex gap-3 pt-1 mt-4">
               <Button variant="outline" onClick={onClose} className="flex-1">Avbryt</Button>
               <Button
                 onClick={handleSubmit}
-                disabled={!machineId || loading || uploading}
+                disabled={!machineId || (isRepair && !description.trim()) || loading || uploading}
                 className="flex-1 astomed-btn-primary"
               >
                 {loading ? "Skickar..." : "Skicka ärende"}
