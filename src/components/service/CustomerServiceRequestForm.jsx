@@ -11,6 +11,8 @@ export default function CustomerServiceRequestForm({ machines, customer, onClose
   const [serialNumber, setSerialNumber] = useState("");
   const [machineId, setMachineId] = useState(machines.length === 1 ? machines[0].id : "");
   const [description, setDescription] = useState("");
+  const [preferredDate, setPreferredDate] = useState("");
+  const [lastServiceDate, setLastServiceDate] = useState("");
   const [image, setImage] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -38,12 +40,20 @@ export default function CustomerServiceRequestForm({ machines, customer, onClose
     if (!machineId || !description.trim()) return;
     setLoading(true);
     try {
+      let finalDescription = description.trim();
+      if (preferredDate) {
+        finalDescription += `\n\nÖnskat datum för service: ${preferredDate}`;
+      }
+      if (lastServiceDate) {
+        finalDescription += `\nKänd senaste servicedatum: ${lastServiceDate}`;
+      }
+
       const newRecord = await base44.entities.ServiceRecord.create({
         machine_id: machineId,
         customer_id: customer.id,
         service_type: "standard",
-        service_date: new Date().toISOString().split("T")[0],
-        description: description.trim(),
+        service_date: preferredDate || new Date().toISOString().split("T")[0],
+        description: finalDescription,
         status: "pending",
         images: image ? [image] : []
       });
@@ -110,9 +120,38 @@ export default function CustomerServiceRequestForm({ machines, customer, onClose
               />
             </div>
 
+            {/* Information about SSM */}
+            <div className="bg-slate-50 p-3 rounded-lg border border-slate-200 text-sm text-slate-600">
+              <p><strong>Viktig information angående service:</strong></p>
+              <p className="mt-1">SSM (Strålsäkerhetsmyndigheten) kräver att lasermaskiner servas en gång om året.</p>
+              <p className="mt-1">Du hittar ditt senaste servicedatum i det protokoll du fått senast, eller på en klisterlapp på baksidan av maskinen.</p>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {/* Senaste service */}
+              <div>
+                <label className="text-sm font-medium mb-1 block" style={{ color: "#254f4f" }}>Senaste servicedatum (om känt)</label>
+                <Input
+                  type="date"
+                  value={lastServiceDate}
+                  onChange={e => setLastServiceDate(e.target.value)}
+                />
+              </div>
+
+              {/* Önskat datum */}
+              <div>
+                <label className="text-sm font-medium mb-1 block" style={{ color: "#254f4f" }}>Önskat datum för nästa service</label>
+                <Input
+                  type="date"
+                  value={preferredDate}
+                  onChange={e => setPreferredDate(e.target.value)}
+                />
+              </div>
+            </div>
+
             {/* Description */}
             <div>
-              <label className="text-sm font-medium mb-1 block" style={{ color: "#254f4f" }}>Beskriv problemet *</label>
+              <label className="text-sm font-medium mb-1 block" style={{ color: "#254f4f" }}>Beskriv problemet eller ärendet *</label>
               <Textarea
                 placeholder="Vad är det för problem? Beskriv så detaljerat som möjligt..."
                 value={description}
