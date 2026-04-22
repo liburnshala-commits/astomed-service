@@ -186,6 +186,24 @@ export default function ServiceRecordForm({ record, machines, customers, presele
       setStep(3); // Skip repair step
     } else {
       set("service_type", "advanced");
+      
+      setForm(prev => {
+        const allTemplateServices = new Set(templates.flatMap(t => t.included_services || []));
+        const manualParts = prev.parts_used.filter(p => !allTemplateServices.has(p.part_name));
+        
+        let newDesc = prev.description || "";
+        templates.forEach(t => {
+          newDesc = newDesc.replace(`\n\nGenomförda moment från mall (${t.name}):`, "");
+          newDesc = newDesc.replace(`Genomförda moment från mall (${t.name}):`, "");
+        });
+        
+        return {
+          ...prev,
+          description: newDesc.trim(),
+          parts_used: manualParts
+        };
+      });
+
       setStep(2);
     }
   };
