@@ -116,24 +116,51 @@ export default function ServiceRecordDetail({ record, machine, customer, onClose
             )}
 
             {/* Description */}
-            {(record.description || record.measured_laser_power || record.pulse_count) && (
+            {(record.description || record.measured_laser_power || record.pulse_count || record.measured_laser_power_2 || record.pulse_count_2) && (
               <div>
                 <div className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">Utfört arbete & Mätvärden</div>
                 <div className="bg-slate-50 rounded-lg p-4 space-y-4">
                   {record.description && <p className="text-sm text-slate-700 leading-relaxed whitespace-pre-wrap">{record.description}</p>}
                   
-                  {(record.measured_laser_power || record.pulse_count) && (
-                    <div className="flex gap-8 border-t border-slate-200 pt-3">
-                      {record.measured_laser_power && (
+                  {(record.measured_laser_power || record.pulse_count || record.measured_laser_power_2 || record.pulse_count_2) && (
+                    <div className="space-y-4 border-t border-slate-200 pt-3">
+                      {(record.measured_laser_power || record.pulse_count) && (
                         <div>
-                          <div className="text-[10px] uppercase text-slate-500 font-semibold mb-1">Uppmätt lasereffekt</div>
-                          <div className="text-sm font-medium">{record.measured_laser_power}</div>
+                          {machine?.model === "Soprano Titanium" && <div className="text-xs font-semibold text-slate-700 mb-1">Handenhet 1</div>}
+                          <div className="flex gap-8">
+                            {record.measured_laser_power && (
+                              <div>
+                                <div className="text-[10px] uppercase text-slate-500 font-semibold mb-1">Uppmätt lasereffekt</div>
+                                <div className="text-sm font-medium">{record.measured_laser_power}</div>
+                              </div>
+                            )}
+                            {record.pulse_count && (
+                              <div>
+                                <div className="text-[10px] uppercase text-slate-500 font-semibold mb-1">Antal pulser</div>
+                                <div className="text-sm font-medium">{record.pulse_count.toLocaleString("sv-SE")}</div>
+                              </div>
+                            )}
+                          </div>
                         </div>
                       )}
-                      {record.pulse_count && (
+                      
+                      {(record.measured_laser_power_2 || record.pulse_count_2) && (
                         <div>
-                          <div className="text-[10px] uppercase text-slate-500 font-semibold mb-1">Antal pulser</div>
-                          <div className="text-sm font-medium">{record.pulse_count.toLocaleString("sv-SE")}</div>
+                          {machine?.model === "Soprano Titanium" && <div className="text-xs font-semibold text-slate-700 mb-1">Handenhet 2</div>}
+                          <div className="flex gap-8">
+                            {record.measured_laser_power_2 && (
+                              <div>
+                                <div className="text-[10px] uppercase text-slate-500 font-semibold mb-1">Uppmätt lasereffekt</div>
+                                <div className="text-sm font-medium">{record.measured_laser_power_2}</div>
+                              </div>
+                            )}
+                            {record.pulse_count_2 && (
+                              <div>
+                                <div className="text-[10px] uppercase text-slate-500 font-semibold mb-1">Antal pulser</div>
+                                <div className="text-sm font-medium">{record.pulse_count_2.toLocaleString("sv-SE")}</div>
+                              </div>
+                            )}
+                          </div>
                         </div>
                       )}
                     </div>

@@ -131,15 +131,32 @@ export default function ServiceReportModal({ record, machine, customer, onClose 
           <hr className="my-5 print:my-1 border-slate-200" />
 
           {/* Technical assessment */}
-          {(record.description || record.measured_laser_power || record.pulse_count) && (
+          {(record.description || record.measured_laser_power || record.pulse_count || record.measured_laser_power_2 || record.pulse_count_2) && (
             <>
               <h2 className="font-bold text-sm print:text-[11px] mb-2 print:mb-0.5">Teknisk bedömning & Mätvärden</h2>
               {record.description && <p className="mb-3 text-slate-700 leading-relaxed whitespace-pre-line">{record.description}</p>}
-              {(record.measured_laser_power || record.pulse_count) && (
-                <ul className="list-disc list-inside space-y-1 mb-4 print:mb-1 text-slate-700">
-                  {record.measured_laser_power && <li><strong>Uppmätt lasereffekt:</strong> {record.measured_laser_power}</li>}
-                  {record.pulse_count && <li><strong>Antal pulser:</strong> {record.pulse_count.toLocaleString("sv-SE")}</li>}
-                </ul>
+              
+              {(record.measured_laser_power || record.pulse_count || record.measured_laser_power_2 || record.pulse_count_2) && (
+                <div className="mb-4 print:mb-1 text-slate-700">
+                  {(record.measured_laser_power || record.pulse_count) && (
+                    <div className="mb-2">
+                      {machine?.model === "Soprano Titanium" && <div className="font-semibold text-xs mb-1">Handenhet 1</div>}
+                      <ul className="list-disc list-inside space-y-1">
+                        {record.measured_laser_power && <li><strong>Uppmätt lasereffekt:</strong> {record.measured_laser_power}</li>}
+                        {record.pulse_count && <li><strong>Antal pulser:</strong> {record.pulse_count.toLocaleString("sv-SE")}</li>}
+                      </ul>
+                    </div>
+                  )}
+                  {(record.measured_laser_power_2 || record.pulse_count_2) && (
+                    <div>
+                      {machine?.model === "Soprano Titanium" && <div className="font-semibold text-xs mb-1">Handenhet 2</div>}
+                      <ul className="list-disc list-inside space-y-1">
+                        {record.measured_laser_power_2 && <li><strong>Uppmätt lasereffekt:</strong> {record.measured_laser_power_2}</li>}
+                        {record.pulse_count_2 && <li><strong>Antal pulser:</strong> {record.pulse_count_2.toLocaleString("sv-SE")}</li>}
+                      </ul>
+                    </div>
+                  )}
+                </div>
               )}
               <hr className="my-5 print:my-1 border-slate-200" />
             </>

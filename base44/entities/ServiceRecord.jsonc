@@ -39,6 +39,14 @@
       "type": "number",
       "description": "Antal pulser"
     },
+    "measured_laser_power_2": {
+      "type": "string",
+      "description": "Uppm\u00e4tt lasereffekt handenhet 2"
+    },
+    "pulse_count_2": {
+      "type": "number",
+      "description": "Antal pulser handenhet 2"
+    },
     "parts_used": {
       "type": "array",
       "description": "Anv\u00e4nda reservdelar",

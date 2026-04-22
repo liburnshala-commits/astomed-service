@@ -50,7 +50,9 @@ export default function ServiceRecordForm({ record, machines, customers, presele
     images: record?.images || [],
     service_contract: record?.service_contract || "",
     measured_laser_power: record?.measured_laser_power || "",
-    pulse_count: record?.pulse_count || ""
+    pulse_count: record?.pulse_count || "",
+    measured_laser_power_2: record?.measured_laser_power_2 || "",
+    pulse_count_2: record?.pulse_count_2 || ""
   });
 
   const [invoiceError, setInvoiceError] = useState(null);
@@ -262,7 +264,9 @@ export default function ServiceRecordForm({ record, machines, customers, presele
       discount_percent: form.discount_percent === "" ? 0 : Number(form.discount_percent),
       next_service_date: form.next_service_date || undefined,
       measured_laser_power: form.measured_laser_power || undefined,
-      pulse_count: form.pulse_count === "" ? undefined : Number(form.pulse_count)
+      pulse_count: form.pulse_count === "" ? undefined : Number(form.pulse_count),
+      measured_laser_power_2: form.measured_laser_power_2 || undefined,
+      pulse_count_2: form.pulse_count_2 === "" ? undefined : Number(form.pulse_count_2)
     });
   };
 
@@ -480,6 +484,10 @@ export default function ServiceRecordForm({ record, machines, customers, presele
                   <div className="col-span-2 text-sm font-semibold text-blue-900 flex items-center gap-2">
                     <CheckCircle2 className="w-4 h-4" /> Mätvärden inför avslut
                   </div>
+                  
+                  {currentMachine?.model === "Soprano Titanium" && (
+                    <div className="col-span-2 text-xs font-semibold text-blue-800 mt-2 uppercase tracking-wide">Handenhet 1</div>
+                  )}
                   <div className="space-y-1">
                     <Label>Uppmätt lasereffekt (W/J)</Label>
                     <Input value={form.measured_laser_power} onChange={e => set("measured_laser_power", e.target.value)} placeholder="T.ex. 2000W" />
@@ -488,6 +496,20 @@ export default function ServiceRecordForm({ record, machines, customers, presele
                     <Label>Antal pulser</Label>
                     <Input type="number" value={form.pulse_count} onChange={e => set("pulse_count", e.target.value === "" ? "" : Number(e.target.value))} placeholder="T.ex. 1500000" />
                   </div>
+
+                  {currentMachine?.model === "Soprano Titanium" && (
+                    <>
+                      <div className="col-span-2 text-xs font-semibold text-blue-800 mt-2 uppercase tracking-wide">Handenhet 2</div>
+                      <div className="space-y-1">
+                        <Label>Uppmätt lasereffekt (W/J)</Label>
+                        <Input value={form.measured_laser_power_2} onChange={e => set("measured_laser_power_2", e.target.value)} placeholder="T.ex. 2000W" />
+                      </div>
+                      <div className="space-y-1">
+                        <Label>Antal pulser</Label>
+                        <Input type="number" value={form.pulse_count_2} onChange={e => set("pulse_count_2", e.target.value === "" ? "" : Number(e.target.value))} placeholder="T.ex. 1500000" />
+                      </div>
+                    </>
+                  )}
                 </div>
               )}
 
