@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { createPageUrl } from "@/utils";
+import { useLocation } from "react-router-dom";
 import { Plus, Search, Wrench, Trash2, Copy } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -33,10 +34,12 @@ const typeColor = { standard: "bg-slate-100 text-slate-700", advanced: "bg-indig
 
 export default function ServiceRecords() {
   const queryClient = useQueryClient();
-  const urlParams = new URLSearchParams(window.location.search);
+  const location = useLocation();
+  const urlParams = new URLSearchParams(location.search);
   const preselectedMachine = urlParams.get("machine");
   const preselectedModel = urlParams.get("model");
   const preselectedId = urlParams.get("id");
+  const isNewParam = urlParams.get("new") === "true";
 
   const [search, setSearch] = useState("");
   const [filters, setFilters] = useState({
@@ -51,7 +54,13 @@ export default function ServiceRecords() {
     maxCost: "",
     sortBy: "date_desc",
   });
-  const [showForm, setShowForm] = useState(urlParams.get("new") === "true");
+  const [showForm, setShowForm] = useState(isNewParam);
+
+  useEffect(() => {
+    if (isNewParam) {
+      setShowForm(true);
+    }
+  }, [isNewParam]);
   const [editing, setEditing] = useState(null);
   const [viewing, setViewing] = useState(null);
 
