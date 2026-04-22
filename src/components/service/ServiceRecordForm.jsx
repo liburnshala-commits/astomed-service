@@ -57,13 +57,23 @@ export default function ServiceRecordForm({ record, machines, customers, presele
   const [uploading, setUploading] = useState(false);
   const [templates, setTemplates] = useState([]);
 
+  const currentMachine = machines.find(m => m.id === form.machine_id);
+  const currentContract = currentMachine?.service_contract || "none";
+  const currentCustomer = customers.find(c => c.id === form.customer_id);
+
+  const [machineServiceDate, setMachineServiceDate] = useState("");
+
   useEffect(() => {
     base44.entities.ServiceAgreementTemplate.list().then(setTemplates).catch(console.error);
   }, []);
 
-  const currentMachine = machines.find(m => m.id === form.machine_id);
-  const currentContract = currentMachine?.service_contract || "none";
-  const currentCustomer = customers.find(c => c.id === form.customer_id);
+  useEffect(() => {
+    if (currentMachine) {
+      setMachineServiceDate(currentMachine.service_date || "");
+    } else {
+      setMachineServiceDate("");
+    }
+  }, [currentMachine?.id]);
 
   const applyTemplate = (templateId) => {
     const template = templates.find(t => t.id === templateId);
@@ -206,6 +216,10 @@ export default function ServiceRecordForm({ record, machines, customers, presele
   };
 
   const handleSave = () => {
+    if (currentMachine && currentMachine.service_date !== machineServiceDate) {
+      base44.entities.Machine.update(currentMachine.id, { service_date: machineServiceDate || null }).catch(console.error);
+    }
+
     let finalStatus = form.status;
     
     // Auto-set status on creation based on date if it hasn't been explicitly set
@@ -291,10 +305,15 @@ export default function ServiceRecordForm({ record, machines, customers, presele
               </div>
 
               {currentMachine && (
-                <div className="col-span-2 bg-slate-50 border border-slate-200 rounded-lg p-3 text-sm grid grid-cols-3 gap-2">
+                <div className="col-span-2 bg-slate-50 border border-slate-200 rounded-lg p-3 text-sm grid grid-cols-3 gap-2 items-center">
                   <div>
                     <span className="block text-[10px] font-semibold text-slate-500 uppercase tracking-wide mb-0.5">Senaste service</span>
-                    <span className="font-medium text-slate-800">{currentMachine.service_date || "Ingen"}</span>
+                    <Input 
+                      type="date" 
+                      className="h-7 text-xs px-2 w-full" 
+                      value={machineServiceDate} 
+                      onChange={e => setMachineServiceDate(e.target.value)} 
+                    />
                   </div>
                   <div>
                     <span className="block text-[10px] font-semibold text-slate-500 uppercase tracking-wide mb-0.5">Serviceavtal</span>
