@@ -37,7 +37,7 @@ export default function CustomerServiceRequestForm({ machines, customer, onClose
   };
 
   const handleSubmit = async () => {
-    if (!machineId || !description.trim()) return;
+    if (!machineId) return;
     setLoading(true);
     try {
       let finalDescription = description.trim();
@@ -151,7 +151,7 @@ export default function CustomerServiceRequestForm({ machines, customer, onClose
 
             {/* Description */}
             <div>
-              <label className="text-sm font-medium mb-1 block" style={{ color: "#254f4f" }}>Beskriv problemet eller ärendet *</label>
+              <label className="text-sm font-medium mb-1 block" style={{ color: "#254f4f" }}>Beskriv problemet eller ärendet (frivilligt)</label>
               <Textarea
                 placeholder="Vad är det för problem? Beskriv så detaljerat som möjligt..."
                 value={description}
@@ -184,7 +184,7 @@ export default function CustomerServiceRequestForm({ machines, customer, onClose
               <Button variant="outline" onClick={onClose} className="flex-1">Avbryt</Button>
               <Button
                 onClick={handleSubmit}
-                disabled={!machineId || !description.trim() || loading || uploading}
+                disabled={!machineId || loading || uploading}
                 className="flex-1 astomed-btn-primary"
               >
                 {loading ? "Skickar..." : "Skicka ärende"}
