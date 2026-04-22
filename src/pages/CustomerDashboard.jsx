@@ -202,7 +202,7 @@ export default function CustomerDashboard() {
                         </div>
                         <div className="mt-3 pt-3 border-t border-slate-200/60">
                            <Button size="sm" variant="outline" className="w-full sm:w-auto text-xs h-8" asChild>
-                             <Link to={createPageUrl(`ServiceRecords`)}>
+                             <Link to={createPageUrl(`ServiceRecords?machine=${machine.id}&new=true`)}>
                                <Wrench className="w-3 h-3 mr-1.5" /> Boka service
                              </Link>
                            </Button>

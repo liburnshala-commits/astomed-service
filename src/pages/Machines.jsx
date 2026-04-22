@@ -282,7 +282,7 @@ export default function Machines() {
           </div>
           <div className="mt-auto pt-4 border-t border-slate-100 flex flex-col items-start sm:items-end gap-2 flex-shrink-0">
             <div className="flex gap-2 flex-wrap justify-start w-full">
-              <Link to={createPageUrl(`ServiceRecords?machine=${machine.id}`)}>
+              <Link to={createPageUrl(`ServiceRecords?machine=${machine.id}&new=true`)}>
                 <Button size="sm" variant="outline" className="w-full">
                   <Wrench className="w-3 h-3 mr-1" /> Starta service
                 </Button>

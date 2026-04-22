@@ -51,7 +51,7 @@ export default function ServiceRecords() {
     maxCost: "",
     sortBy: "date_desc",
   });
-  const [showForm, setShowForm] = useState(false);
+  const [showForm, setShowForm] = useState(urlParams.get("new") === "true");
   const [editing, setEditing] = useState(null);
   const [viewing, setViewing] = useState(null);
 
