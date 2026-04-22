@@ -208,8 +208,8 @@ export default function ServiceRecordForm({ record, machines, customers, presele
   const handleSave = () => {
     let finalStatus = form.status;
     
-    // Auto-set status on creation based on date
-    if (isCreating) {
+    // Auto-set status on creation based on date if it hasn't been explicitly set
+    if (isCreating && finalStatus === "pending") {
       const today = new Date().toISOString().split("T")[0];
       if (form.service_date > today) {
         finalStatus = "pending";
@@ -411,7 +411,7 @@ export default function ServiceRecordForm({ record, machines, customers, presele
 
           {step === 3 && (
             <div className="space-y-6">
-              {!isCreating && (
+              {(!isCreating || (form.service_date && form.service_date <= new Date().toISOString().split("T")[0])) && (
                 <div className="grid grid-cols-2 gap-4 bg-blue-50/50 p-4 rounded-xl border border-blue-100">
                   <div className="col-span-2 text-sm font-semibold text-blue-900 flex items-center gap-2">
                     <CheckCircle2 className="w-4 h-4" /> Mätvärden inför avslut
@@ -428,7 +428,7 @@ export default function ServiceRecordForm({ record, machines, customers, presele
               )}
 
               <div className="grid grid-cols-2 gap-4">
-                {!isCreating && (
+                {(!isCreating || (form.service_date && form.service_date <= new Date().toISOString().split("T")[0])) && (
                   <div className="col-span-2 space-y-1">
                     <Label>Status</Label>
                     <Select value={form.status} onValueChange={v => set("status", v)}>
