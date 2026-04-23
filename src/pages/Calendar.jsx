@@ -228,12 +228,15 @@ export default function Calendar() {
                             onDragStart={(e) => { e.stopPropagation(); setDraggedRecord(r); }}
                             onClick={(e) => { e.stopPropagation(); setBookingDialog({ date: key, record: r }); }}
                             className="flex flex-col px-2 py-1.5 rounded bg-white border border-slate-200 hover:bg-slate-50 hover:border-slate-300 cursor-grab active:cursor-grabbing overflow-hidden transition-colors shadow-sm"
-                            title={`${customer?.company_name || "Okänd kund"} – ${machine?.model || "Maskin"} – ${r.technician_name || "Ingen tekniker"}`}
+                            title={`${customer?.company_name || "Okänd kund"} (${customer?.contact_person || "Ingen kontakt"}) – ${machine?.model || "Maskin"} – ${r.technician_name || "Ingen tekniker"}`}
                           >
                             <div className="flex items-center gap-1.5 mb-1">
                               <span className={cn("w-2 h-2 rounded-full flex-shrink-0", statusColor[r.status])}></span>
                               <span className="font-semibold text-xs truncate text-slate-900 leading-tight">{customer?.company_name || "Okänd kund"}</span>
                             </div>
+                            {customer?.contact_person && (
+                              <div className="truncate text-slate-500 text-[10px] pl-3.5 leading-tight mb-0.5">👤 {customer.contact_person}</div>
+                            )}
                             <div className="truncate text-slate-600 text-[11px] pl-3.5 leading-tight">{machine?.model || "Okänd maskin"}</div>
                           </div>
                         );
@@ -301,7 +304,10 @@ export default function Calendar() {
                                 <Badge className="bg-slate-100 text-slate-600 hover:bg-slate-200 border-0 text-[10px] uppercase font-mono">{machine?.serial_number || "SN saknas"}</Badge>
                               </div>
                               <div className="text-sm text-slate-600 pl-5 space-y-1">
-                                <div className="font-medium">{customer?.company_name || "Okänd kund"}</div>
+                                <div className="font-medium">
+                                  {customer?.company_name || "Okänd kund"}
+                                  {customer?.contact_person && <span className="font-normal text-slate-500 ml-1">({customer.contact_person})</span>}
+                                </div>
                                 <div className="text-xs text-slate-500">Tekniker: {r.technician_name || "Ej angiven"}</div>
                               </div>
                             </div>
