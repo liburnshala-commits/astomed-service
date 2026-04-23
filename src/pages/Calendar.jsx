@@ -201,9 +201,9 @@ export default function Calendar() {
                   <div
                     key={key}
                     className={cn(
-                      "min-h-[120px] rounded-lg p-1.5 border transition-all cursor-pointer select-none flex flex-col",
+                      "min-h-[160px] rounded-lg p-2 border transition-all cursor-pointer select-none flex flex-col",
                       inMonth ? "bg-white border-slate-200" : "bg-slate-50 border-transparent opacity-50",
-                      today && "border-[#3a9e9e] ring-1 ring-[#3a9e9e]/30",
+                      today && "border-[#3a9e9e] ring-2 ring-[#3a9e9e]/40",
                       isOver && "bg-blue-50 border-blue-400 scale-[1.02]",
                     )}
                     onClick={() => setBookingDialog({ date: key })}
@@ -227,14 +227,14 @@ export default function Calendar() {
                             draggable
                             onDragStart={(e) => { e.stopPropagation(); setDraggedRecord(r); }}
                             onClick={(e) => { e.stopPropagation(); setBookingDialog({ date: key, record: r }); }}
-                            className="flex flex-col px-1.5 py-1 rounded bg-slate-50 border border-slate-200 hover:bg-slate-100 hover:border-slate-300 cursor-grab active:cursor-grabbing overflow-hidden transition-colors shadow-sm"
+                            className="flex flex-col px-2 py-1.5 rounded bg-white border border-slate-200 hover:bg-slate-50 hover:border-slate-300 cursor-grab active:cursor-grabbing overflow-hidden transition-colors shadow-sm"
                             title={`${customer?.company_name || "Okänd kund"} – ${machine?.model || "Maskin"} – ${r.technician_name || "Ingen tekniker"}`}
                           >
-                            <div className="flex items-center gap-1 mb-0.5">
+                            <div className="flex items-center gap-1.5 mb-1">
                               <span className={cn("w-2 h-2 rounded-full flex-shrink-0", statusColor[r.status])}></span>
-                              <span className="font-semibold text-[11px] truncate text-slate-800 leading-none">{customer?.company_name || "Okänd kund"}</span>
+                              <span className="font-semibold text-xs truncate text-slate-900 leading-tight">{customer?.company_name || "Okänd kund"}</span>
                             </div>
-                            <div className="truncate text-slate-500 text-[10px] pl-3 leading-none">{machine?.model || "Okänd maskin"}</div>
+                            <div className="truncate text-slate-600 text-[11px] pl-3.5 leading-tight">{machine?.model || "Okänd maskin"}</div>
                           </div>
                         );
                       })}
