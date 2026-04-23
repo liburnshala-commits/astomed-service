@@ -82,7 +82,7 @@ export default function Customers() {
   const getMachineCount = (customerId) => machines.filter(m => m.customer_id === customerId).length;
   const getContractCount = (customerId) => machines.filter(m => m.customer_id === customerId && m.service_contract && m.service_contract !== "none").length;
 
-  const handleSave = async (data, machineData) => {
+  const handleSave = async (data, machineData, inviteNewCustomer = false) => {
     if (!data.portal_token) {
       data.portal_token = Math.random().toString(36).substring(2, 18);
     }
@@ -128,6 +128,19 @@ export default function Customers() {
           user_name: currentUser?.full_name || currentUser?.email,
           details: `Maskin tillagd vid kundregistrering: ${machineData.model} (${machineData.serial_number || 'inget SN'})`
         });
+      }
+
+      if (inviteNewCustomer && data.email) {
+        try {
+          await base44.functions.invoke("inviteUser", {
+            email: data.email,
+            role: "customer",
+            inviterName: currentUser?.full_name || currentUser?.email
+          });
+          toast.success(`Inbjudan skickad till ${data.email}`);
+        } catch (e) {
+          toast.error("Kunde inte skicka inbjudan: " + (e.message || "okänt fel"));
+        }
       }
     }
     setShowForm(false);

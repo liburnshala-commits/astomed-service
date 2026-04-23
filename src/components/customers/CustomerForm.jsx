@@ -32,6 +32,8 @@ export default function CustomerForm({ customer, onSave, onClose }) {
     service_date: ""
   });
 
+  const [invite, setInvite] = useState(false);
+
   const set = (field, value) => setForm(prev => ({ ...prev, [field]: value }));
   const setM = (field, value) => setMachine(prev => ({ ...prev, [field]: value }));
 
@@ -39,7 +41,7 @@ export default function CustomerForm({ customer, onSave, onClose }) {
 
   const handleSubmit = () => {
     const machineData = isNew && machine.model ? machine : null;
-    onSave(form, machineData);
+    onSave(form, machineData, invite);
   };
 
   return createPortal(
@@ -66,6 +68,18 @@ export default function CustomerForm({ customer, onSave, onClose }) {
             <div className="space-y-1">
               <Label>E-post</Label>
               <Input type="email" value={form.email} onChange={e => set("email", e.target.value)} placeholder="kontakt@foretag.se" />
+              {isNew && form.email && (
+                <div className="flex items-center gap-2 mt-1">
+                  <input 
+                    type="checkbox" 
+                    id="inviteCustomer" 
+                    checked={invite} 
+                    onChange={(e) => setInvite(e.target.checked)} 
+                    className="w-3.5 h-3.5 rounded border-slate-300 text-blue-600 cursor-pointer" 
+                  />
+                  <label htmlFor="inviteCustomer" className="text-xs text-slate-600 cursor-pointer select-none">Bjud in kund via e-post</label>
+                </div>
+              )}
             </div>
             <div className="space-y-1">
               <Label>Telefon</Label>
