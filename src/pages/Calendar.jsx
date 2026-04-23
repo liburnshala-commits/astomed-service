@@ -201,7 +201,7 @@ export default function Calendar() {
                   <div
                     key={key}
                     className={cn(
-                      "min-h-[100px] rounded-lg p-1.5 border transition-all cursor-pointer select-none",
+                      "min-h-[120px] rounded-lg p-1.5 border transition-all cursor-pointer select-none flex flex-col",
                       inMonth ? "bg-white border-slate-200" : "bg-slate-50 border-transparent opacity-50",
                       today && "border-[#3a9e9e] ring-1 ring-[#3a9e9e]/30",
                       isOver && "bg-blue-50 border-blue-400 scale-[1.02]",
@@ -217,25 +217,34 @@ export default function Calendar() {
                     )}>
                       {format(day, "d")}
                     </div>
-                    <div className="space-y-0.5">
-                      {dayRecords.slice(0, 3).map(r => {
+                    <div className="space-y-1 mt-1 flex-1">
+                      {dayRecords.slice(0, 4).map(r => {
                         const machine = getMachine(r.machine_id);
+                        const customer = getCustomer(r.customer_id);
                         return (
                           <div
                             key={r.id}
                             draggable
                             onDragStart={(e) => { e.stopPropagation(); setDraggedRecord(r); }}
                             onClick={(e) => { e.stopPropagation(); setBookingDialog({ date: key, record: r }); }}
-                            className="flex items-center gap-1 px-1.5 py-0.5 rounded text-xs bg-slate-100 hover:bg-slate-200 cursor-grab active:cursor-grabbing truncate"
-                            title={`${machine?.model || "Maskin"} – ${r.technician_name || "Ingen tekniker"}`}
+                            className="flex flex-col px-1.5 py-1 rounded bg-slate-50 border border-slate-200 hover:bg-slate-100 hover:border-slate-300 cursor-grab active:cursor-grabbing overflow-hidden transition-colors shadow-sm"
+                            title={`${customer?.company_name || "Okänd kund"} – ${machine?.model || "Maskin"} – ${r.technician_name || "Ingen tekniker"}`}
                           >
-                            <span className={cn("w-1.5 h-1.5 rounded-full flex-shrink-0", statusColor[r.status])}></span>
-                            <span className="truncate text-slate-700">{machine?.model?.split(" ")[0] || "?"}</span>
+                            <div className="flex items-center gap-1 mb-0.5">
+                              <span className={cn("w-2 h-2 rounded-full flex-shrink-0", statusColor[r.status])}></span>
+                              <span className="font-semibold text-[11px] truncate text-slate-800 leading-none">{customer?.company_name || "Okänd kund"}</span>
+                            </div>
+                            <div className="truncate text-slate-500 text-[10px] pl-3 leading-none">{machine?.model || "Okänd maskin"}</div>
                           </div>
                         );
                       })}
-                      {dayRecords.length > 3 && (
-                        <div className="text-xs text-slate-400 pl-1">+{dayRecords.length - 3} till</div>
+                      {dayRecords.length > 4 && (
+                        <div 
+                          className="text-xs font-medium text-slate-500 text-center bg-slate-50 rounded py-0.5 hover:bg-slate-100 cursor-pointer border border-transparent hover:border-slate-200" 
+                          onClick={(e) => { e.stopPropagation(); setBookingDialog({ date: key }); }}
+                        >
+                          +{dayRecords.length - 4} fler
+                        </div>
                       )}
                     </div>
                   </div>
