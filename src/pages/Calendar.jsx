@@ -21,6 +21,32 @@ const statusLabel = {
   pending: "Väntar", awaiting_approval: "Inv. godkänn.", in_progress: "Pågående", completed: "Slutförd", invoiced: "Fakturerad"
 };
 
+const getTechnicianColor = (name) => {
+  if (!name) return "bg-white border-slate-200 hover:bg-slate-50";
+  const colors = [
+    "bg-red-50 border-red-200 hover:bg-red-100",
+    "bg-orange-50 border-orange-200 hover:bg-orange-100",
+    "bg-amber-50 border-amber-200 hover:bg-amber-100",
+    "bg-green-50 border-green-200 hover:bg-green-100",
+    "bg-emerald-50 border-emerald-200 hover:bg-emerald-100",
+    "bg-teal-50 border-teal-200 hover:bg-teal-100",
+    "bg-cyan-50 border-cyan-200 hover:bg-cyan-100",
+    "bg-sky-50 border-sky-200 hover:bg-sky-100",
+    "bg-blue-50 border-blue-200 hover:bg-blue-100",
+    "bg-indigo-50 border-indigo-200 hover:bg-indigo-100",
+    "bg-violet-50 border-violet-200 hover:bg-violet-100",
+    "bg-purple-50 border-purple-200 hover:bg-purple-100",
+    "bg-fuchsia-50 border-fuchsia-200 hover:bg-fuchsia-100",
+    "bg-pink-50 border-pink-200 hover:bg-pink-100",
+    "bg-rose-50 border-rose-200 hover:bg-rose-100",
+  ];
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) {
+    hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  return colors[Math.abs(hash) % colors.length];
+};
+
 export default function Calendar() {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [records, setRecords] = useState([]);
@@ -227,7 +253,7 @@ export default function Calendar() {
                             draggable
                             onDragStart={(e) => { e.stopPropagation(); setDraggedRecord(r); }}
                             onClick={(e) => { e.stopPropagation(); setBookingDialog({ date: key, record: r }); }}
-                            className="flex flex-col px-2 py-1.5 rounded bg-white border border-slate-200 hover:bg-slate-50 hover:border-slate-300 cursor-grab active:cursor-grabbing overflow-hidden transition-colors shadow-sm"
+                            className={cn("flex flex-col px-2 py-1.5 rounded border cursor-grab active:cursor-grabbing overflow-hidden transition-colors shadow-sm", getTechnicianColor(r.technician_name))}
                             title={`${customer?.company_name || "Okänd kund"} (${customer?.contact_person || "Ingen kontakt"}) – ${machine?.model || "Maskin"} – ${r.technician_name || "Ingen tekniker"}`}
                           >
                             <div className="flex items-center gap-1.5 mb-1">
@@ -256,12 +282,28 @@ export default function Calendar() {
             </div>
 
               {/* Legend */}
-              <div className="mt-4 flex flex-wrap gap-3 justify-end">
-                {Object.entries(statusLabel).map(([k, v]) => (
-                  <div key={k} className="flex items-center gap-1.5 text-xs text-slate-500">
-                    <span className={cn("w-2.5 h-2.5 rounded-full", statusColor[k])}></span>{v}
-                  </div>
-                ))}
+              <div className="mt-4 flex flex-col md:flex-row flex-wrap gap-4 justify-between bg-white p-3 rounded-lg border border-slate-200">
+                <div className="flex flex-wrap gap-3 items-center">
+                  <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mr-1">Tekniker:</div>
+                  {[...new Set(Object.values(recordsByDate).flat().map(r => r.technician_name).filter(Boolean))].map(tech => (
+                    <div key={tech} className="flex items-center gap-1.5 text-xs text-slate-700 font-medium">
+                      <span className={cn("w-3.5 h-3.5 rounded border", getTechnicianColor(tech))}></span>{tech}
+                    </div>
+                  ))}
+                  {Object.values(recordsByDate).flat().some(r => !r.technician_name) && (
+                    <div className="flex items-center gap-1.5 text-xs text-slate-700 font-medium">
+                      <span className={cn("w-3.5 h-3.5 rounded border", getTechnicianColor(null))}></span>Odelade
+                    </div>
+                  )}
+                </div>
+                <div className="flex flex-wrap gap-3 items-center">
+                  <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mr-1">Status:</div>
+                  {Object.entries(statusLabel).map(([k, v]) => (
+                    <div key={k} className="flex items-center gap-1.5 text-xs text-slate-600">
+                      <span className={cn("w-2.5 h-2.5 rounded-full", statusColor[k])}></span>{v}
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
 
@@ -293,7 +335,7 @@ export default function Calendar() {
                           return (
                             <div 
                               key={r.id} 
-                              className="p-4 hover:bg-slate-50 cursor-pointer transition-colors"
+                              className={cn("p-4 cursor-pointer transition-colors border-b last:border-b-0", getTechnicianColor(r.technician_name))}
                               onClick={() => setBookingDialog({ date: key, record: r })}
                             >
                               <div className="flex items-start justify-between gap-2 mb-2">
