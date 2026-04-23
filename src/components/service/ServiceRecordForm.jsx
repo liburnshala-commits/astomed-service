@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
-import { X, Plus, Trash2, Upload, CheckCircle2, ChevronRight, ChevronLeft } from "lucide-react";
+import { X, Plus, Trash2, Upload, CheckCircle2, ChevronRight, ChevronLeft, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import ServiceReportModal from "./ServiceReportModal";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -67,6 +68,7 @@ export default function ServiceRecordForm({ record, machines, customers, presele
   const [invoiceError, setInvoiceError] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [templates, setTemplates] = useState([]);
+  const [showReport, setShowReport] = useState(false);
 
   const currentMachine = machines.find(m => m.id === form.machine_id);
   const currentContract = currentMachine?.service_contract || "none";
@@ -326,7 +328,14 @@ export default function ServiceRecordForm({ record, machines, customers, presele
               })}
             </div>
           </div>
-          <Button variant="ghost" size="icon" onClick={onClose}><X className="w-4 h-4" /></Button>
+          <div className="flex items-center gap-2">
+            {!isCreating && (
+              <Button variant="outline" size="sm" className="gap-2 text-slate-600" onClick={() => setShowReport(true)}>
+                <FileText className="w-4 h-4" /> PDF-Rapport
+              </Button>
+            )}
+            <Button variant="ghost" size="icon" onClick={onClose}><X className="w-4 h-4" /></Button>
+          </div>
         </div>
 
         {/* Content */}
@@ -607,6 +616,15 @@ export default function ServiceRecordForm({ record, machines, customers, presele
           )}
         </div>
       </div>
+      
+      {showReport && record && (
+        <ServiceReportModal 
+          record={record} 
+          machine={currentMachine} 
+          customer={currentCustomer} 
+          onClose={() => setShowReport(false)} 
+        />
+      )}
     </div>,
     document.body
   );
