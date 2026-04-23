@@ -29,12 +29,15 @@ export default function BookingDialog({ date, record, records, machines, custome
   const [selectedDate, setSelectedDate] = useState(date || record?.service_date || "");
   const [selectedTechnician, setSelectedTechnician] = useState(record?.technician_name || "");
   const [loading, setLoading] = useState(false);
-  const [technicians, setTechnicians] = useState([]);
+  const [technicians, setTechnicians] = useState(["elman@astomed.se", "liburn@astomed.se"]);
 
   useEffect(() => {
-    base44.entities.User.filter({ role: "technician" }).then(users => {
-      setTechnicians(users.map(u => u.full_name || u.email));
-    });
+    base44.entities.User.list().then(users => {
+      const validUsers = users.filter(u => u.role === "technician" || u.role === "admin");
+      if (validUsers.length > 0) {
+        setTechnicians(validUsers.map(u => u.full_name || u.email));
+      }
+    }).catch(console.error);
   }, []);
 
   // If no specific record, show what's already on this date

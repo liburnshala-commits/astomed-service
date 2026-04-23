@@ -27,6 +27,15 @@ export default function ServiceRecordForm({ record, machines, customers, presele
   
   const preselectedMachine = machines.find(m => m.id === preselectedMachineId);
 
+  useEffect(() => {
+    base44.entities.User.list().then(users => {
+      const validUsers = users.filter(u => u.role === "technician" || u.role === "admin");
+      if (validUsers.length > 0) {
+        setTechnicians(validUsers.map(u => u.full_name || u.email));
+      }
+    }).catch(console.error);
+  }, []);
+
   const [form, setForm] = useState({
     machine_id: record?.machine_id || preselectedMachineId || "",
     customer_id: record?.customer_id || (preselectedMachine?.customer_id || ""),
