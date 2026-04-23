@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
-import { Plus, Search, Calendar as CalendarIcon, Trash2, ArrowRight, User, Building2, Phone, Mail, Copy, Pencil, Send, MessageSquare, CheckCircle2 } from "lucide-react";
+import { Plus, Search, Calendar as CalendarIcon, Trash2, ArrowRight, User, Building2, Phone, Mail, Copy, Pencil, Send, MessageSquare, CheckCircle2, Download } from "lucide-react";
 import { useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
@@ -295,6 +295,27 @@ export default function ServiceContractLeads() {
     }
   };
 
+  const handleExportEmails = () => {
+    // Generate CSV content with UTF-8 BOM for Excel compatibility
+    const csvContent = "\uFEFF" 
+      + "Företag,E-post,Telefon,Status\n"
+      + filteredLeads.map(lead => {
+          const contact = getLeadContact(lead);
+          const statusLabel = statusMap[lead.status]?.label || lead.status;
+          return `"${getLeadName(lead)}","${contact.email || ''}","${formatPhone(contact.phone) || ''}","${statusLabel}"`;
+        }).join("\n");
+    
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", `maillista_prospekt_${format(new Date(), "yyyyMMdd")}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    toast({ title: "Exportera maillista", description: "CSV-filen har laddats ner." });
+  };
+
   const filteredLeads = leads.filter(l => {
     const customer = l.customer_id ? customers.find(c => c.id === l.customer_id) : null;
     const contact = getLeadContact(l);
@@ -340,9 +361,14 @@ export default function ServiceContractLeads() {
           <h1 className="text-2xl font-bold text-slate-900">Serviceavtals-prospekt</h1>
           <p className="text-slate-500 text-sm sm:text-base">Hantera potentiella kunder för serviceavtal. <span className="font-medium text-slate-700">{filteredLeads.length} visas</span>{filteredLeads.length !== leads.length && <span className="text-slate-400"> av {leads.length} totalt</span>}</p>
         </div>
-        <Button onClick={() => setShowNewLeadModal(true)} className="astomed-btn-primary w-full sm:w-auto h-12 sm:h-10 text-base sm:text-sm">
-          <Plus className="w-5 h-5 sm:w-4 sm:h-4 mr-2" /> Nytt Prospekt
-        </Button>
+        <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+          <Button onClick={handleExportEmails} variant="outline" className="w-full sm:w-auto h-12 sm:h-10 text-base sm:text-sm border-dashed">
+            <Download className="w-5 h-5 sm:w-4 sm:h-4 mr-2" /> Exportera maillista
+          </Button>
+          <Button onClick={() => setShowNewLeadModal(true)} className="astomed-btn-primary w-full sm:w-auto h-12 sm:h-10 text-base sm:text-sm">
+            <Plus className="w-5 h-5 sm:w-4 sm:h-4 mr-2" /> Nytt Prospekt
+          </Button>
+        </div>
       </div>
 
       <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
