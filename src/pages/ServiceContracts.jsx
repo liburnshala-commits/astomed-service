@@ -11,7 +11,7 @@ import { createPageUrl } from "@/utils";
 import { useAuth } from "@/lib/AuthContext";
 import { addMonths, format, isPast, parseISO } from "date-fns";
 import { sv } from "date-fns/locale";
-import { FileCheck, Search, Building2, Monitor, Pencil, Clock, Download, Trash2 } from "lucide-react";
+import { FileCheck, Search, Building2, Monitor, Pencil, Clock, Download, Trash2, Phone } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ServiceContractModal from "@/components/machines/ServiceContractModal";
 import PendingContractApproval from "@/components/contracts/PendingContractApproval";
@@ -218,6 +218,7 @@ export default function ServiceContracts() {
                 <div className="min-w-0 flex-1">
                   <div className="font-medium truncate text-slate-800">{cust?.company_name || "–"}</div>
                   {cust?.contact_person && <div className="text-xs text-slate-500 truncate">{cust.contact_person}</div>}
+                  {cust?.phone && <div className="text-xs text-slate-500 truncate mt-0.5"><Phone className="w-3 h-3 inline mr-1" />{cust.phone}</div>}
                 </div>
               </div>
               <div className="flex justify-between items-center py-1">
@@ -299,6 +300,9 @@ export default function ServiceContracts() {
               )}
               {cust?.contact_person && (
                 <div className="text-xs text-slate-500">{cust.contact_person}</div>
+              )}
+              {cust?.phone && (
+                <div className="text-xs text-slate-500 mt-0.5 flex items-center gap-1"><Phone className="w-3 h-3" />{cust.phone}</div>
               )}
             </div>
           </div>
