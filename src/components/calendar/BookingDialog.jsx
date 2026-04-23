@@ -35,7 +35,7 @@ export default function BookingDialog({ date, record, records, machines, custome
     base44.entities.User.list().then(users => {
       const validUsers = users.filter(u => u.role === "technician" || u.role === "admin");
       if (validUsers.length > 0) {
-        setTechnicians(validUsers.map(u => u.full_name || u.email));
+        setTechnicians(validUsers.map(u => u.email));
       }
     }).catch(console.error);
   }, []);
