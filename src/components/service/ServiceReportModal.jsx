@@ -34,23 +34,31 @@ export default function ServiceReportModal({ record, machine, customer, onClose 
       const clone = input.cloneNode(true);
       clone.classList.remove('overflow-y-auto', 'flex-1');
       clone.style.overflow = 'visible';
-      clone.style.height = 'auto';
+      clone.style.height = 'max-content';
       clone.style.maxHeight = 'none';
-      clone.style.position = 'absolute';
-      clone.style.left = '0';
-      clone.style.top = '0';
-      clone.style.zIndex = '-9999';
-      clone.style.width = input.offsetWidth + 'px';
-      document.body.appendChild(clone);
+      
+      // Skapa en oberoende, isolerad wrapper utan flex- eller höjdbegränsningar
+      const wrapper = document.createElement('div');
+      wrapper.style.position = 'absolute';
+      wrapper.style.left = '-9999px';
+      wrapper.style.top = '0';
+      wrapper.style.width = '800px'; // En fast och rymlig bredd för A4-format
+      wrapper.style.height = 'max-content';
+      wrapper.style.zIndex = '-9999';
+      
+      wrapper.appendChild(clone);
+      document.body.appendChild(wrapper);
 
       const canvas = await html2canvas(clone, {
         scale: 2,
         useCORS: true,
         logging: false,
-        backgroundColor: '#ffffff'
+        backgroundColor: '#ffffff',
+        windowWidth: 800,
+        windowHeight: clone.scrollHeight
       });
 
-      document.body.removeChild(clone);
+      document.body.removeChild(wrapper);
       
       const imgData = canvas.toDataURL('image/jpeg', 1.0);
       const pdf = new jsPDF({
