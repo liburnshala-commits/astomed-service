@@ -34,7 +34,7 @@ export default function ServiceReportModal({ record, machine, customer, onClose 
       const clone = input.cloneNode(true);
       clone.classList.remove('overflow-y-auto', 'flex-1');
       clone.style.overflow = 'visible';
-      clone.style.height = 'max-content';
+      clone.style.height = 'auto';
       clone.style.maxHeight = 'none';
       
       const wrapper = document.createElement('div');
@@ -42,18 +42,24 @@ export default function ServiceReportModal({ record, machine, customer, onClose 
       wrapper.style.left = '0px';
       wrapper.style.top = '0px';
       wrapper.style.width = '800px';
-      wrapper.style.height = 'max-content';
+      wrapper.style.height = 'auto';
       wrapper.style.zIndex = '-9999';
       wrapper.style.pointerEvents = 'none';
+      wrapper.style.backgroundColor = '#ffffff';
       
       wrapper.appendChild(clone);
       document.body.appendChild(wrapper);
 
-      const canvas = await html2canvas(clone, {
+      // Ge webbläsaren en bråkdels sekund att applicera alla nya styles och expandera höjden
+      await new Promise(resolve => setTimeout(resolve, 150));
+
+      const canvas = await html2canvas(wrapper, {
         scale: 2,
         useCORS: true,
         logging: false,
         backgroundColor: '#ffffff',
+        width: wrapper.scrollWidth,
+        height: wrapper.scrollHeight,
         windowWidth: 800,
         windowHeight: wrapper.scrollHeight,
         x: 0,
