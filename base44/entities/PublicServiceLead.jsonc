@@ -1,0 +1,106 @@
+{
+  "name": "PublicServiceLead",
+  "type": "object",
+  "properties": {
+    "company_name": {
+      "type": "string",
+      "description": "F\u00f6retagsnamn"
+    },
+    "contact_person": {
+      "type": "string",
+      "description": "Kontaktpersonens namn"
+    },
+    "email": {
+      "type": "string",
+      "description": "E-post"
+    },
+    "phone": {
+      "type": "string",
+      "description": "Telefonnummer"
+    },
+    "org_number": {
+      "type": "string",
+      "description": "Organisationsnummer"
+    },
+    "address": {
+      "type": "string",
+      "description": "Adress"
+    },
+    "postal_code": {
+      "type": "string",
+      "description": "Postnummer"
+    },
+    "city": {
+      "type": "string",
+      "description": "Stad"
+    },
+    "machine_name": {
+      "type": "string",
+      "description": "Maskintyp/namn"
+    },
+    "manufacturer": {
+      "type": "string",
+      "description": "Tillverkare"
+    },
+    "serial_number": {
+      "type": "string",
+      "description": "Serienummer"
+    },
+    "service_description": {
+      "type": "string",
+      "description": "Beskrivning av service\u00e4rendet"
+    },
+    "service_type": {
+      "type": "string",
+      "enum": [
+        "standard",
+        "advanced"
+      ],
+      "default": "standard",
+      "description": "Typ av service"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "new",
+        "customer_created",
+        "assigned",
+        "archived"
+      ],
+      "default": "new",
+      "description": "Status f\u00f6r servicef\u00f6rfr\u00e5gan"
+    },
+    "assigned_technician": {
+      "type": "string",
+      "description": "Tilldelad tekniker"
+    },
+    "customer_id": {
+      "type": "string",
+      "description": "L\u00e4nk till skapad kund (om omvandlad)"
+    },
+    "service_record_id": {
+      "type": "string",
+      "description": "L\u00e4nk till skapat service\u00e4rende (om omvandlad)"
+    },
+    "preferred_time_slot": {
+      "type": "string",
+      "enum": [
+        "f\u00f6rmiddag",
+        "eftermiddag"
+      ],
+      "description": "F\u00f6redragen tid f\u00f6r genomg\u00e5ng"
+    },
+    "notes": {
+      "type": "string",
+      "description": "\u00d6vriga anteckningar"
+    }
+  },
+  "required": [
+    "company_name",
+    "contact_person",
+    "email",
+    "phone",
+    "machine_name",
+    "service_description"
+  ]
+}

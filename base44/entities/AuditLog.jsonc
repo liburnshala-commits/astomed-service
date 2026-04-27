@@ -1,0 +1,45 @@
+{
+  "name": "AuditLog",
+  "type": "object",
+  "properties": {
+    "action": {
+      "type": "string",
+      "enum": [
+        "create",
+        "update",
+        "delete"
+      ],
+      "description": "Typ av h\u00e4ndelse"
+    },
+    "entity_type": {
+      "type": "string",
+      "description": "Entitetstyp (Customer, Machine, ServiceRecord)"
+    },
+    "entity_id": {
+      "type": "string",
+      "description": "ID f\u00f6r p\u00e5verkad post"
+    },
+    "entity_label": {
+      "type": "string",
+      "description": "L\u00e4sbar beskrivning av posten"
+    },
+    "user_email": {
+      "type": "string",
+      "description": "Anv\u00e4ndare som utf\u00f6rde \u00e5tg\u00e4rden"
+    },
+    "user_name": {
+      "type": "string",
+      "description": "Namn p\u00e5 anv\u00e4ndaren"
+    },
+    "details": {
+      "type": "string",
+      "description": "Ytterligare detaljer"
+    }
+  },
+  "required": [
+    "action",
+    "entity_type",
+    "entity_id",
+    "user_email"
+  ]
+}

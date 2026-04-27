@@ -1,0 +1,148 @@
+{
+  "name": "Machine",
+  "type": "object",
+  "properties": {
+    "model": {
+      "type": "string",
+      "description": "Maskinmodell"
+    },
+    "custom_model": {
+      "type": "string",
+      "description": "Eget maskinnamn (om 'Annan' valts)"
+    },
+    "manufacturer": {
+      "type": "string",
+      "description": "Tillverkare"
+    },
+    "serial_number": {
+      "type": "string",
+      "description": "Serienummer"
+    },
+    "customer_id": {
+      "type": "string",
+      "description": "Kund-ID"
+    },
+    "installation_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Installationsdatum"
+    },
+    "warranty_expiry": {
+      "type": "string",
+      "format": "date",
+      "description": "Garantins utg\u00e5ngsdatum"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "inactive",
+        "service"
+      ],
+      "default": "active",
+      "description": "Status"
+    },
+    "service_interval": {
+      "type": "number",
+      "description": "Serviceintervall i m\u00e5nader"
+    },
+    "service_contract": {
+      "type": "string",
+      "enum": [
+        "none",
+        "basic"
+      ],
+      "default": "none",
+      "description": "Serviceavtal"
+    },
+    "contract_status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "inactive",
+        "pending_signature",
+        "rejected"
+      ],
+      "default": "active",
+      "description": "Status f\u00f6r serviceavtalet"
+    },
+    "service_agreement_template_id": {
+      "type": "string",
+      "description": "ID f\u00f6r vald serviceavtalsmall"
+    },
+    "service_agreement_instance_id": {
+      "type": "string",
+      "description": "L\u00e4nk till samlat serviceavtal (vid flera maskiner)"
+    },
+    "contract_created_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Datum d\u00e5 serviceavtalet skapades"
+    },
+    "contract_start_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Avtalets startdatum"
+    },
+    "contract_binding_months": {
+      "type": "number",
+      "enum": [
+        6,
+        12,
+        24
+      ],
+      "description": "Bindningstid i m\u00e5nader"
+    },
+    "contract_discount_percent": {
+      "type": "number",
+      "default": 0,
+      "description": "Rabatt i procent (%)"
+    },
+    "requested_service_contract": {
+      "type": "string",
+      "enum": [
+        "none",
+        "basic"
+      ],
+      "description": "Beg\u00e4rt serviceavtal fr\u00e5n kund"
+    },
+    "service_contract_status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "approved",
+        "rejected"
+      ],
+      "description": "Status f\u00f6r serviceavtalsbeg\u00e4ran"
+    },
+    "service_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Senaste servicedatum"
+    },
+    "next_service_date": {
+      "type": "string",
+      "format": "date",
+      "description": "N\u00e4sta servicedatum"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Anteckningar"
+    },
+    "is_deleted": {
+      "type": "boolean",
+      "default": false,
+      "description": "Markerad som raderad (papperskorg)"
+    },
+    "deleted_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Datum d\u00e5 maskinen raderades"
+    }
+  },
+  "required": [
+    "model",
+    "serial_number",
+    "customer_id"
+  ]
+}

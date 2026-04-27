@@ -1,0 +1,46 @@
+{
+  "name": "ServiceAgreementTemplate",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Namn p\u00e5 serviceavtalet"
+    },
+    "description": {
+      "type": "string",
+      "description": "Beskrivning av serviceavtalet"
+    },
+    "binding_months": {
+      "type": "number",
+      "enum": [
+        12
+      ],
+      "default": 12,
+      "description": "Bindningstid i m\u00e5nader"
+    },
+    "included_services": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Inkluderade tj\u00e4nster och f\u00f6rm\u00e5ner"
+    },
+    "price_per_month": {
+      "type": "number",
+      "description": "M\u00e5nadskostnad f\u00f6r avtalet"
+    },
+    "agreement_type": {
+      "type": "string",
+      "enum": [
+        "BAS Astomed 3.0",
+        "Inget serviceavtal"
+      ],
+      "default": "BAS Astomed 3.0",
+      "description": "Typ av serviceavtal"
+    }
+  },
+  "required": [
+    "name",
+    "agreement_type"
+  ]
+}

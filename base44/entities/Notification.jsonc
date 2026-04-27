@@ -1,0 +1,47 @@
+{
+  "name": "Notification",
+  "type": "object",
+  "properties": {
+    "user_email": {
+      "type": "string",
+      "description": "Mottagarens e-post"
+    },
+    "title": {
+      "type": "string",
+      "description": "Notifieringstitel"
+    },
+    "message": {
+      "type": "string",
+      "description": "Notifieringsmeddelande"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "info",
+        "success",
+        "warning",
+        "error"
+      ],
+      "default": "info",
+      "description": "Notifieringstyp"
+    },
+    "related_entity": {
+      "type": "string",
+      "description": "Relaterad entitytyp (t.ex. ServiceRecord, Machine)"
+    },
+    "related_entity_id": {
+      "type": "string",
+      "description": "Relaterad entitys ID"
+    },
+    "is_read": {
+      "type": "boolean",
+      "default": false,
+      "description": "L\u00e4st status"
+    }
+  },
+  "required": [
+    "user_email",
+    "title",
+    "message"
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "name": "User",
+  "type": "object",
+  "properties": {
+    "role": {
+      "type": "string",
+      "enum": [
+        "admin",
+        "technician",
+        "customer"
+      ],
+      "default": "technician"
+    },
+    "privacy_policy_accepted": {
+      "type": "boolean",
+      "default": false,
+      "description": "Om anv\u00e4ndaren har godk\u00e4nt integritetspolicyn"
+    }
+  },
+  "required": []
+}

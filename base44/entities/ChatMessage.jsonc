@@ -1,0 +1,47 @@
+{
+  "name": "ChatMessage",
+  "type": "object",
+  "properties": {
+    "conversation_id": {
+      "type": "string",
+      "description": "L\u00e4nk till konversationen"
+    },
+    "sender_type": {
+      "type": "string",
+      "enum": [
+        "guest",
+        "agent",
+        "ai",
+        "system"
+      ],
+      "description": "Vem som skickade meddelandet"
+    },
+    "sender_name": {
+      "type": "string",
+      "description": "Namn p\u00e5 avs\u00e4ndaren (t.ex. 'Kundsupport' eller 'AI-assistent')"
+    },
+    "content": {
+      "type": "string",
+      "description": "Sj\u00e4lva meddelandet"
+    }
+  },
+  "required": [
+    "conversation_id",
+    "sender_type",
+    "content"
+  ],
+  "rls": {
+    "create": {},
+    "read": {},
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

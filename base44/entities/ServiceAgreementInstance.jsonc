@@ -1,0 +1,64 @@
+{
+  "name": "ServiceAgreementInstance",
+  "type": "object",
+  "properties": {
+    "customer_id": {
+      "type": "string",
+      "description": "Kund-ID"
+    },
+    "service_agreement_template_id": {
+      "type": "string",
+      "description": "ID f\u00f6r vald serviceavtalsmall"
+    },
+    "machine_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Lista med maskin-ID:n som ing\u00e5r i avtalet"
+    },
+    "quantity": {
+      "type": "number",
+      "default": 1,
+      "description": "Antal maskiner av denna typ i avtalet"
+    },
+    "discount": {
+      "type": "number",
+      "default": 0,
+      "description": "Rabatt i kr/m\u00e5nad eller procent"
+    },
+    "discount_type": {
+      "type": "string",
+      "enum": [
+        "amount",
+        "percent"
+      ],
+      "default": "amount",
+      "description": "Typ av rabatt (belopp i kr eller procent)"
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Startdatum"
+    },
+    "binding_months": {
+      "type": "number",
+      "default": 12,
+      "description": "Bindningstid i m\u00e5nader"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "inactive",
+        "expired"
+      ],
+      "default": "active",
+      "description": "Avtalets status"
+    }
+  },
+  "required": [
+    "customer_id",
+    "service_agreement_template_id"
+  ]
+}

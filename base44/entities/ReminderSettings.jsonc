@@ -1,0 +1,55 @@
+{
+  "name": "ReminderSettings",
+  "type": "object",
+  "properties": {
+    "enabled": {
+      "type": "boolean",
+      "default": true,
+      "description": "\u00c4r p\u00e5minnelser aktiverade"
+    },
+    "reminder_type": {
+      "type": "string",
+      "enum": [
+        "pending_quotes",
+        "upcoming_service",
+        "both"
+      ],
+      "default": "both",
+      "description": "Vilken typ av p\u00e5minnelser att skicka"
+    },
+    "days_before": {
+      "type": "number",
+      "default": 3,
+      "description": "Antal dagar f\u00f6re service\u00e4rende att skicka p\u00e5minnelse"
+    },
+    "reminder_time": {
+      "type": "string",
+      "pattern": "^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$",
+      "default": "09:00",
+      "description": "Tid p\u00e5 dagen f\u00f6r p\u00e5minnelser (HH:MM)"
+    },
+    "include_pending_quotes": {
+      "type": "boolean",
+      "default": true,
+      "description": "Skicka p\u00e5minnelser f\u00f6r v\u00e4ntande offerter"
+    },
+    "send_email": {
+      "type": "boolean",
+      "default": true,
+      "description": "Skicka p\u00e5minnelser via e-post"
+    },
+    "send_inapp": {
+      "type": "boolean",
+      "default": true,
+      "description": "Skicka in-app notiser (visas i NotificationBell)"
+    },
+    "last_reminder_run": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Senaste g\u00e5ng p\u00e5minnelser skickades"
+    }
+  },
+  "required": [
+    "enabled"
+  ]
+}

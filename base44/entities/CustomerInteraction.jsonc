@@ -1,0 +1,43 @@
+{
+  "name": "CustomerInteraction",
+  "type": "object",
+  "properties": {
+    "customer_id": {
+      "type": "string",
+      "description": "Kund-ID"
+    },
+    "lead_id": {
+      "type": "string",
+      "description": "Prospekt-ID"
+    },
+    "interaction_type": {
+      "type": "string",
+      "enum": [
+        "phone",
+        "email",
+        "meeting",
+        "other"
+      ],
+      "default": "phone",
+      "description": "Typ av interaktion"
+    },
+    "interaction_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Tidpunkt f\u00f6r interaktionen"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Anteckningar fr\u00e5n samtalet/m\u00f6tet"
+    },
+    "logged_by": {
+      "type": "string",
+      "description": "Anv\u00e4ndaren som loggade interaktionen"
+    }
+  },
+  "required": [
+    "interaction_type",
+    "interaction_date",
+    "notes"
+  ]
+}

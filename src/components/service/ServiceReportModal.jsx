@@ -31,12 +31,25 @@ export default function ServiceReportModal({ record, machine, customer, onClose 
     
     setGeneratingPDF(true);
     try {
-      const canvas = await html2canvas(input, {
+      // Skapa en klon av elementet för att fånga hela höjden (ignorera scroll-begränsningar)
+      const clone = input.cloneNode(true);
+      clone.style.overflow = 'visible';
+      clone.style.height = 'auto';
+      clone.style.maxHeight = 'none';
+      clone.style.position = 'absolute';
+      clone.style.left = '-9999px';
+      clone.style.top = '0';
+      clone.style.width = input.offsetWidth + 'px';
+      document.body.appendChild(clone);
+
+      const canvas = await html2canvas(clone, {
         scale: 2,
         useCORS: true,
         logging: false,
         backgroundColor: '#ffffff'
       });
+
+      document.body.removeChild(clone);
       
       const imgData = canvas.toDataURL('image/jpeg', 1.0);
       const pdf = new jsPDF({
