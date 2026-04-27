@@ -88,8 +88,17 @@ Deno.serve(async (req) => {
         
         let mY = 95;
         for (const m of allMachines) {
+            if (mY > 270) {
+                doc.addPage();
+                mY = 20;
+            }
             doc.text(`- ${m.model || 'Okänd modell'} (SN: ${m.serial_number || 'Okänt'})`, 20, mY);
             mY += 5;
+        }
+
+        if (mY > 250) {
+            doc.addPage();
+            mY = 20;
         }
 
         const effectiveStartDate = instance?.start_date || machine.contract_start_date;
@@ -122,13 +131,15 @@ Deno.serve(async (req) => {
             // Find all instances for this customer with the same machine_ids
             const allInstances = await base44.asServiceRole.entities.ServiceAgreementInstance.filter({ customer_id: machine.customer_id });
             const sameMachineInstances = allInstances.filter(inst => {
-                // Exclude inactive/expired instances if possible
-                if (inst.status === 'inactive' || inst.status === 'expired') return false;
-
                 if (!inst.machine_ids || !instance.machine_ids) return false;
                 const a = [...inst.machine_ids].sort();
                 const b = [...instance.machine_ids].sort();
-                return JSON.stringify(a) === JSON.stringify(b);
+                if (JSON.stringify(a) !== JSON.stringify(b)) return false;
+
+                // Group by similar creation time (within 1 minute) to ensure we get exactly the instances created together
+                const t1 = new Date(inst.created_date || 0).getTime();
+                const t2 = new Date(instance.created_date || 0).getTime();
+                return Math.abs(t1 - t2) < 60000;
             });
 
             // Deduplicate: Keep only the latest instance per template ID
