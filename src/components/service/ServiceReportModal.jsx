@@ -37,14 +37,14 @@ export default function ServiceReportModal({ record, machine, customer, onClose 
       clone.style.height = 'max-content';
       clone.style.maxHeight = 'none';
       
-      // Skapa en oberoende, isolerad wrapper utan flex- eller höjdbegränsningar
       const wrapper = document.createElement('div');
       wrapper.style.position = 'absolute';
-      wrapper.style.left = '-9999px';
-      wrapper.style.top = '0';
-      wrapper.style.width = '800px'; // En fast och rymlig bredd för A4-format
+      wrapper.style.left = '0px';
+      wrapper.style.top = '0px';
+      wrapper.style.width = '800px';
       wrapper.style.height = 'max-content';
       wrapper.style.zIndex = '-9999';
+      wrapper.style.pointerEvents = 'none';
       
       wrapper.appendChild(clone);
       document.body.appendChild(wrapper);
@@ -55,7 +55,11 @@ export default function ServiceReportModal({ record, machine, customer, onClose 
         logging: false,
         backgroundColor: '#ffffff',
         windowWidth: 800,
-        windowHeight: clone.scrollHeight
+        windowHeight: wrapper.scrollHeight,
+        x: 0,
+        y: 0,
+        scrollX: 0,
+        scrollY: 0
       });
 
       document.body.removeChild(wrapper);
