@@ -31,10 +31,10 @@ export default function ServiceReportModal({ record, machine, customer, onClose 
     
     setGeneratingPDF(true);
     try {
-      // Skapa en klon av elementet för att fånga hela höjden (ignorera scroll-begränsningar)
       const clone = input.cloneNode(true);
+      clone.classList.remove('overflow-y-auto', 'flex-1');
       clone.style.overflow = 'visible';
-      clone.style.height = 'auto';
+      clone.style.height = 'max-content';
       clone.style.maxHeight = 'none';
       clone.style.position = 'absolute';
       clone.style.left = '-9999px';
@@ -46,7 +46,13 @@ export default function ServiceReportModal({ record, machine, customer, onClose 
         scale: 2,
         useCORS: true,
         logging: false,
-        backgroundColor: '#ffffff'
+        backgroundColor: '#ffffff',
+        windowWidth: document.documentElement.offsetWidth,
+        windowHeight: clone.scrollHeight,
+        x: -9999,
+        y: 0,
+        scrollX: 0,
+        scrollY: 0
       });
 
       document.body.removeChild(clone);
@@ -59,19 +65,20 @@ export default function ServiceReportModal({ record, machine, customer, onClose 
       });
       
       const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
       const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
       
       let heightLeft = pdfHeight;
       let position = 0;
       
       pdf.addImage(imgData, 'JPEG', 0, position, pdfWidth, pdfHeight);
-      heightLeft -= pdf.internal.pageSize.getHeight();
+      heightLeft -= pageHeight;
       
       while (heightLeft > 0) {
-        position = heightLeft - pdfHeight;
+        position -= pageHeight;
         pdf.addPage();
         pdf.addImage(imgData, 'JPEG', 0, position, pdfWidth, pdfHeight);
-        heightLeft -= pdf.internal.pageSize.getHeight();
+        heightLeft -= pageHeight;
       }
       
       pdf.save(`Servicerapport_${machine?.serial_number || 'Maskin'}_${format(new Date(), 'yyyyMMdd')}.pdf`);
