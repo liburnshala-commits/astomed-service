@@ -34,11 +34,12 @@ export default function ServiceReportModal({ record, machine, customer, onClose 
       const clone = input.cloneNode(true);
       clone.classList.remove('overflow-y-auto', 'flex-1');
       clone.style.overflow = 'visible';
-      clone.style.height = 'max-content';
+      clone.style.height = 'auto';
       clone.style.maxHeight = 'none';
       clone.style.position = 'absolute';
-      clone.style.left = '-9999px';
+      clone.style.left = '0';
       clone.style.top = '0';
+      clone.style.zIndex = '-9999';
       clone.style.width = input.offsetWidth + 'px';
       document.body.appendChild(clone);
 
@@ -46,13 +47,7 @@ export default function ServiceReportModal({ record, machine, customer, onClose 
         scale: 2,
         useCORS: true,
         logging: false,
-        backgroundColor: '#ffffff',
-        windowWidth: document.documentElement.offsetWidth,
-        windowHeight: clone.scrollHeight,
-        x: -9999,
-        y: 0,
-        scrollX: 0,
-        scrollY: 0
+        backgroundColor: '#ffffff'
       });
 
       document.body.removeChild(clone);
