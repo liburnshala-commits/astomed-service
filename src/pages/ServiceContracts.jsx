@@ -196,10 +196,10 @@ export default function ServiceContracts() {
           <CardContent className="p-4 space-y-4 flex-1 flex flex-col">
             <div className="flex justify-between items-start gap-2">
               <div className="min-w-0">
-                <div className="flex items-center gap-2 mb-1 text-slate-800 font-semibold">
+                <Link to={createPageUrl(`Machines?customer=${machine.customer_id}`)} className="flex items-center gap-2 mb-1 text-slate-800 font-semibold hover:text-[#3a9e9e] hover:underline">
                   <Monitor className="w-4 h-4 text-slate-400 flex-shrink-0" />
                   <span className="truncate">{machine.model}</span>
-                </div>
+                </Link>
                 <div className="text-xs text-slate-500 font-mono">SN: {machine.serial_number}</div>
               </div>
               <Badge className={`border-0 px-2.5 py-1 text-[10px] uppercase tracking-wider text-center ${
@@ -216,8 +216,14 @@ export default function ServiceContracts() {
               <div className="flex items-center gap-2 mb-2 pb-2 border-b border-slate-200">
                 <Building2 className="w-4 h-4 text-slate-400 flex-shrink-0" />
                 <div className="min-w-0 flex-1">
-                  <div className="font-medium truncate text-slate-800">{cust?.company_name || "–"}</div>
-                  {cust?.contact_person && <div className="text-xs text-slate-500 truncate">{cust.contact_person}</div>}
+                  {cust ? (
+                    <Link to={createPageUrl(`CustomerDetails?id=${cust.id}`)} className="font-medium truncate text-slate-800 block hover:text-[#3a9e9e] hover:underline">
+                      {cust.company_name || "–"}
+                    </Link>
+                  ) : (
+                    <div className="font-medium truncate text-slate-800">–</div>
+                  )}
+                  {cust?.contact_person && <div className="text-xs text-slate-500 truncate mt-0.5">{cust.contact_person}</div>}
                   {cust?.phone && <div className="text-xs text-slate-500 truncate mt-0.5"><Phone className="w-3 h-3 inline mr-1" />{cust.phone}</div>}
                 </div>
               </div>
@@ -292,7 +298,7 @@ export default function ServiceContracts() {
             <Building2 className="w-4 h-4 text-slate-400 flex-shrink-0" />
             <div>
               {cust ? (
-                <Link to={createPageUrl(`Machines?customer=${cust.id}`)} className="font-medium text-slate-800 hover:text-[#3a9e9e] hover:underline">
+                <Link to={createPageUrl(`CustomerDetails?id=${cust.id}`)} className="font-medium text-slate-800 hover:text-[#3a9e9e] hover:underline">
                   {cust.company_name || "–"}
                 </Link>
               ) : (
@@ -311,7 +317,9 @@ export default function ServiceContracts() {
           <div className="flex items-center gap-2">
             <Monitor className="w-4 h-4 text-slate-400 flex-shrink-0" />
             <div>
-              <div className="font-medium text-slate-800">{machine.model}</div>
+              <Link to={createPageUrl(`Machines?customer=${machine.customer_id}`)} className="font-medium text-slate-800 hover:text-[#3a9e9e] hover:underline">
+                {machine.model}
+              </Link>
               <div className="text-xs text-slate-400 font-mono">SN: {machine.serial_number}</div>
             </div>
           </div>
