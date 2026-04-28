@@ -21,6 +21,16 @@ Deno.serve(async (req) => {
     // Invite user through Base44
     await base44.users.inviteUser(email, base44Role);
     
+    // Also mark the customer as invited in the Customer entity
+    if (role === 'customer') {
+      const customers = await base44.asServiceRole.entities.Customer.filter({ email });
+      if (customers.length > 0) {
+        for (const c of customers) {
+          await base44.asServiceRole.entities.Customer.update(c.id, { is_invited: true });
+        }
+      }
+    }
+
     // Wait a moment for the user to be created in the system
     await new Promise(resolve => setTimeout(resolve, 1000));
     

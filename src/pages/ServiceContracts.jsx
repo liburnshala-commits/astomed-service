@@ -64,9 +64,10 @@ export default function ServiceContracts() {
     });
   }, []);
 
-  const isCustomerInvited = (email) => {
-    if (!email) return false;
-    return users.some(u => u.email.toLowerCase() === email.toLowerCase());
+  const isCustomerInvited = (customer) => {
+    if (!customer?.email) return false;
+    if (customer.is_invited) return true;
+    return users.some(u => u.email.toLowerCase() === customer.email.toLowerCase());
   };
 
   const inviteCustomer = async (customer) => {
@@ -305,14 +306,14 @@ export default function ServiceContracts() {
               </div>
               {!isTechnician && (
                 <Button 
-                  className={`w-full h-11 border relative ${isCustomerInvited(cust?.email) ? "bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100" : "border-slate-200 text-slate-600 hover:bg-slate-100"}`} 
+                  className={`w-full h-11 border relative ${isCustomerInvited(cust) ? "bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100" : "border-slate-200 text-slate-600 hover:bg-slate-100"}`} 
                   variant="ghost" 
                   onClick={() => inviteCustomer(cust)}
                   disabled={!cust?.email || inviting === cust?.id}
                 >
-                  {inviting === cust?.id ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : isCustomerInvited(cust?.email) ? <Check className="w-4 h-4 mr-2 text-blue-600" /> : <UserPlus className="w-4 h-4 mr-2" />}
-                  <span className="text-xs font-semibold">{!cust?.email ? "Kunden saknar e-post" : isCustomerInvited(cust?.email) ? "Inbjuden (Skicka igen)" : inviting === cust?.id ? "Skickat" : "Bjud in kund till portalen"}</span>
-                  {isCustomerInvited(cust?.email) && <span className="absolute top-2 right-2 w-2 h-2 bg-blue-500 rounded-full"></span>}
+                  {inviting === cust?.id ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : isCustomerInvited(cust) ? <Check className="w-4 h-4 mr-2 text-blue-600" /> : <UserPlus className="w-4 h-4 mr-2" />}
+                  <span className="text-xs font-semibold">{!cust?.email ? "Kunden saknar e-post" : isCustomerInvited(cust) ? "Inbjuden (Skicka igen)" : inviting === cust?.id ? "Skickat" : "Bjud in kund till portalen"}</span>
+                  {isCustomerInvited(cust) && <span className="absolute top-2 right-2 w-2 h-2 bg-blue-500 rounded-full"></span>}
                 </Button>
               )}
             </div>
@@ -438,13 +439,13 @@ export default function ServiceContracts() {
                 variant="outline"
                 size="sm"
                 className={`relative h-8 px-2 flex items-center gap-1 ${
-                  isCustomerInvited(cust?.email) ? "text-blue-700 bg-blue-50 border-blue-200 hover:bg-blue-100" : "text-slate-600 hover:bg-slate-100"
+                  isCustomerInvited(cust) ? "text-blue-700 bg-blue-50 border-blue-200 hover:bg-blue-100" : "text-slate-600 hover:bg-slate-100"
                 }`}
-                title={!cust?.email ? "Saknar e-post" : isCustomerInvited(cust?.email) ? "Inbjuden (Klicka för att skicka igen)" : "Bjud in kund till portalen"}
+                title={!cust?.email ? "Saknar e-post" : isCustomerInvited(cust) ? "Inbjuden (Klicka för att skicka igen)" : "Bjud in kund till portalen"}
               >
-                {inviting === cust?.id ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : isCustomerInvited(cust?.email) ? <Check className="w-3.5 h-3.5" /> : <UserPlus className="w-3.5 h-3.5" />}
-                <span className="text-xs">{isCustomerInvited(cust?.email) ? "Inbjuden" : "Bjud in"}</span>
-                {isCustomerInvited(cust?.email) && <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-blue-500 border-2 border-white rounded-full"></span>}
+                {inviting === cust?.id ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : isCustomerInvited(cust) ? <Check className="w-3.5 h-3.5" /> : <UserPlus className="w-3.5 h-3.5" />}
+                <span className="text-xs">{isCustomerInvited(cust) ? "Inbjuden" : "Bjud in"}</span>
+                {isCustomerInvited(cust) && <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-blue-500 border-2 border-white rounded-full"></span>}
               </Button>
             )}
             {!isTechnician && (

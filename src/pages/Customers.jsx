@@ -66,9 +66,10 @@ export default function Customers() {
   const machines = pageData?.machines || [];
   const users = pageData?.users || [];
 
-  const isCustomerInvited = (email) => {
-    if (!email) return false;
-    return users.some(u => u.email.toLowerCase() === email.toLowerCase());
+  const isCustomerInvited = (customer) => {
+    if (!customer?.email) return false;
+    if (customer.is_invited) return true;
+    return users.some(u => u.email.toLowerCase() === customer.email.toLowerCase());
   };
 
   const load = () => queryClient.invalidateQueries({ queryKey: ["customersPage"] });
@@ -341,17 +342,17 @@ export default function Customers() {
             </Button>
             <Button
               size="sm"
-              variant={isCustomerInvited(customer.email) ? "secondary" : "outline"}
+              variant={isCustomerInvited(customer) ? "secondary" : "outline"}
               onClick={() => inviteCustomer(customer)}
               disabled={inviting === customer.id || !customer.email}
-              title={!customer.email ? "Kunden saknar e-post" : isCustomerInvited(customer.email) ? "Kunden är redan inbjuden (Klicka för att skicka igen)" : "Bjud in kunden att skapa konto"}
-              className={`relative ${isCustomerInvited(customer.email) ? "bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100" : ""}`}
+              title={!customer.email ? "Kunden saknar e-post" : isCustomerInvited(customer) ? "Kunden är redan inbjuden (Klicka för att skicka igen)" : "Bjud in kunden att skapa konto"}
+              className={`relative ${isCustomerInvited(customer) ? "bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100" : ""}`}
             >
-              {isCustomerInvited(customer.email) || inviting === customer.id ? <Check className="w-3 h-3 text-blue-600" /> : <UserPlus className="w-3 h-3" />}
+              {isCustomerInvited(customer) || inviting === customer.id ? <Check className="w-3 h-3 text-blue-600" /> : <UserPlus className="w-3 h-3" />}
               <span className="ml-1 text-xs hidden sm:inline">
-                {isCustomerInvited(customer.email) ? "Inbjuden" : inviting === customer.id ? "Skickat!" : "Bjud in"}
+                {isCustomerInvited(customer) ? "Inbjuden" : inviting === customer.id ? "Skickat!" : "Bjud in"}
               </span>
-              {isCustomerInvited(customer.email) && <span className="absolute top-1 right-1 w-1.5 h-1.5 bg-blue-500 rounded-full"></span>}
+              {isCustomerInvited(customer) && <span className="absolute top-1 right-1 w-1.5 h-1.5 bg-blue-500 rounded-full"></span>}
             </Button>
             <Link to={createPageUrl(`Machines?customer=${customer.id}`)}>
               <Button size="sm" variant="outline">

@@ -47,6 +47,11 @@
       "default": false,
       "description": "Importerad via CSV-import"
     },
+    "is_invited": {
+      "type": "boolean",
+      "default": false,
+      "description": "Kund \u00e4r inbjuden till portalen"
+    },
     "is_deleted": {
       "type": "boolean",
       "default": false,
