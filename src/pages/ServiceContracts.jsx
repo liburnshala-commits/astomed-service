@@ -432,17 +432,20 @@ export default function ServiceContracts() {
               </button>
             )}
             {!isTechnician && (
-              <button
+              <Button
                 onClick={() => inviteCustomer(cust)}
                 disabled={!cust?.email || inviting === cust?.id}
-                className={`relative p-1.5 rounded transition-colors ${
-                  isCustomerInvited(cust?.email) ? "text-blue-600 bg-blue-50 hover:bg-blue-100" : "text-slate-400 hover:bg-slate-100 hover:text-slate-700"
-                } ${(!cust?.email || inviting === cust?.id) ? "opacity-50 cursor-not-allowed" : ""}`}
+                variant="outline"
+                size="sm"
+                className={`relative h-8 px-2 flex items-center gap-1 ${
+                  isCustomerInvited(cust?.email) ? "text-blue-700 bg-blue-50 border-blue-200 hover:bg-blue-100" : "text-slate-600 hover:bg-slate-100"
+                }`}
                 title={!cust?.email ? "Saknar e-post" : isCustomerInvited(cust?.email) ? "Inbjuden (Klicka för att skicka igen)" : "Bjud in kund till portalen"}
               >
-                {inviting === cust?.id ? <Loader2 className="w-4 h-4 animate-spin" /> : isCustomerInvited(cust?.email) ? <Check className="w-4 h-4" /> : <UserPlus className="w-4 h-4" />}
-                {isCustomerInvited(cust?.email) && <span className="absolute top-0 right-0 w-1.5 h-1.5 bg-blue-500 rounded-full"></span>}
-              </button>
+                {inviting === cust?.id ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : isCustomerInvited(cust?.email) ? <Check className="w-3.5 h-3.5" /> : <UserPlus className="w-3.5 h-3.5" />}
+                <span className="text-xs">{isCustomerInvited(cust?.email) ? "Inbjuden" : "Bjud in"}</span>
+                {isCustomerInvited(cust?.email) && <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-blue-500 border-2 border-white rounded-full"></span>}
+              </Button>
             )}
             {!isTechnician && (
               <button
