@@ -11,7 +11,7 @@ import { createPageUrl } from "@/utils";
 import { useAuth } from "@/lib/AuthContext";
 import { addMonths, format, isPast, parseISO } from "date-fns";
 import { sv } from "date-fns/locale";
-import { FileCheck, Search, Building2, Monitor, Pencil, Clock, Download, Trash2, Phone } from "lucide-react";
+import { FileCheck, Search, Building2, Monitor, Pencil, Clock, Download, Trash2, Phone, UserPlus, Check, Loader2 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ServiceContractModal from "@/components/machines/ServiceContractModal";
 import PendingContractApproval from "@/components/contracts/PendingContractApproval";
@@ -45,20 +45,51 @@ export default function ServiceContracts() {
 
   const [machines, setMachines] = useState([]);
   const [customers, setCustomers] = useState([]);
+  const [users, setUsers] = useState([]);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState(initialStatusFilter);
   const [editingMachine, setEditingMachine] = useState(null);
   const [showMultiContract, setShowMultiContract] = useState(false);
+  const [inviting, setInviting] = useState(null);
 
   useEffect(() => {
     Promise.all([
       base44.entities.Machine.list(),
-      base44.entities.Customer.list()
-    ]).then(([m, c]) => {
+      base44.entities.Customer.list(),
+      base44.entities.User.list().catch(() => [])
+    ]).then(([m, c, u]) => {
       setMachines(m);
       setCustomers(c);
+      setUsers(u);
     });
   }, []);
+
+  const isCustomerInvited = (email) => {
+    if (!email) return false;
+    return users.some(u => u.email.toLowerCase() === email.toLowerCase());
+  };
+
+  const inviteCustomer = async (customer) => {
+    if (!customer?.email) {
+      alert("Kunden saknar e-postadress.");
+      return;
+    }
+    setInviting(customer.id);
+    try {
+      const currentUser = await base44.auth.me();
+      await base44.functions.invoke("inviteUser", {
+        email: customer.email,
+        role: "customer",
+        inviterName: currentUser?.full_name || currentUser?.email
+      });
+      alert(`Inbjudan skickad till ${customer.email}`);
+      const newUsers = await base44.entities.User.list().catch(() => []);
+      setUsers(newUsers);
+    } catch (e) {
+      alert("Kunde inte skicka inbjudan: " + (e.message || "okänt fel"));
+    }
+    setInviting(null);
+  };
 
   const customerMap = Object.fromEntries(customers.map(c => [c.id, c]));
 
@@ -272,6 +303,17 @@ export default function ServiceContracts() {
                   </Button>
                 )}
               </div>
+              {!isTechnician && (
+                <Button 
+                  className={`w-full h-11 border ${isCustomerInvited(cust?.email) ? "bg-green-50 text-green-700 border-green-200 hover:bg-green-50" : "border-slate-200 text-slate-600 hover:bg-slate-100"}`} 
+                  variant="ghost" 
+                  onClick={() => inviteCustomer(cust)}
+                  disabled={!cust?.email || isCustomerInvited(cust?.email) || inviting === cust?.id}
+                >
+                  {inviting === cust?.id ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : isCustomerInvited(cust?.email) ? <Check className="w-4 h-4 mr-2 text-green-500" /> : <UserPlus className="w-4 h-4 mr-2" />}
+                  <span className="text-xs font-semibold">{!cust?.email ? "Kunden saknar e-post" : isCustomerInvited(cust?.email) ? "Kunden är inbjuden" : inviting === cust?.id ? "Skickat" : "Bjud in kund till portalen"}</span>
+                </Button>
+              )}
             </div>
           </CardContent>
         </Card>
@@ -386,6 +428,18 @@ export default function ServiceContracts() {
                 title="Redigera avtal"
               >
                 <Pencil className="w-4 h-4" />
+              </button>
+            )}
+            {!isTechnician && (
+              <button
+                onClick={() => inviteCustomer(cust)}
+                disabled={!cust?.email || isCustomerInvited(cust?.email) || inviting === cust?.id}
+                className={`p-1.5 rounded transition-colors ${
+                  isCustomerInvited(cust?.email) ? "text-green-500 bg-green-50" : "text-slate-400 hover:bg-slate-100 hover:text-slate-700"
+                } ${(!cust?.email || inviting === cust?.id) ? "opacity-50 cursor-not-allowed" : ""}`}
+                title={!cust?.email ? "Saknar e-post" : isCustomerInvited(cust?.email) ? "Kunden är inbjuden" : "Bjud in kund till portalen"}
+              >
+                {inviting === cust?.id ? <Loader2 className="w-4 h-4 animate-spin" /> : isCustomerInvited(cust?.email) ? <Check className="w-4 h-4" /> : <UserPlus className="w-4 h-4" />}
               </button>
             )}
             {!isTechnician && (
