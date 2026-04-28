@@ -305,13 +305,14 @@ export default function ServiceContracts() {
               </div>
               {!isTechnician && (
                 <Button 
-                  className={`w-full h-11 border ${isCustomerInvited(cust?.email) ? "bg-green-50 text-green-700 border-green-200 hover:bg-green-100" : "border-slate-200 text-slate-600 hover:bg-slate-100"}`} 
+                  className={`w-full h-11 border relative ${isCustomerInvited(cust?.email) ? "bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100" : "border-slate-200 text-slate-600 hover:bg-slate-100"}`} 
                   variant="ghost" 
                   onClick={() => inviteCustomer(cust)}
                   disabled={!cust?.email || inviting === cust?.id}
                 >
-                  {inviting === cust?.id ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : isCustomerInvited(cust?.email) ? <Check className="w-4 h-4 mr-2 text-green-600" /> : <UserPlus className="w-4 h-4 mr-2" />}
+                  {inviting === cust?.id ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : isCustomerInvited(cust?.email) ? <Check className="w-4 h-4 mr-2 text-blue-600" /> : <UserPlus className="w-4 h-4 mr-2" />}
                   <span className="text-xs font-semibold">{!cust?.email ? "Kunden saknar e-post" : isCustomerInvited(cust?.email) ? "Inbjuden (Skicka igen)" : inviting === cust?.id ? "Skickat" : "Bjud in kund till portalen"}</span>
+                  {isCustomerInvited(cust?.email) && <span className="absolute top-2 right-2 w-2 h-2 bg-blue-500 rounded-full"></span>}
                 </Button>
               )}
             </div>
@@ -434,12 +435,13 @@ export default function ServiceContracts() {
               <button
                 onClick={() => inviteCustomer(cust)}
                 disabled={!cust?.email || inviting === cust?.id}
-                className={`p-1.5 rounded transition-colors ${
-                  isCustomerInvited(cust?.email) ? "text-green-600 bg-green-50 hover:bg-green-100" : "text-slate-400 hover:bg-slate-100 hover:text-slate-700"
+                className={`relative p-1.5 rounded transition-colors ${
+                  isCustomerInvited(cust?.email) ? "text-blue-600 bg-blue-50 hover:bg-blue-100" : "text-slate-400 hover:bg-slate-100 hover:text-slate-700"
                 } ${(!cust?.email || inviting === cust?.id) ? "opacity-50 cursor-not-allowed" : ""}`}
                 title={!cust?.email ? "Saknar e-post" : isCustomerInvited(cust?.email) ? "Inbjuden (Klicka för att skicka igen)" : "Bjud in kund till portalen"}
               >
                 {inviting === cust?.id ? <Loader2 className="w-4 h-4 animate-spin" /> : isCustomerInvited(cust?.email) ? <Check className="w-4 h-4" /> : <UserPlus className="w-4 h-4" />}
+                {isCustomerInvited(cust?.email) && <span className="absolute top-0 right-0 w-1.5 h-1.5 bg-blue-500 rounded-full"></span>}
               </button>
             )}
             {!isTechnician && (

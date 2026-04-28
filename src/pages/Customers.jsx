@@ -345,12 +345,13 @@ export default function Customers() {
               onClick={() => inviteCustomer(customer)}
               disabled={inviting === customer.id || !customer.email}
               title={!customer.email ? "Kunden saknar e-post" : isCustomerInvited(customer.email) ? "Kunden är redan inbjuden (Klicka för att skicka igen)" : "Bjud in kunden att skapa konto"}
-              className={isCustomerInvited(customer.email) ? "bg-green-50 text-green-700 border-green-200 hover:bg-green-100" : ""}
+              className={`relative ${isCustomerInvited(customer.email) ? "bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100" : ""}`}
             >
-              {isCustomerInvited(customer.email) || inviting === customer.id ? <Check className="w-3 h-3 text-green-600" /> : <UserPlus className="w-3 h-3" />}
+              {isCustomerInvited(customer.email) || inviting === customer.id ? <Check className="w-3 h-3 text-blue-600" /> : <UserPlus className="w-3 h-3" />}
               <span className="ml-1 text-xs hidden sm:inline">
                 {isCustomerInvited(customer.email) ? "Inbjuden" : inviting === customer.id ? "Skickat!" : "Bjud in"}
               </span>
+              {isCustomerInvited(customer.email) && <span className="absolute top-1 right-1 w-1.5 h-1.5 bg-blue-500 rounded-full"></span>}
             </Button>
             <Link to={createPageUrl(`Machines?customer=${customer.id}`)}>
               <Button size="sm" variant="outline">
