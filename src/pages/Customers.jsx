@@ -46,7 +46,13 @@ export default function Customers() {
           base44.entities.Customer.list("-created_date"),
           base44.entities.Machine.list()
         ]);
-        return { customers: c, machines: m };
+        let u = [];
+        if (user?.role === "admin") {
+          try {
+            u = await base44.entities.User.list();
+          } catch(e) {}
+        }
+        return { customers: c, machines: m, users: u };
       }
     },
     enabled: !!user,
@@ -58,6 +64,12 @@ export default function Customers() {
 
   const customers = pageData?.customers || [];
   const machines = pageData?.machines || [];
+  const users = pageData?.users || [];
+
+  const isCustomerInvited = (email) => {
+    if (!email) return false;
+    return users.some(u => u.email.toLowerCase() === email.toLowerCase());
+  };
 
   const load = () => queryClient.invalidateQueries({ queryKey: ["customersPage"] });
 
@@ -329,13 +341,16 @@ export default function Customers() {
             </Button>
             <Button
               size="sm"
-              variant="outline"
+              variant={isCustomerInvited(customer.email) ? "secondary" : "outline"}
               onClick={() => inviteCustomer(customer)}
-              disabled={inviting === customer.id || !customer.email}
-              title={customer.email ? "Bjud in kunden att skapa konto" : "Kunden saknar e-post"}
+              disabled={inviting === customer.id || !customer.email || isCustomerInvited(customer.email)}
+              title={!customer.email ? "Kunden saknar e-post" : isCustomerInvited(customer.email) ? "Kunden är redan inbjuden" : "Bjud in kunden att skapa konto"}
+              className={isCustomerInvited(customer.email) ? "bg-green-50 text-green-700 border-green-200" : ""}
             >
-              {inviting === customer.id ? <Check className="w-3 h-3 text-green-500" /> : <UserPlus className="w-3 h-3" />}
-              <span className="ml-1 text-xs hidden sm:inline">{inviting === customer.id ? "Skickat!" : "Bjud in"}</span>
+              {isCustomerInvited(customer.email) || inviting === customer.id ? <Check className="w-3 h-3 text-green-500" /> : <UserPlus className="w-3 h-3" />}
+              <span className="ml-1 text-xs hidden sm:inline">
+                {isCustomerInvited(customer.email) ? "Inbjuden" : inviting === customer.id ? "Skickat!" : "Bjud in"}
+              </span>
             </Button>
             <Link to={createPageUrl(`Machines?customer=${customer.id}`)}>
               <Button size="sm" variant="outline">
