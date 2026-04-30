@@ -188,7 +188,7 @@ export default function Dashboard() {
             <CardContent className="p-5">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-xs astomed-muted font-medium uppercase tracking-wide">Aktiva avtal</p>
+                  <p className="text-xs astomed-muted font-medium uppercase tracking-wide">Maskiner med avtal</p>
                   <p className="text-3xl font-bold astomed-title mt-1">{activeContractsCount}</p>
                 </div>
                 <div className="w-10 h-10 astomed-icon-box" style={{ width: 40, height: 40 }}>
