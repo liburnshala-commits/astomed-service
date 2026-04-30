@@ -22,12 +22,6 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Mobilnavigering
-    if (window.innerWidth < 1024) {
-      window.location.replace(createPageUrl("MobileMenu"));
-      return;
-    }
-
     const loadData = async () => {
       const currentUser = await base44.auth.me();
       setUserRole(currentUser?.role);
@@ -135,7 +129,7 @@ export default function Dashboard() {
           <h1 className="text-2xl font-bold astomed-title">Dashboard</h1>
           <p className="astomed-subtitle text-sm">Översikt av serviceverksamheten</p>
         </div>
-        <Button onClick={exportToPDF} variant="outline" className="gap-2 bg-white hidden print:flex md:flex">
+        <Button onClick={exportToPDF} variant="outline" className="gap-2 bg-white flex">
           <Download className="w-4 h-4" /> Exportera PDF
         </Button>
       </div>
