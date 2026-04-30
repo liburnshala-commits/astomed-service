@@ -1,8 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { base44 } from "@/api/base44Client";
 import { createPageUrl } from "@/utils";
 import { Link } from "react-router-dom";
-import { Monitor, Users, Wrench, CheckCircle, Clock, Phone, Mail, FileText, Star, ThumbsUp } from "lucide-react";
+import { Monitor, Users, Wrench, CheckCircle, Clock, Phone, Mail, FileText, Star, ThumbsUp, Download } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import html2canvas from "html2canvas";
+import { jsPDF } from "jspdf";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
@@ -10,6 +13,7 @@ import TechnicianDashboard from "@/components/dashboard/TechnicianDashboard";
 
 export default function Dashboard() {
   const navigate = useNavigate();
+  const dashboardRef = useRef(null);
   const [machines, setMachines] = useState([]);
   const [customers, setCustomers] = useState([]);
   const [records, setRecords] = useState([]);
@@ -86,12 +90,38 @@ export default function Dashboard() {
   const interestedLeads = leads.filter(l => l.status === "interested").length;
   const proposalSentLeads = leads.filter(l => l.status === "proposal_sent").length;
 
+  const exportToPDF = async () => {
+    if (!dashboardRef.current) return;
+    try {
+      const canvas = await html2canvas(dashboardRef.current, { 
+        scale: 2,
+        useCORS: true,
+        logging: false
+      });
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF("p", "mm", "a4");
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+      
+      pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+      pdf.save("dashboard.pdf");
+    } catch (error) {
+      console.error("Fel vid PDF-export:", error);
+      alert("Det gick inte att exportera till PDF.");
+    }
+  };
+
   if (userRole === "technician") {
     return (
-      <div className="p-6 space-y-6">
-        <div>
-          <h1 className="text-2xl font-bold astomed-title">Teknikeröversikt</h1>
-          <p className="astomed-subtitle text-sm">Din dagliga serviceöversikt</p>
+      <div className="p-6 space-y-6" ref={dashboardRef}>
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-bold astomed-title">Teknikeröversikt</h1>
+            <p className="astomed-subtitle text-sm">Din dagliga serviceöversikt</p>
+          </div>
+          <Button onClick={exportToPDF} variant="outline" className="gap-2 bg-white">
+            <Download className="w-4 h-4" /> Exportera PDF
+          </Button>
         </div>
         <TechnicianDashboard machines={machines} customers={customers} records={records} />
       </div>
@@ -99,10 +129,15 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="p-6 space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold astomed-title">Dashboard</h1>
-        <p className="astomed-subtitle text-sm">Översikt av serviceverksamheten</p>
+    <div className="p-6 space-y-6" ref={dashboardRef}>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold astomed-title">Dashboard</h1>
+          <p className="astomed-subtitle text-sm">Översikt av serviceverksamheten</p>
+        </div>
+        <Button onClick={exportToPDF} variant="outline" className="gap-2 bg-white hidden print:flex md:flex">
+          <Download className="w-4 h-4" /> Exportera PDF
+        </Button>
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
