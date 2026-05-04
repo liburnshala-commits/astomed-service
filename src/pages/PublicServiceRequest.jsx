@@ -212,6 +212,11 @@ export default function PublicServiceRequest() {
                   <h3 className="text-xl font-semibold mb-2">Fast månadskostnad</h3>
                   <p className="text-sm text-slate-300">Slipp stora klumpsummor. Dela upp kostnaden för enklare budgetering.</p>
                 </div>
+                <a href="https://www.stralsakerhetsmyndigheten.se/omraden/kroppsbehandlingar/anmalan-av-estetisk-verksamhet/" target="_blank" rel="noopener noreferrer" className="block bg-red-500/20 hover:bg-red-500/30 backdrop-blur-md p-6 rounded-2xl border border-red-500/40 shadow-xl transition-colors group">
+                  <AlertCircle className="w-10 h-10 text-red-400 mb-4 group-hover:scale-110 transition-transform" />
+                  <h3 className="text-xl font-semibold mb-2 text-white">Anmäl din klinik nu</h3>
+                  <p className="text-sm text-red-100">Portalen har öppnat! Klicka här för att läsa mer och göra din lagstadgade anmälan till SSM.</p>
+                </a>
               </div>
             </div>
           </div>
