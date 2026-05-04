@@ -223,15 +223,20 @@ export default function PublicServiceRequest() {
           <Badge className="bg-red-500 hover:bg-red-600 text-white mb-6 px-3 py-1 border-0">Viktig Laguppdatering</Badge>
           <h2 className="text-3xl md:text-4xl font-bold mb-6 leading-tight">Nya föreskrifter från Strålsäkerhetsmyndigheten (SSMFS 2026:1)</h2>
           <p className="text-lg text-slate-300 mb-8 leading-relaxed">
-            Den 4 maj 2026 inför Strålsäkerhetsmyndigheten (SSM) anmälningsplikt för alla verksamheter som utför estetiska behandlingar med laser och IPL. Är din klinik redo?
+            Den 4 maj 2026 införde Strålsäkerhetsmyndigheten (SSM) anmälningsplikt för alla verksamheter som utför estetiska behandlingar med laser och IPL. Är din klinik redo för anmälan?
           </p>
           
           <div className="space-y-6 mb-8">
             <div className="flex gap-4">
               <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0 font-bold text-[#3a9e9e]">1</div>
               <div>
-                <h4 className="text-lg font-semibold mb-2">Startdatum: 4 maj 2026</h4>
-                <p className="text-slate-400">De nya reglerna och anmälningsportalen börjar gälla. Du kan inte anmäla din verksamhet före detta datum.</p>
+                <h4 className="text-lg font-semibold mb-2">Portalen är nu öppen</h4>
+                <p className="text-slate-400">
+                  De nya reglerna och anmälningsportalen är aktiva sedan 4 maj 2026. Du kan läsa mer och göra din anmälan på{" "}
+                  <a href="https://anmalningsplikt.ssm.se/" target="_blank" rel="noopener noreferrer" className="text-[#3a9e9e] hover:underline font-semibold">
+                    anmalningsplikt.ssm.se
+                  </a>.
+                </p>
               </div>
             </div>
             <div className="flex gap-4">
@@ -254,9 +259,9 @@ export default function PublicServiceRequest() {
             <div className="flex items-start gap-4">
               <Info className="w-6 h-6 text-[#3a9e9e] shrink-0 mt-1" />
               <div>
-                <h4 className="font-semibold mb-2">När öppnar portalen för att anmäla sin verksamhet?</h4>
+                <h4 className="font-semibold mb-2">Portalen är nu öppen för anmälan!</h4>
                 <blockquote className="text-slate-300 italic text-sm leading-relaxed">
-                  "Just nu går det inte att anmäla sig – portalen hos SSM öppnar först den 4 maj 2026. Men det du <strong>kan</strong> och <strong>bör</strong> göra nu är att se till att din servicehistorik och dina tekniska protokoll är i ordning. När anmälan väl öppnar kommer de kräva bevis på att maskinerna underhålls korrekt, och där hjälper vi dig så att du är redo direkt."
+                  "Anmälan till SSM är nu öppen. För att kunna slutföra din anmälan krävs det att din servicehistorik och dina tekniska protokoll är i ordning, eftersom myndigheten kräver bevis på att maskinerna underhålls korrekt. Vi hjälper dig att säkerställa att all dokumentation är komplett, så att din anmälan går smidigt. Läs mer och anmäl verksamheten på <a href="https://anmalningsplikt.ssm.se/" target="_blank" rel="noopener noreferrer" className="text-[#3a9e9e] hover:underline font-semibold not-italic">anmalningsplikt.ssm.se</a>."
                 </blockquote>
               </div>
             </div>
