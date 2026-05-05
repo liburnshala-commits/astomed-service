@@ -9,6 +9,8 @@ import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import PublicServiceRequest from './pages/PublicServiceRequest';
+import { useEffect } from 'react';
+import { base44 } from '@/api/base44Client';
 import ServiceAgreementTemplates from './pages/ServiceAgreementTemplates';
 import CustomerDetails from './pages/CustomerDetails';
 import ServiceContractLeads from './pages/ServiceContractLeads';
@@ -32,6 +34,27 @@ const AuthenticatedApp = () => {
   const { user, isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
   const location = useLocation();
   const currentPath = location.pathname;
+
+  useEffect(() => {
+    if (user && user.role === 'customer') {
+      let timeoutId;
+      const resetTimer = () => {
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => {
+          base44.auth.logout();
+        }, 20 * 60 * 1000); // 20 minutes
+      };
+      
+      resetTimer();
+      const events = ['mousedown', 'mousemove', 'keydown', 'scroll', 'touchstart'];
+      events.forEach(e => window.addEventListener(e, resetTimer));
+      
+      return () => {
+        clearTimeout(timeoutId);
+        events.forEach(e => window.removeEventListener(e, resetTimer));
+      };
+    }
+  }, [user]);
 
   // Public routes that don't require authentication
   const isPublicRoute = currentPath === '/' || currentPath === '/PublicServiceRequest';
