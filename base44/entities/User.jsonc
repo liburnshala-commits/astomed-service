@@ -9,7 +9,7 @@
         "technician",
         "customer"
       ],
-      "default": "technician"
+      "default": "customer"
     },
     "privacy_policy_accepted": {
       "type": "boolean",
