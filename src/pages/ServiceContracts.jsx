@@ -11,7 +11,7 @@ import { createPageUrl } from "@/utils";
 import { useAuth } from "@/lib/AuthContext";
 import { addMonths, format, isPast, parseISO } from "date-fns";
 import { sv } from "date-fns/locale";
-import { FileCheck, Search, Building2, Monitor, Pencil, Clock, Download, Trash2, Phone, UserPlus, Check, Loader2 } from "lucide-react";
+import { FileCheck, Search, Building2, Monitor, Pencil, Clock, Download, Trash2, Phone, UserPlus, Check, Loader2, Copy } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ServiceContractModal from "@/components/machines/ServiceContractModal";
 import PendingContractApproval from "@/components/contracts/PendingContractApproval";
@@ -51,6 +51,25 @@ export default function ServiceContracts() {
   const [editingMachine, setEditingMachine] = useState(null);
   const [showMultiContract, setShowMultiContract] = useState(false);
   const [inviting, setInviting] = useState(null);
+
+  const handleCopyActiveEmails = () => {
+    const activeMachines = machines.filter(m => m.service_contract && m.service_contract !== "none" && (!m.contract_status || m.contract_status === "active"));
+    const activeCustomerIds = [...new Set(activeMachines.map(m => m.customer_id))];
+    const emails = activeCustomerIds
+      .map(id => customerMap[id]?.email)
+      .filter(email => email && email.trim() !== "");
+    
+    if (emails.length === 0) {
+      alert("Hittade inga e-postadresser för aktiva avtal.");
+      return;
+    }
+    
+    const uniqueEmails = [...new Set(emails)];
+    const emailString = uniqueEmails.join("; ");
+    navigator.clipboard.writeText(emailString)
+      .then(() => alert(`Kopierade ${uniqueEmails.length} unika e-postadresser till urklipp!\n\nDu kan nu klistra in dem i ditt mailprograms "Hemlig kopia" (BCC)-fält.`))
+      .catch(() => alert("Kunde inte kopiera till urklipp."));
+  };
 
   useEffect(() => {
     Promise.all([
@@ -484,7 +503,12 @@ export default function ServiceContracts() {
             />
           </div>
           {!isTechnician && (
-            <Button onClick={() => setShowMultiContract(true)} className="astomed-btn-primary">Nytt Serviceavtal</Button>
+            <>
+              <Button onClick={handleCopyActiveEmails} variant="outline" className="gap-2 bg-white hidden lg:flex" title="Kopiera e-postlista för kunder med aktiva avtal">
+                <Copy className="w-4 h-4" /> Maillista (Aktiva)
+              </Button>
+              <Button onClick={() => setShowMultiContract(true)} className="astomed-btn-primary">Nytt Serviceavtal</Button>
+            </>
           )}
         </div>
       </div>
