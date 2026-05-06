@@ -28,13 +28,13 @@ export default function Dashboard() {
       if (currentUser?.role === "customer") {
         const ownCustomers = await base44.entities.Customer.filter({ email: currentUser.email });
         const cust = ownCustomers[0];
-        setCustomers(cust ? [cust] : []);
-        if (cust) {
+        setCustomers(cust && !cust.is_deleted ? [cust] : []);
+        if (cust && !cust.is_deleted) {
           const [m, r] = await Promise.all([
             base44.entities.Machine.filter({ customer_id: cust.id }),
             base44.entities.ServiceRecord.filter({ customer_id: cust.id }, "-service_date", 50)
           ]);
-          setMachines(m);
+          setMachines(m.filter(x => !x.is_deleted));
           setRecords(r);
           setLeads([]);
         }
@@ -45,14 +45,26 @@ export default function Dashboard() {
           base44.entities.ServiceRecord.list("-created_date", 50),
           base44.entities.ServiceContractLead.list()
         ]);
-        setMachines(m);
-        setCustomers(c);
+        setMachines(m.filter(x => !x.is_deleted));
+        setCustomers(c.filter(x => !x.is_deleted));
         setRecords(r);
         setLeads(l);
       }
       setLoading(false);
     };
     loadData();
+
+    const unsubM = base44.entities.Machine.subscribe(() => loadData());
+    const unsubC = base44.entities.Customer.subscribe(() => loadData());
+    const unsubR = base44.entities.ServiceRecord.subscribe(() => loadData());
+    const unsubL = base44.entities.ServiceContractLead.subscribe(() => loadData());
+
+    return () => {
+      unsubM();
+      unsubC();
+      unsubR();
+      unsubL();
+    };
   }, []);
 
   const statusColor = {
