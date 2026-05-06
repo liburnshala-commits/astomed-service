@@ -11,6 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
 import TechnicianDashboard from "@/components/dashboard/TechnicianDashboard";
 import ContractsPieChart from "@/components/dashboard/ContractsPieChart";
+import UpcomingServiceReminders from "@/components/dashboard/UpcomingServiceReminders";
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -348,6 +349,9 @@ export default function Dashboard() {
           </div>
           
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <div className="min-h-[300px]">
+               <UpcomingServiceReminders machines={machines} customers={customers} />
+            </div>
             <div className="min-h-[300px]">
                <ContractsPieChart machines={machines} templates={templates} />
             </div>
