@@ -354,6 +354,26 @@ export default function ServiceContractLeads() {
     return getStatusWeight(a.status) - getStatusWeight(b.status);
   });
 
+  const handleCopyEmails = () => {
+    const emails = filteredLeads
+      .map(lead => getLeadContact(lead).email)
+      .filter(email => email && email.trim() !== "");
+      
+    if (emails.length === 0) {
+      toast({ title: "Inga mailadresser", description: "Hittade inga e-postadresser för nuvarande urval.", variant: "destructive" });
+      return;
+    }
+    
+    const uniqueEmails = [...new Set(emails)];
+    const emailString = uniqueEmails.join("; ");
+    navigator.clipboard.writeText(emailString)
+      .then(() => toast({ 
+        title: "Maillista kopierad!", 
+        description: `${uniqueEmails.length} unika e-postadresser kopierades till urklipp.` 
+      }))
+      .catch(() => toast({ title: "Kunde inte kopiera", variant: "destructive" }));
+  };
+
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
@@ -362,6 +382,9 @@ export default function ServiceContractLeads() {
           <p className="text-slate-500 text-sm sm:text-base">Hantera potentiella kunder för serviceavtal. <span className="font-medium text-slate-700">{filteredLeads.length} visas</span>{filteredLeads.length !== leads.length && <span className="text-slate-400"> av {leads.length} totalt</span>}</p>
         </div>
         <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+          <Button onClick={handleCopyEmails} variant="outline" className="w-full sm:w-auto h-12 sm:h-10 text-base sm:text-sm border-dashed hidden lg:flex" title="Kopiera e-postlista för prospekt i nuvarande urval">
+            <Copy className="w-4 h-4 mr-2" /> Kopiera maillista
+          </Button>
           <Button onClick={handleExportEmails} variant="outline" className="w-full sm:w-auto h-12 sm:h-10 text-base sm:text-sm border-dashed">
             <Download className="w-5 h-5 sm:w-4 sm:h-4 mr-2" /> Exportera maillista
           </Button>
