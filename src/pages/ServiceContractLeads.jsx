@@ -382,7 +382,7 @@ export default function ServiceContractLeads() {
           <p className="text-slate-500 text-sm sm:text-base">Hantera potentiella kunder för serviceavtal. <span className="font-medium text-slate-700">{filteredLeads.length} visas</span>{filteredLeads.length !== leads.length && <span className="text-slate-400"> av {leads.length} totalt</span>}</p>
         </div>
         <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
-          <Button onClick={handleCopyEmails} variant="outline" className="w-full sm:w-auto h-12 sm:h-10 text-base sm:text-sm border-dashed hidden lg:flex" title="Kopiera e-postlista för prospekt i nuvarande urval">
+          <Button onClick={handleCopyEmails} variant="outline" className="w-full sm:w-auto h-12 sm:h-10 text-base sm:text-sm border-dashed" title="Kopiera e-postlista för prospekt i nuvarande urval">
             <Copy className="w-4 h-4 mr-2" /> Kopiera maillista
           </Button>
           <Button onClick={handleExportEmails} variant="outline" className="w-full sm:w-auto h-12 sm:h-10 text-base sm:text-sm border-dashed">
