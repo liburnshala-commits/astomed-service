@@ -354,25 +354,32 @@ export default function ServiceContractLeads() {
     return getStatusWeight(a.status) - getStatusWeight(b.status);
   });
 
+  const uniqueLeadEmails = filteredLeads.reduce((acc, lead) => {
+    const email = getLeadContact(lead).email;
+    if (email && email.trim() !== "" && !acc.some(e => e.email === email)) {
+      acc.push({ email, name: getLeadName(lead) });
+    }
+    return acc;
+  }, []);
+
   const handleCopyEmails = () => {
-    const emails = filteredLeads
-      .map(lead => getLeadContact(lead).email)
-      .filter(email => email && email.trim() !== "");
-      
-    if (emails.length === 0) {
+    if (uniqueLeadEmails.length === 0) {
       toast({ title: "Inga mailadresser", description: "Hittade inga e-postadresser för nuvarande urval.", variant: "destructive" });
       return;
     }
     
-    const uniqueEmails = [...new Set(emails)];
-    const emailString = uniqueEmails.join("; ");
+    const emailString = uniqueLeadEmails.map(x => x.email).join("; ");
     navigator.clipboard.writeText(emailString)
       .then(() => toast({ 
         title: "Maillista kopierad!", 
-        description: `${uniqueEmails.length} unika e-postadresser kopierades till urklipp.` 
+        description: `${uniqueLeadEmails.length} unika e-postadresser kopierades till urklipp.` 
       }))
       .catch(() => toast({ title: "Kunde inte kopiera", variant: "destructive" }));
   };
+
+  const copyTooltipText = uniqueLeadEmails.length > 0 
+    ? `Kopiera ${uniqueLeadEmails.length} adresser:\n` + uniqueLeadEmails.slice(0, 20).map(x => `- ${x.name}`).join('\n') + (uniqueLeadEmails.length > 20 ? `\n...och ${uniqueLeadEmails.length - 20} till` : "")
+    : "Inga mailadresser i nuvarande urval";
 
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-6">
@@ -382,7 +389,7 @@ export default function ServiceContractLeads() {
           <p className="text-slate-500 text-sm sm:text-base">Hantera potentiella kunder för serviceavtal. <span className="font-medium text-slate-700">{filteredLeads.length} visas</span>{filteredLeads.length !== leads.length && <span className="text-slate-400"> av {leads.length} totalt</span>}</p>
         </div>
         <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
-          <Button onClick={handleCopyEmails} variant="outline" className="w-full sm:w-auto h-12 sm:h-10 text-base sm:text-sm border-dashed" title="Kopiera e-postlista för prospekt i nuvarande urval">
+          <Button onClick={handleCopyEmails} variant="outline" className="w-full sm:w-auto h-12 sm:h-10 text-base sm:text-sm border-dashed" title={copyTooltipText}>
             <Copy className="w-4 h-4 mr-2" /> Kopiera maillista
           </Button>
           <Button onClick={handleExportEmails} variant="outline" className="w-full sm:w-auto h-12 sm:h-10 text-base sm:text-sm border-dashed">
