@@ -10,6 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
 import TechnicianDashboard from "@/components/dashboard/TechnicianDashboard";
+import ContractsPieChart from "@/components/dashboard/ContractsPieChart";
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -18,6 +19,7 @@ export default function Dashboard() {
   const [customers, setCustomers] = useState([]);
   const [records, setRecords] = useState([]);
   const [leads, setLeads] = useState([]);
+  const [templates, setTemplates] = useState([]);
   const [userRole, setUserRole] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -30,25 +32,29 @@ export default function Dashboard() {
         const cust = ownCustomers[0];
         setCustomers(cust && !cust.is_deleted ? [cust] : []);
         if (cust && !cust.is_deleted) {
-          const [m, r] = await Promise.all([
+          const [m, r, t] = await Promise.all([
             base44.entities.Machine.filter({ customer_id: cust.id }),
-            base44.entities.ServiceRecord.filter({ customer_id: cust.id }, "-service_date", 50)
+            base44.entities.ServiceRecord.filter({ customer_id: cust.id }, "-service_date", 50),
+            base44.entities.ServiceAgreementTemplate.list()
           ]);
           setMachines(m.filter(x => !x.is_deleted));
           setRecords(r);
           setLeads([]);
+          setTemplates(t);
         }
       } else {
-        const [m, c, r, l] = await Promise.all([
+        const [m, c, r, l, t] = await Promise.all([
           base44.entities.Machine.list("-created_date"),
           base44.entities.Customer.list("-created_date"),
           base44.entities.ServiceRecord.list("-created_date", 50),
-          base44.entities.ServiceContractLead.list()
+          base44.entities.ServiceContractLead.list(),
+          base44.entities.ServiceAgreementTemplate.list()
         ]);
         setMachines(m.filter(x => !x.is_deleted));
         setCustomers(c.filter(x => !x.is_deleted));
         setRecords(r);
         setLeads(l);
+        setTemplates(t);
       }
       setLoading(false);
     };
@@ -58,12 +64,14 @@ export default function Dashboard() {
     const unsubC = base44.entities.Customer.subscribe(() => loadData());
     const unsubR = base44.entities.ServiceRecord.subscribe(() => loadData());
     const unsubL = base44.entities.ServiceContractLead.subscribe(() => loadData());
+    const unsubT = base44.entities.ServiceAgreementTemplate.subscribe(() => loadData());
 
     return () => {
       unsubM();
       unsubC();
       unsubR();
       unsubL();
+      unsubT();
     };
   }, []);
 
@@ -257,37 +265,42 @@ export default function Dashboard() {
         </Link>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <Link to={createPageUrl("ServiceContracts") + "?status=active"} className="block">
-          <Card className="astomed-card cursor-pointer" style={{ background: "#f4f9f9" }}>
-            <CardContent className="p-5">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-xs astomed-muted font-medium uppercase tracking-wide">Avtalsintäkt (Aktiva)</p>
-                  <p className="text-3xl font-bold astomed-title mt-1">{estimatedActiveRevenue.toLocaleString("sv-SE")} kr</p>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
+          <Link to={createPageUrl("ServiceContracts") + "?status=active"} className="block h-full">
+            <Card className="astomed-card cursor-pointer h-full" style={{ background: "#f4f9f9" }}>
+              <CardContent className="p-5 h-full flex flex-col justify-center">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-xs astomed-muted font-medium uppercase tracking-wide">Avtalsintäkt (Aktiva)</p>
+                    <p className="text-3xl font-bold astomed-title mt-1">{estimatedActiveRevenue.toLocaleString("sv-SE")} kr</p>
+                  </div>
+                  <div className="w-10 h-10 astomed-icon-box" style={{ width: 40, height: 40 }}>
+                    <CheckCircle className="w-5 h-5" style={{ color: "#1b3a3a" }} />
+                  </div>
                 </div>
-                <div className="w-10 h-10 astomed-icon-box" style={{ width: 40, height: 40 }}>
-                  <CheckCircle className="w-5 h-5" style={{ color: "#1b3a3a" }} />
+              </CardContent>
+            </Card>
+          </Link>
+          <Link to={createPageUrl("ServiceContracts") + "?status=pending_signature"} className="block h-full">
+            <Card className="astomed-card cursor-pointer h-full" style={{ background: "#fffaf0" }}>
+              <CardContent className="p-5 h-full flex flex-col justify-center">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-xs astomed-muted font-medium uppercase tracking-wide">Förväntad intäkt (Signering)</p>
+                    <p className="text-3xl font-bold astomed-title mt-1">{estimatedPendingRevenue.toLocaleString("sv-SE")} kr</p>
+                  </div>
+                  <div className="w-10 h-10 astomed-icon-box" style={{ width: 40, height: 40, background: "#fef3c7" }}>
+                    <Clock className="w-5 h-5" style={{ color: "#e6a817" }} />
+                  </div>
                 </div>
-              </div>
-            </CardContent>
-          </Card>
-        </Link>
-        <Link to={createPageUrl("ServiceContracts") + "?status=pending_signature"} className="block">
-          <Card className="astomed-card cursor-pointer" style={{ background: "#fffaf0" }}>
-            <CardContent className="p-5">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-xs astomed-muted font-medium uppercase tracking-wide">Förväntad intäkt (Signering)</p>
-                  <p className="text-3xl font-bold astomed-title mt-1">{estimatedPendingRevenue.toLocaleString("sv-SE")} kr</p>
-                </div>
-                <div className="w-10 h-10 astomed-icon-box" style={{ width: 40, height: 40, background: "#fef3c7" }}>
-                  <Clock className="w-5 h-5" style={{ color: "#e6a817" }} />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </Link>
+              </CardContent>
+            </Card>
+          </Link>
+        </div>
+        <div className="lg:col-span-1 min-h-[300px]">
+          <ContractsPieChart machines={machines} templates={templates} />
+        </div>
       </div>
 
       {userRole !== "customer" && (
