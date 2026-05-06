@@ -299,8 +299,7 @@ export default function Dashboard() {
       {userRole !== "customer" && (
         <>
           <h2 className="text-lg font-bold astomed-title mt-8 mb-4">Serviceärenden</h2>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-            <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
               <Link to={createPageUrl("ServiceRecords") + "?status=completed"} className="block">
                 <Card className="astomed-card cursor-pointer h-full" style={{ background: "#f0fdf4" }}>
                   <CardContent className="p-5 h-full flex flex-col justify-center">
@@ -346,9 +345,10 @@ export default function Dashboard() {
                   </CardContent>
                 </Card>
               </Link>
-            </div>
-            
-            <div className="lg:col-span-1 min-h-[300px]">
+          </div>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <div className="min-h-[300px]">
                <ContractsPieChart machines={machines} templates={templates} />
             </div>
           </div>
