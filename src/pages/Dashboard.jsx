@@ -98,11 +98,9 @@ export default function Dashboard() {
   const estimatedActiveRevenue = activeContractsCount * 600;
   const estimatedPendingRevenue = pendingContractsCount * 600;
 
-  const contactedLeads = leads.filter(l => l.status === "sold_machines").length;
-  const calledLeads = leads.filter(l => l.status === "called").length;
-  const newLeads = leads.filter(l => l.status === "new").length;
-  const interestedLeads = leads.filter(l => l.status === "interested").length;
-  const proposalSentLeads = leads.filter(l => l.status === "proposal_sent").length;
+  const completedServices = records.filter(r => r.status === "completed" || r.status === "invoiced").length;
+  const plannedServices = records.filter(r => r.status === "planned" || r.status === "pending" || r.status === "awaiting_approval").length;
+  const inProgressServices = records.filter(r => r.status === "in_progress").length;
 
   const exportToPDF = async () => {
     if (!dashboardRef.current) return;
@@ -265,123 +263,94 @@ export default function Dashboard() {
         </Link>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
-          <Link to={createPageUrl("ServiceContracts") + "?status=active"} className="block h-full">
-            <Card className="astomed-card cursor-pointer h-full" style={{ background: "#f4f9f9" }}>
-              <CardContent className="p-5 h-full flex flex-col justify-center">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-xs astomed-muted font-medium uppercase tracking-wide">Avtalsintäkt (Aktiva)</p>
-                    <p className="text-3xl font-bold astomed-title mt-1">{estimatedActiveRevenue.toLocaleString("sv-SE")} kr</p>
-                  </div>
-                  <div className="w-10 h-10 astomed-icon-box" style={{ width: 40, height: 40 }}>
-                    <CheckCircle className="w-5 h-5" style={{ color: "#1b3a3a" }} />
-                  </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <Link to={createPageUrl("ServiceContracts") + "?status=active"} className="block h-full">
+          <Card className="astomed-card cursor-pointer h-full" style={{ background: "#f4f9f9" }}>
+            <CardContent className="p-5 h-full flex flex-col justify-center">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-xs astomed-muted font-medium uppercase tracking-wide">Avtalsintäkt (Aktiva)</p>
+                  <p className="text-3xl font-bold astomed-title mt-1">{estimatedActiveRevenue.toLocaleString("sv-SE")} kr</p>
                 </div>
-              </CardContent>
-            </Card>
-          </Link>
-          <Link to={createPageUrl("ServiceContracts") + "?status=pending_signature"} className="block h-full">
-            <Card className="astomed-card cursor-pointer h-full" style={{ background: "#fffaf0" }}>
-              <CardContent className="p-5 h-full flex flex-col justify-center">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-xs astomed-muted font-medium uppercase tracking-wide">Förväntad intäkt (Signering)</p>
-                    <p className="text-3xl font-bold astomed-title mt-1">{estimatedPendingRevenue.toLocaleString("sv-SE")} kr</p>
-                  </div>
-                  <div className="w-10 h-10 astomed-icon-box" style={{ width: 40, height: 40, background: "#fef3c7" }}>
-                    <Clock className="w-5 h-5" style={{ color: "#e6a817" }} />
-                  </div>
+                <div className="w-10 h-10 astomed-icon-box" style={{ width: 40, height: 40 }}>
+                  <CheckCircle className="w-5 h-5" style={{ color: "#1b3a3a" }} />
                 </div>
-              </CardContent>
-            </Card>
-          </Link>
-        </div>
-        <div className="lg:col-span-1 min-h-[300px]">
-          <ContractsPieChart machines={machines} templates={templates} />
-        </div>
+              </div>
+            </CardContent>
+          </Card>
+        </Link>
+        <Link to={createPageUrl("ServiceContracts") + "?status=pending_signature"} className="block h-full">
+          <Card className="astomed-card cursor-pointer h-full" style={{ background: "#fffaf0" }}>
+            <CardContent className="p-5 h-full flex flex-col justify-center">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-xs astomed-muted font-medium uppercase tracking-wide">Förväntad intäkt (Signering)</p>
+                  <p className="text-3xl font-bold astomed-title mt-1">{estimatedPendingRevenue.toLocaleString("sv-SE")} kr</p>
+                </div>
+                <div className="w-10 h-10 astomed-icon-box" style={{ width: 40, height: 40, background: "#fef3c7" }}>
+                  <Clock className="w-5 h-5" style={{ color: "#e6a817" }} />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </Link>
       </div>
 
       {userRole !== "customer" && (
         <>
-          <h2 className="text-lg font-bold astomed-title mt-8 mb-4">Prospektbearbetning</h2>
-          <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
-            <Link to={createPageUrl("ServiceContractLeads") + "?status=new"} className="block">
-              <Card className="astomed-card cursor-pointer" style={{ background: "#f8fafc" }}>
-                <CardContent className="p-5">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-xs astomed-muted font-medium uppercase tracking-wide">Nya prospekt</p>
-                      <p className="text-3xl font-bold astomed-title mt-1">{newLeads}</p>
+          <h2 className="text-lg font-bold astomed-title mt-8 mb-4">Serviceärenden</h2>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+            <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-3 gap-4">
+              <Link to={createPageUrl("ServiceRecords") + "?status=completed"} className="block">
+                <Card className="astomed-card cursor-pointer h-full" style={{ background: "#f0fdf4" }}>
+                  <CardContent className="p-5 h-full flex flex-col justify-center">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-xs astomed-muted font-medium uppercase tracking-wide">Genomförda</p>
+                        <p className="text-3xl font-bold astomed-title mt-1">{completedServices}</p>
+                      </div>
+                      <div className="w-10 h-10 astomed-icon-box" style={{ width: 40, height: 40, background: "#dcfce7" }}>
+                        <CheckCircle className="w-5 h-5" style={{ color: "#166534" }} />
+                      </div>
                     </div>
-                    <div className="w-10 h-10 astomed-icon-box" style={{ width: 40, height: 40, background: "#e2e8f0" }}>
-                      <Star className="w-5 h-5" style={{ color: "#475569" }} />
+                  </CardContent>
+                </Card>
+              </Link>
+              <Link to={createPageUrl("ServiceRecords") + "?status=planned"} className="block">
+                <Card className="astomed-card cursor-pointer h-full" style={{ background: "#fffaf0" }}>
+                  <CardContent className="p-5 h-full flex flex-col justify-center">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-xs astomed-muted font-medium uppercase tracking-wide">Bokade/Planerade</p>
+                        <p className="text-3xl font-bold astomed-title mt-1">{plannedServices}</p>
+                      </div>
+                      <div className="w-10 h-10 astomed-icon-box" style={{ width: 40, height: 40, background: "#fef3c7" }}>
+                        <Clock className="w-5 h-5" style={{ color: "#d97706" }} />
+                      </div>
                     </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </Link>
-            <Link to={createPageUrl("ServiceContractLeads") + "?status=sold_machines"} className="block">
-              <Card className="astomed-card cursor-pointer" style={{ background: "#fffbeb" }}>
-                <CardContent className="p-5">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-xs astomed-muted font-medium uppercase tracking-wide">Sålt maskiner</p>
-                      <p className="text-3xl font-bold astomed-title mt-1">{contactedLeads}</p>
+                  </CardContent>
+                </Card>
+              </Link>
+              <Link to={createPageUrl("ServiceRecords") + "?status=in_progress"} className="block">
+                <Card className="astomed-card cursor-pointer h-full" style={{ background: "#eff6ff" }}>
+                  <CardContent className="p-5 h-full flex flex-col justify-center">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-xs astomed-muted font-medium uppercase tracking-wide">Pågående</p>
+                        <p className="text-3xl font-bold astomed-title mt-1">{inProgressServices}</p>
+                      </div>
+                      <div className="w-10 h-10 astomed-icon-box" style={{ width: 40, height: 40, background: "#dbeafe" }}>
+                        <Wrench className="w-5 h-5" style={{ color: "#1d4ed8" }} />
+                      </div>
                     </div>
-                    <div className="w-10 h-10 astomed-icon-box" style={{ width: 40, height: 40, background: "#fef3c7" }}>
-                      <Mail className="w-5 h-5" style={{ color: "#d97706" }} />
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </Link>
-            <Link to={createPageUrl("ServiceContractLeads") + "?status=called"} className="block">
-              <Card className="astomed-card cursor-pointer" style={{ background: "#f0fdfa" }}>
-                <CardContent className="p-5">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-xs astomed-muted font-medium uppercase tracking-wide">Ringda</p>
-                      <p className="text-3xl font-bold astomed-title mt-1">{calledLeads}</p>
-                    </div>
-                    <div className="w-10 h-10 astomed-icon-box" style={{ width: 40, height: 40, background: "#ccfbf1" }}>
-                      <Phone className="w-5 h-5" style={{ color: "#0f766e" }} />
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </Link>
-            <Link to={createPageUrl("ServiceContractLeads") + "?status=interested"} className="block">
-              <Card className="astomed-card cursor-pointer" style={{ background: "#f0fdf4" }}>
-                <CardContent className="p-5">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-xs astomed-muted font-medium uppercase tracking-wide">Intresserade</p>
-                      <p className="text-3xl font-bold astomed-title mt-1">{interestedLeads}</p>
-                    </div>
-                    <div className="w-10 h-10 astomed-icon-box" style={{ width: 40, height: 40, background: "#ccfbf1" }}>
-                      <ThumbsUp className="w-5 h-5" style={{ color: "#14b8a6" }} />
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </Link>
-            <Link to={createPageUrl("ServiceContractLeads") + "?status=proposal_sent"} className="block">
-              <Card className="astomed-card cursor-pointer" style={{ background: "#faf5ff" }}>
-                <CardContent className="p-5">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-xs astomed-muted font-medium uppercase tracking-wide">Offert skickad</p>
-                      <p className="text-3xl font-bold astomed-title mt-1">{proposalSentLeads}</p>
-                    </div>
-                    <div className="w-10 h-10 astomed-icon-box" style={{ width: 40, height: 40, background: "#f3e8ff" }}>
-                      <FileText className="w-5 h-5" style={{ color: "#a855f7" }} />
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </Link>
+                  </CardContent>
+                </Card>
+              </Link>
+            </div>
+            
+            <div className="lg:col-span-1 min-h-[300px]">
+               <ContractsPieChart machines={machines} templates={templates} />
+            </div>
           </div>
         </>
       )}
