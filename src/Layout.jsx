@@ -65,6 +65,7 @@ const navSections = [
     items: [
       { label: "Kunder", page: "Customers", icon: Users, roles: ["admin", "technician"] },
       { label: "Maskiner", page: "Machines", icon: Monitor, roles: ["admin", "technician", "customer"] },
+      { label: "Produkter & Manualer", page: "Products", icon: FileText, roles: ["admin", "technician"] },
       { label: "Rapporter", page: "Reports", icon: FileText, roles: ["admin", "technician"] },
       { label: "Teknikervy (mobil)", page: "TechnicianMobile", icon: Wrench, roles: ["admin", "technician"] },
     ]

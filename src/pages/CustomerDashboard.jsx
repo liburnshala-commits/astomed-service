@@ -24,6 +24,7 @@ export default function CustomerDashboard() {
   const [customer, setCustomer] = useState(null);
   const [machines, setMachines] = useState([]);
   const [records, setRecords] = useState([]);
+  const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showOtherMachineForm, setShowOtherMachineForm] = useState(false);
   const [requestingContractFor, setRequestingContractFor] = useState(null);
@@ -37,12 +38,14 @@ export default function CustomerDashboard() {
       setCustomer(cust);
 
       if (cust) {
-        const [m, r] = await Promise.all([
+        const [m, r, p] = await Promise.all([
           base44.entities.Machine.filter({ customer_id: cust.id }),
-          base44.entities.ServiceRecord.filter({ customer_id: cust.id }, "-created_date", 50)
+          base44.entities.ServiceRecord.filter({ customer_id: cust.id }, "-created_date", 50),
+          base44.entities.Product.list()
         ]);
         setMachines(m);
         setRecords(r);
+        setProducts(p);
       }
       setLoading(false);
     };
@@ -201,18 +204,29 @@ export default function CustomerDashboard() {
                           })()}
                         </div>
                         
-                        {machine.documents?.length > 0 && (
-                          <div className="mt-3 pt-3 border-t border-slate-200/60 space-y-2">
-                            <p className="text-xs font-semibold text-slate-700">Maskindokument</p>
-                            {machine.documents.map((doc, i) => (
-                              <a key={i} href={doc.url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-xs p-2 rounded border border-slate-200 bg-white hover:border-slate-300 hover:shadow-sm transition-all text-blue-600 group">
-                                <FileText className="w-3.5 h-3.5 text-blue-500 group-hover:text-blue-700" />
-                                <span className="truncate flex-1 group-hover:underline">{doc.name}</span>
-                                <Download className="w-3 h-3 text-slate-400" />
-                              </a>
-                            ))}
-                          </div>
-                        )}
+                        {(() => {
+                          const matchingProduct = products.find(p => 
+                            p.name === machine.model || 
+                            (p.related_machine_models && p.related_machine_models.includes(machine.model))
+                          );
+                          const combinedDocs = [
+                            ...(machine.documents || []),
+                            ...(matchingProduct?.documents || [])
+                          ];
+                          if (combinedDocs.length === 0) return null;
+                          return (
+                            <div className="mt-3 pt-3 border-t border-slate-200/60 space-y-2">
+                              <p className="text-xs font-semibold text-slate-700">Manualer & Dokument</p>
+                              {combinedDocs.map((doc, i) => (
+                                <a key={i} href={doc.url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-xs p-2 rounded border border-slate-200 bg-white hover:border-slate-300 hover:shadow-sm transition-all text-blue-600 group">
+                                  <FileText className="w-3.5 h-3.5 text-blue-500 group-hover:text-blue-700" />
+                                  <span className="truncate flex-1 group-hover:underline">{doc.name}</span>
+                                  <Download className="w-3 h-3 text-slate-400" />
+                                </a>
+                              ))}
+                            </div>
+                          );
+                        })()}
                         
                         <div className="mt-3 pt-3 border-t border-slate-200/60">
                            <Button size="sm" variant="outline" className="w-full sm:w-auto text-xs h-8" asChild>

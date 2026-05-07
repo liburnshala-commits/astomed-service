@@ -1,0 +1,95 @@
+{
+  "name": "Product",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Produktnamn"
+    },
+    "description": {
+      "type": "string",
+      "description": "Detaljerad beskrivning av produkten"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "Kringprodukt",
+        "Skönhetsprodukt",
+        "Ny utrustning",
+        "Uppgradering",
+        "Reservdel",
+        "Paket"
+      ],
+      "description": "Typ av produkt"
+    },
+    "related_machine_models": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Maskinmodeller som produkten är kompatibel med"
+    },
+    "suggested_retail_price": {
+      "type": "number",
+      "description": "Rekommenderat utpris"
+    },
+    "cost_price": {
+      "type": "number",
+      "description": "Inköpspris"
+    },
+    "image_url": {
+      "type": "string",
+      "description": "URL till produktbild"
+    },
+    "benefits": {
+      "type": "string",
+      "description": "Fördelar för kunden"
+    },
+    "min_machine_age_for_upgrade_years": {
+      "type": "number",
+      "description": "Minsta maskinålder i år för att föreslås som uppgradering"
+    },
+    "estimated_trade_in_value_multiplier": {
+      "type": "number",
+      "description": "Multiplikator för inbytesvärde"
+    },
+    "education_url": {
+      "type": "string",
+      "description": "Länk till utbildning, kurs eller produktblad"
+    },
+    "is_package": {
+      "type": "boolean",
+      "default": false,
+      "description": "Är detta ett paketerbjudande?"
+    },
+    "package_items": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Vilka produkter/tjänster som ingår (för paket)"
+    },
+    "documents": {
+      "type": "array",
+      "description": "Uppladdade manualer och dokument",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          }
+        },
+        "required": ["name", "url"]
+      }
+    }
+  },
+  "required": [
+    "name",
+    "category",
+    "suggested_retail_price",
+    "cost_price"
+  ]
+}

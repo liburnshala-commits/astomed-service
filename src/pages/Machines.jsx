@@ -56,20 +56,22 @@ export default function Machines() {
         const ownCustomers = await base44.entities.Customer.filter({ email: user.email });
         const cust = ownCustomers[0];
         if (cust) {
-          const [m, r] = await Promise.all([
+          const [m, r, p] = await Promise.all([
             base44.entities.Machine.filter({ customer_id: cust.id }, "-created_date"),
-            base44.entities.ServiceRecord.filter({ customer_id: cust.id }, "-created_date")
+            base44.entities.ServiceRecord.filter({ customer_id: cust.id }, "-created_date"),
+            base44.entities.Product.list()
           ]);
-          return { machines: m.filter(x => !x.is_deleted), records: r, customers: [cust] };
+          return { machines: m.filter(x => !x.is_deleted), records: r, customers: [cust], products: p };
         }
-        return { machines: [], records: [], customers: [] };
+        return { machines: [], records: [], customers: [], products: [] };
       } else {
-        const [m, c, r] = await Promise.all([
+        const [m, c, r, p] = await Promise.all([
           base44.entities.Machine.list("-created_date"),
           base44.entities.Customer.list(),
-          base44.entities.ServiceRecord.list("-created_date")
+          base44.entities.ServiceRecord.list("-created_date"),
+          base44.entities.Product.list()
         ]);
-        return { machines: m.filter(x => !x.is_deleted), customers: c, records: r };
+        return { machines: m.filter(x => !x.is_deleted), customers: c, records: r, products: p };
       }
     },
     enabled: !!user,
@@ -82,6 +84,7 @@ export default function Machines() {
   const machines = pageData?.machines || [];
   const customers = pageData?.customers || [];
   const records = pageData?.records || [];
+  const products = pageData?.products || [];
 
   const load = () => queryClient.invalidateQueries({ queryKey: ["machinesPage"] });
 
@@ -279,16 +282,28 @@ export default function Machines() {
                 </div>
               );
             })()}
-            {machine.documents?.length > 0 && (
-              <div className="mt-3 space-y-1.5">
-                {machine.documents.map((doc, i) => (
-                  <a key={i} href={doc.url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-xs p-1.5 rounded bg-slate-50 border border-slate-100 hover:border-slate-300 text-blue-600 group">
-                    <FileText className="w-3 h-3 text-blue-500" />
-                    <span className="truncate flex-1 group-hover:underline">{doc.name}</span>
-                  </a>
-                ))}
-              </div>
-            )}
+            {(() => {
+              const matchingProduct = products.find(p => 
+                p.name === machine.model || 
+                (p.related_machine_models && p.related_machine_models.includes(machine.model))
+              );
+              const combinedDocs = [
+                ...(machine.documents || []),
+                ...(matchingProduct?.documents || [])
+              ];
+              if (combinedDocs.length === 0) return null;
+              return (
+                <div className="mt-3 space-y-1.5">
+                  <p className="text-xs font-semibold text-slate-700">Manualer & Dokument</p>
+                  {combinedDocs.map((doc, i) => (
+                    <a key={i} href={doc.url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-xs p-1.5 rounded bg-slate-50 border border-slate-100 hover:border-slate-300 text-blue-600 group">
+                      <FileText className="w-3 h-3 text-blue-500" />
+                      <span className="truncate flex-1 group-hover:underline">{doc.name}</span>
+                    </a>
+                  ))}
+                </div>
+              );
+            })()}
           </div>
           <div className="mt-auto pt-4 border-t border-slate-100 flex flex-col items-start sm:items-end gap-2 flex-shrink-0">
             <div className="flex gap-2 flex-wrap justify-start w-full">
