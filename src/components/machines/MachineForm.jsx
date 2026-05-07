@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Upload, FileText, Trash2, Loader2 } from "lucide-react";
 import { machineServiceDetails } from "../MachineServiceDetails";
 import { base44 } from "@/api/base44Client";
 import { MACHINE_MODELS } from "@/lib/constants";
@@ -25,8 +26,39 @@ export default function MachineForm({ machine, customers, preselectedCustomerId,
     warranty_expiry: machine?.warranty_expiry || "",
     status: machine?.status || "active",
     service_contract: machine?.service_contract || "none",
-    notes: machine?.notes || ""
+    notes: machine?.notes || "",
+    documents: machine?.documents || []
   });
+
+  const [uploadingDoc, setUploadingDoc] = useState(false);
+  
+  const handleFileUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploadingDoc(true);
+    try {
+      const res = await base44.integrations.Core.UploadFile({ file });
+      if (res?.file_url) {
+        setForm(prev => ({
+          ...prev,
+          documents: [...(prev.documents || []), { name: file.name, url: res.file_url }]
+        }));
+      }
+    } catch (err) {
+      console.error("Fel vid uppladdning", err);
+      alert("Kunde inte ladda upp filen.");
+    } finally {
+      setUploadingDoc(false);
+      e.target.value = "";
+    }
+  };
+
+  const removeDocument = (index) => {
+    setForm(prev => ({
+      ...prev,
+      documents: prev.documents.filter((_, i) => i !== index)
+    }));
+  };
 
   const currentCustomer = customers.find(c => c.id === form.customer_id);
   const [customerContact, setCustomerContact] = useState("");
@@ -173,6 +205,41 @@ export default function MachineForm({ machine, customers, preselectedCustomerId,
             <div className="col-span-2 space-y-1">
               <Label>Anteckningar</Label>
               <Textarea value={form.notes} onChange={e => set("notes", e.target.value)} placeholder="Övriga anteckningar..." rows={3} />
+            </div>
+            
+            <div className="col-span-2 space-y-2 mt-2 p-4 border border-slate-200 rounded-lg bg-slate-50">
+              <div className="flex items-center justify-between">
+                <Label className="font-semibold text-slate-800">Dokument & Filer (t.ex. PDF-manualer)</Label>
+                <div className="relative">
+                  <Input 
+                    type="file" 
+                    accept=".pdf,.doc,.docx"
+                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" 
+                    onChange={handleFileUpload} 
+                    disabled={uploadingDoc}
+                  />
+                  <Button type="button" size="sm" variant="outline" disabled={uploadingDoc}>
+                    {uploadingDoc ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Upload className="w-4 h-4 mr-2" />}
+                    Ladda upp fil
+                  </Button>
+                </div>
+              </div>
+              
+              {form.documents?.length > 0 && (
+                <div className="space-y-2 mt-3">
+                  {form.documents.map((doc, idx) => (
+                    <div key={idx} className="flex items-center justify-between p-2 bg-white rounded border border-slate-200 text-sm">
+                      <div className="flex items-center gap-2 truncate">
+                        <FileText className="w-4 h-4 text-blue-500 flex-shrink-0" />
+                        <span className="truncate text-slate-700">{doc.name}</span>
+                      </div>
+                      <Button type="button" variant="ghost" size="sm" onClick={() => removeDocument(idx)} className="text-red-500 hover:bg-red-50 h-8 w-8 p-0">
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         </div>

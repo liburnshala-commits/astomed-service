@@ -138,6 +138,21 @@
       "type": "string",
       "format": "date-time",
       "description": "Datum d\u00e5 maskinen raderades"
+    },
+    "documents": {
+      "type": "array",
+      "description": "Uppladdade dokument (t.ex. PDF)",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          }
+        }
+      }
     }
   },
   "required": [

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { createPageUrl } from "@/utils";
 import { Link } from "react-router-dom";
-import { Monitor, Wrench, CheckCircle, Clock, Building2, Mail, Phone, MapPin, User, AlertTriangle, Plus, FileCheck } from "lucide-react";
+import { Monitor, Wrench, CheckCircle, Clock, Building2, Mail, Phone, MapPin, User, AlertTriangle, Plus, FileCheck, FileText, Download } from "lucide-react";
 import OtherMachineServiceForm from "@/components/portal/OtherMachineServiceForm";
 import RequestContractModal from "@/components/portal/RequestContractModal";
 import ServiceRecordDetail from "@/components/service/ServiceRecordDetail";
@@ -200,6 +200,20 @@ export default function CustomerDashboard() {
                             );
                           })()}
                         </div>
+                        
+                        {machine.documents?.length > 0 && (
+                          <div className="mt-3 pt-3 border-t border-slate-200/60 space-y-2">
+                            <p className="text-xs font-semibold text-slate-700">Maskindokument</p>
+                            {machine.documents.map((doc, i) => (
+                              <a key={i} href={doc.url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-xs p-2 rounded border border-slate-200 bg-white hover:border-slate-300 hover:shadow-sm transition-all text-blue-600 group">
+                                <FileText className="w-3.5 h-3.5 text-blue-500 group-hover:text-blue-700" />
+                                <span className="truncate flex-1 group-hover:underline">{doc.name}</span>
+                                <Download className="w-3 h-3 text-slate-400" />
+                              </a>
+                            ))}
+                          </div>
+                        )}
+                        
                         <div className="mt-3 pt-3 border-t border-slate-200/60">
                            <Button size="sm" variant="outline" className="w-full sm:w-auto text-xs h-8" asChild>
                              <Link to={createPageUrl(`ServiceRecords?machine=${machine.id}&new=true`)}>

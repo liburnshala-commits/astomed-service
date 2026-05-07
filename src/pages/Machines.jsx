@@ -279,6 +279,16 @@ export default function Machines() {
                 </div>
               );
             })()}
+            {machine.documents?.length > 0 && (
+              <div className="mt-3 space-y-1.5">
+                {machine.documents.map((doc, i) => (
+                  <a key={i} href={doc.url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-xs p-1.5 rounded bg-slate-50 border border-slate-100 hover:border-slate-300 text-blue-600 group">
+                    <FileText className="w-3 h-3 text-blue-500" />
+                    <span className="truncate flex-1 group-hover:underline">{doc.name}</span>
+                  </a>
+                ))}
+              </div>
+            )}
           </div>
           <div className="mt-auto pt-4 border-t border-slate-100 flex flex-col items-start sm:items-end gap-2 flex-shrink-0">
             <div className="flex gap-2 flex-wrap justify-start w-full">
