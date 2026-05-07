@@ -5,20 +5,13 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
+import { useAuth } from "@/lib/AuthContext";
 
 export default function NotificationBell() {
   const [notifications, setNotifications] = useState([]);
   const [open, setOpen] = useState(false);
-  const [user, setUser] = useState(null);
+  const { user } = useAuth();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      const currentUser = await base44.auth.me();
-      setUser(currentUser);
-    };
-    fetchUser();
-  }, []);
 
   useEffect(() => {
     if (!user?.email) return;
