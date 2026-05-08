@@ -1,10 +1,13 @@
 import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useNavigate } from 'react-router-dom';
+import { createPageUrl } from '@/utils';
 
 const COLORS = ['#1b3a3a', '#3a9e9e', '#e6a817', '#64748b', '#ef4444', '#14b8a6', '#a855f7', '#0f766e', '#d97706'];
 
 export default function ContractsPieChart({ machines, templates }) {
+  const navigate = useNavigate();
   const activeMachines = machines.filter(m => m.service_contract && m.service_contract !== 'none' && (!m.contract_status || m.contract_status === 'active'));
   
   const distribution = {};
@@ -68,7 +71,16 @@ export default function ContractsPieChart({ machines, templates }) {
               tick={{ fontSize: 10, fill: '#64748b' }}
             />
             <Tooltip content={<CustomTooltip />} cursor={{ fill: '#f1f5f9' }} />
-            <Bar dataKey="value" radius={[4, 4, 0, 0]}>
+            <Bar 
+              dataKey="value" 
+              radius={[4, 4, 0, 0]} 
+              cursor="pointer"
+              onClick={(data) => {
+                if (data && data.name) {
+                  navigate(createPageUrl(`Machines?search=${encodeURIComponent(data.name)}`));
+                }
+              }}
+            >
               {data.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
               ))}
