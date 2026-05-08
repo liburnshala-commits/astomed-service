@@ -49,7 +49,6 @@ const navSections = [
     title: "Service",
     items: [
       { label: "Serviceförfrågningar", page: "PublicServiceLeads", icon: ClipboardList, roles: ["admin"] },
-      { label: "Uppföljningar (To-Do)", page: "Tasks", icon: CheckSquare, roles: ["admin"] },
       { label: "Chattsupport", page: "ChatSupport", icon: MessageSquare, roles: ["admin"] },
       { label: "Serviceärenden", page: "ServiceRecords", icon: Wrench, roles: ["admin", "technician", "customer"] },
       { label: "Servicekalender", page: "Calendar", icon: CalendarDays, roles: ["admin", "technician"] },

@@ -17,7 +17,6 @@ import ServiceContractLeads from './pages/ServiceContractLeads';
 import ClosedLeads from './pages/ClosedLeads';
 import DeletedMachines from './pages/DeletedMachines';
 import ChatSupport from './pages/ChatSupport';
-import Tasks from './pages/Tasks';
 import MobileMenu from './pages/MobileMenu';
 import ClinicDevelopment from './pages/ClinicDevelopment';
 import Products from './pages/Products';
@@ -112,7 +111,6 @@ const AuthenticatedApp = () => {
         <Route path="/ClosedLeads" element={<AnimatedPage><LayoutWrapper currentPageName="ClosedLeads"><ClosedLeads /></LayoutWrapper></AnimatedPage>} />
         <Route path="/DeletedMachines" element={<AnimatedPage><LayoutWrapper currentPageName="Machines"><DeletedMachines /></LayoutWrapper></AnimatedPage>} />
         <Route path="/ChatSupport" element={<AnimatedPage><LayoutWrapper currentPageName="ChatSupport"><ChatSupport /></LayoutWrapper></AnimatedPage>} />
-        <Route path="/Tasks" element={<AnimatedPage><LayoutWrapper currentPageName="Tasks"><Tasks /></LayoutWrapper></AnimatedPage>} />
         <Route path="/MobileMenu" element={<AnimatedPage><LayoutWrapper currentPageName="MobileMenu"><MobileMenu /></LayoutWrapper></AnimatedPage>} />
         <Route path="/ClinicDevelopment" element={<AnimatedPage><LayoutWrapper currentPageName="ClinicDevelopment"><ClinicDevelopment /></LayoutWrapper></AnimatedPage>} />
         <Route path="/Products" element={<AnimatedPage><LayoutWrapper currentPageName="Products"><Products /></LayoutWrapper></AnimatedPage>} />
