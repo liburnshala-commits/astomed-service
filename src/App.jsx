@@ -20,7 +20,6 @@ import ChatSupport from './pages/ChatSupport';
 import Tasks from './pages/Tasks';
 import MobileMenu from './pages/MobileMenu';
 import ClinicDevelopment from './pages/ClinicDevelopment';
-import ContractsByCity from './pages/ContractsByCity';
 import Products from './pages/Products';
 
 const { Pages, Layout, mainPage } = pagesConfig;
@@ -116,7 +115,6 @@ const AuthenticatedApp = () => {
         <Route path="/Tasks" element={<AnimatedPage><LayoutWrapper currentPageName="Tasks"><Tasks /></LayoutWrapper></AnimatedPage>} />
         <Route path="/MobileMenu" element={<AnimatedPage><LayoutWrapper currentPageName="MobileMenu"><MobileMenu /></LayoutWrapper></AnimatedPage>} />
         <Route path="/ClinicDevelopment" element={<AnimatedPage><LayoutWrapper currentPageName="ClinicDevelopment"><ClinicDevelopment /></LayoutWrapper></AnimatedPage>} />
-        <Route path="/ContractsByCity" element={<AnimatedPage><LayoutWrapper currentPageName="ContractsByCity"><ContractsByCity /></LayoutWrapper></AnimatedPage>} />
         <Route path="/Products" element={<AnimatedPage><LayoutWrapper currentPageName="Products"><Products /></LayoutWrapper></AnimatedPage>} />
         {Object.entries(Pages).map(([path, Page]) => (
           <Route
