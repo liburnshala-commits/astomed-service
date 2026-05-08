@@ -77,7 +77,7 @@ export default function ContractsPieChart({ machines, templates }) {
               cursor="pointer"
               onClick={(data) => {
                 if (data && data.name) {
-                  navigate(createPageUrl(`Machines?search=${encodeURIComponent(data.name)}`));
+                  navigate(createPageUrl(`Machines?search=${encodeURIComponent(data.name)}&contract=active`));
                 }
               }}
             >

@@ -30,19 +30,26 @@ export default function Machines() {
   const urlParams = new URLSearchParams(location.search);
   const preselectedCustomer = urlParams.get("customer");
   const preselectedSearch = urlParams.get("search") || "";
+  const preselectedContract = urlParams.get("contract") || "all";
 
   const [search, setSearch] = useState(preselectedSearch);
   const [filterModel, setFilterModel] = useState("all");
   const [filterCustomer, setFilterCustomer] = useState("all");
+  const [filterContract, setFilterContract] = useState(preselectedContract);
   const [showForm, setShowForm] = useState(false);
   const [editing, setEditing] = useState(null);
   const [contractMachine, setContractMachine] = useState(null);
   const [reportData, setReportData] = useState(null);
 
   useEffect(() => {
-    const searchParam = new URLSearchParams(location.search).get("search");
+    const params = new URLSearchParams(location.search);
+    const searchParam = params.get("search");
+    const contractParam = params.get("contract");
     if (searchParam !== null) {
       setSearch(searchParam);
+    }
+    if (contractParam !== null) {
+      setFilterContract(contractParam);
     }
   }, [location.search]);
 
@@ -120,7 +127,15 @@ export default function Machines() {
       customer?.phone?.toLowerCase().includes(searchLower);
     const matchModel = filterModel === "all" || m.model === filterModel;
     const matchCustomer = filterCustomer === "all" || m.customer_id === filterCustomer;
-    return matchSearch && matchModel && matchCustomer;
+    
+    let matchContract = true;
+    if (filterContract === "active") {
+      matchContract = m.service_contract && m.service_contract !== 'none' && (!m.contract_status || m.contract_status === 'active');
+    } else if (filterContract === "none") {
+      matchContract = !m.service_contract || m.service_contract === 'none';
+    }
+    
+    return matchSearch && matchModel && matchCustomer && matchContract;
   });
 
   const handleDownloadContract = async (machine) => {
@@ -382,6 +397,14 @@ export default function Machines() {
           <SelectContent>
             <SelectItem value="all">Alla kunder</SelectItem>
             {customers.map(c => <SelectItem key={c.id} value={c.id}>{c.company_name}</SelectItem>)}
+          </SelectContent>
+        </Select>
+        <Select value={filterContract} onValueChange={setFilterContract}>
+          <SelectTrigger className="w-full sm:w-48"><SelectValue placeholder="Avtalsstatus" /></SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">Alla maskiner</SelectItem>
+            <SelectItem value="active">Aktivt avtal</SelectItem>
+            <SelectItem value="none">Inget avtal</SelectItem>
           </SelectContent>
         </Select>
       </div>
