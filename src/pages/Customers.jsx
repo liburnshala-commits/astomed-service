@@ -96,6 +96,16 @@ export default function Customers() {
   const getMachineCount = (customerId) => machines.filter(m => m.customer_id === customerId).length;
   const getContractCount = (customerId) => machines.filter(m => m.customer_id === customerId && m.service_contract && m.service_contract !== "none").length;
 
+  const getContractStatusInfo = (customerId) => {
+    const customerMachines = machines.filter(m => m.customer_id === customerId && m.service_contract && m.service_contract !== "none");
+    if (customerMachines.length === 0) return { count: 0, hasRejected: false, hasActive: false };
+    
+    const hasRejected = customerMachines.some(m => m.contract_status === "rejected");
+    const hasActive = customerMachines.some(m => !m.contract_status || m.contract_status === "active");
+    
+    return { count: customerMachines.length, hasRejected, hasActive };
+  };
+
   const handleSave = async (data, machineData, inviteNewCustomer = false) => {
     if (!data.portal_token) {
       data.portal_token = Math.random().toString(36).substring(2, 18);
@@ -268,8 +278,23 @@ export default function Customers() {
     }
   };
 
-  const renderCard = (customer, isMobile = false) => (
-    <Card key={customer.id} className={`astomed-card h-full flex flex-col ${isMobile ? 'mx-1' : ''}`}>
+  const renderCard = (customer, isMobile = false) => {
+    const contractInfo = getContractStatusInfo(customer.id);
+    return (
+    <Card key={customer.id} className={`astomed-card h-full flex flex-col relative ${isMobile ? 'mx-1' : ''}`}>
+      {contractInfo.count > 0 && (
+        <div className="absolute top-3 right-3 z-10">
+          {contractInfo.hasRejected ? (
+            <div className="bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center shadow-sm" title="Nekat signering">
+              <span className="font-bold text-sm">!</span>
+            </div>
+          ) : contractInfo.hasActive ? (
+            <div className="bg-green-500 text-white rounded-full w-6 h-6 flex items-center justify-center shadow-sm" title="Aktivt serviceavtal">
+              <Check className="w-4 h-4" />
+            </div>
+          ) : null}
+        </div>
+      )}
       <CardContent className="p-5 flex-1 flex flex-col">
         <div className="flex flex-col sm:flex-row items-start justify-between gap-4 mb-4">
           <div className="flex-1 min-w-0">
@@ -314,10 +339,16 @@ export default function Customers() {
                 {getMachineCount(customer.id)} maskin{getMachineCount(customer.id) !== 1 ? "er" : ""}
               </Badge>
             </Link>
-            {getContractCount(customer.id) > 0 && (
+            {contractInfo.count > 0 && (
               <Link to={createPageUrl(`Machines?customer=${customer.id}`)}>
-                <Badge variant="secondary" className="bg-[#f0f7f0] text-[#1a5c2a] cursor-pointer hover:bg-[#d8eddb] transition-colors">
-                  {getContractCount(customer.id)} serviceavtal
+                <Badge variant="secondary" className={`cursor-pointer transition-colors ${
+                  contractInfo.hasRejected 
+                    ? "bg-red-100 text-red-800 hover:bg-red-200" 
+                    : contractInfo.hasActive 
+                      ? "bg-green-100 text-green-800 hover:bg-green-200" 
+                      : "bg-[#f0f7f0] text-[#1a5c2a] hover:bg-[#d8eddb]"
+                }`}>
+                  {contractInfo.count} serviceavtal
                 </Badge>
               </Link>
             )}
@@ -372,7 +403,7 @@ export default function Customers() {
         </div>
       </CardContent>
     </Card>
-  );
+  )};
 
   return (
     <div className="p-6 space-y-6">
