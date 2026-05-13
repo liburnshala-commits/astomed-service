@@ -83,7 +83,8 @@ export default function Customers() {
       c.org_number?.toLowerCase().includes(searchLower) ||
       c.contact_person?.toLowerCase().includes(searchLower) ||
       c.email?.toLowerCase().includes(searchLower) ||
-      c.phone?.toLowerCase().includes(searchLower);
+      c.phone?.toLowerCase().includes(searchLower) ||
+      c.city?.toLowerCase().includes(searchLower);
 
     const matchFilter = filterParam === "signed" ? 
       machines.some(m => m.customer_id === c.id && m.service_contract && m.service_contract !== "none" && (!m.contract_status || m.contract_status === "active")) 
@@ -409,7 +410,7 @@ export default function Customers() {
 
       <div className="relative">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 astomed-muted" />
-        <Input placeholder="Sök kund, org.nr eller kontaktperson..." className="pl-9" value={search} onChange={e => setSearch(e.target.value)} />
+        <Input placeholder="Sök kund, org.nr, kontaktperson, stad..." className="pl-9" value={search} onChange={e => setSearch(e.target.value)} />
       </div>
 
       {filtered.length === 0 ? (
