@@ -1,0 +1,47 @@
+{
+  "name": "LocationSafetyCheck",
+  "type": "object",
+  "properties": {
+    "clinic_id": {
+      "type": "string"
+    },
+    "check_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Datum f\u00f6r kontroll"
+    },
+    "checked_by": {
+      "type": "string",
+      "description": "Kontrollerad av"
+    },
+    "warning_signs_present": {
+      "type": "boolean",
+      "default": false,
+      "description": "Varningsskyltar finns p\u00e5 d\u00f6rrar"
+    },
+    "windows_covered": {
+      "type": "boolean",
+      "default": false,
+      "description": "F\u00f6nster \u00e4r insynsskyddade"
+    },
+    "no_reflecting_surfaces": {
+      "type": "boolean",
+      "default": false,
+      "description": "Inga reflekterande ytor (t.ex. speglar) i str\u00e5lg\u00e5ngen"
+    },
+    "safety_glasses_intact": {
+      "type": "boolean",
+      "default": false,
+      "description": "Skyddsglas\u00f6gon \u00e4r hela, rena och CE-m\u00e4rkta f\u00f6r r\u00e4tt v\u00e5gl\u00e4ngd"
+    },
+    "comments": {
+      "type": "string",
+      "description": "\u00d6vriga kommentarer eller \u00e5tg\u00e4rder"
+    }
+  },
+  "required": [
+    "clinic_id",
+    "check_date",
+    "checked_by"
+  ]
+}

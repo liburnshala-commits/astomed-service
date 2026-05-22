@@ -44,6 +44,10 @@ export default function RadiationSafety() {
   const [currentClientInfo, setCurrentClientInfo] = useState({});
   const [measurementModalOpen, setMeasurementModalOpen] = useState(false);
   const [currentMeasurement, setCurrentMeasurement] = useState({});
+  const [locationModalOpen, setLocationModalOpen] = useState(false);
+  const [currentLocationCheck, setCurrentLocationCheck] = useState({});
+  const [auditModalOpen, setAuditModalOpen] = useState(false);
+  const [currentAudit, setCurrentAudit] = useState({});
 
   const isCustomer = user?.role === 'customer';
   const clinicId = isCustomer ? user.id : 'all'; // Simplified for demo, normally handled via selected customer
@@ -82,6 +86,16 @@ export default function RadiationSafety() {
   const { data: measurements = [] } = useQuery({
     queryKey: ['measurements', clinicId],
     queryFn: () => base44.entities.MeasurementReport.filter(isCustomer ? { clinic_id: user.id } : {}),
+  });
+
+  const { data: locationChecks = [] } = useQuery({
+    queryKey: ['locationChecks', clinicId],
+    queryFn: () => base44.entities.LocationSafetyCheck.filter(isCustomer ? { clinic_id: user.id } : {}),
+  });
+
+  const { data: annualAudits = [] } = useQuery({
+    queryKey: ['annualAudits', clinicId],
+    queryFn: () => base44.entities.AnnualAudit.filter(isCustomer ? { clinic_id: user.id } : {}),
   });
 
   // Mutations
@@ -160,6 +174,24 @@ export default function RadiationSafety() {
     onSuccess: () => { queryClient.invalidateQueries(['measurements']); setMeasurementModalOpen(false); toast({ title: "Sparad" }); }
   });
 
+  const saveLocationCheck = useMutation({
+    mutationFn: (data) => {
+      const payload = { ...data, clinic_id: user.id };
+      if (data.id) return base44.entities.LocationSafetyCheck.update(data.id, payload);
+      return base44.entities.LocationSafetyCheck.create(payload);
+    },
+    onSuccess: () => { queryClient.invalidateQueries(['locationChecks']); setLocationModalOpen(false); toast({ title: "Sparad" }); }
+  });
+
+  const saveAudit = useMutation({
+    mutationFn: (data) => {
+      const payload = { ...data, clinic_id: user.id };
+      if (data.id) return base44.entities.AnnualAudit.update(data.id, payload);
+      return base44.entities.AnnualAudit.create(payload);
+    },
+    onSuccess: () => { queryClient.invalidateQueries(['annualAudits']); setAuditModalOpen(false); toast({ title: "Sparad" }); }
+  });
+
   const deleteDelegation = useMutation({
     mutationFn: (id) => base44.entities.ResponsibilityDelegation.delete(id),
     onSuccess: () => { queryClient.invalidateQueries(['delegations']); setDelegationModalOpen(false); toast({ title: "Borttagen" }); }
@@ -186,12 +218,14 @@ export default function RadiationSafety() {
         <div className="overflow-x-auto pb-2 scrollbar-hide">
           <TabsList className="inline-flex w-max min-w-full">
             <TabsTrigger value="info">Information</TabsTrigger>
+            <TabsTrigger value="location">Lokal & Skydd</TabsTrigger>
             <TabsTrigger value="personnel">Personal & Ansvar</TabsTrigger>
             <TabsTrigger value="client_info">Klientinfo</TabsTrigger>
             <TabsTrigger value="methods">Metoder</TabsTrigger>
             <TabsTrigger value="measurements">Mätrapporter</TabsTrigger>
             <TabsTrigger value="treatments">Dokumentation</TabsTrigger>
             <TabsTrigger value="incidents">Incidenter</TabsTrigger>
+            <TabsTrigger value="audit">Internrevision</TabsTrigger>
           </TabsList>
         </div>
 
@@ -466,6 +500,63 @@ export default function RadiationSafety() {
             ))}
           </div>
         </TabsContent>
+        <TabsContent value="location" className="mt-6">
+          <Card className="bg-blue-50 border-blue-200 mb-6">
+            <CardHeader><CardTitle className="text-base">Vad du behöver göra här</CardTitle></CardHeader>
+            <CardContent className="text-sm text-muted-foreground">
+              Kontrollera löpande att behandlingsrummet uppfyller säkerhetskraven (skyltar, fönster, inga speglar) och att skyddsutrustningen är i gott skick.
+            </CardContent>
+          </Card>
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-xl font-semibold">Lokalsäkerhet & Skyddsutrustning</h2>
+            <Button onClick={() => { setCurrentLocationCheck({}); setLocationModalOpen(true); }}><Plus className="w-4 h-4 mr-2" /> Ny Kontroll</Button>
+          </div>
+          <div className="grid gap-4 md:grid-cols-2">
+            {locationChecks.map(check => (
+              <Card key={check.id} className="cursor-pointer hover:bg-muted/50" onClick={() => { setCurrentLocationCheck(check); setLocationModalOpen(true); }}>
+                <CardHeader className="py-3">
+                  <div className="flex justify-between items-center">
+                    <CardTitle className="text-md flex items-center gap-2"><ShieldAlert className="w-4 h-4 text-primary" />Kontroll</CardTitle>
+                    <span className="text-xs text-muted-foreground">{check.check_date ? new Date(check.check_date).toLocaleDateString() : ''}</span>
+                  </div>
+                </CardHeader>
+                <CardContent className="py-2 text-sm text-muted-foreground">
+                  <p>Utförd av: {check.checked_by}</p>
+                </CardContent>
+              </Card>
+            ))}
+            {locationChecks.length === 0 && <p className="text-muted-foreground">Inga kontroller registrerade.</p>}
+          </div>
+        </TabsContent>
+
+        <TabsContent value="audit" className="mt-6">
+          <Card className="bg-blue-50 border-blue-200 mb-6">
+            <CardHeader><CardTitle className="text-base">Vad du behöver göra här</CardTitle></CardHeader>
+            <CardContent className="text-sm text-muted-foreground">
+              Utför en årlig internrevision (egenkontroll) av strålskyddet. Gå igenom rutiner, incidenter och personalens utbildningar för att se om något behöver förbättras.
+            </CardContent>
+          </Card>
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-xl font-semibold">Årlig Internrevision</h2>
+            <Button onClick={() => { setCurrentAudit({}); setAuditModalOpen(true); }}><Plus className="w-4 h-4 mr-2" /> Ny Revision</Button>
+          </div>
+          <div className="grid gap-4 md:grid-cols-2">
+            {annualAudits.map(audit => (
+              <Card key={audit.id} className="cursor-pointer hover:bg-muted/50" onClick={() => { setCurrentAudit(audit); setAuditModalOpen(true); }}>
+                <CardHeader className="py-3">
+                  <div className="flex justify-between items-center">
+                    <CardTitle className="text-md flex items-center gap-2"><CheckCircle className="w-4 h-4 text-primary" />Revision</CardTitle>
+                    <span className="text-xs text-muted-foreground">{audit.audit_date ? new Date(audit.audit_date).toLocaleDateString() : ''}</span>
+                  </div>
+                </CardHeader>
+                <CardContent className="py-2 text-sm text-muted-foreground">
+                  <p>Utförd av: {audit.auditor_name}</p>
+                </CardContent>
+              </Card>
+            ))}
+            {annualAudits.length === 0 && <p className="text-muted-foreground">Inga revisioner registrerade.</p>}
+          </div>
+        </TabsContent>
       </Tabs>
 
       {/* Method Modal */}
@@ -685,6 +776,43 @@ export default function RadiationSafety() {
             <div className="grid gap-2"><Label>Avvikelse från grundvärde</Label><Input value={currentMeasurement.deviation_from_baseline || ''} onChange={e => setCurrentMeasurement({...currentMeasurement, deviation_from_baseline: e.target.value})} /></div>
             <div className="grid gap-2"><Label>Utförd av</Label><Input value={currentMeasurement.measured_by || ''} onChange={e => setCurrentMeasurement({...currentMeasurement, measured_by: e.target.value})} /></div>
             <Button onClick={() => saveMeasurement.mutate(currentMeasurement)} className="w-full">Spara</Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+      {/* Location Modal */}
+      <Dialog open={locationModalOpen} onOpenChange={setLocationModalOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader><DialogTitle>{currentLocationCheck.id ? 'Redigera Kontroll' : 'Ny Säkerhetskontroll'}</DialogTitle></DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="grid gap-2"><Label>Datum</Label><Input type="date" value={currentLocationCheck.check_date || ''} onChange={e => setCurrentLocationCheck({...currentLocationCheck, check_date: e.target.value})} /></div>
+            <div className="grid gap-2"><Label>Utförd av</Label><Input value={currentLocationCheck.checked_by || ''} onChange={e => setCurrentLocationCheck({...currentLocationCheck, checked_by: e.target.value})} /></div>
+            <div className="space-y-3 p-4 border rounded-lg bg-muted/20">
+              <div className="flex items-center gap-2"><Checkbox id="chk_signs" checked={currentLocationCheck.warning_signs_present || false} onCheckedChange={c => setCurrentLocationCheck({...currentLocationCheck, warning_signs_present: c})} /><Label htmlFor="chk_signs">Varningsskyltar finns på dörrar</Label></div>
+              <div className="flex items-center gap-2"><Checkbox id="chk_win" checked={currentLocationCheck.windows_covered || false} onCheckedChange={c => setCurrentLocationCheck({...currentLocationCheck, windows_covered: c})} /><Label htmlFor="chk_win">Fönster är insynsskyddade</Label></div>
+              <div className="flex items-center gap-2"><Checkbox id="chk_ref" checked={currentLocationCheck.no_reflecting_surfaces || false} onCheckedChange={c => setCurrentLocationCheck({...currentLocationCheck, no_reflecting_surfaces: c})} /><Label htmlFor="chk_ref">Inga reflekterande ytor i strålgången</Label></div>
+              <div className="flex items-center gap-2"><Checkbox id="chk_glass" checked={currentLocationCheck.safety_glasses_intact || false} onCheckedChange={c => setCurrentLocationCheck({...currentLocationCheck, safety_glasses_intact: c})} /><Label htmlFor="chk_glass">Skyddsglasögon är hela och CE-märkta</Label></div>
+            </div>
+            <div className="grid gap-2"><Label>Kommentarer / Åtgärder</Label><Textarea value={currentLocationCheck.comments || ''} onChange={e => setCurrentLocationCheck({...currentLocationCheck, comments: e.target.value})} /></div>
+            <Button onClick={() => saveLocationCheck.mutate(currentLocationCheck)} className="w-full">Spara Kontroll</Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Audit Modal */}
+      <Dialog open={auditModalOpen} onOpenChange={setAuditModalOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader><DialogTitle>{currentAudit.id ? 'Redigera Revision' : 'Ny Årlig Internrevision'}</DialogTitle></DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="grid gap-2"><Label>Datum</Label><Input type="date" value={currentAudit.audit_date || ''} onChange={e => setCurrentAudit({...currentAudit, audit_date: e.target.value})} /></div>
+            <div className="grid gap-2"><Label>Utförd av</Label><Input value={currentAudit.auditor_name || ''} onChange={e => setCurrentAudit({...currentAudit, auditor_name: e.target.value})} /></div>
+            <div className="space-y-3 p-4 border rounded-lg bg-muted/20">
+              <div className="flex items-center gap-2"><Checkbox id="aud_met" checked={currentAudit.methods_updated || false} onCheckedChange={c => setCurrentAudit({...currentAudit, methods_updated: c})} /><Label htmlFor="aud_met">Metoder genomgångna och uppdaterade</Label></div>
+              <div className="flex items-center gap-2"><Checkbox id="aud_trn" checked={currentAudit.training_updated || false} onCheckedChange={c => setCurrentAudit({...currentAudit, training_updated: c})} /><Label htmlFor="aud_trn">Personalens utbildning är aktuell</Label></div>
+              <div className="flex items-center gap-2"><Checkbox id="aud_inc" checked={currentAudit.incidents_reviewed || false} onCheckedChange={c => setCurrentAudit({...currentAudit, incidents_reviewed: c})} /><Label htmlFor="aud_inc">Årets incidenter har analyserats</Label></div>
+            </div>
+            <div className="grid gap-2"><Label>Sammanfattning</Label><Textarea value={currentAudit.summary || ''} onChange={e => setCurrentAudit({...currentAudit, summary: e.target.value})} /></div>
+            <div className="grid gap-2"><Label>Planerade åtgärder framåt</Label><Textarea value={currentAudit.planned_actions || ''} onChange={e => setCurrentAudit({...currentAudit, planned_actions: e.target.value})} /></div>
+            <Button onClick={() => saveAudit.mutate(currentAudit)} className="w-full">Spara Revision</Button>
           </div>
         </DialogContent>
       </Dialog>

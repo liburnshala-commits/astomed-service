@@ -1,0 +1,46 @@
+{
+  "name": "AnnualAudit",
+  "type": "object",
+  "properties": {
+    "clinic_id": {
+      "type": "string"
+    },
+    "audit_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Datum f\u00f6r revision"
+    },
+    "auditor_name": {
+      "type": "string",
+      "description": "Utf\u00f6rd av"
+    },
+    "methods_updated": {
+      "type": "boolean",
+      "default": false,
+      "description": "Metodbeskrivningar genomg\u00e5ngna och uppdaterade"
+    },
+    "training_updated": {
+      "type": "boolean",
+      "default": false,
+      "description": "Personalens utbildningsregister \u00e4r uppdaterat"
+    },
+    "incidents_reviewed": {
+      "type": "boolean",
+      "default": false,
+      "description": "\u00c5rets avvikelser/tillbud har analyserats"
+    },
+    "summary": {
+      "type": "string",
+      "description": "Sammanfattning av revisionen"
+    },
+    "planned_actions": {
+      "type": "string",
+      "description": "Planerade \u00e5tg\u00e4rder f\u00f6r kommande \u00e5r"
+    }
+  },
+  "required": [
+    "clinic_id",
+    "audit_date",
+    "auditor_name"
+  ]
+}
