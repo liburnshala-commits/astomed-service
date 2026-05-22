@@ -360,6 +360,13 @@ export default function RadiationSafety() {
                   <CardContent className="py-2">
                     <p className="text-sm font-semibold">{del.assigned_to_name}</p>
                     <p className="text-xs text-muted-foreground mt-1">{del.responsibilities}</p>
+                    <div className="mt-2">
+                      {del.employee_approved ? (
+                        <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">✓ Godkänd</span>
+                      ) : (
+                        <span className="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded">⚠ Avvaktar godkännande</span>
+                      )}
+                    </div>
                   </CardContent>
                 </Card>
               ))}
@@ -601,6 +608,18 @@ export default function RadiationSafety() {
             <div className="grid gap-2"><Label>Namn på ansvarig</Label><Input value={currentDelegation.assigned_to_name || ''} onChange={e => setCurrentDelegation({...currentDelegation, assigned_to_name: e.target.value})} /></div>
             <div className="grid gap-2"><Label>Datum tilldelat</Label><Input type="date" value={currentDelegation.date_assigned || ''} onChange={e => setCurrentDelegation({...currentDelegation, date_assigned: e.target.value})} /></div>
             <div className="grid gap-2"><Label>Ansvarsområden</Label><Textarea value={currentDelegation.responsibilities || ''} onChange={e => setCurrentDelegation({...currentDelegation, responsibilities: e.target.value})} /></div>
+            <div className="border-t pt-4 mt-4">
+              <div className="flex items-start gap-2">
+                <Checkbox id="emp_appr" checked={currentDelegation.employee_approved || false} onCheckedChange={c => setCurrentDelegation({...currentDelegation, employee_approved: c, approval_date: c ? new Date().toISOString().split('T')[0] : ''})} />
+                <label htmlFor="emp_appr" className="text-sm cursor-pointer">
+                  <span className="font-semibold">Personalen har godkänt</span>
+                  <p className="text-xs text-muted-foreground mt-1">Bekräfta att denna person godkänt att bli registrerad för detta ansvar</p>
+                </label>
+              </div>
+              {currentDelegation.employee_approved && (
+                <p className="text-xs text-green-600 mt-2 ml-6">Godkänd: {currentDelegation.approval_date}</p>
+              )}
+            </div>
             <Button onClick={() => saveDelegation.mutate(currentDelegation)} className="w-full">Spara</Button>
           </div>
         </DialogContent>

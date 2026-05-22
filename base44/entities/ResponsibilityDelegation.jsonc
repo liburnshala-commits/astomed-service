@@ -21,6 +21,16 @@
       "type": "string",
       "format": "date",
       "description": "Datum d\u00e5 ansvaret tilldelades"
+    },
+    "employee_approved": {
+      "type": "boolean",
+      "default": false,
+      "description": "Personalen har godk\u00e4nt att bli registrerad f\u00f6r detta ansvar"
+    },
+    "approval_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Datum f\u00f6r godk\u00e4nnande"
     }
   },
   "required": [
