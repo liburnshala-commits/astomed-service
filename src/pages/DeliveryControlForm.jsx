@@ -12,6 +12,7 @@ export default function DeliveryControlForm() {
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const [templates, setTemplates] = useState([]);
+  const [customerMachines, setCustomerMachines] = useState([]);
   const [formData, setFormData] = useState({
      packaging_ok: false,
      no_visible_damage_packaging: false,
@@ -43,9 +44,16 @@ export default function DeliveryControlForm() {
          const allTemplates = await base44.entities.ServiceAgreementTemplate.list();
          setTemplates(allTemplates);
 
-         const ownCustomers = await base44.entities.Customer.filter({ email: user.email });
-         if (ownCustomers && ownCustomers.length > 0) {
-            setCustomer(ownCustomers[0]);
+         if (user.role === 'admin' || user.role === 'technician') {
+            const m = await base44.entities.Machine.list();
+            setCustomerMachines(m);
+         } else {
+            const ownCustomers = await base44.entities.Customer.filter({ email: user.email });
+            if (ownCustomers && ownCustomers.length > 0) {
+               setCustomer(ownCustomers[0]);
+               const m = await base44.entities.Machine.filter({ customer_id: ownCustomers[0].id });
+               setCustomerMachines(m);
+            }
          }
       }
     };
@@ -156,7 +164,34 @@ export default function DeliveryControlForm() {
                     </div>
                     <div>
                       <Label>Serienummer</Label>
-                      <Input value={formData.serial_number || ''} onChange={e => handleChange('serial_number', e.target.value)} />
+                      <div className="space-y-2">
+                        <select 
+                          className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#0088ff]"
+                          value={formData.machine_id || ''}
+                          onChange={e => {
+                            const m = customerMachines.find(x => x.id === e.target.value);
+                            if (m) {
+                               setFormData(prev => ({
+                                 ...prev,
+                                 machine_id: m.id,
+                                 serial_number: m.serial_number,
+                                 manufacturer: m.manufacturer || prev.manufacturer,
+                                 customer_id: m.customer_id
+                               }));
+                            } else {
+                               setFormData(prev => ({ ...prev, machine_id: '', serial_number: '' }));
+                            }
+                          }}
+                        >
+                          <option value="">-- Välj befintligt eller skriv in nedan --</option>
+                          {customerMachines
+                            .filter(m => !formData.model || m.model === formData.model)
+                            .map(m => (
+                            <option key={m.id} value={m.id}>{m.serial_number} {m.model !== formData.model ? `(${m.model})` : ''}</option>
+                          ))}
+                        </select>
+                        <Input placeholder="Eller skriv manuellt..." value={formData.serial_number || ''} onChange={e => handleChange('serial_number', e.target.value)} />
+                      </div>
                     </div>
                     <div>
                       <Label>Tillverkare</Label>
