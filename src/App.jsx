@@ -20,6 +20,8 @@ import ChatSupport from './pages/ChatSupport';
 import MobileMenu from './pages/MobileMenu';
 import ClinicDevelopment from './pages/ClinicDevelopment';
 import Products from './pages/Products';
+import DeliveryControls from './pages/DeliveryControls';
+import DeliveryControlForm from './pages/DeliveryControlForm';
 
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
@@ -114,6 +116,8 @@ const AuthenticatedApp = () => {
         <Route path="/MobileMenu" element={<AnimatedPage><LayoutWrapper currentPageName="MobileMenu"><MobileMenu /></LayoutWrapper></AnimatedPage>} />
         <Route path="/ClinicDevelopment" element={<AnimatedPage><LayoutWrapper currentPageName="ClinicDevelopment"><ClinicDevelopment /></LayoutWrapper></AnimatedPage>} />
         <Route path="/Products" element={<AnimatedPage><LayoutWrapper currentPageName="Products"><Products /></LayoutWrapper></AnimatedPage>} />
+        <Route path="/DeliveryControls" element={<AnimatedPage><LayoutWrapper currentPageName="DeliveryControls"><DeliveryControls /></LayoutWrapper></AnimatedPage>} />
+        <Route path="/DeliveryControlForm" element={<AnimatedPage><DeliveryControlForm /></AnimatedPage>} />
         {Object.entries(Pages).map(([path, Page]) => (
           <Route
             key={path}

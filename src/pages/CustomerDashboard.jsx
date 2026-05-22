@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { createPageUrl } from "@/utils";
 import { Link } from "react-router-dom";
-import { Monitor, Wrench, CheckCircle, Clock, Building2, Mail, Phone, MapPin, User, AlertTriangle, Plus, FileCheck, FileText, Download } from "lucide-react";
+import { Monitor, Wrench, CheckCircle, Clock, Building2, Mail, Phone, MapPin, User, AlertTriangle, Plus, FileCheck, FileText, Download, Box } from "lucide-react";
 import OtherMachineServiceForm from "@/components/portal/OtherMachineServiceForm";
 import RequestContractModal from "@/components/portal/RequestContractModal";
 import ServiceRecordDetail from "@/components/service/ServiceRecordDetail";
@@ -298,6 +298,28 @@ export default function CustomerDashboard() {
             </CardContent>
           </Card>
         </Link>
+      </div>
+
+      {/* Controls section */}
+      <div>
+        <h2 className="text-sm font-semibold astomed-label mb-4 flex items-center gap-2">
+          <FileCheck className="w-4 h-4" />
+          Kontroller
+        </h2>
+        <Card className="astomed-card mb-6" style={{ background: "#f4f9f9" }}>
+          <CardContent className="p-4 flex gap-3">
+             <Button variant="outline" className="flex-1 bg-white hover:bg-slate-50 border-slate-200" asChild>
+               <Link to={createPageUrl("DeliveryControls")}>
+                 <Box className="w-4 h-4 mr-2 text-blue-600" /> Leveranskontroll
+               </Link>
+             </Button>
+             <Button variant="outline" className="flex-1 bg-white hover:bg-slate-50 border-slate-200" asChild>
+               <Link to={createPageUrl("DeliveryControls")}>
+                 <CheckCircle className="w-4 h-4 mr-2 text-green-600" /> Funktionskontroll
+               </Link>
+             </Button>
+          </CardContent>
+        </Card>
       </div>
 
       {/* Service records section */}

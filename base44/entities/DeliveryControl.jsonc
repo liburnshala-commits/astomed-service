@@ -1,0 +1,301 @@
+{
+  "name": "DeliveryControl",
+  "type": "object",
+  "properties": {
+    "customer_id": {
+      "type": "string",
+      "description": "L\u00e4nk till kund"
+    },
+    "machine_id": {
+      "type": "string",
+      "description": "L\u00e4nk till maskin (valfritt om ny maskin)"
+    },
+    "control_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Datum f\u00f6r kontroll"
+    },
+    "control_time": {
+      "type": "string",
+      "description": "Tid f\u00f6r kontroll, t.ex. 15:28"
+    },
+    "controlled_by": {
+      "type": "string",
+      "description": "Namn p\u00e5 den som utf\u00f6rde kontrollen"
+    },
+    "machine_location": {
+      "type": "string",
+      "description": "Var maskinen ska st\u00e5"
+    },
+    "packaging_photos_url": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "URL:er till foton av f\u00f6rpackningen"
+    },
+    "packaging_ok": {
+      "type": "boolean",
+      "default": false,
+      "description": "Jag har fotograferat f\u00f6rpackningen fr\u00e5n alla h\u00e5ll"
+    },
+    "no_visible_damage_packaging": {
+      "type": "boolean",
+      "default": false,
+      "description": "Det finns inga synliga skador p\u00e5 f\u00f6rpackningen"
+    },
+    "machine_photos_url": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "URL:er till foton av maskinen"
+    },
+    "machine_photos_ok": {
+      "type": "boolean",
+      "default": false,
+      "description": "Maskinen \u00e4r fotograferad fr\u00e5n alla h\u00e5ll"
+    },
+    "no_cracks_dents_stains": {
+      "type": "boolean",
+      "default": false,
+      "description": "Inga sprickor, bucklor eller fl\u00e4ckar"
+    },
+    "no_leakage_step1": {
+      "type": "boolean",
+      "default": false,
+      "description": "Inget l\u00e4ckage"
+    },
+    "machine_type": {
+      "type": "string",
+      "description": "Typ av maskin"
+    },
+    "manufacturer": {
+      "type": "string",
+      "description": "Tillverkare"
+    },
+    "model": {
+      "type": "string",
+      "description": "Maskinmodell"
+    },
+    "light_source_type": {
+      "type": "string",
+      "description": "Typ av str\u00e5lk\u00e4lla"
+    },
+    "wavelengths": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "V\u00e5gl\u00e4ngder"
+    },
+    "serial_number": {
+      "type": "string",
+      "description": "Serienummer"
+    },
+    "seller": {
+      "type": "string",
+      "description": "Vem som s\u00e5lde maskinen"
+    },
+    "delivery_date": {
+      "type": "string",
+      "format": "date",
+      "description": "N\u00e4r levererades den?"
+    },
+    "commissioning_date": {
+      "type": "string",
+      "format": "date",
+      "description": "N\u00e4r togs den i bruk?"
+    },
+    "intended_treatments": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Vilka behandlingar maskinen ska anv\u00e4ndas till"
+    },
+    "is_used_machine": {
+      "type": "boolean",
+      "default": false,
+      "description": "Det h\u00e4r \u00e4r en begagnad maskin"
+    },
+    "history_documents_url": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "URL:er till uppladdad maskinhistorik"
+    },
+    "not_recalled_by_manufacturer": {
+      "type": "boolean",
+      "default": false,
+      "description": "Inte \u00e5terkallats av tillverkaren"
+    },
+    "certificate_type": {
+      "type": "string",
+      "description": "Typ av certifikat"
+    },
+    "certificate_number": {
+      "type": "string",
+      "description": "Certifikatets nummer"
+    },
+    "certificate_issuer": {
+      "type": "string",
+      "description": "Vem utf\u00e4rdade det?"
+    },
+    "certificate_valid_until": {
+      "type": "string",
+      "format": "date",
+      "description": "Giltigt till"
+    },
+    "certificate_file_url": {
+      "type": "string",
+      "description": "URL till uppladdat certifikat"
+    },
+    "certificate_covers_treatments": {
+      "type": "boolean",
+      "default": false,
+      "description": "Certifikatet t\u00e4cker behandlingar"
+    },
+    "serial_number_matches_document": {
+      "type": "boolean",
+      "default": false,
+      "description": "Serienummer st\u00e4mmer \u00f6verens"
+    },
+    "all_ordered_items_present": {
+      "type": "boolean",
+      "default": false,
+      "description": "Allt best\u00e4llt finns med"
+    },
+    "manual_present": {
+      "type": "boolean",
+      "default": false,
+      "description": "Bruksanvisning finns med"
+    },
+    "other_comments_step2": {
+      "type": "string",
+      "description": "\u00d6vriga kommentarer steg 2"
+    },
+    "machine_starts": {
+      "type": "boolean",
+      "default": false,
+      "description": "Maskinen startar"
+    },
+    "no_strange_sounds_smells": {
+      "type": "boolean",
+      "default": false,
+      "description": "Inga konstiga ljud eller lukter"
+    },
+    "no_abnormal_vibrations": {
+      "type": "boolean",
+      "default": false,
+      "description": "Inga onormala vibrationer"
+    },
+    "no_leakage_step3": {
+      "type": "boolean",
+      "default": false,
+      "description": "Inget l\u00e4ckage steg 3"
+    },
+    "emergency_stop_functions": {
+      "type": "boolean",
+      "default": false,
+      "description": "N\u00f6dstopp fungerar"
+    },
+    "other_comments_step3": {
+      "type": "string",
+      "description": "\u00d6vriga kommentarer steg 3"
+    },
+    "light_beam_symmetrical": {
+      "type": "boolean",
+      "default": false,
+      "description": "Ljusstr\u00e5len \u00e4r symmetrisk"
+    },
+    "foot_pedal_functions": {
+      "type": "boolean",
+      "default": false,
+      "description": "Fotpedalen fungerar"
+    },
+    "safety_glasses_present": {
+      "type": "boolean",
+      "default": false,
+      "description": "Skyddsglas\u00f6gon finns"
+    },
+    "warning_sign_present": {
+      "type": "boolean",
+      "default": false,
+      "description": "Varningsskylt finns"
+    },
+    "other_comments_step4_function": {
+      "type": "string",
+      "description": "\u00d6vriga kommentarer funktionstest"
+    },
+    "other_comments_step4_safety": {
+      "type": "string",
+      "description": "\u00d6vriga kommentarer s\u00e4kerhetsutrustning"
+    },
+    "delivery_control_status": {
+      "type": "string",
+      "enum": [
+        "Godk\u00e4nd",
+        "Godk\u00e4nd med anm\u00e4rkning",
+        "Ej godk\u00e4nd"
+      ],
+      "description": "Status"
+    },
+    "can_machine_be_used": {
+      "type": "string",
+      "enum": [
+        "Maskinen f\u00e5r anv\u00e4ndas",
+        "F\u00e5r anv\u00e4ndas efter \u00e5tg\u00e4rd",
+        "Maskinen f\u00e5r inte anv\u00e4ndas"
+      ],
+      "description": "F\u00e5r maskinen anv\u00e4ndas"
+    },
+    "final_comments": {
+      "type": "string",
+      "description": "Sammanfattande kommentarer"
+    },
+    "report_pdf_url": {
+      "type": "string",
+      "description": "L\u00e4nk till PDF-rapport"
+    }
+  },
+  "required": [
+    "customer_id",
+    "delivery_control_status"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": [
+          "admin",
+          "customer"
+        ]
+      }
+    },
+    "read": {
+      "user_condition": {
+        "role": [
+          "admin",
+          "customer",
+          "technician"
+        ]
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": [
+          "admin",
+          "customer"
+        ]
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": [
+          "admin"
+        ]
+      }
+    }
+  }
+}
