@@ -136,7 +136,7 @@ export default function DeliveryControlForm() {
        <div className="flex-1 p-4 max-w-lg mx-auto w-full space-y-6 pb-24">
           {step === 1 && (
              <div className="space-y-6">
-               <div className="bg-blue-50/50 p-4 rounded-xl text-sm text-blue-900">
+               <div className="bg-primary/10 p-4 rounded-xl text-sm text-primary">
                  Fyll i grundläggande information om maskinen och bekräfta visuellt skick.
                </div>
                
@@ -233,16 +233,16 @@ export default function DeliveryControlForm() {
                        <span className="text-sm font-medium">Bilder på förpackning</span>
                        <div className="flex items-center gap-3">
                          {formData.packaging_photos_url?.length > 0 && <span className="text-xs font-semibold text-green-600">{formData.packaging_photos_url.length} bilder</span>}
-                         <label className="cursor-pointer bg-blue-50 text-blue-600 px-3 py-1.5 rounded text-xs font-semibold hover:bg-blue-100 transition-colors">
+                         <label className="cursor-pointer bg-primary/10 text-primary px-3 py-1.5 rounded text-xs font-semibold hover:bg-primary/20 transition-colors">
                            Ladda upp <input type="file" multiple accept="image/*" className="hidden" onChange={e => handleFileUpload(e, 'packaging_photos_url', true)} />
                          </label>
                        </div>
                     </div>
-                    <label className="flex items-center gap-3 border p-4 rounded-xl bg-white cursor-pointer hover:border-blue-200">
+                    <label className="flex items-center gap-3 border p-4 rounded-xl bg-white cursor-pointer hover:border-primary/20">
                        <Checkbox checked={formData.packaging_ok} onCheckedChange={c => handleChange('packaging_ok', c)} />
                        <span className="text-sm">Jag har fotograferat förpackningen från alla håll</span>
                     </label>
-                    <label className="flex items-center gap-3 border p-4 rounded-xl bg-white cursor-pointer hover:border-blue-200">
+                    <label className="flex items-center gap-3 border p-4 rounded-xl bg-white cursor-pointer hover:border-primary/20">
                        <Checkbox checked={formData.no_visible_damage_packaging} onCheckedChange={c => handleChange('no_visible_damage_packaging', c)} />
                        <span className="text-sm">Det finns inga synliga skador på förpackningen</span>
                     </label>
@@ -251,16 +251,16 @@ export default function DeliveryControlForm() {
                        <span className="text-sm font-medium">Bilder på maskinen</span>
                        <div className="flex items-center gap-3">
                          {formData.machine_photos_url?.length > 0 && <span className="text-xs font-semibold text-green-600">{formData.machine_photos_url.length} bilder</span>}
-                         <label className="cursor-pointer bg-blue-50 text-blue-600 px-3 py-1.5 rounded text-xs font-semibold hover:bg-blue-100 transition-colors">
+                         <label className="cursor-pointer bg-primary/10 text-primary px-3 py-1.5 rounded text-xs font-semibold hover:bg-primary/20 transition-colors">
                            Ladda upp <input type="file" multiple accept="image/*" className="hidden" onChange={e => handleFileUpload(e, 'machine_photos_url', true)} />
                          </label>
                        </div>
                     </div>
-                    <label className="flex items-center gap-3 border p-4 rounded-xl bg-white cursor-pointer hover:border-blue-200">
+                    <label className="flex items-center gap-3 border p-4 rounded-xl bg-white cursor-pointer hover:border-primary/20">
                        <Checkbox checked={formData.machine_photos_ok} onCheckedChange={c => handleChange('machine_photos_ok', c)} />
                        <span className="text-sm">Maskinen är fotograferad från alla håll</span>
                     </label>
-                    <label className="flex items-center gap-3 border p-4 rounded-xl bg-white cursor-pointer hover:border-blue-200">
+                    <label className="flex items-center gap-3 border p-4 rounded-xl bg-white cursor-pointer hover:border-primary/20">
                        <Checkbox checked={formData.no_cracks_dents_stains} onCheckedChange={c => handleChange('no_cracks_dents_stains', c)} />
                        <span className="text-sm">Inga sprickor, bucklor eller fläckar</span>
                     </label>
@@ -271,19 +271,19 @@ export default function DeliveryControlForm() {
 
           {step === 2 && (
              <div className="space-y-6">
-               <div className="bg-blue-50/50 p-4 rounded-xl text-sm text-blue-900">
+               <div className="bg-primary/10 p-4 rounded-xl text-sm text-primary">
                  Kontrollera att maskinen stämmer överens med beställningen.
                </div>
                <div className="space-y-2">
-                  <label className="flex items-center gap-3 border p-4 rounded-xl bg-white cursor-pointer hover:border-blue-200">
+                  <label className="flex items-center gap-3 border p-4 rounded-xl bg-white cursor-pointer hover:border-primary/20">
                      <Checkbox checked={formData.serial_number_matches_document} onCheckedChange={c => handleChange('serial_number_matches_document', c)} />
                      <span className="text-sm">Serienummer stämmer överens med dokument</span>
                   </label>
-                  <label className="flex items-center gap-3 border p-4 rounded-xl bg-white cursor-pointer hover:border-blue-200">
+                  <label className="flex items-center gap-3 border p-4 rounded-xl bg-white cursor-pointer hover:border-primary/20">
                      <Checkbox checked={formData.all_ordered_items_present} onCheckedChange={c => handleChange('all_ordered_items_present', c)} />
                      <span className="text-sm">Allt beställt finns med</span>
                   </label>
-                  <label className="flex items-center gap-3 border p-4 rounded-xl bg-white cursor-pointer hover:border-blue-200">
+                  <label className="flex items-center gap-3 border p-4 rounded-xl bg-white cursor-pointer hover:border-primary/20">
                      <Checkbox checked={formData.manual_present} onCheckedChange={c => handleChange('manual_present', c)} />
                      <span className="text-sm">Bruksanvisning finns med</span>
                   </label>
@@ -297,23 +297,23 @@ export default function DeliveryControlForm() {
 
           {step === 3 && (
              <div className="space-y-6">
-               <div className="bg-blue-50/50 p-4 rounded-xl text-sm text-blue-900">
+               <div className="bg-primary/10 p-4 rounded-xl text-sm text-primary">
                  Koppla in strömmen och testa grundläggande start.
                </div>
                <div className="space-y-2">
-                  <label className="flex items-center gap-3 border p-4 rounded-xl bg-white cursor-pointer hover:border-blue-200">
+                  <label className="flex items-center gap-3 border p-4 rounded-xl bg-white cursor-pointer hover:border-primary/20">
                      <Checkbox checked={formData.machine_starts} onCheckedChange={c => handleChange('machine_starts', c)} />
                      <span className="text-sm">Maskinen startar</span>
                   </label>
-                  <label className="flex items-center gap-3 border p-4 rounded-xl bg-white cursor-pointer hover:border-blue-200">
+                  <label className="flex items-center gap-3 border p-4 rounded-xl bg-white cursor-pointer hover:border-primary/20">
                      <Checkbox checked={formData.no_strange_sounds_smells} onCheckedChange={c => handleChange('no_strange_sounds_smells', c)} />
                      <span className="text-sm">Inga konstiga ljud eller lukter</span>
                   </label>
-                  <label className="flex items-center gap-3 border p-4 rounded-xl bg-white cursor-pointer hover:border-blue-200">
+                  <label className="flex items-center gap-3 border p-4 rounded-xl bg-white cursor-pointer hover:border-primary/20">
                      <Checkbox checked={formData.no_abnormal_vibrations} onCheckedChange={c => handleChange('no_abnormal_vibrations', c)} />
                      <span className="text-sm">Inga onormala vibrationer</span>
                   </label>
-                  <label className="flex items-center gap-3 border p-4 rounded-xl bg-white cursor-pointer hover:border-blue-200">
+                  <label className="flex items-center gap-3 border p-4 rounded-xl bg-white cursor-pointer hover:border-primary/20">
                      <Checkbox checked={formData.emergency_stop_functions} onCheckedChange={c => handleChange('emergency_stop_functions', c)} />
                      <span className="text-sm">Nödstopp fungerar</span>
                   </label>
@@ -330,11 +330,11 @@ export default function DeliveryControlForm() {
                <div>
                  <Label className="font-semibold mb-3 block">Testa maskinen</Label>
                  <div className="space-y-2">
-                    <label className="flex items-center gap-3 border p-4 rounded-xl bg-white cursor-pointer hover:border-blue-200">
+                    <label className="flex items-center gap-3 border p-4 rounded-xl bg-white cursor-pointer hover:border-primary/20">
                        <Checkbox checked={formData.light_beam_symmetrical} onCheckedChange={c => handleChange('light_beam_symmetrical', c)} />
                        <span className="text-sm">Ljusstrålen är symmetrisk/jämn (om det gäller)</span>
                     </label>
-                    <label className="flex items-center gap-3 border p-4 rounded-xl bg-white cursor-pointer hover:border-blue-200">
+                    <label className="flex items-center gap-3 border p-4 rounded-xl bg-white cursor-pointer hover:border-primary/20">
                        <Checkbox checked={formData.foot_pedal_functions} onCheckedChange={c => handleChange('foot_pedal_functions', c)} />
                        <span className="text-sm">Fotpedalen fungerar</span>
                     </label>
@@ -348,11 +348,11 @@ export default function DeliveryControlForm() {
                <div>
                  <Label className="font-semibold mb-3 block">Skyddsutrustning</Label>
                  <div className="space-y-2">
-                    <label className="flex items-center gap-3 border p-4 rounded-xl bg-white cursor-pointer hover:border-blue-200">
+                    <label className="flex items-center gap-3 border p-4 rounded-xl bg-white cursor-pointer hover:border-primary/20">
                        <Checkbox checked={formData.safety_glasses_present} onCheckedChange={c => handleChange('safety_glasses_present', c)} />
                        <span className="text-sm">Skyddsglasögon finns</span>
                     </label>
-                    <label className="flex items-center gap-3 border p-4 rounded-xl bg-white cursor-pointer hover:border-blue-200">
+                    <label className="flex items-center gap-3 border p-4 rounded-xl bg-white cursor-pointer hover:border-primary/20">
                        <Checkbox checked={formData.warning_sign_present} onCheckedChange={c => handleChange('warning_sign_present', c)} />
                        <span className="text-sm">Varningsskylt finns till dörren med rätt laserklass</span>
                     </label>
@@ -391,10 +391,10 @@ export default function DeliveryControlForm() {
                        { v: "Maskinen får inte användas", desc: "Det finns allvarliga fel" }
                      ].map(opt => (
                         <div key={opt.v}
-                           onClick={() => handleChange('can_machine_be_used', opt.v)}
-                           className={`p-4 border rounded-xl cursor-pointer transition-all ${formData.can_machine_be_used === opt.v ? 'bg-blue-50/50 border-blue-300' : 'bg-white hover:border-slate-300'}`}
-                        >
-                           <div className={`font-semibold text-sm ${formData.can_machine_be_used === opt.v ? 'text-[#0088ff]' : 'text-slate-700'}`}>{opt.v}</div>
+                            onClick={() => handleChange('can_machine_be_used', opt.v)}
+                            className={`p-4 border rounded-xl cursor-pointer transition-all ${formData.can_machine_be_used === opt.v ? 'bg-primary/10 border-primary/30' : 'bg-white hover:border-slate-300'}`}
+                         >
+                            <div className={`font-semibold text-sm ${formData.can_machine_be_used === opt.v ? 'text-primary' : 'text-slate-700'}`}>{opt.v}</div>
                            <div className="text-xs text-slate-500 mt-1">{opt.desc}</div>
                         </div>
                      ))}
