@@ -11,6 +11,7 @@ import { Label } from "@/components/ui/label";
 export default function DeliveryControlForm() {
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
+  const [machines, setMachines] = useState([]);
   const [formData, setFormData] = useState({
      packaging_ok: false,
      no_visible_damage_packaging: false,
@@ -40,22 +41,50 @@ export default function DeliveryControlForm() {
       const user = await base44.auth.me();
       if (user) {
          const ownCustomers = await base44.entities.Customer.filter({ email: user.email });
-         setCustomer(ownCustomers[0]);
+         const cust = ownCustomers[0];
+         setCustomer(cust);
+         if (cust) {
+            const m = await base44.entities.Machine.filter({ customer_id: cust.id });
+            setMachines(m);
+         }
       }
     };
     load();
   }, []);
+
+  const handleFileUpload = async (e, fieldName, isArray = false) => {
+    const files = Array.from(e.target.files);
+    if(files.length === 0) return;
+    
+    for (const file of files) {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = async () => {
+        try {
+          const res = await base44.integrations.Core.UploadFile({ file: reader.result });
+          if (res.file_url) {
+            if (isArray) {
+               setFormData(prev => ({ ...prev, [fieldName]: [...(prev[fieldName] || []), res.file_url] }));
+            } else {
+               setFormData(prev => ({ ...prev, [fieldName]: res.file_url }));
+            }
+          }
+        } catch(err) { console.error(err); }
+      };
+    }
+  };
 
   const handleChange = (field, value) => setFormData(prev => ({ ...prev, [field]: value }));
 
   const handleSubmit = async () => {
      setLoading(true);
      try {
-       await base44.entities.DeliveryControl.create({
+       const record = await base44.entities.DeliveryControl.create({
           ...formData,
           customer_id: customer?.id,
           control_date: new Date().toISOString().split('T')[0]
        });
+       await base44.functions.invoke("generateDeliveryControlPDF", { deliveryControlId: record.id });
        navigate(-1);
      } catch (e) {
        alert("Gick inte att spara: " + e.message);
@@ -105,25 +134,115 @@ export default function DeliveryControlForm() {
                  Fyll i grundläggande information om maskinen och bekräfta visuellt skick.
                </div>
                
-               <div className="space-y-3">
-                  <Label>Maskinmodell</Label>
-                  <Input placeholder="T.ex. Deka Lasers Motus PRO" value={formData.model || ''} onChange={e => handleChange('model', e.target.value)} />
-               </div>
-               <div className="space-y-3">
-                  <Label>Serienummer</Label>
-                  <Input placeholder="SN..." value={formData.serial_number || ''} onChange={e => handleChange('serial_number', e.target.value)} />
+               <div className="space-y-4">
+                  <div>
+                    <Label className="mb-2 block">Välj befintlig maskin (valfritt)</Label>
+                    <select 
+                      className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#0088ff]"
+                      value={formData.machine_id || ''}
+                      onChange={e => {
+                        const m = machines.find(x => x.id === e.target.value);
+                        if (m) {
+                           setFormData(prev => ({
+                             ...prev,
+                             machine_id: m.id,
+                             model: m.model,
+                             serial_number: m.serial_number,
+                             manufacturer: m.manufacturer
+                           }));
+                        } else {
+                           handleChange('machine_id', '');
+                        }
+                      }}
+                    >
+                      <option value="">-- Ny maskin (manuell inmatning) --</option>
+                      {machines.map(m => (
+                        <option key={m.id} value={m.id}>{m.model} ({m.serial_number})</option>
+                      ))}
+                    </select>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Label>Maskinmodell</Label>
+                      <Input value={formData.model || ''} onChange={e => handleChange('model', e.target.value)} />
+                    </div>
+                    <div>
+                      <Label>Serienummer</Label>
+                      <Input value={formData.serial_number || ''} onChange={e => handleChange('serial_number', e.target.value)} />
+                    </div>
+                    <div>
+                      <Label>Tillverkare</Label>
+                      <Input value={formData.manufacturer || ''} onChange={e => handleChange('manufacturer', e.target.value)} />
+                    </div>
+                    <div>
+                      <Label>Maskintyp</Label>
+                      <Input placeholder="T.ex. Laser" value={formData.machine_type || ''} onChange={e => handleChange('machine_type', e.target.value)} />
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Label>Leveransdatum</Label>
+                      <Input type="date" value={formData.delivery_date || ''} onChange={e => handleChange('delivery_date', e.target.value)} />
+                    </div>
+                    <label className="flex items-center gap-3 border p-3 rounded-lg bg-white cursor-pointer mt-5">
+                       <Checkbox checked={formData.is_used_machine} onCheckedChange={c => handleChange('is_used_machine', c)} />
+                       <span className="text-sm">Begagnad maskin</span>
+                    </label>
+                  </div>
+                  
+                  <div className="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                    <Label className="mb-3 block font-semibold">Certifikat (t.ex. MDR)</Label>
+                    <div className="grid grid-cols-2 gap-2 mb-3">
+                       <Input placeholder="Typ (t.ex. MDR)" value={formData.certificate_type || ''} onChange={e => handleChange('certificate_type', e.target.value)} />
+                       <Input placeholder="Nummer" value={formData.certificate_number || ''} onChange={e => handleChange('certificate_number', e.target.value)} />
+                    </div>
+                    <div className="flex flex-col gap-2">
+                       <span className="text-xs text-slate-500 font-medium">Bifoga fil (frivilligt)</span>
+                       <input type="file" onChange={e => handleFileUpload(e, 'certificate_file_url')} className="text-sm" />
+                       {formData.certificate_file_url && <span className="text-xs text-green-600 font-bold">✓ Uppladdad!</span>}
+                    </div>
+                  </div>
                </div>
                
-               <div className="pt-2">
-                 <Label className="font-semibold mb-3 block">Förpackning</Label>
-                 <div className="space-y-2">
-                    <label className="flex items-center gap-3 border p-4 rounded-xl bg-white cursor-pointer hover:border-blue-200 transition-colors">
+               <div className="pt-4 border-t">
+                 <Label className="font-semibold mb-3 block">Förpackning & Skick</Label>
+                 <div className="space-y-3">
+                    <div className="flex items-center justify-between border p-3 rounded-xl bg-white shadow-sm">
+                       <span className="text-sm font-medium">Bilder på förpackning</span>
+                       <div className="flex items-center gap-3">
+                         {formData.packaging_photos_url?.length > 0 && <span className="text-xs font-semibold text-green-600">{formData.packaging_photos_url.length} bilder</span>}
+                         <label className="cursor-pointer bg-blue-50 text-blue-600 px-3 py-1.5 rounded text-xs font-semibold hover:bg-blue-100 transition-colors">
+                           Ladda upp <input type="file" multiple accept="image/*" className="hidden" onChange={e => handleFileUpload(e, 'packaging_photos_url', true)} />
+                         </label>
+                       </div>
+                    </div>
+                    <label className="flex items-center gap-3 border p-4 rounded-xl bg-white cursor-pointer hover:border-blue-200">
                        <Checkbox checked={formData.packaging_ok} onCheckedChange={c => handleChange('packaging_ok', c)} />
                        <span className="text-sm">Jag har fotograferat förpackningen från alla håll</span>
                     </label>
-                    <label className="flex items-center gap-3 border p-4 rounded-xl bg-white cursor-pointer hover:border-blue-200 transition-colors">
+                    <label className="flex items-center gap-3 border p-4 rounded-xl bg-white cursor-pointer hover:border-blue-200">
                        <Checkbox checked={formData.no_visible_damage_packaging} onCheckedChange={c => handleChange('no_visible_damage_packaging', c)} />
                        <span className="text-sm">Det finns inga synliga skador på förpackningen</span>
+                    </label>
+                    
+                    <div className="flex items-center justify-between border p-3 rounded-xl bg-white shadow-sm mt-4">
+                       <span className="text-sm font-medium">Bilder på maskinen</span>
+                       <div className="flex items-center gap-3">
+                         {formData.machine_photos_url?.length > 0 && <span className="text-xs font-semibold text-green-600">{formData.machine_photos_url.length} bilder</span>}
+                         <label className="cursor-pointer bg-blue-50 text-blue-600 px-3 py-1.5 rounded text-xs font-semibold hover:bg-blue-100 transition-colors">
+                           Ladda upp <input type="file" multiple accept="image/*" className="hidden" onChange={e => handleFileUpload(e, 'machine_photos_url', true)} />
+                         </label>
+                       </div>
+                    </div>
+                    <label className="flex items-center gap-3 border p-4 rounded-xl bg-white cursor-pointer hover:border-blue-200">
+                       <Checkbox checked={formData.machine_photos_ok} onCheckedChange={c => handleChange('machine_photos_ok', c)} />
+                       <span className="text-sm">Maskinen är fotograferad från alla håll</span>
+                    </label>
+                    <label className="flex items-center gap-3 border p-4 rounded-xl bg-white cursor-pointer hover:border-blue-200">
+                       <Checkbox checked={formData.no_cracks_dents_stains} onCheckedChange={c => handleChange('no_cracks_dents_stains', c)} />
+                       <span className="text-sm">Inga sprickor, bucklor eller fläckar</span>
                     </label>
                  </div>
                </div>
@@ -148,6 +267,10 @@ export default function DeliveryControlForm() {
                      <Checkbox checked={formData.manual_present} onCheckedChange={c => handleChange('manual_present', c)} />
                      <span className="text-sm">Bruksanvisning finns med</span>
                   </label>
+                  <div className="pt-4">
+                     <Label className="mb-2 block">Övriga kommentarer (Steg 2)</Label>
+                     <Textarea value={formData.other_comments_step2 || ''} onChange={e => handleChange('other_comments_step2', e.target.value)} placeholder="Finns det något mer att notera kring uppackningen?" />
+                  </div>
                </div>
              </div>
           )}
@@ -167,9 +290,17 @@ export default function DeliveryControlForm() {
                      <span className="text-sm">Inga konstiga ljud eller lukter</span>
                   </label>
                   <label className="flex items-center gap-3 border p-4 rounded-xl bg-white cursor-pointer hover:border-blue-200">
+                     <Checkbox checked={formData.no_abnormal_vibrations} onCheckedChange={c => handleChange('no_abnormal_vibrations', c)} />
+                     <span className="text-sm">Inga onormala vibrationer</span>
+                  </label>
+                  <label className="flex items-center gap-3 border p-4 rounded-xl bg-white cursor-pointer hover:border-blue-200">
                      <Checkbox checked={formData.emergency_stop_functions} onCheckedChange={c => handleChange('emergency_stop_functions', c)} />
                      <span className="text-sm">Nödstopp fungerar</span>
                   </label>
+                  <div className="pt-4">
+                     <Label className="mb-2 block">Övriga kommentarer (Steg 3)</Label>
+                     <Textarea value={formData.other_comments_step3 || ''} onChange={e => handleChange('other_comments_step3', e.target.value)} placeholder="T.ex. detaljer om felande nödstopp etc." />
+                  </div>
                </div>
              </div>
           )}
@@ -187,6 +318,10 @@ export default function DeliveryControlForm() {
                        <Checkbox checked={formData.foot_pedal_functions} onCheckedChange={c => handleChange('foot_pedal_functions', c)} />
                        <span className="text-sm">Fotpedalen fungerar</span>
                     </label>
+                    <div className="pt-2">
+                       <Label className="mb-2 block">Övriga kommentarer (Funktionstest)</Label>
+                       <Textarea value={formData.other_comments_step4_function || ''} onChange={e => handleChange('other_comments_step4_function', e.target.value)} />
+                    </div>
                  </div>
                </div>
                
@@ -201,6 +336,10 @@ export default function DeliveryControlForm() {
                        <Checkbox checked={formData.warning_sign_present} onCheckedChange={c => handleChange('warning_sign_present', c)} />
                        <span className="text-sm">Varningsskylt finns till dörren med rätt laserklass</span>
                     </label>
+                    <div className="pt-2">
+                       <Label className="mb-2 block">Övriga kommentarer (Säkerhet)</Label>
+                       <Textarea value={formData.other_comments_step4_safety || ''} onChange={e => handleChange('other_comments_step4_safety', e.target.value)} />
+                    </div>
                  </div>
                </div>
              </div>

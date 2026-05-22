@@ -64,11 +64,18 @@ export default function DeliveryControls() {
                     <div className="font-semibold text-sm">{c.model || "Okänd modell"}</div>
                     <div className="text-xs text-slate-500">{c.control_date ? format(new Date(c.control_date), "yyyy-MM-dd") : "Inget datum"}</div>
                  </div>
-                 <div className="flex items-center gap-2">
-                    <span className={`text-xs font-medium px-2 py-1 rounded ${c.delivery_control_status === 'Ej godkänd' ? 'text-red-600 bg-red-50' : 'text-green-600 bg-green-50'}`}>
-                       {c.delivery_control_status || "Godkänd"}
-                    </span>
-                    <ChevronRight className="w-4 h-4 text-slate-400" />
+                 <div className="flex flex-col items-end gap-2">
+                    <div className="flex items-center gap-2">
+                       <span className={`text-xs font-medium px-2 py-1 rounded ${c.delivery_control_status === 'Ej godkänd' ? 'text-red-600 bg-red-50' : 'text-green-600 bg-green-50'}`}>
+                          {c.delivery_control_status || "Godkänd"}
+                       </span>
+                       <ChevronRight className="w-4 h-4 text-slate-400" />
+                    </div>
+                    {c.report_pdf_url && (
+                       <a href={c.report_pdf_url} target="_blank" rel="noopener noreferrer" className="text-xs text-blue-600 hover:underline font-medium" onClick={e => e.stopPropagation()}>
+                         Visa PDF-rapport
+                       </a>
+                    )}
                  </div>
                </CardContent>
             </Card>
