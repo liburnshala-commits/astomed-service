@@ -3,7 +3,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { createPageUrl } from "@/utils";
 import { Link, useNavigate } from "react-router-dom";
-import { Building2, Phone, Mail, Monitor, ArrowLeft, ExternalLink, Shield, Trash2, Download, FileCheck, FileText } from "lucide-react";
+import { Building2, Phone, Mail, Monitor, ArrowLeft, ExternalLink, Shield, Trash2, Download, FileCheck, FileText, CheckCircle, Box } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -151,6 +151,24 @@ export default function CustomerDetails() {
                     </div>
                   </div>
                 )}
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="astomed-card border-0 shadow-sm">
+            <CardContent className="p-5 space-y-4">
+              <h3 className="font-semibold text-slate-800 border-b pb-2">Kontroller</h3>
+              <div className="grid grid-cols-2 gap-3">
+                <Link to={createPageUrl("DeliveryControls")} className="block">
+                  <Button variant="outline" className="w-full h-12 rounded-lg flex items-center justify-center gap-2 text-sm font-medium hover:bg-slate-50">
+                    <Box className="w-4 h-4" /> Leveranskontroll
+                  </Button>
+                </Link>
+                <Link to={createPageUrl("FunctionControls")} className="block">
+                  <Button variant="outline" className="w-full h-12 rounded-lg flex items-center justify-center gap-2 text-sm font-medium hover:bg-slate-50">
+                    <CheckCircle className="w-4 h-4" /> Funktionskontroll
+                  </Button>
+                </Link>
               </div>
             </CardContent>
           </Card>
