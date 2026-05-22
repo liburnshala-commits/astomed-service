@@ -22,6 +22,8 @@ import ClinicDevelopment from './pages/ClinicDevelopment';
 import Products from './pages/Products';
 import DeliveryControls from './pages/DeliveryControls';
 import DeliveryControlForm from './pages/DeliveryControlForm';
+import FunctionControls from './pages/FunctionControls';
+import FunctionControlForm from './pages/FunctionControlForm';
 
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
@@ -82,7 +84,7 @@ const AuthenticatedApp = () => {
 
   // Strict routing for customers
   if (user && user.role === 'customer' && !isPublicRoute) {
-    const allowedCustomerPaths = ['/CustomerDashboard', '/ClinicDevelopment', '/ServiceRecords', '/Machines', '/DeliveryControls', '/DeliveryControlForm'];
+    const allowedCustomerPaths = ['/CustomerDashboard', '/ClinicDevelopment', '/ServiceRecords', '/Machines', '/DeliveryControls', '/DeliveryControlForm', '/FunctionControls', '/FunctionControlForm'];
     if (!allowedCustomerPaths.includes(currentPath)) {
       return <Navigate to="/CustomerDashboard" replace />;
     }
@@ -118,6 +120,8 @@ const AuthenticatedApp = () => {
         <Route path="/Products" element={<AnimatedPage><LayoutWrapper currentPageName="Products"><Products /></LayoutWrapper></AnimatedPage>} />
         <Route path="/DeliveryControls" element={<AnimatedPage><LayoutWrapper currentPageName="DeliveryControls"><DeliveryControls /></LayoutWrapper></AnimatedPage>} />
         <Route path="/DeliveryControlForm" element={<AnimatedPage><DeliveryControlForm /></AnimatedPage>} />
+        <Route path="/FunctionControls" element={<AnimatedPage><LayoutWrapper currentPageName="FunctionControls"><FunctionControls /></LayoutWrapper></AnimatedPage>} />
+        <Route path="/FunctionControlForm" element={<AnimatedPage><FunctionControlForm /></AnimatedPage>} />
         {Object.entries(Pages).map(([path, Page]) => (
           <Route
             key={path}

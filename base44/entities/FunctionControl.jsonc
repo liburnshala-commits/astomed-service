@@ -1,0 +1,119 @@
+{
+  "name": "FunctionControl",
+  "type": "object",
+  "properties": {
+    "customer_id": {
+      "type": "string",
+      "description": "L\u00e4nk till kund"
+    },
+    "machine_id": {
+      "type": "string",
+      "description": "L\u00e4nk till maskin"
+    },
+    "control_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Datum f\u00f6r kontroll"
+    },
+    "controlled_by": {
+      "type": "string",
+      "description": "Namn p\u00e5 den som utf\u00f6rde kontrollen"
+    },
+    "machine_model": {
+      "type": "string",
+      "description": "Maskinmodell"
+    },
+    "serial_number": {
+      "type": "string",
+      "description": "Serienummer"
+    },
+    "machine_starts": {
+      "type": "boolean",
+      "default": false,
+      "description": "Maskinen startar"
+    },
+    "no_strange_sounds_smells": {
+      "type": "boolean",
+      "default": false,
+      "description": "Inga konstiga ljud eller lukter"
+    },
+    "no_abnormal_vibrations": {
+      "type": "boolean",
+      "default": false,
+      "description": "Inga onormala vibrationer"
+    },
+    "no_leakage": {
+      "type": "boolean",
+      "default": false,
+      "description": "Inget l\u00e4ckage"
+    },
+    "emergency_stop_functions": {
+      "type": "boolean",
+      "default": false,
+      "description": "N\u00f6dstopp fungerar"
+    },
+    "light_beam_symmetrical": {
+      "type": "boolean",
+      "default": false,
+      "description": "Ljusstr\u00e5len \u00e4r symmetrisk"
+    },
+    "foot_pedal_functions": {
+      "type": "boolean",
+      "default": false,
+      "description": "Fotpedalen fungerar"
+    },
+    "safety_glasses_present": {
+      "type": "boolean",
+      "default": false,
+      "description": "Skyddsglas\u00f6gon finns"
+    },
+    "warning_sign_present": {
+      "type": "boolean",
+      "default": false,
+      "description": "Varningsskylt finns"
+    },
+    "measured_laser_power": {
+      "type": "string",
+      "description": "Uppm\u00e4tt lasereffekt"
+    },
+    "comments": {
+      "type": "string",
+      "description": "\u00d6vriga kommentarer"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Godk\u00e4nd",
+        "Godk\u00e4nd med anm\u00e4rkning",
+        "Ej godk\u00e4nd"
+      ],
+      "description": "Status p\u00e5 funktionskontrollen"
+    },
+    "can_machine_be_used": {
+      "type": "string",
+      "enum": [
+        "Maskinen f\u00e5r anv\u00e4ndas",
+        "F\u00e5r anv\u00e4ndas efter \u00e5tg\u00e4rd",
+        "Maskinen f\u00e5r inte anv\u00e4ndas"
+      ],
+      "description": "F\u00e5r maskinen anv\u00e4ndas"
+    },
+    "report_pdf_url": {
+      "type": "string",
+      "description": "L\u00e4nk till PDF-rapport"
+    }
+  },
+  "required": [
+    "status"
+  ],
+  "rls": {
+    "create": {},
+    "read": {},
+    "update": {},
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

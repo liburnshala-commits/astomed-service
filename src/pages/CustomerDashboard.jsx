@@ -314,7 +314,7 @@ export default function CustomerDashboard() {
                </Link>
              </Button>
              <Button variant="outline" className="flex-1 bg-white hover:bg-slate-50 border-slate-200" asChild>
-               <Link to={createPageUrl("DeliveryControls")}>
+               <Link to={createPageUrl("FunctionControls")}>
                  <CheckCircle className="w-4 h-4 mr-2 text-green-600" /> Funktionskontroll
                </Link>
              </Button>
