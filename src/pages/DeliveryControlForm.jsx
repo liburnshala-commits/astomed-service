@@ -40,12 +40,17 @@ export default function DeliveryControlForm() {
     const load = async () => {
       const user = await base44.auth.me();
       if (user) {
-         const ownCustomers = await base44.entities.Customer.filter({ email: user.email });
-         const cust = ownCustomers[0];
-         setCustomer(cust);
-         if (cust) {
-            const m = await base44.entities.Machine.filter({ customer_id: cust.id });
-            setMachines(m);
+         if (user.role === 'admin' || user.role === 'technician') {
+            const allMachines = await base44.entities.Machine.list();
+            setMachines(allMachines);
+         } else {
+            const ownCustomers = await base44.entities.Customer.filter({ email: user.email });
+            const cust = ownCustomers[0];
+            setCustomer(cust);
+            if (cust) {
+               const m = await base44.entities.Machine.filter({ customer_id: cust.id });
+               setMachines(m);
+            }
          }
       }
     };
@@ -81,7 +86,7 @@ export default function DeliveryControlForm() {
      try {
        const record = await base44.entities.DeliveryControl.create({
           ...formData,
-          customer_id: customer?.id,
+          customer_id: formData.customer_id || customer?.id,
           control_date: new Date().toISOString().split('T')[0]
        });
        await base44.functions.invoke("generateDeliveryControlPDF", { deliveryControlId: record.id });
@@ -148,7 +153,8 @@ export default function DeliveryControlForm() {
                              machine_id: m.id,
                              model: m.model,
                              serial_number: m.serial_number,
-                             manufacturer: m.manufacturer
+                             manufacturer: m.manufacturer,
+                             customer_id: m.customer_id
                            }));
                         } else {
                            handleChange('machine_id', '');

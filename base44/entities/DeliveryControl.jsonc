@@ -261,7 +261,6 @@
     }
   },
   "required": [
-    "customer_id",
     "delivery_control_status"
   ],
   "rls": {
@@ -269,7 +268,8 @@
       "user_condition": {
         "role": [
           "admin",
-          "customer"
+          "customer",
+          "technician"
         ]
       }
     },
@@ -286,7 +286,8 @@
       "user_condition": {
         "role": [
           "admin",
-          "customer"
+          "customer",
+          "technician"
         ]
       }
     },
