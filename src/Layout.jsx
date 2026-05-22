@@ -51,6 +51,7 @@ const navSections = [
       { label: "Serviceförfrågningar", page: "PublicServiceLeads", icon: ClipboardList, roles: ["admin"] },
       { label: "Chattsupport", page: "ChatSupport", icon: MessageSquare, roles: ["admin"] },
       { label: "Serviceärenden", page: "ServiceRecords", icon: Wrench, roles: ["admin", "technician", "customer"] },
+      { label: "Leveranskontroller", page: "DeliveryControls", icon: FileCheck, roles: ["admin", "customer"] },
       { label: "Servicekalender", page: "Calendar", icon: CalendarDays, roles: ["admin", "technician"] },
       { label: "Serviceavtal", page: "ServiceContracts", icon: FileCheck, roles: ["admin", "technician"] },
       { label: "Avtalsprospekt", page: "ServiceContractLeads", icon: UsersIcon, roles: ["admin"] },
