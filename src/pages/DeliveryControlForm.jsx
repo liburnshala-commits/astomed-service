@@ -11,7 +11,7 @@ import { Label } from "@/components/ui/label";
 export default function DeliveryControlForm() {
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
-  const [machines, setMachines] = useState([]);
+  const [templates, setTemplates] = useState([]);
   const [formData, setFormData] = useState({
      packaging_ok: false,
      no_visible_damage_packaging: false,
@@ -40,17 +40,12 @@ export default function DeliveryControlForm() {
     const load = async () => {
       const user = await base44.auth.me();
       if (user) {
-         if (user.role === 'admin' || user.role === 'technician') {
-            const allMachines = await base44.entities.Machine.list();
-            setMachines(allMachines);
-         } else {
-            const ownCustomers = await base44.entities.Customer.filter({ email: user.email });
-            const cust = ownCustomers[0];
-            setCustomer(cust);
-            if (cust) {
-               const m = await base44.entities.Machine.filter({ customer_id: cust.id });
-               setMachines(m);
-            }
+         const allTemplates = await base44.entities.ServiceAgreementTemplate.list();
+         setTemplates(allTemplates);
+
+         const ownCustomers = await base44.entities.Customer.filter({ email: user.email });
+         if (ownCustomers && ownCustomers.length > 0) {
+            setCustomer(ownCustomers[0]);
          }
       }
     };
@@ -141,29 +136,15 @@ export default function DeliveryControlForm() {
                
                <div className="space-y-4">
                   <div>
-                    <Label className="mb-2 block">Välj befintlig maskin (valfritt)</Label>
+                    <Label className="mb-2 block">Välj maskinmodell</Label>
                     <select 
                       className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#0088ff]"
-                      value={formData.machine_id || ''}
-                      onChange={e => {
-                        const m = machines.find(x => x.id === e.target.value);
-                        if (m) {
-                           setFormData(prev => ({
-                             ...prev,
-                             machine_id: m.id,
-                             model: m.model,
-                             serial_number: m.serial_number,
-                             manufacturer: m.manufacturer,
-                             customer_id: m.customer_id
-                           }));
-                        } else {
-                           handleChange('machine_id', '');
-                        }
-                      }}
+                      value={formData.model || ''}
+                      onChange={e => handleChange('model', e.target.value)}
                     >
-                      <option value="">-- Ny maskin (manuell inmatning) --</option>
-                      {machines.map(m => (
-                        <option key={m.id} value={m.id}>{m.model} ({m.serial_number})</option>
+                      <option value="">-- Manuell inmatning --</option>
+                      {templates.map(t => (
+                        <option key={t.id} value={t.name}>{t.name}</option>
                       ))}
                     </select>
                   </div>
