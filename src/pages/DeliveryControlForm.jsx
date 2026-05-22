@@ -100,22 +100,12 @@ export default function DeliveryControlForm() {
      setLoading(false);
   };
 
-  const renderStepIndicators = () => (
-     <div className="flex items-center justify-center gap-2 py-4 px-6 bg-white border-b border-slate-100">
-        {[1,2,3,4,5].map(i => (
-           <div key={i} className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-colors ${
-              step > i ? "bg-green-100 text-green-600" : step === i ? "bg-[#0088ff] text-white" : "bg-slate-100 text-slate-400"
-           }`}>
-              {step > i ? <Check className="w-4 h-4" /> : i}
-           </div>
-        ))}
-     </div>
-  );
+
 
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col">
        <div className="bg-white border-b px-4 py-3 flex items-center justify-between sticky top-0 z-10">
-         <button onClick={() => navigate("/DeliveryControls")} className="flex items-center gap-1 text-[#0088ff]">
+         <button onClick={() => navigate("/DeliveryControls")} className="flex items-center gap-1 text-primary">
             <ChevronLeft className="w-5 h-5" /> Stäng
          </button>
          <div className="font-semibold text-center">
@@ -128,12 +118,20 @@ export default function DeliveryControlForm() {
               {step === 5 && "Sammanfattning"}
             </span>
          </div>
-         <button className="text-[#0088ff] flex items-center gap-1 text-sm font-medium disabled:opacity-50" onClick={handleSubmit} disabled={loading}>
+         <button className="text-primary flex items-center gap-1 text-sm font-medium disabled:opacity-50" onClick={handleSubmit} disabled={loading}>
             {loading ? "Sparar..." : "Spara"}
          </button>
        </div>
        
-       {renderStepIndicators()}
+       <div className="flex items-center justify-center gap-2 py-4 px-6 bg-white border-b border-slate-100">
+         {[1,2,3,4,5].map(i => (
+           <div key={i} className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-colors ${
+             step > i ? "bg-primary/10 text-primary" : step === i ? "bg-primary text-primary-foreground" : "bg-slate-100 text-slate-400"
+           }`}>
+             {step > i ? <Check className="w-4 h-4" /> : i}
+           </div>
+         ))}
+       </div>
 
        <div className="flex-1 p-4 max-w-lg mx-auto w-full space-y-6 pb-24">
           {step === 1 && (
@@ -146,7 +144,7 @@ export default function DeliveryControlForm() {
                   <div>
                     <Label className="mb-2 block">Välj maskinmodell</Label>
                     <select 
-                      className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#0088ff]"
+                      className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                       value={formData.model || ''}
                       onChange={e => handleChange('model', e.target.value)}
                     >
@@ -166,7 +164,7 @@ export default function DeliveryControlForm() {
                       <Label>Serienummer</Label>
                       <div className="space-y-2">
                         <select 
-                          className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#0088ff]"
+                          className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                           value={formData.machine_id || ''}
                           onChange={e => {
                             const m = customerMachines.find(x => x.id === e.target.value);
@@ -417,15 +415,15 @@ export default function DeliveryControlForm() {
        </div>
 
        <div className="fixed bottom-0 left-0 right-0 p-4 bg-white border-t flex justify-between gap-4 max-w-lg mx-auto w-full">
-          <Button variant="ghost" onClick={() => setStep(s => Math.max(1, s - 1))} disabled={step === 1} className="text-[#0088ff] hover:text-blue-700 hover:bg-blue-50">
+          <Button variant="ghost" onClick={() => setStep(s => Math.max(1, s - 1))} disabled={step === 1} className="text-primary hover:text-primary/70 hover:bg-primary/5">
              Föregående
           </Button>
           {step < 5 ? (
-             <Button onClick={() => setStep(s => Math.min(5, s + 1))} className="bg-[#0088ff] hover:bg-blue-600 rounded-full px-6">
-                Nästa <ChevronRight className="w-4 h-4 ml-1" />
-             </Button>
-          ) : (
-             <Button onClick={handleSubmit} disabled={loading} className="bg-emerald-500 hover:bg-emerald-600 text-white rounded-full px-6">
+             <Button onClick={() => setStep(s => Math.min(5, s + 1))} className="bg-primary hover:bg-primary/90 rounded-full px-6">
+                   Nästa <ChevronRight className="w-4 h-4 ml-1" />
+                </Button>
+             ) : (
+                <Button onClick={handleSubmit} disabled={loading} className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-full px-6">
                 {loading ? "Sparar..." : <span className="flex items-center gap-1"><Check className="w-4 h-4 mr-1" /> Slutför</span>}
              </Button>
           )}
