@@ -132,7 +132,78 @@ export default function CustomerDashboard() {
         </Card>
       )}
 
-      {/* Machines section */}
+      {/* Stats */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <Link to={createPageUrl("Machines")} className="block">
+          <Card className="astomed-card cursor-pointer" style={{ background: "#f4f9f9" }}>
+            <CardContent className="p-5 text-center">
+              <div className="w-10 h-10 astomed-icon-box mx-auto mb-3" style={{ width: 40, height: 40 }}>
+                <Monitor className="w-5 h-5" style={{ color: "#1b3a3a" }} />
+              </div>
+              <p className="text-3xl font-bold astomed-title">{machines.length}</p>
+              <p className="text-xs astomed-muted mt-1 font-medium uppercase tracking-wide">Maskiner</p>
+            </CardContent>
+          </Card>
+        </Link>
+        <Link to={createPageUrl("ServiceRecords?status=pending")} className="block">
+          <Card className="astomed-card cursor-pointer" style={{ background: "#fffaf0" }}>
+            <CardContent className="p-5 text-center">
+              <div className="w-10 h-10 mx-auto mb-3 rounded-xl flex items-center justify-center" style={{ width: 40, height: 40, background: "#fef9e7" }}>
+                <Wrench className="w-5 h-5" style={{ color: "#d4a017" }} />
+              </div>
+              <p className="text-3xl font-bold astomed-title">{pending}</p>
+              <p className="text-xs astomed-muted mt-1 font-medium uppercase tracking-wide">Väntande</p>
+            </CardContent>
+          </Card>
+        </Link>
+        <Link to={createPageUrl("ServiceRecords?status=in_progress")} className="block">
+          <Card className="astomed-card cursor-pointer" style={{ background: "#f0fafa" }}>
+            <CardContent className="p-5 text-center">
+              <div className="w-10 h-10 astomed-icon-box mx-auto mb-3" style={{ width: 40, height: 40 }}>
+                <Clock className="w-5 h-5" style={{ color: "#3a9e9e" }} />
+              </div>
+              <p className="text-3xl font-bold astomed-title">{inProgress}</p>
+              <p className="text-xs astomed-muted mt-1 font-medium uppercase tracking-wide">Pågående</p>
+            </CardContent>
+          </Card>
+        </Link>
+        <Link to={createPageUrl("ServiceRecords?status=completed")} className="block">
+          <Card className="astomed-card cursor-pointer" style={{ background: "#f0faf9" }}>
+            <CardContent className="p-5 text-center">
+              <div className="w-10 h-10 astomed-icon-box mx-auto mb-3" style={{ width: 40, height: 40 }}>
+                <CheckCircle className="w-5 h-5" style={{ color: "#3a9e9e" }} />
+              </div>
+              <p className="text-3xl font-bold astomed-title">{completed}</p>
+              <p className="text-xs astomed-muted mt-1 font-medium uppercase tracking-wide">Slutförda</p>
+            </CardContent>
+          </Card>
+          </Link>
+          </div>
+
+          {/* Controls section */}
+          <div>
+          <h2 className="text-sm font-semibold astomed-label mb-4 flex items-center gap-2">
+            <FileCheck className="w-4 h-4" />
+            Kontroller
+          </h2>
+          <Card className="astomed-card" style={{ background: "#f4f9f9" }}>
+            <CardContent className="p-4 flex gap-3">
+               <Button variant="outline" className="flex-1 bg-white hover:bg-slate-50 border-slate-200" asChild>
+                 <Link to={createPageUrl("DeliveryControls")}>
+                   <Box className="w-4 h-4 mr-2 text-blue-600" /> Leveranskontroll
+                 </Link>
+               </Button>
+               <Button variant="outline" className="flex-1 bg-white hover:bg-slate-50 border-slate-200" asChild>
+                 <Link to={createPageUrl("FunctionControls")}>
+                   <CheckCircle className="w-4 h-4 mr-2 text-green-600" /> Funktionskontroll
+                 </Link>
+               </Button>
+            </CardContent>
+          </Card>
+          </div>
+          </div>
+
+          {/* Machines section */}
       <div>
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-sm font-semibold astomed-label flex items-center gap-2">
@@ -250,11 +321,13 @@ export default function CustomerDashboard() {
             </CardContent>
           </Card>
         )}
-      </div>
+        </div>
 
-      {/* Stats */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <Link to={createPageUrl("Machines")} className="block">
+        {/* Stats and Controls - Moved up */}
+        <div>
+        {/* Stats */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+          <Link to={createPageUrl("Machines")} className="block">
           <Card className="astomed-card cursor-pointer" style={{ background: "#f4f9f9" }}>
             <CardContent className="p-5 text-center">
               <div className="w-10 h-10 astomed-icon-box mx-auto mb-3" style={{ width: 40, height: 40 }}>
@@ -320,9 +393,10 @@ export default function CustomerDashboard() {
              </Button>
           </CardContent>
         </Card>
-      </div>
+        </div>
+        </div>
 
-      {/* Service records section */}
+        {/* Service records section */}
       <div>
         <h2 className="text-sm font-semibold astomed-label mb-4 flex items-center gap-2">
           <Wrench className="w-4 h-4" />
