@@ -218,6 +218,15 @@ export default function RadiationSafety() {
         </TabsContent>
 
         <TabsContent value="methods" className="mt-6">
+          <Card className="bg-blue-50 border-blue-200 mb-6">
+            <CardHeader>
+              <CardTitle className="text-base">Vad du behöver göra här</CardTitle>
+            </CardHeader>
+            <CardContent className="text-sm text-muted-foreground">
+              Dokumentera exakt hur varje behandling ska genomföras. Beskriv utrustningsinställningar, exponeringstider, vilka som får utföra behandlingen, riskbedömning, skyddsutrustning och eftervård. Detta är en juridisk krav.
+            </CardContent>
+          </Card>
+
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-xl font-semibold">Metoder & Rutiner</h2>
             <Button onClick={() => { setCurrentMethod({}); setMethodModalOpen(true); }}>
@@ -244,6 +253,15 @@ export default function RadiationSafety() {
         </TabsContent>
 
         <TabsContent value="incidents" className="mt-6">
+          <Card className="bg-blue-50 border-blue-200 mb-6">
+            <CardHeader>
+              <CardTitle className="text-base">Vad du behöver göra här</CardTitle>
+            </CardHeader>
+            <CardContent className="text-sm text-muted-foreground">
+              Rapportera alla oväntade händelser eller skador under behandling. Dokumentera vad som hände, vilka åtgärder som togs och om det rapporterades till SSM. Detta används för att förbättra dina rutiner.
+            </CardContent>
+          </Card>
+
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-xl font-semibold">Incidentrapporter</h2>
             <Button onClick={() => { setCurrentIncident({ status: 'open' }); setIncidentModalOpen(true); }} variant="destructive">
@@ -273,6 +291,15 @@ export default function RadiationSafety() {
         </TabsContent>
 
         <TabsContent value="treatments" className="mt-6">
+          <Card className="bg-blue-50 border-blue-200 mb-6">
+            <CardHeader>
+              <CardTitle className="text-base">Vad du behöver göra här</CardTitle>
+            </CardHeader>
+            <CardContent className="text-sm text-muted-foreground">
+              Dokumentera varje behandling: patientens ID, datum/tid, vilken metod som användes, inställningar, och bekräfta att individuell bedömning gjordes och information gavs. Behåll dessa records i 3 år.
+            </CardContent>
+          </Card>
+
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-xl font-semibold">Behandlingsdokumentation</h2>
             <Button onClick={() => { setCurrentTreatment({}); setTreatmentModalOpen(true); }}>
@@ -309,6 +336,16 @@ export default function RadiationSafety() {
         </TabsContent>
 
         <TabsContent value="personnel" className="mt-6 space-y-8">
+          <Card className="bg-blue-50 border-blue-200 mb-6">
+            <CardHeader>
+              <CardTitle className="text-base">Vad du behöver göra här</CardTitle>
+            </CardHeader>
+            <CardContent className="text-sm text-muted-foreground">
+              <p className="mb-3">1. <strong>Ansvarsdelegering:</strong> Definiera vilka roller och poster som finns på er klinik (t.ex. Verksamhetschef, Strålskyddsansvarig) och tilldela dessa till specifika personer.</p>
+              <p>2. <strong>Personal & Kompetens:</strong> Registrera all personal som jobbar med strålande utrustning och dokumentera deras strålskyddsutbildning.</p>
+            </CardContent>
+          </Card>
+
           <div>
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-semibold">Ansvarsdelegering</h2>
@@ -353,6 +390,15 @@ export default function RadiationSafety() {
         </TabsContent>
 
         <TabsContent value="client_info" className="mt-6">
+          <Card className="bg-blue-50 border-blue-200 mb-6">
+            <CardHeader>
+              <CardTitle className="text-base">Vad du behöver göra här</CardTitle>
+            </CardHeader>
+            <CardContent className="text-sm text-muted-foreground">
+              Skapa skriftliga informationsblad för varje behandling. Dessa ska innehålla behandlingsbeskrivning, möjliga risker, biverkningar och eftervårdsinstruktioner. Du måste ge denna information till klienterna innan behandling.
+            </CardContent>
+          </Card>
+
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-xl font-semibold">Klientinformationsblad</h2>
             <Button onClick={() => { setCurrentClientInfo({}); setClientInfoModalOpen(true); }}>
@@ -372,6 +418,15 @@ export default function RadiationSafety() {
         </TabsContent>
 
         <TabsContent value="measurements" className="mt-6">
+          <Card className="bg-blue-50 border-blue-200 mb-6">
+            <CardHeader>
+              <CardTitle className="text-base">Vad du behöver göra här</CardTitle>
+            </CardHeader>
+            <CardContent className="text-sm text-muted-foreground">
+              Registrera mätningar av lasereffekt och andra tekniska parametrar. Dessa mätningar visar att utrustningen fungerar korrekt och dokumenteras för kontroll- och kalibreringssyften.
+            </CardContent>
+          </Card>
+
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-xl font-semibold">Mätrapporter (Laser/IPL)</h2>
             <Button onClick={() => { setCurrentMeasurement({}); setMeasurementModalOpen(true); }}>
