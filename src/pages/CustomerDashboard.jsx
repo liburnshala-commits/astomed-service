@@ -190,7 +190,7 @@ export default function CustomerDashboard() {
           <CardContent className="p-4 flex gap-3">
             <Button variant="outline" className="flex-1 bg-white hover:bg-slate-50 border-slate-200" asChild>
               <Link to={createPageUrl("DeliveryControls")}>
-                <Box className="w-4 h-4 mr-2 text-blue-600" /> Leveranskontroll
+                <Box className="w-4 h-4 mr-2 text-slate-600" /> Leveranskontroll
               </Link>
             </Button>
             <Button variant="outline" className="flex-1 bg-white hover:bg-slate-50 border-slate-200" asChild>
