@@ -93,7 +93,7 @@ export default function DeliveryControlForm() {
           control_date: new Date().toISOString().split('T')[0]
        });
        await base44.functions.invoke("generateDeliveryControlPDF", { deliveryControlId: record.id });
-       navigate(-1);
+       navigate("/DeliveryControls");
      } catch (e) {
        alert("Gick inte att spara: " + e.message);
      }
@@ -115,7 +115,7 @@ export default function DeliveryControlForm() {
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col">
        <div className="bg-white border-b px-4 py-3 flex items-center justify-between sticky top-0 z-10">
-         <button onClick={() => navigate(-1)} className="flex items-center gap-1 text-[#0088ff]">
+         <button onClick={() => navigate("/DeliveryControls")} className="flex items-center gap-1 text-[#0088ff]">
             <ChevronLeft className="w-5 h-5" /> Stäng
          </button>
          <div className="font-semibold text-center">
@@ -128,8 +128,8 @@ export default function DeliveryControlForm() {
               {step === 5 && "Sammanfattning"}
             </span>
          </div>
-         <button className="text-[#0088ff] flex items-center gap-1 text-sm font-medium" onClick={handleSubmit}>
-            Spara
+         <button className="text-[#0088ff] flex items-center gap-1 text-sm font-medium disabled:opacity-50" onClick={handleSubmit} disabled={loading}>
+            {loading ? "Sparar..." : "Spara"}
          </button>
        </div>
        
@@ -426,7 +426,7 @@ export default function DeliveryControlForm() {
              </Button>
           ) : (
              <Button onClick={handleSubmit} disabled={loading} className="bg-emerald-500 hover:bg-emerald-600 text-white rounded-full px-6">
-                <Check className="w-4 h-4 mr-1" /> Slutför
+                {loading ? "Sparar..." : <span className="flex items-center gap-1"><Check className="w-4 h-4 mr-1" /> Slutför</span>}
              </Button>
           )}
        </div>
