@@ -14,22 +14,26 @@ export default function DeliveryControls() {
 
   useEffect(() => {
     const load = async () => {
-      const user = await base44.auth.me();
-      if (user) {
-         const ownCustomers = await base44.entities.Customer.filter({ email: user.email });
-         const cust = ownCustomers[0];
-         if (cust) {
-            const data = await base44.entities.DeliveryControl.filter({ customer_id: cust.id }, "-created_date");
-            setControls(data);
-         } else {
-             // For admins/technicians viewing all
-             if (user.role === 'admin' || user.role === 'technician') {
-                 const data = await base44.entities.DeliveryControl.list("-created_date");
-                 setControls(data);
-             }
-         }
+      try {
+        const user = await base44.auth.me();
+        if (user) {
+           if (user.role === 'admin' || user.role === 'technician') {
+               const data = await base44.entities.DeliveryControl.list("-created_date");
+               setControls(data || []);
+           } else {
+               const ownCustomers = await base44.entities.Customer.filter({ email: user.email });
+               const cust = ownCustomers[0];
+               if (cust) {
+                  const data = await base44.entities.DeliveryControl.filter({ customer_id: cust.id }, "-created_date");
+                  setControls(data || []);
+               }
+           }
+        }
+      } catch (err) {
+        console.error("Kunde inte ladda leveranskontroller:", err);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
     load();
   }, []);
