@@ -78,16 +78,9 @@ Deno.serve(async (req) => {
         doc.text(`Varningsskylt finns: ${control.warning_sign_present ? 'Ja' : 'Nej'}`, 20, y); y += 6;
 
         const pdfBytes = doc.output('arraybuffer');
+        const file = new File([pdfBytes], 'report.pdf', { type: 'application/pdf' });
         
-        let binary = '';
-        const bytes = new Uint8Array(pdfBytes);
-        for (let i = 0; i < bytes.byteLength; i++) {
-            binary += String.fromCharCode(bytes[i]);
-        }
-        const base64String = btoa(binary);
-        const dataUrl = `data:application/pdf;base64,${base64String}`;
-        
-        const uploadRes = await base44.asServiceRole.integrations.Core.UploadFile({ file: dataUrl });
+        const uploadRes = await base44.asServiceRole.integrations.Core.UploadFile({ file });
         
         if (uploadRes.file_url) {
             await base44.asServiceRole.entities.DeliveryControl.update(deliveryControlId, {

@@ -264,38 +264,12 @@
     "delivery_control_status"
   ],
   "rls": {
-    "create": {
-      "user_condition": {
-        "role": [
-          "admin",
-          "customer",
-          "technician"
-        ]
-      }
-    },
-    "read": {
-      "user_condition": {
-        "role": [
-          "admin",
-          "customer",
-          "technician"
-        ]
-      }
-    },
-    "update": {
-      "user_condition": {
-        "role": [
-          "admin",
-          "customer",
-          "technician"
-        ]
-      }
-    },
+    "create": {},
+    "read": {},
+    "update": {},
     "delete": {
       "user_condition": {
-        "role": [
-          "admin"
-        ]
+        "role": "admin"
       }
     }
   }
