@@ -1,0 +1,43 @@
+{
+  "name": "PersonnelCompetence",
+  "type": "object",
+  "properties": {
+    "clinic_id": {
+      "type": "string",
+      "description": "Klinikens ID"
+    },
+    "employee_name": {
+      "type": "string",
+      "description": "Personalens namn"
+    },
+    "role": {
+      "type": "string",
+      "description": "Yrkesroll"
+    },
+    "radiation_safety_training": {
+      "type": "boolean",
+      "default": false,
+      "description": "Genomg\u00e5tt specifik str\u00e5lskyddsutbildning"
+    },
+    "training_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Datum f\u00f6r utbildning"
+    },
+    "authorized_methods": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Metoder personen \u00e4r auktoriserad f\u00f6r"
+    },
+    "notes": {
+      "type": "string",
+      "description": "\u00d6vriga anteckningar/certifikat"
+    }
+  },
+  "required": [
+    "clinic_id",
+    "employee_name"
+  ]
+}

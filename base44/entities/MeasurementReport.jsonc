@@ -1,0 +1,44 @@
+{
+  "name": "MeasurementReport",
+  "type": "object",
+  "properties": {
+    "machine_id": {
+      "type": "string",
+      "description": "L\u00e4nk till maskin"
+    },
+    "clinic_id": {
+      "type": "string",
+      "description": "Klinikens ID"
+    },
+    "measurement_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Datum f\u00f6r m\u00e4tning"
+    },
+    "measured_by": {
+      "type": "string",
+      "description": "Vem som utf\u00f6rde m\u00e4tningen"
+    },
+    "laser_power_measured": {
+      "type": "string",
+      "description": "Uppm\u00e4tt effekt"
+    },
+    "pulse_parameters": {
+      "type": "string",
+      "description": "Pulsparametrar (om relevant)"
+    },
+    "deviation_from_baseline": {
+      "type": "string",
+      "description": "Avvikelse fr\u00e5n grundv\u00e4rde/tidigare m\u00e4tning"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Kommentarer"
+    }
+  },
+  "required": [
+    "machine_id",
+    "clinic_id",
+    "measurement_date"
+  ]
+}

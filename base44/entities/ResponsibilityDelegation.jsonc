@@ -1,0 +1,31 @@
+{
+  "name": "ResponsibilityDelegation",
+  "type": "object",
+  "properties": {
+    "clinic_id": {
+      "type": "string"
+    },
+    "role_title": {
+      "type": "string",
+      "description": "T.ex. Verksamhetschef, Str\u00e5lskyddsansvarig"
+    },
+    "assigned_to_name": {
+      "type": "string",
+      "description": "Namn p\u00e5 ansvarig person"
+    },
+    "responsibilities": {
+      "type": "string",
+      "description": "Specifikt ansvarsomr\u00e5de"
+    },
+    "date_assigned": {
+      "type": "string",
+      "format": "date",
+      "description": "Datum d\u00e5 ansvaret tilldelades"
+    }
+  },
+  "required": [
+    "clinic_id",
+    "role_title",
+    "assigned_to_name"
+  ]
+}

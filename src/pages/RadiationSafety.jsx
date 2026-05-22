@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Plus, ShieldAlert, FileText, Activity, AlertTriangle, CheckCircle } from "lucide-react";
+import { Plus, ShieldAlert, FileText, Activity, AlertTriangle, CheckCircle, Users, Info, Settings2 } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 
 export default function RadiationSafety() {
@@ -35,6 +35,16 @@ export default function RadiationSafety() {
   const [treatmentModalOpen, setTreatmentModalOpen] = useState(false);
   const [currentTreatment, setCurrentTreatment] = useState({});
 
+  // New States
+  const [personnelModalOpen, setPersonnelModalOpen] = useState(false);
+  const [currentPersonnel, setCurrentPersonnel] = useState({});
+  const [delegationModalOpen, setDelegationModalOpen] = useState(false);
+  const [currentDelegation, setCurrentDelegation] = useState({});
+  const [clientInfoModalOpen, setClientInfoModalOpen] = useState(false);
+  const [currentClientInfo, setCurrentClientInfo] = useState({});
+  const [measurementModalOpen, setMeasurementModalOpen] = useState(false);
+  const [currentMeasurement, setCurrentMeasurement] = useState({});
+
   const isCustomer = user?.role === 'customer';
   const clinicId = isCustomer ? user.id : 'all'; // Simplified for demo, normally handled via selected customer
 
@@ -52,6 +62,26 @@ export default function RadiationSafety() {
   const { data: treatments = [] } = useQuery({
     queryKey: ['treatments', clinicId],
     queryFn: () => base44.entities.TreatmentDocumentation.filter(isCustomer ? { clinic_id: user.id } : {}),
+  });
+
+  const { data: personnel = [] } = useQuery({
+    queryKey: ['personnel', clinicId],
+    queryFn: () => base44.entities.PersonnelCompetence.filter(isCustomer ? { clinic_id: user.id } : {}),
+  });
+
+  const { data: delegations = [] } = useQuery({
+    queryKey: ['delegations', clinicId],
+    queryFn: () => base44.entities.ResponsibilityDelegation.filter(isCustomer ? { clinic_id: user.id } : {}),
+  });
+
+  const { data: clientInfos = [] } = useQuery({
+    queryKey: ['clientInfos', clinicId],
+    queryFn: () => base44.entities.ClientInformationSheet.filter(isCustomer ? { clinic_id: user.id } : {}),
+  });
+
+  const { data: measurements = [] } = useQuery({
+    queryKey: ['measurements', clinicId],
+    queryFn: () => base44.entities.MeasurementReport.filter(isCustomer ? { clinic_id: user.id } : {}),
   });
 
   // Mutations
@@ -94,6 +124,42 @@ export default function RadiationSafety() {
     }
   });
 
+  const savePersonnel = useMutation({
+    mutationFn: (data) => {
+      const payload = { ...data, clinic_id: user.id };
+      if (data.id) return base44.entities.PersonnelCompetence.update(data.id, payload);
+      return base44.entities.PersonnelCompetence.create(payload);
+    },
+    onSuccess: () => { queryClient.invalidateQueries(['personnel']); setPersonnelModalOpen(false); toast({ title: "Sparad" }); }
+  });
+
+  const saveDelegation = useMutation({
+    mutationFn: (data) => {
+      const payload = { ...data, clinic_id: user.id };
+      if (data.id) return base44.entities.ResponsibilityDelegation.update(data.id, payload);
+      return base44.entities.ResponsibilityDelegation.create(payload);
+    },
+    onSuccess: () => { queryClient.invalidateQueries(['delegations']); setDelegationModalOpen(false); toast({ title: "Sparad" }); }
+  });
+
+  const saveClientInfo = useMutation({
+    mutationFn: (data) => {
+      const payload = { ...data, clinic_id: user.id };
+      if (data.id) return base44.entities.ClientInformationSheet.update(data.id, payload);
+      return base44.entities.ClientInformationSheet.create(payload);
+    },
+    onSuccess: () => { queryClient.invalidateQueries(['clientInfos']); setClientInfoModalOpen(false); toast({ title: "Sparad" }); }
+  });
+
+  const saveMeasurement = useMutation({
+    mutationFn: (data) => {
+      const payload = { ...data, clinic_id: user.id };
+      if (data.id) return base44.entities.MeasurementReport.update(data.id, payload);
+      return base44.entities.MeasurementReport.create(payload);
+    },
+    onSuccess: () => { queryClient.invalidateQueries(['measurements']); setMeasurementModalOpen(false); toast({ title: "Sparad" }); }
+  });
+
   return (
     <div className="p-6 max-w-7xl mx-auto">
       <div className="mb-8">
@@ -107,12 +173,17 @@ export default function RadiationSafety() {
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid w-full grid-cols-4 lg:w-[600px]">
-          <TabsTrigger value="info">Information</TabsTrigger>
-          <TabsTrigger value="methods">Metoder</TabsTrigger>
-          <TabsTrigger value="incidents">Incidenter</TabsTrigger>
-          <TabsTrigger value="treatments">Dokumentation</TabsTrigger>
-        </TabsList>
+        <div className="overflow-x-auto pb-2 scrollbar-hide">
+          <TabsList className="inline-flex w-max min-w-full">
+            <TabsTrigger value="info">Information</TabsTrigger>
+            <TabsTrigger value="personnel">Personal & Ansvar</TabsTrigger>
+            <TabsTrigger value="client_info">Klientinfo</TabsTrigger>
+            <TabsTrigger value="methods">Metoder</TabsTrigger>
+            <TabsTrigger value="measurements">Mätrapporter</TabsTrigger>
+            <TabsTrigger value="treatments">Dokumentation</TabsTrigger>
+            <TabsTrigger value="incidents">Incidenter</TabsTrigger>
+          </TabsList>
+        </div>
 
         <TabsContent value="info" className="mt-6 space-y-4">
           <Card>
@@ -234,6 +305,93 @@ export default function RadiationSafety() {
               </Card>
             ))}
             {treatments.length === 0 && <p className="text-muted-foreground">Ingen dokumentation registrerad.</p>}
+          </div>
+        </TabsContent>
+
+        <TabsContent value="personnel" className="mt-6 space-y-8">
+          <div>
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-semibold">Ansvarsdelegering</h2>
+              <Button onClick={() => { setCurrentDelegation({}); setDelegationModalOpen(true); }} size="sm">
+                <Plus className="w-4 h-4 mr-2" /> Ny Delegering
+              </Button>
+            </div>
+            <div className="grid gap-4 md:grid-cols-2">
+              {delegations.map(del => (
+                <Card key={del.id} className="cursor-pointer hover:bg-muted/50" onClick={() => { setCurrentDelegation(del); setDelegationModalOpen(true); }}>
+                  <CardHeader className="py-3"><CardTitle className="text-md">{del.role_title}</CardTitle></CardHeader>
+                  <CardContent className="py-2">
+                    <p className="text-sm font-semibold">{del.assigned_to_name}</p>
+                    <p className="text-xs text-muted-foreground mt-1">{del.responsibilities}</p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-semibold">Personal & Kompetens</h2>
+              <Button onClick={() => { setCurrentPersonnel({}); setPersonnelModalOpen(true); }} size="sm">
+                <Plus className="w-4 h-4 mr-2" /> Lägg till
+              </Button>
+            </div>
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+              {personnel.map(pers => (
+                <Card key={pers.id} className="cursor-pointer hover:bg-muted/50" onClick={() => { setCurrentPersonnel(pers); setPersonnelModalOpen(true); }}>
+                  <CardHeader className="py-3">
+                    <CardTitle className="text-md flex items-center gap-2"><Users className="w-4 h-4" />{pers.employee_name}</CardTitle>
+                    <CardDescription>{pers.role}</CardDescription>
+                  </CardHeader>
+                  <CardContent className="py-2">
+                    {pers.radiation_safety_training && <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">Strålskyddsutbildad</span>}
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="client_info" className="mt-6">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-xl font-semibold">Klientinformationsblad</h2>
+            <Button onClick={() => { setCurrentClientInfo({}); setClientInfoModalOpen(true); }}>
+              <Plus className="w-4 h-4 mr-2" /> Nytt Blad
+            </Button>
+          </div>
+          <div className="grid gap-4 md:grid-cols-2">
+            {clientInfos.map(info => (
+              <Card key={info.id} className="cursor-pointer hover:bg-muted/50" onClick={() => { setCurrentClientInfo(info); setClientInfoModalOpen(true); }}>
+                <CardHeader className="py-3">
+                  <CardTitle className="text-md flex items-center gap-2"><Info className="w-4 h-4 text-primary" />{info.title}</CardTitle>
+                  <CardDescription>Version {info.version}</CardDescription>
+                </CardHeader>
+              </Card>
+            ))}
+          </div>
+        </TabsContent>
+
+        <TabsContent value="measurements" className="mt-6">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-xl font-semibold">Mätrapporter (Laser/IPL)</h2>
+            <Button onClick={() => { setCurrentMeasurement({}); setMeasurementModalOpen(true); }}>
+              <Plus className="w-4 h-4 mr-2" /> Ny Mätning
+            </Button>
+          </div>
+          <div className="grid gap-4 md:grid-cols-2">
+            {measurements.map(meas => (
+              <Card key={meas.id} className="cursor-pointer hover:bg-muted/50" onClick={() => { setCurrentMeasurement(meas); setMeasurementModalOpen(true); }}>
+                <CardHeader className="py-3">
+                  <div className="flex justify-between items-center">
+                    <CardTitle className="text-md flex items-center gap-2"><Settings2 className="w-4 h-4 text-primary" />Mätning</CardTitle>
+                    <span className="text-xs text-muted-foreground">{meas.measurement_date ? new Date(meas.measurement_date).toLocaleDateString() : ''}</span>
+                  </div>
+                </CardHeader>
+                <CardContent className="py-2">
+                  <p className="text-sm">Effekt: {meas.laser_power_measured}</p>
+                </CardContent>
+              </Card>
+            ))}
           </div>
         </TabsContent>
       </Tabs>
@@ -375,6 +533,64 @@ export default function RadiationSafety() {
             <Button onClick={() => saveTreatment.mutate(currentTreatment)} className="w-full" disabled={saveTreatment.isPending}>
               Spara Dokumentation
             </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Delegation Modal */}
+      <Dialog open={delegationModalOpen} onOpenChange={setDelegationModalOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader><DialogTitle>{currentDelegation.id ? 'Redigera Delegering' : 'Ny Delegering'}</DialogTitle></DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="grid gap-2"><Label>Roll/Titel</Label><Input value={currentDelegation.role_title || ''} onChange={e => setCurrentDelegation({...currentDelegation, role_title: e.target.value})} placeholder="t.ex. Strålskyddsansvarig" /></div>
+            <div className="grid gap-2"><Label>Namn på ansvarig</Label><Input value={currentDelegation.assigned_to_name || ''} onChange={e => setCurrentDelegation({...currentDelegation, assigned_to_name: e.target.value})} /></div>
+            <div className="grid gap-2"><Label>Datum tilldelat</Label><Input type="date" value={currentDelegation.date_assigned || ''} onChange={e => setCurrentDelegation({...currentDelegation, date_assigned: e.target.value})} /></div>
+            <div className="grid gap-2"><Label>Ansvarsområden</Label><Textarea value={currentDelegation.responsibilities || ''} onChange={e => setCurrentDelegation({...currentDelegation, responsibilities: e.target.value})} /></div>
+            <Button onClick={() => saveDelegation.mutate(currentDelegation)} className="w-full">Spara</Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Personnel Modal */}
+      <Dialog open={personnelModalOpen} onOpenChange={setPersonnelModalOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader><DialogTitle>{currentPersonnel.id ? 'Redigera Personal' : 'Ny Personal'}</DialogTitle></DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="grid gap-2"><Label>Namn</Label><Input value={currentPersonnel.employee_name || ''} onChange={e => setCurrentPersonnel({...currentPersonnel, employee_name: e.target.value})} /></div>
+            <div className="grid gap-2"><Label>Yrkesroll</Label><Input value={currentPersonnel.role || ''} onChange={e => setCurrentPersonnel({...currentPersonnel, role: e.target.value})} placeholder="t.ex. Hudterapeut" /></div>
+            <div className="flex items-center gap-2 mt-2"><Checkbox id="rad_saf" checked={currentPersonnel.radiation_safety_training || false} onCheckedChange={c => setCurrentPersonnel({...currentPersonnel, radiation_safety_training: c})} /><Label htmlFor="rad_saf">Har genomgått strålskyddsutbildning</Label></div>
+            <div className="grid gap-2"><Label>Datum för utbildning</Label><Input type="date" value={currentPersonnel.training_date || ''} onChange={e => setCurrentPersonnel({...currentPersonnel, training_date: e.target.value})} /></div>
+            <Button onClick={() => savePersonnel.mutate(currentPersonnel)} className="w-full">Spara</Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Client Info Modal */}
+      <Dialog open={clientInfoModalOpen} onOpenChange={setClientInfoModalOpen}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader><DialogTitle>{currentClientInfo.id ? 'Redigera Informationsblad' : 'Nytt Informationsblad'}</DialogTitle></DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="grid gap-2"><Label>Titel</Label><Input value={currentClientInfo.title || ''} onChange={e => setCurrentClientInfo({...currentClientInfo, title: e.target.value})} placeholder="t.ex. Information om Laserbehandling" /></div>
+            <div className="grid gap-2"><Label>Version</Label><Input value={currentClientInfo.version || ''} onChange={e => setCurrentClientInfo({...currentClientInfo, version: e.target.value})} placeholder="1.0" /></div>
+            <div className="grid gap-2"><Label>Behandlingsbeskrivning</Label><Textarea value={currentClientInfo.treatment_description || ''} onChange={e => setCurrentClientInfo({...currentClientInfo, treatment_description: e.target.value})} /></div>
+            <div className="grid gap-2"><Label>Risker och biverkningar</Label><Textarea value={currentClientInfo.risks_and_side_effects || ''} onChange={e => setCurrentClientInfo({...currentClientInfo, risks_and_side_effects: e.target.value})} /></div>
+            <div className="grid gap-2"><Label>Eftervårdsinstruktioner</Label><Textarea value={currentClientInfo.aftercare_instructions || ''} onChange={e => setCurrentClientInfo({...currentClientInfo, aftercare_instructions: e.target.value})} /></div>
+            <Button onClick={() => saveClientInfo.mutate(currentClientInfo)} className="w-full">Spara</Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Measurement Modal */}
+      <Dialog open={measurementModalOpen} onOpenChange={setMeasurementModalOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader><DialogTitle>{currentMeasurement.id ? 'Redigera Mätrapport' : 'Ny Mätrapport'}</DialogTitle></DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="grid gap-2"><Label>Datum</Label><Input type="date" value={currentMeasurement.measurement_date || ''} onChange={e => setCurrentMeasurement({...currentMeasurement, measurement_date: e.target.value})} /></div>
+            <div className="grid gap-2"><Label>Uppmätt effekt (J/cm2 etc)</Label><Input value={currentMeasurement.laser_power_measured || ''} onChange={e => setCurrentMeasurement({...currentMeasurement, laser_power_measured: e.target.value})} /></div>
+            <div className="grid gap-2"><Label>Pulsparametrar</Label><Input value={currentMeasurement.pulse_parameters || ''} onChange={e => setCurrentMeasurement({...currentMeasurement, pulse_parameters: e.target.value})} /></div>
+            <div className="grid gap-2"><Label>Avvikelse från grundvärde</Label><Input value={currentMeasurement.deviation_from_baseline || ''} onChange={e => setCurrentMeasurement({...currentMeasurement, deviation_from_baseline: e.target.value})} /></div>
+            <div className="grid gap-2"><Label>Utförd av</Label><Input value={currentMeasurement.measured_by || ''} onChange={e => setCurrentMeasurement({...currentMeasurement, measured_by: e.target.value})} /></div>
+            <Button onClick={() => saveMeasurement.mutate(currentMeasurement)} className="w-full">Spara</Button>
           </div>
         </DialogContent>
       </Dialog>

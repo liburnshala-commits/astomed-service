@@ -1,0 +1,34 @@
+{
+  "name": "ClientInformationSheet",
+  "type": "object",
+  "properties": {
+    "clinic_id": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string",
+      "description": "Titel p\u00e5 informationsbladet, t.ex. H\u00e5rborttagning Laser"
+    },
+    "treatment_description": {
+      "type": "string",
+      "description": "Information om behandlingen"
+    },
+    "risks_and_side_effects": {
+      "type": "string",
+      "description": "Risker och biverkningar"
+    },
+    "aftercare_instructions": {
+      "type": "string",
+      "description": "Efterv\u00e5rdsinstruktioner"
+    },
+    "version": {
+      "type": "string",
+      "default": "1.0",
+      "description": "Versionsnummer"
+    }
+  },
+  "required": [
+    "clinic_id",
+    "title"
+  ]
+}
