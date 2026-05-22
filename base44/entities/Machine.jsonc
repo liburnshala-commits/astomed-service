@@ -153,6 +153,34 @@
           }
         }
       }
+    },
+    "commissioning_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Datum d\u00e5 anordningen togs i bruk (SSMFS 2026:1)"
+    },
+    "radiation_source_type": {
+      "type": "string",
+      "description": "Typ av str\u00e5lk\u00e4lla (t.ex. Laser klass 4, IPL, EMF, Ultraljud)"
+    },
+    "radiation_safety_actions": {
+      "type": "array",
+      "description": "\u00c5tg\u00e4rder av betydelse fr\u00e5n str\u00e5lskyddssynpunkt",
+      "items": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date"
+          },
+          "action": {
+            "type": "string"
+          },
+          "notes": {
+            "type": "string"
+          }
+        }
+      }
     }
   },
   "required": [

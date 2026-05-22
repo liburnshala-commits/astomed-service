@@ -24,6 +24,7 @@ import DeliveryControls from './pages/DeliveryControls';
 import DeliveryControlForm from './pages/DeliveryControlForm';
 import FunctionControls from './pages/FunctionControls';
 import FunctionControlForm from './pages/FunctionControlForm';
+import RadiationSafety from './pages/RadiationSafety';
 
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
@@ -122,6 +123,7 @@ const AuthenticatedApp = () => {
         <Route path="/DeliveryControlForm" element={<AnimatedPage><DeliveryControlForm /></AnimatedPage>} />
         <Route path="/FunctionControls" element={<AnimatedPage><LayoutWrapper currentPageName="FunctionControls"><FunctionControls /></LayoutWrapper></AnimatedPage>} />
         <Route path="/FunctionControlForm" element={<AnimatedPage><FunctionControlForm /></AnimatedPage>} />
+        <Route path="/RadiationSafety" element={<AnimatedPage><LayoutWrapper currentPageName="RadiationSafety"><RadiationSafety /></LayoutWrapper></AnimatedPage>} />
         {Object.entries(Pages).map(([path, Page]) => (
           <Route
             key={path}

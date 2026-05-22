@@ -1,0 +1,58 @@
+{
+  "name": "TreatmentDocumentation",
+  "type": "object",
+  "properties": {
+    "patient_id": {
+      "type": "string",
+      "description": "Patientens ID/Referens (anonymiserad vid behov)"
+    },
+    "clinic_id": {
+      "type": "string",
+      "description": "Klinikens/Kundens ID"
+    },
+    "machine_id": {
+      "type": "string",
+      "description": "L\u00e4nk till anv\u00e4nd maskin"
+    },
+    "method_id": {
+      "type": "string",
+      "description": "L\u00e4nk till till\u00e4mpad metodbeskrivning"
+    },
+    "treatment_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Tidpunkt f\u00f6r behandlingen"
+    },
+    "individual_assessment_done": {
+      "type": "boolean",
+      "default": false,
+      "description": "Individuell bed\u00f6mning utf\u00f6rd och dokumenterad"
+    },
+    "pre_treatment_info_given": {
+      "type": "boolean",
+      "default": false,
+      "description": "Skriftlig och muntlig information har getts till kunden"
+    },
+    "equipment_settings_used": {
+      "type": "string",
+      "description": "Vilka inst\u00e4llningar som anv\u00e4ndes under behandlingen"
+    },
+    "deviations": {
+      "type": "string",
+      "description": "Avvikande h\u00e4ndelser eller \u00e4ndringar fr\u00e5n standardinst\u00e4llningar"
+    },
+    "protective_equipment_used": {
+      "type": "boolean",
+      "default": false,
+      "description": "Skyddsutrustning anv\u00e4ndes enligt metodbeskrivning"
+    },
+    "signature": {
+      "type": "string",
+      "description": "Signatur av den som utf\u00f6rde behandlingen"
+    }
+  },
+  "required": [
+    "clinic_id",
+    "treatment_date"
+  ]
+}

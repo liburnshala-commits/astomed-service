@@ -1,0 +1,58 @@
+{
+  "name": "MethodDescription",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Namn p\u00e5 metoden/behandlingen"
+    },
+    "description": {
+      "type": "string",
+      "description": "Kort beskrivning av metoden"
+    },
+    "authorized_roles": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Vilka personer som ska utf\u00f6ra varje enskilt moment"
+    },
+    "required_competence": {
+      "type": "string",
+      "description": "Vilken kompetens som kr\u00e4vs f\u00f6r att utf\u00f6ra behandlingen"
+    },
+    "equipment_settings": {
+      "type": "string",
+      "description": "Hur den tekniska anordningen ska st\u00e4llas in"
+    },
+    "exposure_times": {
+      "type": "string",
+      "description": "Vilka exponeringstider som ska anv\u00e4ndas"
+    },
+    "risk_assessment": {
+      "type": "string",
+      "description": "Vilka riskbed\u00f6mningar som ska g\u00f6ras inf\u00f6r varje behandlingstillf\u00e4lle"
+    },
+    "customer_info": {
+      "type": "string",
+      "description": "Vilken information som ska ges till den som avser att genomg\u00e5 behandlingen"
+    },
+    "protective_equipment": {
+      "type": "string",
+      "description": "Vilken skyddsutrustning som ska anv\u00e4ndas"
+    },
+    "clinic_id": {
+      "type": "string",
+      "description": "Klinikens/Kundens ID"
+    },
+    "is_routine": {
+      "type": "boolean",
+      "default": false,
+      "description": "Om detta \u00e4r en allm\u00e4n rutin ist\u00e4llet f\u00f6r en specifik metod"
+    }
+  },
+  "required": [
+    "title",
+    "clinic_id"
+  ]
+}

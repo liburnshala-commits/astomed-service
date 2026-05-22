@@ -1,0 +1,64 @@
+{
+  "name": "IncidentReport",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Kort titel p\u00e5 h\u00e4ndelsen"
+    },
+    "incident_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Datum och tid f\u00f6r h\u00e4ndelsen"
+    },
+    "location": {
+      "type": "string",
+      "description": "Var h\u00e4ndelsen intr\u00e4ffade"
+    },
+    "description": {
+      "type": "string",
+      "description": "Kort beskrivning av h\u00e4ndelsef\u00f6rloppet"
+    },
+    "actions_taken": {
+      "type": "string",
+      "description": "\u00c5tg\u00e4rder som vidtagits f\u00f6r att f\u00f6rhindra att det h\u00e4nder igen"
+    },
+    "reported_to_ssm": {
+      "type": "boolean",
+      "default": false,
+      "description": "Har h\u00e4ndelsen rapporterats till Str\u00e5ls\u00e4kerhetsmyndigheten?"
+    },
+    "reported_to_other": {
+      "type": "string",
+      "description": "Har h\u00e4ndelsen rapporterats till annan instans (t.ex. L\u00e4kemedelsverket)?"
+    },
+    "machine_id": {
+      "type": "string",
+      "description": "L\u00e4nk till inblandad maskin (om relevant)"
+    },
+    "treatment_id": {
+      "type": "string",
+      "description": "L\u00e4nk till specifik behandlingsdokumentation (om relevant)"
+    },
+    "clinic_id": {
+      "type": "string",
+      "description": "Klinikens/Kundens ID"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "open",
+        "investigated",
+        "closed"
+      ],
+      "default": "open",
+      "description": "Status p\u00e5 utredningen"
+    }
+  },
+  "required": [
+    "title",
+    "incident_date",
+    "description",
+    "clinic_id"
+  ]
+}
