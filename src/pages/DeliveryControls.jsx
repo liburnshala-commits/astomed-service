@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { createPageUrl } from "@/utils";
-import { ChevronLeft, Plus, Box, ChevronRight } from "lucide-react";
+import { ChevronLeft, Plus, Box, ChevronRight, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { format } from "date-fns";
@@ -11,6 +11,18 @@ export default function DeliveryControls() {
   const [controls, setControls] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+
+  const handleDelete = async (e, id) => {
+    e.stopPropagation();
+    if (window.confirm("Är du säker på att du vill ta bort denna leveranskontroll?")) {
+      try {
+        await base44.entities.DeliveryControl.delete(id);
+        setControls(prev => prev.filter(c => c.id !== id));
+      } catch (err) {
+        alert("Kunde inte ta bort kontrollen.");
+      }
+    }
+  };
 
   useEffect(() => {
     const load = async () => {
@@ -73,6 +85,9 @@ export default function DeliveryControls() {
                        <span className={`text-xs font-medium px-2 py-1 rounded ${c.delivery_control_status === 'Ej godkänd' ? 'text-red-600 bg-red-50' : 'text-green-600 bg-green-50'}`}>
                           {c.delivery_control_status || "Godkänd"}
                        </span>
+                       <button onClick={(e) => handleDelete(e, c.id)} className="text-red-500 hover:text-red-700 p-1 rounded hover:bg-red-50 transition-colors" title="Ta bort">
+                          <Trash2 className="w-4 h-4" />
+                       </button>
                        <ChevronRight className="w-4 h-4 text-slate-400" />
                     </div>
                     {c.report_pdf_url && (
