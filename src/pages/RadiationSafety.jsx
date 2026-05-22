@@ -160,6 +160,16 @@ export default function RadiationSafety() {
     onSuccess: () => { queryClient.invalidateQueries(['measurements']); setMeasurementModalOpen(false); toast({ title: "Sparad" }); }
   });
 
+  const deleteDelegation = useMutation({
+    mutationFn: (id) => base44.entities.ResponsibilityDelegation.delete(id),
+    onSuccess: () => { queryClient.invalidateQueries(['delegations']); setDelegationModalOpen(false); toast({ title: "Borttagen" }); }
+  });
+
+  const deletePersonnel = useMutation({
+    mutationFn: (id) => base44.entities.PersonnelCompetence.delete(id),
+    onSuccess: () => { queryClient.invalidateQueries(['personnel']); setPersonnelModalOpen(false); toast({ title: "Borttagen" }); }
+  });
+
   return (
     <div className="p-6 max-w-7xl mx-auto">
       <div className="mb-8">
@@ -620,7 +630,12 @@ export default function RadiationSafety() {
                 <p className="text-xs text-green-600 mt-2 ml-6">Godkänd: {currentDelegation.approval_date}</p>
               )}
             </div>
-            <Button onClick={() => saveDelegation.mutate(currentDelegation)} className="w-full">Spara</Button>
+            <div className="flex gap-2 pt-4 border-t">
+              <Button onClick={() => saveDelegation.mutate(currentDelegation)} className="flex-1">Spara</Button>
+              {currentDelegation.id && (
+                <Button variant="destructive" onClick={() => { if (confirm('Ta bort denna delegering?')) deleteDelegation.mutate(currentDelegation.id); }} className="flex-1">Ta bort</Button>
+              )}
+            </div>
           </div>
         </DialogContent>
       </Dialog>
@@ -634,7 +649,12 @@ export default function RadiationSafety() {
             <div className="grid gap-2"><Label>Yrkesroll</Label><Input value={currentPersonnel.role || ''} onChange={e => setCurrentPersonnel({...currentPersonnel, role: e.target.value})} placeholder="t.ex. Hudterapeut" /></div>
             <div className="flex items-center gap-2 mt-2"><Checkbox id="rad_saf" checked={currentPersonnel.radiation_safety_training || false} onCheckedChange={c => setCurrentPersonnel({...currentPersonnel, radiation_safety_training: c})} /><Label htmlFor="rad_saf">Har genomgått strålskyddsutbildning</Label></div>
             <div className="grid gap-2"><Label>Datum för utbildning</Label><Input type="date" value={currentPersonnel.training_date || ''} onChange={e => setCurrentPersonnel({...currentPersonnel, training_date: e.target.value})} /></div>
-            <Button onClick={() => savePersonnel.mutate(currentPersonnel)} className="w-full">Spara</Button>
+            <div className="flex gap-2 pt-4 border-t">
+              <Button onClick={() => savePersonnel.mutate(currentPersonnel)} className="flex-1">Spara</Button>
+              {currentPersonnel.id && (
+                <Button variant="destructive" onClick={() => { if (confirm('Ta bort denna person?')) deletePersonnel.mutate(currentPersonnel.id); }} className="flex-1">Ta bort</Button>
+              )}
+            </div>
           </div>
         </DialogContent>
       </Dialog>
