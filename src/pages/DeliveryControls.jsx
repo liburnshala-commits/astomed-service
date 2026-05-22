@@ -53,10 +53,10 @@ export default function DeliveryControls() {
   if (loading) return <div className="p-6">Laddar...</div>;
 
   return (
-    <div className="min-h-screen bg-slate-50 pb-20">
-       <div className="bg-[#0088ff] text-white p-4">
+    <div className="min-h-screen bg-background pb-20">
+       <div className="bg-primary text-primary-foreground p-4">
          <div className="flex items-center gap-2 mb-2">
-            <button onClick={() => navigate(-1)} className="flex items-center gap-1 text-white hover:opacity-80">
+            <button onClick={() => navigate(-1)} className="flex items-center gap-1 text-primary-foreground hover:opacity-80">
               <ChevronLeft className="w-5 h-5" /> Tillbaka
             </button>
          </div>
@@ -64,7 +64,7 @@ export default function DeliveryControls() {
          <p className="text-sm opacity-90">{controls.length} kontroller</p>
        </div>
        <div className="p-4 space-y-3 max-w-lg mx-auto">
-         <Button variant="outline" className="w-full bg-white text-[#0088ff] border-blue-200 justify-center h-12 rounded-xl mb-2" asChild>
+         <Button variant="outline" className="w-full bg-background text-primary border-border justify-center h-12 rounded-xl mb-2" asChild>
            <Link to={createPageUrl("DeliveryControlForm")}>
              <Plus className="w-4 h-4 mr-2" /> Ny leveranskontroll
            </Link>
@@ -73,7 +73,7 @@ export default function DeliveryControls() {
          {controls.map(c => (
             <Card key={c.id} className="cursor-pointer hover:shadow-md transition-shadow border-slate-200 rounded-xl">
                <CardContent className="p-4 flex items-center gap-3">
-                 <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-[#0088ff]">
+                 <div className="w-10 h-10 rounded-full bg-accent flex items-center justify-center text-accent-foreground">
                     <Box className="w-5 h-5" />
                  </div>
                  <div className="flex-1">
