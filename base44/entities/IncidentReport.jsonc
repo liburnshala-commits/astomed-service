@@ -28,9 +28,14 @@
       "default": false,
       "description": "Har h\u00e4ndelsen rapporterats till Str\u00e5ls\u00e4kerhetsmyndigheten?"
     },
+    "reported_to_lakemedelsverket": {
+      "type": "boolean",
+      "default": false,
+      "description": "Har h\u00e4ndelsen rapporterats till L\u00e4kemedelsverket?"
+    },
     "reported_to_other": {
       "type": "string",
-      "description": "Har h\u00e4ndelsen rapporterats till annan instans (t.ex. L\u00e4kemedelsverket)?"
+      "description": "Har h\u00e4ndelsen rapporterats till annan instans?"
     },
     "machine_id": {
       "type": "string",

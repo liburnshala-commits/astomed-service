@@ -92,6 +92,9 @@ export default function NotificationBell() {
         case "PublicServiceLead":
           path = "PublicServiceLeads";
           break;
+        case "IncidentReport":
+          path = notification.related_entity_id ? `RadiationSafety?incidentId=${notification.related_entity_id}` : "RadiationSafety";
+          break;
       }
       if (path) {
         navigate(createPageUrl(path));

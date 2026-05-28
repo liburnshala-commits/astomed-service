@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import { useAuth } from '@/lib/AuthContext';
@@ -19,10 +19,13 @@ import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/components/ui/use-toast";
 import AnnualWheel from '@/components/safety/AnnualWheel';
 
+import { useSearchParams } from 'react-router-dom';
+
 export default function RadiationSafety() {
   const { user } = useAuth();
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const [searchParams] = useSearchParams();
   const [activeTab, setActiveTab] = useState("methods");
   
   // Method State
@@ -111,6 +114,18 @@ export default function RadiationSafety() {
     queryKey: ['annualAudits', clinicId],
     queryFn: () => base44.entities.AnnualAudit.filter(clinicId !== 'all' ? { clinic_id: clinicId } : {}),
   });
+
+  React.useEffect(() => {
+    const incidentId = searchParams.get('incidentId');
+    if (incidentId && incidents.length > 0) {
+      const incident = incidents.find(i => i.id === incidentId);
+      if (incident) {
+        setActiveTab("incidents");
+        setCurrentIncident(incident);
+        setIncidentModalOpen(true);
+      }
+    }
+  }, [searchParams, incidents]);
 
   // Gamification & Progress
   const openIncidentsCount = incidents.filter(i => i.status !== 'closed').length;
@@ -850,10 +865,16 @@ export default function RadiationSafety() {
               <Label>Vidtagna åtgärder</Label>
               <Textarea value={currentIncident.actions_taken || ''} onChange={e => setCurrentIncident({...currentIncident, actions_taken: e.target.value})} />
             </div>
-            <div className="flex gap-4">
-              <div className="flex items-center gap-2">
-                <Checkbox id="ssm" checked={currentIncident.reported_to_ssm || false} onCheckedChange={c => setCurrentIncident({...currentIncident, reported_to_ssm: c})} />
-                <Label htmlFor="ssm">Rapporterad till SSM</Label>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2 p-3 border rounded-md bg-muted/20">
+                <div className="flex items-center gap-2">
+                  <Checkbox id="ssm" checked={currentIncident.reported_to_ssm || false} onCheckedChange={c => setCurrentIncident({...currentIncident, reported_to_ssm: c})} />
+                  <Label htmlFor="ssm">Rapporterad till SSM</Label>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Checkbox id="lakemedelsverket" checked={currentIncident.reported_to_lakemedelsverket || false} onCheckedChange={c => setCurrentIncident({...currentIncident, reported_to_lakemedelsverket: c})} />
+                  <Label htmlFor="lakemedelsverket">Rapporterad till Läkemedelsverket</Label>
+                </div>
               </div>
               <div className="flex items-center gap-2">
                 <Label>Status:</Label>
