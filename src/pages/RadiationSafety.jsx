@@ -21,6 +21,34 @@ import AnnualWheel from '@/components/safety/AnnualWheel';
 
 import { useSearchParams } from 'react-router-dom';
 
+const useDraftState = (key, defaultStateFn) => {
+  const [state, setState] = useState({});
+  
+  useEffect(() => {
+    if (state && !state.id && Object.keys(state).length > 0) {
+      localStorage.setItem(key, JSON.stringify(state));
+    }
+  }, [state, key]);
+
+  const openNew = () => {
+    try {
+      const draft = localStorage.getItem(key);
+      if (draft) {
+        setState(JSON.parse(draft));
+        return;
+      }
+    } catch(e) {}
+    setState(defaultStateFn());
+  };
+
+  const clearDraft = () => {
+    localStorage.removeItem(key);
+    setState(defaultStateFn());
+  };
+
+  return [state, setState, openNew, clearDraft];
+};
+
 export default function RadiationSafety() {
   const { user } = useAuth();
   const { toast } = useToast();
@@ -30,29 +58,29 @@ export default function RadiationSafety() {
   
   // Method State
   const [methodModalOpen, setMethodModalOpen] = useState(false);
-  const [currentMethod, setCurrentMethod] = useState({});
+  const [currentMethod, setCurrentMethod, openNewMethod, clearMethodDraft] = useDraftState('rs_draft_method', () => ({}));
 
   // Incident State
   const [incidentModalOpen, setIncidentModalOpen] = useState(false);
-  const [currentIncident, setCurrentIncident] = useState({});
+  const [currentIncident, setCurrentIncident, openNewIncident, clearIncidentDraft] = useDraftState('rs_draft_incident', () => ({ status: 'open' }));
 
   // Treatment State
   const [treatmentModalOpen, setTreatmentModalOpen] = useState(false);
-  const [currentTreatment, setCurrentTreatment] = useState({});
+  const [currentTreatment, setCurrentTreatment, openNewTreatment, clearTreatmentDraft] = useDraftState('rs_draft_treatment', () => ({}));
 
   // New States
   const [personnelModalOpen, setPersonnelModalOpen] = useState(false);
-  const [currentPersonnel, setCurrentPersonnel] = useState({});
+  const [currentPersonnel, setCurrentPersonnel, openNewPersonnel, clearPersonnelDraft] = useDraftState('rs_draft_personnel', () => ({}));
   const [delegationModalOpen, setDelegationModalOpen] = useState(false);
-  const [currentDelegation, setCurrentDelegation] = useState({});
+  const [currentDelegation, setCurrentDelegation, openNewDelegation, clearDelegationDraft] = useDraftState('rs_draft_delegation', () => ({}));
   const [clientInfoModalOpen, setClientInfoModalOpen] = useState(false);
-  const [currentClientInfo, setCurrentClientInfo] = useState({});
+  const [currentClientInfo, setCurrentClientInfo, openNewClientInfo, clearClientInfoDraft] = useDraftState('rs_draft_clientInfo', () => ({}));
   const [measurementModalOpen, setMeasurementModalOpen] = useState(false);
-  const [currentMeasurement, setCurrentMeasurement] = useState({});
+  const [currentMeasurement, setCurrentMeasurement, openNewMeasurement, clearMeasurementDraft] = useDraftState('rs_draft_measurement', () => ({}));
   const [locationModalOpen, setLocationModalOpen] = useState(false);
-  const [currentLocationCheck, setCurrentLocationCheck] = useState({});
+  const [currentLocationCheck, setCurrentLocationCheck, openNewLocationCheck, clearLocationCheckDraft] = useDraftState('rs_draft_locationCheck', () => ({}));
   const [auditModalOpen, setAuditModalOpen] = useState(false);
-  const [currentAudit, setCurrentAudit] = useState({});
+  const [currentAudit, setCurrentAudit, openNewAudit, clearAuditDraft] = useDraftState('rs_draft_audit', () => ({}));
 
   const [selectedAdminClinicId, setSelectedAdminClinicId] = useState('all');
   const isCustomer = user?.role === 'customer';
@@ -147,9 +175,13 @@ export default function RadiationSafety() {
   };
 
   // Mutations
-  const getPayload = (data) => {
+  const getPayload = (data, dateField = null, isDateTime = false) => {
     const targetClinicId = clinicId !== 'all' ? clinicId : (data.clinic_id || user.id);
-    return { ...data, clinic_id: targetClinicId };
+    const payload = { ...data, clinic_id: targetClinicId };
+    if (!data.id && dateField) {
+      payload[dateField] = isDateTime ? new Date().toISOString() : new Date().toISOString().split('T')[0];
+    }
+    return payload;
   };
 
   const saveMethod = useMutation({
@@ -161,52 +193,55 @@ export default function RadiationSafety() {
     onSuccess: () => {
       queryClient.invalidateQueries(['methods']);
       setMethodModalOpen(false);
+      clearMethodDraft();
       toast({ title: "Sparad", description: "Metodbeskrivningen har sparats." });
     }
   });
 
   const saveIncident = useMutation({
     mutationFn: (data) => {
-      const payload = getPayload(data);
+      const payload = getPayload(data, 'incident_date', true);
       if (data.id) return base44.entities.IncidentReport.update(data.id, payload);
       return base44.entities.IncidentReport.create(payload);
     },
     onSuccess: () => {
       queryClient.invalidateQueries(['incidents']);
       setIncidentModalOpen(false);
+      clearIncidentDraft();
       toast({ title: "Sparad", description: "Incidenten har sparats." });
     }
   });
 
   const saveTreatment = useMutation({
     mutationFn: (data) => {
-      const payload = getPayload(data);
+      const payload = getPayload(data, 'treatment_date', true);
       if (data.id) return base44.entities.TreatmentDocumentation.update(data.id, payload);
       return base44.entities.TreatmentDocumentation.create(payload);
     },
     onSuccess: () => {
       queryClient.invalidateQueries(['treatments']);
       setTreatmentModalOpen(false);
+      clearTreatmentDraft();
       toast({ title: "Sparad", description: "Dokumentationen har sparats." });
     }
   });
 
   const savePersonnel = useMutation({
     mutationFn: (data) => {
-      const payload = getPayload(data);
+      const payload = getPayload(data, 'training_date', false);
       if (data.id) return base44.entities.PersonnelCompetence.update(data.id, payload);
       return base44.entities.PersonnelCompetence.create(payload);
     },
-    onSuccess: () => { queryClient.invalidateQueries(['personnel']); setPersonnelModalOpen(false); toast({ title: "Sparad" }); }
+    onSuccess: () => { queryClient.invalidateQueries(['personnel']); setPersonnelModalOpen(false); clearPersonnelDraft(); toast({ title: "Sparad" }); }
   });
 
   const saveDelegation = useMutation({
     mutationFn: (data) => {
-      const payload = getPayload(data);
+      const payload = getPayload(data, 'date_assigned', false);
       if (data.id) return base44.entities.ResponsibilityDelegation.update(data.id, payload);
       return base44.entities.ResponsibilityDelegation.create(payload);
     },
-    onSuccess: () => { queryClient.invalidateQueries(['delegations']); setDelegationModalOpen(false); toast({ title: "Sparad" }); }
+    onSuccess: () => { queryClient.invalidateQueries(['delegations']); setDelegationModalOpen(false); clearDelegationDraft(); toast({ title: "Sparad" }); }
   });
 
   const saveClientInfo = useMutation({
@@ -215,34 +250,34 @@ export default function RadiationSafety() {
       if (data.id) return base44.entities.ClientInformationSheet.update(data.id, payload);
       return base44.entities.ClientInformationSheet.create(payload);
     },
-    onSuccess: () => { queryClient.invalidateQueries(['clientInfos']); setClientInfoModalOpen(false); toast({ title: "Sparad" }); }
+    onSuccess: () => { queryClient.invalidateQueries(['clientInfos']); setClientInfoModalOpen(false); clearClientInfoDraft(); toast({ title: "Sparad" }); }
   });
 
   const saveMeasurement = useMutation({
     mutationFn: (data) => {
-      const payload = getPayload(data);
+      const payload = getPayload(data, 'measurement_date', false);
       if (data.id) return base44.entities.MeasurementReport.update(data.id, payload);
       return base44.entities.MeasurementReport.create(payload);
     },
-    onSuccess: () => { queryClient.invalidateQueries(['measurements']); setMeasurementModalOpen(false); toast({ title: "Sparad" }); }
+    onSuccess: () => { queryClient.invalidateQueries(['measurements']); setMeasurementModalOpen(false); clearMeasurementDraft(); toast({ title: "Sparad" }); }
   });
 
   const saveLocationCheck = useMutation({
     mutationFn: (data) => {
-      const payload = getPayload(data);
+      const payload = getPayload(data, 'check_date', false);
       if (data.id) return base44.entities.LocationSafetyCheck.update(data.id, payload);
       return base44.entities.LocationSafetyCheck.create(payload);
     },
-    onSuccess: () => { queryClient.invalidateQueries(['locationChecks']); setLocationModalOpen(false); toast({ title: "Sparad" }); }
+    onSuccess: () => { queryClient.invalidateQueries(['locationChecks']); setLocationModalOpen(false); clearLocationCheckDraft(); toast({ title: "Sparad" }); }
   });
 
   const saveAudit = useMutation({
     mutationFn: (data) => {
-      const payload = getPayload(data);
+      const payload = getPayload(data, 'audit_date', false);
       if (data.id) return base44.entities.AnnualAudit.update(data.id, payload);
       return base44.entities.AnnualAudit.create(payload);
     },
-    onSuccess: () => { queryClient.invalidateQueries(['annualAudits']); setAuditModalOpen(false); toast({ title: "Sparad" }); }
+    onSuccess: () => { queryClient.invalidateQueries(['annualAudits']); setAuditModalOpen(false); clearAuditDraft(); toast({ title: "Sparad" }); }
   });
 
   const deleteDelegation = useMutation({
@@ -390,7 +425,7 @@ export default function RadiationSafety() {
 
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-semibold">Dina Metoder</h2>
-              <Button onClick={() => { setCurrentMethod({}); setMethodModalOpen(true); }} className="shadow-sm">
+              <Button onClick={() => { openNewMethod(); setMethodModalOpen(true); }} className="shadow-sm">
                 <Plus className="w-4 h-4 mr-2" /> Lägg till
               </Button>
             </div>
@@ -447,7 +482,7 @@ export default function RadiationSafety() {
 
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-semibold">Dina Incidenter</h2>
-              <Button onClick={() => { setCurrentIncident({ status: 'open' }); setIncidentModalOpen(true); }} variant="destructive" className="shadow-sm">
+              <Button onClick={() => { openNewIncident(); setIncidentModalOpen(true); }} variant="destructive" className="shadow-sm">
                 <AlertTriangle className="w-4 h-4 mr-2" /> Rapportera
               </Button>
             </div>
@@ -507,7 +542,7 @@ export default function RadiationSafety() {
 
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-semibold">Din Dokumentation</h2>
-              <Button onClick={() => { setCurrentTreatment({}); setTreatmentModalOpen(true); }} className="shadow-sm">
+              <Button onClick={() => { openNewTreatment(); setTreatmentModalOpen(true); }} className="shadow-sm">
                 <Plus className="w-4 h-4 mr-2" /> Lägg till
               </Button>
             </div>
@@ -574,7 +609,7 @@ export default function RadiationSafety() {
           <div>
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-semibold">Ansvarsdelegering</h2>
-              <Button onClick={() => { setCurrentDelegation({}); setDelegationModalOpen(true); }} size="sm">
+              <Button onClick={() => { openNewDelegation(); setDelegationModalOpen(true); }} size="sm">
                 <Plus className="w-4 h-4 mr-2" /> Ny Delegering
               </Button>
             </div>
@@ -601,7 +636,7 @@ export default function RadiationSafety() {
           <div>
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-semibold">Personal & Kompetens</h2>
-              <Button onClick={() => { setCurrentPersonnel({}); setPersonnelModalOpen(true); }} size="sm">
+              <Button onClick={() => { openNewPersonnel(); setPersonnelModalOpen(true); }} size="sm">
                 <Plus className="w-4 h-4 mr-2" /> Lägg till
               </Button>
             </div>
@@ -643,7 +678,7 @@ export default function RadiationSafety() {
 
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-xl font-semibold">Klientinformationsblad</h2>
-            <Button onClick={() => { setCurrentClientInfo({}); setClientInfoModalOpen(true); }}>
+            <Button onClick={() => { openNewClientInfo(); setClientInfoModalOpen(true); }}>
               <Plus className="w-4 h-4 mr-2" /> Nytt Blad
             </Button>
           </div>
@@ -681,7 +716,7 @@ export default function RadiationSafety() {
 
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-xl font-semibold">Mätrapporter (Laser/IPL)</h2>
-            <Button onClick={() => { setCurrentMeasurement({}); setMeasurementModalOpen(true); }}>
+            <Button onClick={() => { openNewMeasurement(); setMeasurementModalOpen(true); }}>
               <Plus className="w-4 h-4 mr-2" /> Ny Mätning
             </Button>
           </div>
@@ -737,7 +772,7 @@ export default function RadiationSafety() {
           </Card>
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-xl font-semibold">Lokalsäkerhet & Skyddsutrustning</h2>
-            <Button onClick={() => { setCurrentLocationCheck({}); setLocationModalOpen(true); }}><Plus className="w-4 h-4 mr-2" /> Ny Kontroll</Button>
+            <Button onClick={() => { openNewLocationCheck(); setLocationModalOpen(true); }}><Plus className="w-4 h-4 mr-2" /> Ny Kontroll</Button>
           </div>
           <div className="grid gap-4 md:grid-cols-2">
             {locationChecks.map(check => (
@@ -776,7 +811,7 @@ export default function RadiationSafety() {
           </Card>
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-xl font-semibold">Årlig Internrevision</h2>
-            <Button onClick={() => { setCurrentAudit({}); setAuditModalOpen(true); }}><Plus className="w-4 h-4 mr-2" /> Ny Revision</Button>
+            <Button onClick={() => { openNewAudit(); setAuditModalOpen(true); }}><Plus className="w-4 h-4 mr-2" /> Ny Revision</Button>
           </div>
           <div className="grid gap-4 md:grid-cols-2">
             {annualAudits.map(audit => (
@@ -854,7 +889,11 @@ export default function RadiationSafety() {
               </div>
               <div className="grid gap-2">
                 <Label>Datum</Label>
-                <Input type="datetime-local" value={currentIncident.incident_date?.slice(0,16) || ''} onChange={e => setCurrentIncident({...currentIncident, incident_date: new Date(e.target.value).toISOString()})} />
+                {currentIncident.id ? (
+                  <div className="text-sm font-medium py-2 px-3 bg-muted/50 rounded-md border">{new Date(currentIncident.incident_date).toLocaleString('sv-SE').slice(0,16)}</div>
+                ) : (
+                  <div className="text-sm font-medium py-2 px-3 bg-muted/50 rounded-md border text-muted-foreground">Sätts automatiskt till dagens datum</div>
+                )}
               </div>
             </div>
             <div className="grid gap-2">
@@ -910,7 +949,11 @@ export default function RadiationSafety() {
               </div>
               <div className="grid gap-2">
                 <Label>Datum och tid</Label>
-                <Input type="datetime-local" value={currentTreatment.treatment_date?.slice(0,16) || ''} onChange={e => setCurrentTreatment({...currentTreatment, treatment_date: new Date(e.target.value).toISOString()})} />
+                {currentTreatment.id ? (
+                  <div className="text-sm font-medium py-2 px-3 bg-muted/50 rounded-md border">{new Date(currentTreatment.treatment_date).toLocaleString('sv-SE').slice(0,16)}</div>
+                ) : (
+                  <div className="text-sm font-medium py-2 px-3 bg-muted/50 rounded-md border text-muted-foreground">Sätts automatiskt vid sparning</div>
+                )}
               </div>
             </div>
             
@@ -952,7 +995,13 @@ export default function RadiationSafety() {
           <div className="space-y-4 py-4">
             <div className="grid gap-2"><Label>Roll/Titel</Label><Input value={currentDelegation.role_title || ''} onChange={e => setCurrentDelegation({...currentDelegation, role_title: e.target.value})} placeholder="t.ex. Strålskyddsansvarig" /></div>
             <div className="grid gap-2"><Label>Namn på ansvarig</Label><Input value={currentDelegation.assigned_to_name || ''} onChange={e => setCurrentDelegation({...currentDelegation, assigned_to_name: e.target.value})} /></div>
-            <div className="grid gap-2"><Label>Datum tilldelat</Label><Input type="date" value={currentDelegation.date_assigned || ''} onChange={e => setCurrentDelegation({...currentDelegation, date_assigned: e.target.value})} /></div>
+            <div className="grid gap-2"><Label>Datum tilldelat</Label>
+              {currentDelegation.id ? (
+                <div className="text-sm font-medium py-2 px-3 bg-muted/50 rounded-md border">{currentDelegation.date_assigned}</div>
+              ) : (
+                <div className="text-sm font-medium py-2 px-3 bg-muted/50 rounded-md border text-muted-foreground">Sätts automatiskt vid sparning</div>
+              )}
+            </div>
             <div className="grid gap-2"><Label>Ansvarsområden</Label><Textarea value={currentDelegation.responsibilities || ''} onChange={e => setCurrentDelegation({...currentDelegation, responsibilities: e.target.value})} /></div>
             <div className="border-t pt-4 mt-4">
               <div className="flex items-start gap-2">
@@ -984,7 +1033,13 @@ export default function RadiationSafety() {
             <div className="grid gap-2"><Label>Namn</Label><Input value={currentPersonnel.employee_name || ''} onChange={e => setCurrentPersonnel({...currentPersonnel, employee_name: e.target.value})} /></div>
             <div className="grid gap-2"><Label>Yrkesroll</Label><Input value={currentPersonnel.role || ''} onChange={e => setCurrentPersonnel({...currentPersonnel, role: e.target.value})} placeholder="t.ex. Hudterapeut" /></div>
             <div className="flex items-center gap-2 mt-2"><Checkbox id="rad_saf" checked={currentPersonnel.radiation_safety_training || false} onCheckedChange={c => setCurrentPersonnel({...currentPersonnel, radiation_safety_training: c})} /><Label htmlFor="rad_saf">Har genomgått strålskyddsutbildning</Label></div>
-            <div className="grid gap-2"><Label>Datum för utbildning</Label><Input type="date" value={currentPersonnel.training_date || ''} onChange={e => setCurrentPersonnel({...currentPersonnel, training_date: e.target.value})} /></div>
+            <div className="grid gap-2"><Label>Datum för utbildning</Label>
+              {currentPersonnel.id ? (
+                <div className="text-sm font-medium py-2 px-3 bg-muted/50 rounded-md border">{currentPersonnel.training_date}</div>
+              ) : (
+                <div className="text-sm font-medium py-2 px-3 bg-muted/50 rounded-md border text-muted-foreground">Sätts automatiskt vid sparning</div>
+              )}
+            </div>
             <div className="flex gap-2 pt-4 border-t">
               <Button onClick={() => savePersonnel.mutate(currentPersonnel)} className="flex-1">Spara</Button>
               {currentPersonnel.id && (
@@ -1015,7 +1070,13 @@ export default function RadiationSafety() {
         <DialogContent className="max-w-md">
           <DialogHeader><DialogTitle>{currentMeasurement.id ? 'Redigera Mätrapport' : 'Ny Mätrapport'}</DialogTitle></DialogHeader>
           <div className="space-y-4 py-4">
-            <div className="grid gap-2"><Label>Datum</Label><Input type="date" value={currentMeasurement.measurement_date || ''} onChange={e => setCurrentMeasurement({...currentMeasurement, measurement_date: e.target.value})} /></div>
+            <div className="grid gap-2"><Label>Datum</Label>
+              {currentMeasurement.id ? (
+                <div className="text-sm font-medium py-2 px-3 bg-muted/50 rounded-md border">{currentMeasurement.measurement_date}</div>
+              ) : (
+                <div className="text-sm font-medium py-2 px-3 bg-muted/50 rounded-md border text-muted-foreground">Sätts automatiskt vid sparning</div>
+              )}
+            </div>
             <div className="grid gap-2"><Label>Uppmätt effekt (J/cm2 etc)</Label><Input value={currentMeasurement.laser_power_measured || ''} onChange={e => setCurrentMeasurement({...currentMeasurement, laser_power_measured: e.target.value})} /></div>
             <div className="grid gap-2"><Label>Pulsparametrar</Label><Input value={currentMeasurement.pulse_parameters || ''} onChange={e => setCurrentMeasurement({...currentMeasurement, pulse_parameters: e.target.value})} /></div>
             <div className="grid gap-2"><Label>Avvikelse från grundvärde</Label><Input value={currentMeasurement.deviation_from_baseline || ''} onChange={e => setCurrentMeasurement({...currentMeasurement, deviation_from_baseline: e.target.value})} /></div>
@@ -1029,7 +1090,13 @@ export default function RadiationSafety() {
         <DialogContent className="max-w-md">
           <DialogHeader><DialogTitle>{currentLocationCheck.id ? 'Redigera Kontroll' : 'Ny Säkerhetskontroll'}</DialogTitle></DialogHeader>
           <div className="space-y-4 py-4">
-            <div className="grid gap-2"><Label>Datum</Label><Input type="date" value={currentLocationCheck.check_date || ''} onChange={e => setCurrentLocationCheck({...currentLocationCheck, check_date: e.target.value})} /></div>
+            <div className="grid gap-2"><Label>Datum</Label>
+              {currentLocationCheck.id ? (
+                <div className="text-sm font-medium py-2 px-3 bg-muted/50 rounded-md border">{currentLocationCheck.check_date}</div>
+              ) : (
+                <div className="text-sm font-medium py-2 px-3 bg-muted/50 rounded-md border text-muted-foreground">Sätts automatiskt vid sparning</div>
+              )}
+            </div>
             <div className="grid gap-2"><Label>Utförd av</Label><Input value={currentLocationCheck.checked_by || ''} onChange={e => setCurrentLocationCheck({...currentLocationCheck, checked_by: e.target.value})} /></div>
             <div className="space-y-3 p-4 border rounded-lg bg-muted/20">
               <div className="flex items-center gap-2"><Checkbox id="chk_signs" checked={currentLocationCheck.warning_signs_present || false} onCheckedChange={c => setCurrentLocationCheck({...currentLocationCheck, warning_signs_present: c})} /><Label htmlFor="chk_signs">Varningsskyltar finns på dörrar</Label></div>
@@ -1048,7 +1115,13 @@ export default function RadiationSafety() {
         <DialogContent className="max-w-md">
           <DialogHeader><DialogTitle>{currentAudit.id ? 'Redigera Revision' : 'Ny Årlig Internrevision'}</DialogTitle></DialogHeader>
           <div className="space-y-4 py-4">
-            <div className="grid gap-2"><Label>Datum</Label><Input type="date" value={currentAudit.audit_date || ''} onChange={e => setCurrentAudit({...currentAudit, audit_date: e.target.value})} /></div>
+            <div className="grid gap-2"><Label>Datum</Label>
+              {currentAudit.id ? (
+                <div className="text-sm font-medium py-2 px-3 bg-muted/50 rounded-md border">{currentAudit.audit_date}</div>
+              ) : (
+                <div className="text-sm font-medium py-2 px-3 bg-muted/50 rounded-md border text-muted-foreground">Sätts automatiskt vid sparning</div>
+              )}
+            </div>
             <div className="grid gap-2"><Label>Utförd av</Label><Input value={currentAudit.auditor_name || ''} onChange={e => setCurrentAudit({...currentAudit, auditor_name: e.target.value})} /></div>
             <div className="space-y-3 p-4 border rounded-lg bg-muted/20">
               <div className="flex items-center gap-2"><Checkbox id="aud_met" checked={currentAudit.methods_updated || false} onCheckedChange={c => setCurrentAudit({...currentAudit, methods_updated: c})} /><Label htmlFor="aud_met">Metoder genomgångna och uppdaterade</Label></div>
