@@ -51,58 +51,65 @@ export default function RadiationSafety() {
   const [auditModalOpen, setAuditModalOpen] = useState(false);
   const [currentAudit, setCurrentAudit] = useState({});
 
+  const [selectedAdminClinicId, setSelectedAdminClinicId] = useState('all');
   const isCustomer = user?.role === 'customer';
-  const clinicId = isCustomer ? user.id : 'all'; // Simplified for demo, normally handled via selected customer
+  const clinicId = isCustomer ? user.id : selectedAdminClinicId;
+
+  const { data: customers = [] } = useQuery({
+    queryKey: ['customers'],
+    queryFn: () => base44.entities.Customer.filter({}),
+    enabled: !isCustomer
+  });
 
   // Queries
   const { data: methods = [] } = useQuery({
     queryKey: ['methods', clinicId],
-    queryFn: () => base44.entities.MethodDescription.filter(isCustomer ? { clinic_id: user.id } : {}),
+    queryFn: () => base44.entities.MethodDescription.filter(clinicId !== 'all' ? { clinic_id: clinicId } : {}),
   });
 
   const { data: incidents = [] } = useQuery({
     queryKey: ['incidents', clinicId],
-    queryFn: () => base44.entities.IncidentReport.filter(isCustomer ? { clinic_id: user.id } : {}),
+    queryFn: () => base44.entities.IncidentReport.filter(clinicId !== 'all' ? { clinic_id: clinicId } : {}),
   });
 
   const { data: treatments = [] } = useQuery({
     queryKey: ['treatments', clinicId],
-    queryFn: () => base44.entities.TreatmentDocumentation.filter(isCustomer ? { clinic_id: user.id } : {}),
+    queryFn: () => base44.entities.TreatmentDocumentation.filter(clinicId !== 'all' ? { clinic_id: clinicId } : {}),
   });
 
   const { data: personnel = [] } = useQuery({
     queryKey: ['personnel', clinicId],
-    queryFn: () => base44.entities.PersonnelCompetence.filter(isCustomer ? { clinic_id: user.id } : {}),
+    queryFn: () => base44.entities.PersonnelCompetence.filter(clinicId !== 'all' ? { clinic_id: clinicId } : {}),
   });
 
   const { data: delegations = [] } = useQuery({
     queryKey: ['delegations', clinicId],
-    queryFn: () => base44.entities.ResponsibilityDelegation.filter(isCustomer ? { clinic_id: user.id } : {}),
+    queryFn: () => base44.entities.ResponsibilityDelegation.filter(clinicId !== 'all' ? { clinic_id: clinicId } : {}),
   });
 
   const { data: clientInfos = [] } = useQuery({
     queryKey: ['clientInfos', clinicId],
-    queryFn: () => base44.entities.ClientInformationSheet.filter(isCustomer ? { clinic_id: user.id } : {}),
+    queryFn: () => base44.entities.ClientInformationSheet.filter(clinicId !== 'all' ? { clinic_id: clinicId } : {}),
   });
 
   const { data: measurements = [] } = useQuery({
     queryKey: ['measurements', clinicId],
-    queryFn: () => base44.entities.MeasurementReport.filter(isCustomer ? { clinic_id: user.id } : {}),
+    queryFn: () => base44.entities.MeasurementReport.filter(clinicId !== 'all' ? { clinic_id: clinicId } : {}),
   });
 
   const { data: serviceRecords = [] } = useQuery({
     queryKey: ['serviceRecords', clinicId],
-    queryFn: () => base44.entities.ServiceRecord.filter(isCustomer ? { customer_id: user.id } : {}),
+    queryFn: () => base44.entities.ServiceRecord.filter(clinicId !== 'all' ? { customer_id: clinicId } : {}),
   });
 
   const { data: locationChecks = [] } = useQuery({
     queryKey: ['locationChecks', clinicId],
-    queryFn: () => base44.entities.LocationSafetyCheck.filter(isCustomer ? { clinic_id: user.id } : {}),
+    queryFn: () => base44.entities.LocationSafetyCheck.filter(clinicId !== 'all' ? { clinic_id: clinicId } : {}),
   });
 
   const { data: annualAudits = [] } = useQuery({
     queryKey: ['annualAudits', clinicId],
-    queryFn: () => base44.entities.AnnualAudit.filter(isCustomer ? { clinic_id: user.id } : {}),
+    queryFn: () => base44.entities.AnnualAudit.filter(clinicId !== 'all' ? { clinic_id: clinicId } : {}),
   });
 
   // Gamification & Progress
@@ -125,9 +132,14 @@ export default function RadiationSafety() {
   };
 
   // Mutations
+  const getPayload = (data) => {
+    const targetClinicId = clinicId !== 'all' ? clinicId : (data.clinic_id || user.id);
+    return { ...data, clinic_id: targetClinicId };
+  };
+
   const saveMethod = useMutation({
     mutationFn: (data) => {
-      const payload = { ...data, clinic_id: user.id };
+      const payload = getPayload(data);
       if (data.id) return base44.entities.MethodDescription.update(data.id, payload);
       return base44.entities.MethodDescription.create(payload);
     },
@@ -140,7 +152,7 @@ export default function RadiationSafety() {
 
   const saveIncident = useMutation({
     mutationFn: (data) => {
-      const payload = { ...data, clinic_id: user.id };
+      const payload = getPayload(data);
       if (data.id) return base44.entities.IncidentReport.update(data.id, payload);
       return base44.entities.IncidentReport.create(payload);
     },
@@ -153,7 +165,7 @@ export default function RadiationSafety() {
 
   const saveTreatment = useMutation({
     mutationFn: (data) => {
-      const payload = { ...data, clinic_id: user.id };
+      const payload = getPayload(data);
       if (data.id) return base44.entities.TreatmentDocumentation.update(data.id, payload);
       return base44.entities.TreatmentDocumentation.create(payload);
     },
@@ -166,7 +178,7 @@ export default function RadiationSafety() {
 
   const savePersonnel = useMutation({
     mutationFn: (data) => {
-      const payload = { ...data, clinic_id: user.id };
+      const payload = getPayload(data);
       if (data.id) return base44.entities.PersonnelCompetence.update(data.id, payload);
       return base44.entities.PersonnelCompetence.create(payload);
     },
@@ -175,7 +187,7 @@ export default function RadiationSafety() {
 
   const saveDelegation = useMutation({
     mutationFn: (data) => {
-      const payload = { ...data, clinic_id: user.id };
+      const payload = getPayload(data);
       if (data.id) return base44.entities.ResponsibilityDelegation.update(data.id, payload);
       return base44.entities.ResponsibilityDelegation.create(payload);
     },
@@ -184,7 +196,7 @@ export default function RadiationSafety() {
 
   const saveClientInfo = useMutation({
     mutationFn: (data) => {
-      const payload = { ...data, clinic_id: user.id };
+      const payload = getPayload(data);
       if (data.id) return base44.entities.ClientInformationSheet.update(data.id, payload);
       return base44.entities.ClientInformationSheet.create(payload);
     },
@@ -193,7 +205,7 @@ export default function RadiationSafety() {
 
   const saveMeasurement = useMutation({
     mutationFn: (data) => {
-      const payload = { ...data, clinic_id: user.id };
+      const payload = getPayload(data);
       if (data.id) return base44.entities.MeasurementReport.update(data.id, payload);
       return base44.entities.MeasurementReport.create(payload);
     },
@@ -202,7 +214,7 @@ export default function RadiationSafety() {
 
   const saveLocationCheck = useMutation({
     mutationFn: (data) => {
-      const payload = { ...data, clinic_id: user.id };
+      const payload = getPayload(data);
       if (data.id) return base44.entities.LocationSafetyCheck.update(data.id, payload);
       return base44.entities.LocationSafetyCheck.create(payload);
     },
@@ -211,7 +223,7 @@ export default function RadiationSafety() {
 
   const saveAudit = useMutation({
     mutationFn: (data) => {
-      const payload = { ...data, clinic_id: user.id };
+      const payload = getPayload(data);
       if (data.id) return base44.entities.AnnualAudit.update(data.id, payload);
       return base44.entities.AnnualAudit.create(payload);
     },
@@ -239,6 +251,32 @@ export default function RadiationSafety() {
           Hantera metoder, rutiner, incidenter och behandlingsdokumentation enligt Strålsäkerhetsmyndighetens föreskrifter.
         </p>
       </div>
+
+      {!isCustomer && (
+        <Card className="mb-8 border-indigo-100 bg-indigo-50/50">
+          <CardContent className="p-4 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+            <div className="flex items-center gap-2 text-indigo-800">
+              <Users className="w-5 h-5" />
+              <span className="font-semibold whitespace-nowrap">Se som kund:</span>
+            </div>
+            <select 
+              className="flex h-10 w-full md:max-w-md items-center justify-between rounded-md border border-indigo-200 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              value={selectedAdminClinicId}
+              onChange={e => setSelectedAdminClinicId(e.target.value)}
+            >
+              <option value="all">Alla kunder (Översikt)</option>
+              {customers.map(c => (
+                <option key={c.id} value={c.id}>{c.company_name}</option>
+              ))}
+            </select>
+            {selectedAdminClinicId !== 'all' && (
+              <Button variant="outline" size="sm" onClick={() => setSelectedAdminClinicId('all')} className="whitespace-nowrap">
+                Återställ vy
+              </Button>
+            )}
+          </CardContent>
+        </Card>
+      )}
 
       {/* Gamification Dashboard */}
       <Card className="mb-8 bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200">
