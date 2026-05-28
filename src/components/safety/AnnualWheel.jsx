@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { AlertCircle, CheckCircle2, Clock, CalendarDays, ArrowRight } from "lucide-react";
 import { differenceInDays, addYears, format } from "date-fns";
 
-export default function AnnualWheel({ audits, locationChecks, measurements, personnel }) {
+export default function AnnualWheel({ audits, locationChecks, measurements, personnel, serviceRecords }) {
   const getLatestDate = (items, dateField) => {
     if (!items || items.length === 0) return null;
     const validItems = items.filter(item => item[dateField] || item.created_date);
@@ -23,10 +23,14 @@ export default function AnnualWheel({ audits, locationChecks, measurements, pers
     return { status: 'ok', label: 'Klar', color: 'text-emerald-600', bg: 'bg-emerald-50', border: 'border-emerald-200', days: daysLeft, icon: CheckCircle2 };
   };
 
+  const latestMeasurement = getLatestDate(measurements, "measurement_date");
+  const latestService = getLatestDate(serviceRecords, "service_date");
+  const latestMeasurementOrService = Math.max(latestMeasurement?.getTime() || 0, latestService?.getTime() || 0) || null;
+
   const tasks = [
     { title: "Årlig Internrevision", date: getLatestDate(audits, "audit_date") },
     { title: "Säkerhetskontroll Lokal", date: getLatestDate(locationChecks, "check_date") },
-    { title: "Mätrapporter", date: getLatestDate(measurements, "measurement_date") },
+    { title: "Mätrapporter & Service", date: latestMeasurementOrService ? new Date(latestMeasurementOrService) : null },
     { title: "Strålskyddsutbildning", date: getLatestDate(personnel, "training_date") },
   ];
 

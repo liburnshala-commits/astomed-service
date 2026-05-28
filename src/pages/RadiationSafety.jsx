@@ -90,6 +90,11 @@ export default function RadiationSafety() {
     queryFn: () => base44.entities.MeasurementReport.filter(isCustomer ? { clinic_id: user.id } : {}),
   });
 
+  const { data: serviceRecords = [] } = useQuery({
+    queryKey: ['serviceRecords', clinicId],
+    queryFn: () => base44.entities.ServiceRecord.filter(isCustomer ? { customer_id: user.id } : {}),
+  });
+
   const { data: locationChecks = [] } = useQuery({
     queryKey: ['locationChecks', clinicId],
     queryFn: () => base44.entities.LocationSafetyCheck.filter(isCustomer ? { clinic_id: user.id } : {}),
@@ -109,7 +114,7 @@ export default function RadiationSafety() {
   if (personnel.length > 0) score += 15;
   if (delegations.length > 0) score += 15;
   if (clientInfos.length > 0) score += 10;
-  if (measurements.length > 0) score += 10;
+  if (measurements.length > 0 || serviceRecords.length > 0) score += 10;
   if (locationChecks.length > 0) score += 10;
   if (annualAudits.length > 0) score += 10;
 
@@ -263,6 +268,7 @@ export default function RadiationSafety() {
         locationChecks={locationChecks} 
         measurements={measurements} 
         personnel={personnel} 
+        serviceRecords={serviceRecords}
       />
 
       <Accordion type="single" collapsible value={activeTab} onValueChange={setActiveTab} className="w-full space-y-4">
@@ -606,8 +612,8 @@ export default function RadiationSafety() {
             <div className="flex items-center gap-3 w-full">
               <Settings2 className="w-5 h-5 text-cyan-500" />
               <span className="text-lg font-semibold flex-1 text-left">Mätrapporter</span>
-              <span className="text-sm font-normal text-muted-foreground hidden md:inline">{measurements.length} st</span>
-              <div className="mr-2">{getStatusIcon(measurements.length > 0)}</div>
+              <span className="text-sm font-normal text-muted-foreground hidden md:inline">{measurements.length + serviceRecords.length} st</span>
+              <div className="mr-2">{getStatusIcon(measurements.length > 0 || serviceRecords.length > 0)}</div>
             </div>
           </AccordionTrigger>
           <AccordionContent className="px-4 pb-4 pt-4 border-t">
@@ -631,12 +637,28 @@ export default function RadiationSafety() {
               <Card key={meas.id} className="cursor-pointer hover:bg-muted/50" onClick={() => { setCurrentMeasurement(meas); setMeasurementModalOpen(true); }}>
                 <CardHeader className="py-3">
                   <div className="flex justify-between items-center">
-                    <CardTitle className="text-md flex items-center gap-2"><Settings2 className="w-4 h-4 text-primary" />Mätning</CardTitle>
+                    <CardTitle className="text-md flex items-center gap-2"><Settings2 className="w-4 h-4 text-primary" />Manuell Mätning</CardTitle>
                     <span className="text-xs text-muted-foreground">{meas.measurement_date ? new Date(meas.measurement_date).toLocaleDateString() : ''}</span>
                   </div>
                 </CardHeader>
                 <CardContent className="py-2">
                   <p className="text-sm">Effekt: {meas.laser_power_measured}</p>
+                  {meas.pulse_parameters && <p className="text-sm text-slate-500">Pulser: {meas.pulse_parameters}</p>}
+                </CardContent>
+              </Card>
+            ))}
+            {serviceRecords.map(record => (
+              <Card key={record.id} className="bg-slate-50 border-slate-200">
+                <CardHeader className="py-3">
+                  <div className="flex justify-between items-center">
+                    <CardTitle className="text-md flex items-center gap-2"><Settings2 className="w-4 h-4 text-indigo-500" />Servicemätning</CardTitle>
+                    <span className="text-xs text-muted-foreground">{record.service_date ? new Date(record.service_date).toLocaleDateString() : ''}</span>
+                  </div>
+                </CardHeader>
+                <CardContent className="py-2">
+                  <p className="text-sm">Beskrivning: {record.description || 'Ingen beskrivning'}</p>
+                  {record.measured_laser_power && <p className="text-sm mt-1">Uppmätt effekt: <span className="font-semibold">{record.measured_laser_power}</span></p>}
+                  {record.pulse_count && <p className="text-sm text-slate-500">Antal pulser: {record.pulse_count}</p>}
                 </CardContent>
               </Card>
             ))}
