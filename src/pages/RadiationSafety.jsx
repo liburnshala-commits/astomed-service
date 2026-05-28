@@ -14,7 +14,8 @@ import {
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Plus, ShieldAlert, FileText, Activity, AlertTriangle, CheckCircle, Users, Info, Settings2 } from "lucide-react";
+import { Plus, ShieldAlert, FileText, Activity, AlertTriangle, CheckCircle, Users, Info, Settings2, Trophy, Target, AlertCircle, CheckCircle2, Clock, BookOpen, Zap, Award, ClipboardList, ShieldCheck } from "lucide-react";
+import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/components/ui/use-toast";
 
 export default function RadiationSafety() {
@@ -97,6 +98,25 @@ export default function RadiationSafety() {
     queryKey: ['annualAudits', clinicId],
     queryFn: () => base44.entities.AnnualAudit.filter(isCustomer ? { clinic_id: user.id } : {}),
   });
+
+  // Gamification & Progress
+  const openIncidentsCount = incidents.filter(i => i.status !== 'closed').length;
+  
+  let score = 0;
+  if (methods.length > 0) score += 15;
+  if (treatments.length > 0) score += 15;
+  if (personnel.length > 0) score += 15;
+  if (delegations.length > 0) score += 15;
+  if (clientInfos.length > 0) score += 10;
+  if (measurements.length > 0) score += 10;
+  if (locationChecks.length > 0) score += 10;
+  if (annualAudits.length > 0) score += 10;
+
+  const getStatusIcon = (isComplete, hasWarning = false) => {
+    if (hasWarning) return <AlertCircle className="w-5 h-5 text-yellow-500" />;
+    if (isComplete) return <CheckCircle2 className="w-5 h-5 text-green-500" />;
+    return <Clock className="w-5 h-5 text-slate-300" />;
+  };
 
   // Mutations
   const saveMethod = useMutation({
@@ -214,10 +234,37 @@ export default function RadiationSafety() {
         </p>
       </div>
 
+      {/* Gamification Dashboard */}
+      <Card className="mb-8 bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200">
+        <CardContent className="pt-6 pb-6 flex flex-col md:flex-row items-center gap-6">
+          <div className="flex-shrink-0 bg-white p-4 rounded-full shadow-sm border border-blue-100">
+            {score === 100 ? <Trophy className="w-12 h-12 text-yellow-500" /> : <Target className="w-12 h-12 text-blue-500" />}
+          </div>
+          <div className="flex-1 w-full space-y-2">
+            <div className="flex justify-between items-end">
+              <div>
+                <h2 className="text-xl font-bold text-slate-800">
+                  {score === 100 ? "Wow! Din klinik är 100% compliant! 🎉" : "Din väg mot en säker klinik"}
+                </h2>
+                <p className="text-sm text-slate-600">
+                  Du har slutfört {score}% av de rekommenderade stegen för en komplett strålsäkerhetsdokumentation.
+                </p>
+              </div>
+              <span className="text-2xl font-black text-blue-600">{score}%</span>
+            </div>
+            <Progress value={score} className="h-3 bg-blue-100" />
+          </div>
+        </CardContent>
+      </Card>
+
       <Accordion type="single" collapsible value={activeTab} onValueChange={setActiveTab} className="w-full space-y-4">
         <AccordionItem value="info" className="border rounded-lg bg-card overflow-hidden">
-          <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/50 text-lg font-semibold data-[state=open]:bg-muted/50">
-            Information
+          <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/50 data-[state=open]:bg-muted/50">
+            <div className="flex items-center gap-3 w-full">
+              <BookOpen className="w-5 h-5 text-blue-500" />
+              <span className="text-lg font-semibold flex-1 text-left">Information & Lagkrav</span>
+              <Info className="w-5 h-5 text-slate-400 mr-2" />
+            </div>
           </AccordionTrigger>
           <AccordionContent className="px-4 pb-4 pt-4 border-t space-y-4">
           <Card>
@@ -253,152 +300,209 @@ export default function RadiationSafety() {
         </AccordionItem>
 
         <AccordionItem value="methods" className="border rounded-lg bg-card overflow-hidden">
-          <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/50 text-lg font-semibold data-[state=open]:bg-muted/50">
-            Metoder & Rutiner
+          <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/50 data-[state=open]:bg-muted/50">
+            <div className="flex items-center gap-3 w-full">
+              <FileText className="w-5 h-5 text-indigo-500" />
+              <span className="text-lg font-semibold flex-1 text-left">Metoder & Rutiner</span>
+              <span className="text-sm font-normal text-muted-foreground hidden md:inline">{methods.length} st</span>
+              <div className="mr-2">{getStatusIcon(methods.length > 0)}</div>
+            </div>
           </AccordionTrigger>
           <AccordionContent className="px-4 pb-4 pt-4 border-t">
-          <Card className="bg-blue-50 border-blue-200 mb-6">
-            <CardHeader>
-              <CardTitle className="text-base">Vad du behöver göra här</CardTitle>
-            </CardHeader>
-            <CardContent className="text-sm text-muted-foreground">
-              Dokumentera exakt hur varje behandling ska genomföras. Beskriv utrustningsinställningar, exponeringstider, vilka som får utföra behandlingen, riskbedömning, skyddsutrustning och eftervård. Detta är en juridisk krav.
-            </CardContent>
-          </Card>
+            <Card className="bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200 mb-6">
+              <CardContent className="pt-6 pb-6 flex items-start gap-4">
+                <div className="bg-white p-2 rounded-full"><Zap className="w-6 h-6 text-yellow-500" /></div>
+                <div>
+                  <h3 className="font-bold text-slate-800 mb-1">Dags att beskriva era arbetsmetoder!</h3>
+                  <p className="text-sm text-slate-600">
+                    Dokumentera exakt hur varje behandling ska genomföras. Beskriv utrustningsinställningar, exponeringstider, vilka som får utföra behandlingen, riskbedömning och skyddsutrustning.
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
 
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-semibold">Metoder & Rutiner</h2>
-            <Button onClick={() => { setCurrentMethod({}); setMethodModalOpen(true); }}>
-              <Plus className="w-4 h-4 mr-2" /> Ny Metod
-            </Button>
-          </div>
-          
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {methods.map(method => (
-              <Card key={method.id} className="cursor-pointer hover:bg-muted/50" onClick={() => { setCurrentMethod(method); setMethodModalOpen(true); }}>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-lg flex items-center gap-2">
-                    <FileText className="w-4 h-4 text-primary" /> {method.title}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-muted-foreground line-clamp-2">{method.description}</p>
-                  {method.is_routine && <span className="inline-block mt-2 text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">Allmän Rutin</span>}
-                </CardContent>
-              </Card>
-            ))}
-            {methods.length === 0 && <p className="text-muted-foreground">Inga metoder inlagda ännu.</p>}
-          </div>
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-semibold">Dina Metoder</h2>
+              <Button onClick={() => { setCurrentMethod({}); setMethodModalOpen(true); }} className="shadow-sm">
+                <Plus className="w-4 h-4 mr-2" /> Lägg till
+              </Button>
+            </div>
+
+            {methods.length === 0 ? (
+              <div className="text-center py-12 px-4 border-2 border-dashed rounded-xl bg-slate-50/50">
+                <FileText className="w-12 h-12 text-slate-300 mx-auto mb-3" />
+                <h3 className="text-lg font-semibold text-slate-700 mb-2">Inga metoder inlagda ännu</h3>
+                <p className="text-slate-500 max-w-sm mx-auto mb-4">Låt oss lägga grunden för en säker klinik! Klicka på knappen ovan för att lägga till er första metod.</p>
+              </div>
+            ) : (
+              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                {methods.map(method => (
+                  <Card key={method.id} className="cursor-pointer hover:shadow-md transition-shadow" onClick={() => { setCurrentMethod(method); setMethodModalOpen(true); }}>
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-lg flex items-center gap-2">
+                        <FileText className="w-4 h-4 text-indigo-500" /> {method.title}
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-sm text-slate-600 line-clamp-2">{method.description}</p>
+                      {method.is_routine && <span className="inline-block mt-3 text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full font-medium">Allmän Rutin</span>}
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            )}
           </AccordionContent>
         </AccordionItem>
 
         <AccordionItem value="incidents" className="border rounded-lg bg-card overflow-hidden">
-          <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/50 text-lg font-semibold data-[state=open]:bg-muted/50">
-            Incidenter
+          <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/50 data-[state=open]:bg-muted/50">
+            <div className="flex items-center gap-3 w-full">
+              <AlertTriangle className="w-5 h-5 text-red-500" />
+              <span className="text-lg font-semibold flex-1 text-left">Incidenter</span>
+              <span className="text-sm font-normal text-muted-foreground hidden md:inline">
+                {openIncidentsCount > 0 ? <span className="text-red-500 font-medium">{openIncidentsCount} öppna</span> : `${incidents.length} st`}
+              </span>
+              <div className="mr-2">{getStatusIcon(true, openIncidentsCount > 0)}</div>
+            </div>
           </AccordionTrigger>
           <AccordionContent className="px-4 pb-4 pt-4 border-t">
-          <Card className="bg-blue-50 border-blue-200 mb-6">
-            <CardHeader>
-              <CardTitle className="text-base">Vad du behöver göra här</CardTitle>
-            </CardHeader>
-            <CardContent className="text-sm text-muted-foreground">
-              Rapportera alla oväntade händelser eller skador under behandling. Dokumentera vad som hände, vilka åtgärder som togs och om det rapporterades till SSM. Detta används för att förbättra dina rutiner.
-            </CardContent>
-          </Card>
+            <Card className="bg-gradient-to-r from-red-50 to-orange-50 border-red-200 mb-6">
+              <CardContent className="pt-6 pb-6 flex items-start gap-4">
+                <div className="bg-white p-2 rounded-full"><AlertCircle className="w-6 h-6 text-red-500" /></div>
+                <div>
+                  <h3 className="font-bold text-slate-800 mb-1">Rapportera för att lära och förbättra</h3>
+                  <p className="text-sm text-slate-600">
+                    Rapportera alla oväntade händelser eller skador. Dokumentera vad som hände och vilka åtgärder som togs. Transparens skapar en tryggare miljö för både personal och klienter.
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
 
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-semibold">Incidentrapporter</h2>
-            <Button onClick={() => { setCurrentIncident({ status: 'open' }); setIncidentModalOpen(true); }} variant="destructive">
-              <AlertTriangle className="w-4 h-4 mr-2" /> Ny Incident
-            </Button>
-          </div>
-          
-          <div className="space-y-4">
-            {incidents.map(inc => (
-              <Card key={inc.id} className="cursor-pointer hover:bg-muted/50" onClick={() => { setCurrentIncident(inc); setIncidentModalOpen(true); }}>
-                <CardHeader className="py-3">
-                  <div className="flex justify-between items-center">
-                    <CardTitle className="text-md flex items-center gap-2">
-                      <AlertTriangle className={`w-4 h-4 ${inc.status === 'closed' ? 'text-green-500' : 'text-red-500'}`} />
-                      {inc.title}
-                    </CardTitle>
-                    <span className="text-xs text-muted-foreground">{new Date(inc.incident_date).toLocaleDateString()}</span>
-                  </div>
-                </CardHeader>
-                <CardContent className="py-2">
-                  <p className="text-sm">{inc.description}</p>
-                </CardContent>
-              </Card>
-            ))}
-            {incidents.length === 0 && <p className="text-muted-foreground">Inga incidenter registrerade.</p>}
-          </div>
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-semibold">Dina Incidenter</h2>
+              <Button onClick={() => { setCurrentIncident({ status: 'open' }); setIncidentModalOpen(true); }} variant="destructive" className="shadow-sm">
+                <AlertTriangle className="w-4 h-4 mr-2" /> Rapportera
+              </Button>
+            </div>
+
+            {incidents.length === 0 ? (
+              <div className="text-center py-12 px-4 border-2 border-dashed rounded-xl bg-slate-50/50">
+                <Award className="w-12 h-12 text-green-400 mx-auto mb-3" />
+                <h3 className="text-lg font-semibold text-slate-700 mb-2">Härligt, inga incidenter!</h3>
+                <p className="text-slate-500 max-w-sm mx-auto mb-4">Bra jobbat med säkerheten! Skulle något hända, vet du var du ska rapportera det.</p>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {incidents.map(inc => (
+                  <Card key={inc.id} className="cursor-pointer hover:shadow-md transition-shadow" onClick={() => { setCurrentIncident(inc); setIncidentModalOpen(true); }}>
+                    <CardHeader className="py-3">
+                      <div className="flex justify-between items-center">
+                        <CardTitle className="text-md flex items-center gap-2">
+                          <div className={`p-1.5 rounded-full ${inc.status === 'closed' ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'}`}>
+                            {inc.status === 'closed' ? <CheckCircle2 className="w-4 h-4" /> : <AlertTriangle className="w-4 h-4" />}
+                          </div>
+                          {inc.title}
+                        </CardTitle>
+                        <span className="text-xs font-medium text-slate-500 bg-slate-100 px-2 py-1 rounded-md">{new Date(inc.incident_date).toLocaleDateString()}</span>
+                      </div>
+                    </CardHeader>
+                    <CardContent className="py-2">
+                      <p className="text-sm text-slate-600 line-clamp-2">{inc.description}</p>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            )}
           </AccordionContent>
         </AccordionItem>
 
         <AccordionItem value="treatments" className="border rounded-lg bg-card overflow-hidden">
-          <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/50 text-lg font-semibold data-[state=open]:bg-muted/50">
-            Dokumentation
+          <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/50 data-[state=open]:bg-muted/50">
+            <div className="flex items-center gap-3 w-full">
+              <Activity className="w-5 h-5 text-teal-500" />
+              <span className="text-lg font-semibold flex-1 text-left">Behandlingsdokumentation</span>
+              <span className="text-sm font-normal text-muted-foreground hidden md:inline">{treatments.length} st</span>
+              <div className="mr-2">{getStatusIcon(treatments.length > 0)}</div>
+            </div>
           </AccordionTrigger>
           <AccordionContent className="px-4 pb-4 pt-4 border-t">
-          <Card className="bg-blue-50 border-blue-200 mb-6">
-            <CardHeader>
-              <CardTitle className="text-base">Vad du behöver göra här</CardTitle>
-            </CardHeader>
-            <CardContent className="text-sm text-muted-foreground">
-              Dokumentera varje behandling: patientens ID, datum/tid, vilken metod som användes, inställningar, och bekräfta att individuell bedömning gjordes och information gavs. Behåll dessa records i 3 år.
-            </CardContent>
-          </Card>
+            <Card className="bg-gradient-to-r from-teal-50 to-emerald-50 border-teal-200 mb-6">
+              <CardContent className="pt-6 pb-6 flex items-start gap-4">
+                <div className="bg-white p-2 rounded-full"><Activity className="w-6 h-6 text-teal-500" /></div>
+                <div>
+                  <h3 className="font-bold text-slate-800 mb-1">Spåra dina behandlingar (Journalföring)</h3>
+                  <p className="text-sm text-slate-600">
+                    Dokumentera varje behandling noga. Bekräfta att individuell bedömning gjorts och att patienten fått information. Enligt lag ska detta bevaras i minst 3 år.
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
 
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-semibold">Behandlingsdokumentation</h2>
-            <Button onClick={() => { setCurrentTreatment({}); setTreatmentModalOpen(true); }}>
-              <Plus className="w-4 h-4 mr-2" /> Ny Dokumentation
-            </Button>
-          </div>
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-semibold">Din Dokumentation</h2>
+              <Button onClick={() => { setCurrentTreatment({}); setTreatmentModalOpen(true); }} className="shadow-sm">
+                <Plus className="w-4 h-4 mr-2" /> Lägg till
+              </Button>
+            </div>
 
-          <div className="space-y-4">
-            {treatments.map(trt => (
-              <Card key={trt.id} className="cursor-pointer hover:bg-muted/50" onClick={() => { setCurrentTreatment(trt); setTreatmentModalOpen(true); }}>
-                <CardHeader className="py-3">
-                  <div className="flex justify-between items-center">
-                    <CardTitle className="text-md flex items-center gap-2">
-                      <Activity className="w-4 h-4 text-primary" />
-                      Patient: {trt.patient_id || 'Okänd'}
-                    </CardTitle>
-                    <span className="text-xs text-muted-foreground">{trt.treatment_date ? new Date(trt.treatment_date).toLocaleString() : ''}</span>
-                  </div>
-                </CardHeader>
-                <CardContent className="py-2">
-                  <div className="flex gap-4 text-xs text-muted-foreground">
-                    <span className="flex items-center gap-1">
-                      <CheckCircle className={`w-3 h-3 ${trt.individual_assessment_done ? 'text-green-500' : 'text-slate-300'}`} /> Bedömning
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <CheckCircle className={`w-3 h-3 ${trt.pre_treatment_info_given ? 'text-green-500' : 'text-slate-300'}`} /> Info given
-                    </span>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-            {treatments.length === 0 && <p className="text-muted-foreground">Ingen dokumentation registrerad.</p>}
-          </div>
+            {treatments.length === 0 ? (
+              <div className="text-center py-12 px-4 border-2 border-dashed rounded-xl bg-slate-50/50">
+                <Activity className="w-12 h-12 text-slate-300 mx-auto mb-3" />
+                <h3 className="text-lg font-semibold text-slate-700 mb-2">Ingen dokumentation registrerad</h3>
+                <p className="text-slate-500 max-w-sm mx-auto mb-4">Det är dags att logga er första behandling. Klicka på knappen ovan för att komma igång.</p>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {treatments.map(trt => (
+                  <Card key={trt.id} className="cursor-pointer hover:shadow-md transition-shadow" onClick={() => { setCurrentTreatment(trt); setTreatmentModalOpen(true); }}>
+                    <CardHeader className="py-3">
+                      <div className="flex justify-between items-center">
+                        <CardTitle className="text-md flex items-center gap-2">
+                          <div className="bg-teal-100 text-teal-700 p-1.5 rounded-full"><Activity className="w-4 h-4" /></div>
+                          Patient: {trt.patient_id || 'Okänd'}
+                        </CardTitle>
+                        <span className="text-xs font-medium text-slate-500 bg-slate-100 px-2 py-1 rounded-md">{trt.treatment_date ? new Date(trt.treatment_date).toLocaleString() : ''}</span>
+                      </div>
+                    </CardHeader>
+                    <CardContent className="py-2">
+                      <div className="flex gap-4 text-xs font-medium">
+                        <span className={`flex items-center gap-1.5 px-2 py-1 rounded-md ${trt.individual_assessment_done ? 'bg-green-50 text-green-700' : 'bg-slate-50 text-slate-500'}`}>
+                          <CheckCircle className={`w-3 h-3 ${trt.individual_assessment_done ? 'text-green-500' : 'text-slate-400'}`} /> Bedömning
+                        </span>
+                        <span className={`flex items-center gap-1.5 px-2 py-1 rounded-md ${trt.pre_treatment_info_given ? 'bg-green-50 text-green-700' : 'bg-slate-50 text-slate-500'}`}>
+                          <CheckCircle className={`w-3 h-3 ${trt.pre_treatment_info_given ? 'text-green-500' : 'text-slate-400'}`} /> Info given
+                        </span>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            )}
           </AccordionContent>
         </AccordionItem>
 
         <AccordionItem value="personnel" className="border rounded-lg bg-card overflow-hidden">
-          <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/50 text-lg font-semibold data-[state=open]:bg-muted/50">
-            Personal & Ansvar
+          <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/50 data-[state=open]:bg-muted/50">
+            <div className="flex items-center gap-3 w-full">
+              <Users className="w-5 h-5 text-purple-500" />
+              <span className="text-lg font-semibold flex-1 text-left">Personal & Ansvar</span>
+              <span className="text-sm font-normal text-muted-foreground hidden md:inline">{personnel.length} pers, {delegations.length} roller</span>
+              <div className="mr-2">{getStatusIcon(personnel.length > 0 && delegations.length > 0)}</div>
+            </div>
           </AccordionTrigger>
           <AccordionContent className="px-4 pb-4 pt-4 border-t space-y-8">
-          <Card className="bg-blue-50 border-blue-200 mb-6">
-            <CardHeader>
-              <CardTitle className="text-base">Vad du behöver göra här</CardTitle>
-            </CardHeader>
-            <CardContent className="text-sm text-muted-foreground">
-              <p className="mb-3">1. <strong>Ansvarsdelegering:</strong> Definiera vilka roller och poster som finns på er klinik (t.ex. Verksamhetschef, Strålskyddsansvarig) och tilldela dessa till specifika personer.</p>
-              <p>2. <strong>Personal & Kompetens:</strong> Registrera all personal som jobbar med strålande utrustning och dokumentera deras strålskyddsutbildning.</p>
-            </CardContent>
-          </Card>
+            <Card className="bg-gradient-to-r from-purple-50 to-pink-50 border-purple-200 mb-6">
+              <CardContent className="pt-6 pb-6 flex items-start gap-4">
+                <div className="bg-white p-2 rounded-full"><Users className="w-6 h-6 text-purple-500" /></div>
+                <div>
+                  <h3 className="font-bold text-slate-800 mb-1">Rätt person på rätt plats</h3>
+                  <div className="text-sm text-slate-600 space-y-2">
+                    <p>1. <strong>Ansvarsdelegering:</strong> Tilldela viktiga roller (t.ex. Strålskyddsansvarig) till din personal.</p>
+                    <p>2. <strong>Personal & Kompetens:</strong> Registrera teamet och bocka av deras strålskyddsutbildningar.</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
 
           <div>
             <div className="flex justify-between items-center mb-4">
@@ -452,8 +556,13 @@ export default function RadiationSafety() {
         </AccordionItem>
 
         <AccordionItem value="client_info" className="border rounded-lg bg-card overflow-hidden">
-          <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/50 text-lg font-semibold data-[state=open]:bg-muted/50">
-            Klientinfo
+          <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/50 data-[state=open]:bg-muted/50">
+            <div className="flex items-center gap-3 w-full">
+              <ClipboardList className="w-5 h-5 text-pink-500" />
+              <span className="text-lg font-semibold flex-1 text-left">Klientinformationsblad</span>
+              <span className="text-sm font-normal text-muted-foreground hidden md:inline">{clientInfos.length} st</span>
+              <div className="mr-2">{getStatusIcon(clientInfos.length > 0)}</div>
+            </div>
           </AccordionTrigger>
           <AccordionContent className="px-4 pb-4 pt-4 border-t">
           <Card className="bg-blue-50 border-blue-200 mb-6">
@@ -485,8 +594,13 @@ export default function RadiationSafety() {
         </AccordionItem>
 
         <AccordionItem value="measurements" className="border rounded-lg bg-card overflow-hidden">
-          <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/50 text-lg font-semibold data-[state=open]:bg-muted/50">
-            Mätrapporter
+          <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/50 data-[state=open]:bg-muted/50">
+            <div className="flex items-center gap-3 w-full">
+              <Settings2 className="w-5 h-5 text-cyan-500" />
+              <span className="text-lg font-semibold flex-1 text-left">Mätrapporter</span>
+              <span className="text-sm font-normal text-muted-foreground hidden md:inline">{measurements.length} st</span>
+              <div className="mr-2">{getStatusIcon(measurements.length > 0)}</div>
+            </div>
           </AccordionTrigger>
           <AccordionContent className="px-4 pb-4 pt-4 border-t">
           <Card className="bg-blue-50 border-blue-200 mb-6">
@@ -523,8 +637,13 @@ export default function RadiationSafety() {
         </AccordionItem>
 
         <AccordionItem value="location" className="border rounded-lg bg-card overflow-hidden">
-          <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/50 text-lg font-semibold data-[state=open]:bg-muted/50">
-            Lokal & Skydd
+          <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/50 data-[state=open]:bg-muted/50">
+            <div className="flex items-center gap-3 w-full">
+              <ShieldCheck className="w-5 h-5 text-amber-500" />
+              <span className="text-lg font-semibold flex-1 text-left">Lokal & Skydd</span>
+              <span className="text-sm font-normal text-muted-foreground hidden md:inline">{locationChecks.length} st</span>
+              <div className="mr-2">{getStatusIcon(locationChecks.length > 0)}</div>
+            </div>
           </AccordionTrigger>
           <AccordionContent className="px-4 pb-4 pt-4 border-t">
           <Card className="bg-blue-50 border-blue-200 mb-6">
@@ -557,8 +676,13 @@ export default function RadiationSafety() {
         </AccordionItem>
 
         <AccordionItem value="audit" className="border rounded-lg bg-card overflow-hidden">
-          <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/50 text-lg font-semibold data-[state=open]:bg-muted/50">
-            Internrevision
+          <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/50 data-[state=open]:bg-muted/50">
+            <div className="flex items-center gap-3 w-full">
+              <Award className="w-5 h-5 text-fuchsia-500" />
+              <span className="text-lg font-semibold flex-1 text-left">Årlig Internrevision</span>
+              <span className="text-sm font-normal text-muted-foreground hidden md:inline">{annualAudits.length} st</span>
+              <div className="mr-2">{getStatusIcon(annualAudits.length > 0)}</div>
+            </div>
           </AccordionTrigger>
           <AccordionContent className="px-4 pb-4 pt-4 border-t">
           <Card className="bg-blue-50 border-blue-200 mb-6">
