@@ -135,7 +135,7 @@ export default function ChatSupport() {
                                                 )}
                                             </span>
                                             <span className="text-xs text-slate-400">
-                                                {conv.last_message_at ? format(new Date(conv.last_message_at), "HH:mm") : ""}
+                                                {conv.last_message_at ? format(new Date(conv.last_message_at), "d MMM HH:mm") : conv.created_date ? format(new Date(conv.created_date), "d MMM HH:mm") : ""}
                                             </span>
                                         </div>
                                         <div className="flex items-center gap-2 text-xs mt-2">
