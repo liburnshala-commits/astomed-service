@@ -473,9 +473,19 @@ export default function RadiationSafety() {
                 <div className="bg-white p-2 rounded-full"><AlertCircle className="w-6 h-6 text-red-500" /></div>
                 <div>
                   <h3 className="font-bold text-slate-800 mb-1">Rapportera för att lära och förbättra</h3>
-                  <p className="text-sm text-slate-600">
-                    Rapportera alla oväntade händelser eller skador. Dokumentera vad som hände och vilka åtgärder som togs. Transparens skapar en tryggare miljö för både personal och klienter.
-                  </p>
+                  <div className="text-sm text-slate-600 space-y-2">
+                    <p>
+                      Rapportera alla oväntade händelser eller skador. Dokumentera vad som hände och vilka åtgärder som togs.
+                    </p>
+                    <p>
+                      <strong>Strålsäkerhetsmyndigheten (SSM):</strong> Incidenter som har betydelse från strålskyddssynpunkt ska rapporteras. 
+                      <a href="https://www.stralsakerhetsmyndigheten.se/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline ml-1">Läs mer hos SSM</a>
+                    </p>
+                    <p>
+                      <strong>Läkemedelsverket:</strong> Allvarliga tillbud som rör en medicinteknisk produkt ska rapporteras hit. 
+                      <a href="https://www.lakemedelsverket.se/sv/medicinteknik/folj-upp-anvandning/rapportering-av-allvarliga-tillbud" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline ml-1">Läs mer hos Läkemedelsverket</a>
+                    </p>
+                  </div>
                 </div>
               </CardContent>
             </Card>
