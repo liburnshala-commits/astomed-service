@@ -3,8 +3,8 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import { useAuth } from '@/lib/AuthContext';
 import { 
-  Tabs, TabsContent, TabsList, TabsTrigger 
-} from "@/components/ui/tabs";
+  Accordion, AccordionContent, AccordionItem, AccordionTrigger 
+} from "@/components/ui/accordion";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -214,22 +214,12 @@ export default function RadiationSafety() {
         </p>
       </div>
 
-      <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <div className="overflow-x-auto pb-2 scrollbar-hide">
-          <TabsList className="inline-flex w-max min-w-full">
-            <TabsTrigger value="info">Information</TabsTrigger>
-            <TabsTrigger value="location">Lokal & Skydd</TabsTrigger>
-            <TabsTrigger value="personnel">Personal & Ansvar</TabsTrigger>
-            <TabsTrigger value="client_info">Klientinfo</TabsTrigger>
-            <TabsTrigger value="methods">Metoder</TabsTrigger>
-            <TabsTrigger value="measurements">Mätrapporter</TabsTrigger>
-            <TabsTrigger value="treatments">Dokumentation</TabsTrigger>
-            <TabsTrigger value="incidents">Incidenter</TabsTrigger>
-            <TabsTrigger value="audit">Internrevision</TabsTrigger>
-          </TabsList>
-        </div>
-
-        <TabsContent value="info" className="mt-6 space-y-4">
+      <Accordion type="single" collapsible value={activeTab} onValueChange={setActiveTab} className="w-full space-y-4">
+        <AccordionItem value="info" className="border rounded-lg bg-card overflow-hidden">
+          <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/50 text-lg font-semibold data-[state=open]:bg-muted/50">
+            Information
+          </AccordionTrigger>
+          <AccordionContent className="px-4 pb-4 pt-4 border-t space-y-4">
           <Card>
             <CardHeader>
               <CardTitle>Anmälningsplikt och Krav</CardTitle>
@@ -259,9 +249,14 @@ export default function RadiationSafety() {
               </div>
             </CardContent>
           </Card>
-        </TabsContent>
+          </AccordionContent>
+        </AccordionItem>
 
-        <TabsContent value="methods" className="mt-6">
+        <AccordionItem value="methods" className="border rounded-lg bg-card overflow-hidden">
+          <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/50 text-lg font-semibold data-[state=open]:bg-muted/50">
+            Metoder & Rutiner
+          </AccordionTrigger>
+          <AccordionContent className="px-4 pb-4 pt-4 border-t">
           <Card className="bg-blue-50 border-blue-200 mb-6">
             <CardHeader>
               <CardTitle className="text-base">Vad du behöver göra här</CardTitle>
@@ -294,9 +289,14 @@ export default function RadiationSafety() {
             ))}
             {methods.length === 0 && <p className="text-muted-foreground">Inga metoder inlagda ännu.</p>}
           </div>
-        </TabsContent>
+          </AccordionContent>
+        </AccordionItem>
 
-        <TabsContent value="incidents" className="mt-6">
+        <AccordionItem value="incidents" className="border rounded-lg bg-card overflow-hidden">
+          <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/50 text-lg font-semibold data-[state=open]:bg-muted/50">
+            Incidenter
+          </AccordionTrigger>
+          <AccordionContent className="px-4 pb-4 pt-4 border-t">
           <Card className="bg-blue-50 border-blue-200 mb-6">
             <CardHeader>
               <CardTitle className="text-base">Vad du behöver göra här</CardTitle>
@@ -332,9 +332,14 @@ export default function RadiationSafety() {
             ))}
             {incidents.length === 0 && <p className="text-muted-foreground">Inga incidenter registrerade.</p>}
           </div>
-        </TabsContent>
+          </AccordionContent>
+        </AccordionItem>
 
-        <TabsContent value="treatments" className="mt-6">
+        <AccordionItem value="treatments" className="border rounded-lg bg-card overflow-hidden">
+          <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/50 text-lg font-semibold data-[state=open]:bg-muted/50">
+            Dokumentation
+          </AccordionTrigger>
+          <AccordionContent className="px-4 pb-4 pt-4 border-t">
           <Card className="bg-blue-50 border-blue-200 mb-6">
             <CardHeader>
               <CardTitle className="text-base">Vad du behöver göra här</CardTitle>
@@ -377,9 +382,14 @@ export default function RadiationSafety() {
             ))}
             {treatments.length === 0 && <p className="text-muted-foreground">Ingen dokumentation registrerad.</p>}
           </div>
-        </TabsContent>
+          </AccordionContent>
+        </AccordionItem>
 
-        <TabsContent value="personnel" className="mt-6 space-y-8">
+        <AccordionItem value="personnel" className="border rounded-lg bg-card overflow-hidden">
+          <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/50 text-lg font-semibold data-[state=open]:bg-muted/50">
+            Personal & Ansvar
+          </AccordionTrigger>
+          <AccordionContent className="px-4 pb-4 pt-4 border-t space-y-8">
           <Card className="bg-blue-50 border-blue-200 mb-6">
             <CardHeader>
               <CardTitle className="text-base">Vad du behöver göra här</CardTitle>
@@ -438,9 +448,14 @@ export default function RadiationSafety() {
               ))}
             </div>
           </div>
-        </TabsContent>
+          </AccordionContent>
+        </AccordionItem>
 
-        <TabsContent value="client_info" className="mt-6">
+        <AccordionItem value="client_info" className="border rounded-lg bg-card overflow-hidden">
+          <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/50 text-lg font-semibold data-[state=open]:bg-muted/50">
+            Klientinfo
+          </AccordionTrigger>
+          <AccordionContent className="px-4 pb-4 pt-4 border-t">
           <Card className="bg-blue-50 border-blue-200 mb-6">
             <CardHeader>
               <CardTitle className="text-base">Vad du behöver göra här</CardTitle>
@@ -466,9 +481,14 @@ export default function RadiationSafety() {
               </Card>
             ))}
           </div>
-        </TabsContent>
+          </AccordionContent>
+        </AccordionItem>
 
-        <TabsContent value="measurements" className="mt-6">
+        <AccordionItem value="measurements" className="border rounded-lg bg-card overflow-hidden">
+          <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/50 text-lg font-semibold data-[state=open]:bg-muted/50">
+            Mätrapporter
+          </AccordionTrigger>
+          <AccordionContent className="px-4 pb-4 pt-4 border-t">
           <Card className="bg-blue-50 border-blue-200 mb-6">
             <CardHeader>
               <CardTitle className="text-base">Vad du behöver göra här</CardTitle>
@@ -499,8 +519,14 @@ export default function RadiationSafety() {
               </Card>
             ))}
           </div>
-        </TabsContent>
-        <TabsContent value="location" className="mt-6">
+          </AccordionContent>
+        </AccordionItem>
+
+        <AccordionItem value="location" className="border rounded-lg bg-card overflow-hidden">
+          <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/50 text-lg font-semibold data-[state=open]:bg-muted/50">
+            Lokal & Skydd
+          </AccordionTrigger>
+          <AccordionContent className="px-4 pb-4 pt-4 border-t">
           <Card className="bg-blue-50 border-blue-200 mb-6">
             <CardHeader><CardTitle className="text-base">Vad du behöver göra här</CardTitle></CardHeader>
             <CardContent className="text-sm text-muted-foreground">
@@ -527,9 +553,14 @@ export default function RadiationSafety() {
             ))}
             {locationChecks.length === 0 && <p className="text-muted-foreground">Inga kontroller registrerade.</p>}
           </div>
-        </TabsContent>
+          </AccordionContent>
+        </AccordionItem>
 
-        <TabsContent value="audit" className="mt-6">
+        <AccordionItem value="audit" className="border rounded-lg bg-card overflow-hidden">
+          <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/50 text-lg font-semibold data-[state=open]:bg-muted/50">
+            Internrevision
+          </AccordionTrigger>
+          <AccordionContent className="px-4 pb-4 pt-4 border-t">
           <Card className="bg-blue-50 border-blue-200 mb-6">
             <CardHeader><CardTitle className="text-base">Vad du behöver göra här</CardTitle></CardHeader>
             <CardContent className="text-sm text-muted-foreground">
@@ -556,8 +587,9 @@ export default function RadiationSafety() {
             ))}
             {annualAudits.length === 0 && <p className="text-muted-foreground">Inga revisioner registrerade.</p>}
           </div>
-        </TabsContent>
-      </Tabs>
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
 
       {/* Method Modal */}
       <Dialog open={methodModalOpen} onOpenChange={setMethodModalOpen}>
