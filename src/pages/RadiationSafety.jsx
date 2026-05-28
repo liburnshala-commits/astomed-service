@@ -143,6 +143,11 @@ export default function RadiationSafety() {
     queryFn: () => base44.entities.AnnualAudit.filter(clinicId !== 'all' ? { clinic_id: clinicId } : {}),
   });
 
+  const { data: machines = [] } = useQuery({
+    queryKey: ['machines', clinicId],
+    queryFn: () => base44.entities.Machine.filter(clinicId !== 'all' ? { customer_id: clinicId } : {}),
+  });
+
   React.useEffect(() => {
     const incidentId = searchParams.get('incidentId');
     if (incidentId && incidents.length > 0) {
@@ -573,11 +578,14 @@ export default function RadiationSafety() {
                           <div className="bg-teal-100 text-teal-700 p-1.5 rounded-full"><Activity className="w-4 h-4" /></div>
                           Patient: {trt.patient_id || 'Okänd'}
                         </CardTitle>
-                        <span className="text-xs font-medium text-slate-500 bg-slate-100 px-2 py-1 rounded-md">{trt.treatment_date ? new Date(trt.treatment_date).toLocaleString() : ''}</span>
+                        <span className="text-xs font-medium text-slate-500 bg-slate-100 px-2 py-1 rounded-md">{trt.treatment_date ? new Date(trt.treatment_date).toLocaleString('sv-SE').slice(0,16) : ''}</span>
                       </div>
                     </CardHeader>
-                    <CardContent className="py-2">
-                      <div className="flex gap-4 text-xs font-medium">
+                    <CardContent className="py-2 space-y-2">
+                      {trt.signature && (
+                        <p className="text-xs text-slate-500">Utförd av: {trt.signature}</p>
+                      )}
+                      <div className="flex flex-wrap gap-2 text-xs font-medium mt-1">
                         <span className={`flex items-center gap-1.5 px-2 py-1 rounded-md ${trt.individual_assessment_done ? 'bg-green-50 text-green-700' : 'bg-slate-50 text-slate-500'}`}>
                           <CheckCircle className={`w-3 h-3 ${trt.individual_assessment_done ? 'text-green-500' : 'text-slate-400'}`} /> Bedömning
                         </span>
@@ -1004,15 +1012,15 @@ export default function RadiationSafety() {
 
       {/* Treatment Modal */}
       <Dialog open={treatmentModalOpen} onOpenChange={setTreatmentModalOpen}>
-        <DialogContent className="max-w-xl">
+        <DialogContent className="max-w-xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>Behandlingsdokumentation</DialogTitle>
+            <DialogTitle>Behandlingsdokumentation (Journalföring)</DialogTitle>
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div className="grid grid-cols-2 gap-4">
               <div className="grid gap-2">
-                <Label>Patient Ref / ID</Label>
-                <Input value={currentTreatment.patient_id || ''} onChange={e => setCurrentTreatment({...currentTreatment, patient_id: e.target.value})} />
+                <Label>Patient Ref / ID (Anonymiserad)</Label>
+                <Input value={currentTreatment.patient_id || ''} onChange={e => setCurrentTreatment({...currentTreatment, patient_id: e.target.value})} placeholder="t.ex. Patient 123" />
               </div>
               <div className="grid gap-2">
                 <Label>Datum och tid</Label>
@@ -1024,31 +1032,71 @@ export default function RadiationSafety() {
               </div>
             </div>
             
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid gap-2">
+                <Label>Använd maskin / utrustning</Label>
+                <select 
+                  className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm"
+                  value={currentTreatment.machine_id || ''} 
+                  onChange={e => setCurrentTreatment({...currentTreatment, machine_id: e.target.value})}
+                >
+                  <option value="">-- Välj maskin --</option>
+                  {machines.map(m => (
+                    <option key={m.id} value={m.id}>{m.model} {m.serial_number ? `(${m.serial_number})` : ''}</option>
+                  ))}
+                  <option value="other">Annan / Olistad maskin</option>
+                </select>
+              </div>
+              <div className="grid gap-2">
+                <Label>Tillämpad metodbeskrivning</Label>
+                <select 
+                  className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm"
+                  value={currentTreatment.method_id || ''} 
+                  onChange={e => setCurrentTreatment({...currentTreatment, method_id: e.target.value})}
+                >
+                  <option value="">-- Välj metod --</option>
+                  {methods.map(m => (
+                    <option key={m.id} value={m.id}>{m.title}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
             <div className="space-y-3 p-4 border rounded-lg bg-muted/20">
+              <Label className="font-semibold text-sm">Checklista inför behandling</Label>
               <div className="flex items-center gap-2">
                 <Checkbox id="ind_ass" checked={currentTreatment.individual_assessment_done || false} onCheckedChange={c => setCurrentTreatment({...currentTreatment, individual_assessment_done: c})} />
-                <Label htmlFor="ind_ass">Individuell bedömning utförd enligt rutin</Label>
+                <Label htmlFor="ind_ass">Individuell bedömning utförd och dokumenterad enligt rutin</Label>
               </div>
               <div className="flex items-center gap-2">
                 <Checkbox id="pre_info" checked={currentTreatment.pre_treatment_info_given || false} onCheckedChange={c => setCurrentTreatment({...currentTreatment, pre_treatment_info_given: c})} />
-                <Label htmlFor="pre_info">Skriftlig och muntlig information given till kund</Label>
+                <Label htmlFor="pre_info">Skriftlig och muntlig information har getts till kunden</Label>
               </div>
               <div className="flex items-center gap-2">
                 <Checkbox id="prot_eq" checked={currentTreatment.protective_equipment_used || false} onCheckedChange={c => setCurrentTreatment({...currentTreatment, protective_equipment_used: c})} />
-                <Label htmlFor="prot_eq">Skyddsutrustning använd (t.ex. glasögon)</Label>
+                <Label htmlFor="prot_eq">Skyddsutrustning använd enligt metodbeskrivning</Label>
               </div>
             </div>
 
             <div className="grid gap-2">
-              <Label>Utrustningsinställningar (som användes)</Label>
-              <Textarea value={currentTreatment.equipment_settings_used || ''} onChange={e => setCurrentTreatment({...currentTreatment, equipment_settings_used: e.target.value})} />
+              <Label>Utrustningsinställningar (Exakta värden under denna behandling)</Label>
+              <Textarea value={currentTreatment.equipment_settings_used || ''} onChange={e => setCurrentTreatment({...currentTreatment, equipment_settings_used: e.target.value})} placeholder="T.ex. Fluens: 25 J/cm2, Pulslängd: 30 ms..." />
             </div>
             <div className="grid gap-2">
-              <Label>Avvikelser under behandling</Label>
-              <Textarea placeholder="Lämna tomt om inga avvikelser skedde" value={currentTreatment.deviations || ''} onChange={e => setCurrentTreatment({...currentTreatment, deviations: e.target.value})} />
+              <Label>Avvikelser under behandling / Kommentarer</Label>
+              <Textarea placeholder="Lämna tomt om behandlingen förlöpte enligt standardrutin. Skriv in om hudreaktion uppstod eller om inställningar ändrades." value={currentTreatment.deviations || ''} onChange={e => setCurrentTreatment({...currentTreatment, deviations: e.target.value})} />
+            </div>
+
+            <div className="grid gap-2">
+              <Label>Signatur (Namn på utförare)</Label>
+              <Input value={currentTreatment.signature || ''} onChange={e => setCurrentTreatment({...currentTreatment, signature: e.target.value})} placeholder="Ditt namn" />
             </div>
             
-            <Button onClick={() => saveTreatment.mutate(currentTreatment)} className="w-full" disabled={saveTreatment.isPending}>
+            <div className="bg-blue-50 text-blue-800 text-xs p-3 rounded-md mt-2">
+              <strong>Lagkrav:</strong> Enligt SSM ska denna behandlingsdokumentation bevaras i minst tre (3) år.
+            </div>
+            
+            <Button onClick={() => saveTreatment.mutate(currentTreatment)} className="w-full mt-2" disabled={saveTreatment.isPending}>
               Spara Dokumentation
             </Button>
           </div>
