@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Plus, ShieldAlert, FileText, Activity, AlertTriangle, CheckCircle, Users, Info, Settings2, Trophy, Target, AlertCircle, CheckCircle2, Clock, BookOpen, Zap, Award, ClipboardList, ShieldCheck } from "lucide-react";
+import { Plus, ShieldAlert, FileText, Activity, AlertTriangle, CheckCircle, Users, Info, Settings2, Trophy, Target, AlertCircle, CheckCircle2, Clock, BookOpen, Zap, Award, ClipboardList, ShieldCheck, Trash2 } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/components/ui/use-toast";
 import AnnualWheel from '@/components/safety/AnnualWheel';
@@ -1179,22 +1179,53 @@ export default function RadiationSafety() {
       {/* Personnel Modal */}
       <Dialog open={personnelModalOpen} onOpenChange={setPersonnelModalOpen}>
         <DialogContent className="max-w-md">
-          <DialogHeader><DialogTitle>{currentPersonnel.id ? 'Redigera Personal' : 'Ny Personal'}</DialogTitle></DialogHeader>
+          <DialogHeader><DialogTitle>{currentPersonnel.id ? 'Redigera Kompetens & Utbildning' : 'Ny Personal'}</DialogTitle></DialogHeader>
           <div className="space-y-4 py-4">
-            <div className="grid gap-2"><Label>Namn</Label><Input value={currentPersonnel.employee_name || ''} onChange={e => setCurrentPersonnel({...currentPersonnel, employee_name: e.target.value})} /></div>
-            <div className="grid gap-2"><Label>Yrkesroll</Label><Input value={currentPersonnel.role || ''} onChange={e => setCurrentPersonnel({...currentPersonnel, role: e.target.value})} placeholder="t.ex. Hudterapeut" /></div>
-            <div className="flex items-center gap-2 mt-2"><Checkbox id="rad_saf" checked={currentPersonnel.radiation_safety_training || false} onCheckedChange={c => setCurrentPersonnel({...currentPersonnel, radiation_safety_training: c})} /><Label htmlFor="rad_saf">Har genomgått strålskyddsutbildning</Label></div>
-            <div className="grid gap-2"><Label>Datum för utbildning</Label>
-              {currentPersonnel.id ? (
-                <div className="text-sm font-medium py-2 px-3 bg-muted/50 rounded-md border">{currentPersonnel.training_date}</div>
-              ) : (
-                <div className="text-sm font-medium py-2 px-3 bg-muted/50 rounded-md border text-muted-foreground">Sätts automatiskt vid sparning</div>
-              )}
+            <div className="grid gap-2">
+              <Label>Namn på anställd</Label>
+              <Input value={currentPersonnel.employee_name || ''} onChange={e => setCurrentPersonnel({...currentPersonnel, employee_name: e.target.value})} />
             </div>
+            <div className="grid gap-2">
+              <Label>Yrkesroll / Titel</Label>
+              <Input value={currentPersonnel.role || ''} onChange={e => setCurrentPersonnel({...currentPersonnel, role: e.target.value})} placeholder="t.ex. Auktoriserad Hudterapeut, Sjuksköterska" />
+            </div>
+            
+            <div className="border-t pt-4 space-y-4">
+              <Label className="font-semibold text-base">Strålskyddsutbildning</Label>
+              <div className="p-3 bg-muted/20 border rounded-md space-y-3">
+                <div className="flex items-center gap-2">
+                  <Checkbox id="rad_saf" checked={currentPersonnel.radiation_safety_training || false} onCheckedChange={c => setCurrentPersonnel({...currentPersonnel, radiation_safety_training: c, training_date: c ? (currentPersonnel.training_date || new Date().toISOString().split('T')[0]) : ''})} />
+                  <Label htmlFor="rad_saf" className="font-medium">Har genomgått dokumenterad strålskyddsutbildning</Label>
+                </div>
+                {currentPersonnel.radiation_safety_training && (
+                  <div className="grid gap-2 pl-6">
+                    <Label className="text-xs">Datum för senaste utbildning</Label>
+                    <Input type="date" value={currentPersonnel.training_date || ''} onChange={e => setCurrentPersonnel({...currentPersonnel, training_date: e.target.value})} className="h-8" />
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="grid gap-2">
+              <Label>Auktoriserad att utföra följande metoder/behandlingar</Label>
+              <Textarea 
+                value={currentPersonnel.authorized_methods ? currentPersonnel.authorized_methods.join(', ') : ''} 
+                onChange={e => setCurrentPersonnel({...currentPersonnel, authorized_methods: e.target.value.split(',').map(s => s.trim()).filter(Boolean)})} 
+                placeholder="T.ex. Hårborttagning Laser, IPL Kärl (Separera med kommatecken)"
+                className="min-h-[80px]"
+              />
+              <p className="text-xs text-muted-foreground">Listar vilka maskiner/metoder denna person bedömts ha kompetens att använda.</p>
+            </div>
+
+            <div className="grid gap-2">
+              <Label>Övriga anteckningar / Certifikat</Label>
+              <Textarea value={currentPersonnel.notes || ''} onChange={e => setCurrentPersonnel({...currentPersonnel, notes: e.target.value})} placeholder="Referens till sparat certifikat, diplom etc." />
+            </div>
+
             <div className="flex gap-2 pt-4 border-t">
-              <Button onClick={() => savePersonnel.mutate(currentPersonnel)} className="flex-1">Spara</Button>
+              <Button onClick={() => savePersonnel.mutate(currentPersonnel)} className="flex-1" disabled={savePersonnel.isPending}>Spara Kompetensprofil</Button>
               {currentPersonnel.id && (
-                <Button variant="destructive" onClick={() => { if (confirm('Ta bort denna person?')) deletePersonnel.mutate(currentPersonnel.id); }} className="flex-1">Ta bort</Button>
+                <Button variant="destructive" onClick={() => { if (confirm('Ta bort denna person?')) deletePersonnel.mutate(currentPersonnel.id); }} className="px-3"><Trash2 className="w-4 h-4" /></Button>
               )}
             </div>
           </div>
