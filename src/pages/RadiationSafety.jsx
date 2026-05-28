@@ -295,6 +295,11 @@ export default function RadiationSafety() {
     onSuccess: () => { queryClient.invalidateQueries(['personnel']); setPersonnelModalOpen(false); toast({ title: "Borttagen" }); }
   });
 
+  const deleteLocationCheck = useMutation({
+    mutationFn: (id) => base44.entities.LocationSafetyCheck.delete(id),
+    onSuccess: () => { queryClient.invalidateQueries(['locationChecks']); setLocationModalOpen(false); toast({ title: "Borttagen" }); }
+  });
+
   return (
     <div className="p-6 max-w-7xl mx-auto">
       <div className="mb-8">
@@ -1269,25 +1274,84 @@ export default function RadiationSafety() {
       </Dialog>
       {/* Location Modal */}
       <Dialog open={locationModalOpen} onOpenChange={setLocationModalOpen}>
-        <DialogContent className="max-w-md">
-          <DialogHeader><DialogTitle>{currentLocationCheck.id ? 'Redigera Kontroll' : 'Ny Säkerhetskontroll'}</DialogTitle></DialogHeader>
+        <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
+          <DialogHeader><DialogTitle>{currentLocationCheck.id ? 'Redigera Lokalkontroll' : 'Ny Lokalsäkerhetskontroll'}</DialogTitle></DialogHeader>
           <div className="space-y-4 py-4">
-            <div className="grid gap-2"><Label>Datum</Label>
-              {currentLocationCheck.id ? (
-                <div className="text-sm font-medium py-2 px-3 bg-muted/50 rounded-md border">{currentLocationCheck.check_date}</div>
-              ) : (
-                <div className="text-sm font-medium py-2 px-3 bg-muted/50 rounded-md border text-muted-foreground">Sätts automatiskt vid sparning</div>
+            <div className="bg-amber-50 text-amber-800 p-3 rounded-md text-sm mb-2">
+              Regelbunden kontroll av behandlingsrum för att säkerställa att utrustning och lokaler uppfyller kraven från Strålsäkerhetsmyndigheten.
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="grid gap-2">
+                <Label>Datum för kontroll</Label>
+                {currentLocationCheck.id ? (
+                  <div className="text-sm font-medium py-2 px-3 bg-muted/50 rounded-md border">{currentLocationCheck.check_date}</div>
+                ) : (
+                  <div className="text-sm font-medium py-2 px-3 bg-muted/50 rounded-md border text-muted-foreground">Sätts automatiskt till dagens datum</div>
+                )}
+              </div>
+              <div className="grid gap-2">
+                <Label>Kontrollerad av</Label>
+                <Input value={currentLocationCheck.checked_by || ''} onChange={e => setCurrentLocationCheck({...currentLocationCheck, checked_by: e.target.value})} placeholder="Ditt namn" />
+              </div>
+            </div>
+
+            <div className="border-t pt-4 mt-4 space-y-4">
+              <Label className="font-semibold text-base">Checklista för behandlingsrum</Label>
+              
+              <div className="p-4 bg-muted/20 border rounded-md space-y-4">
+                <div className="flex items-start gap-3">
+                  <Checkbox className="mt-1" id="chk_signs" checked={currentLocationCheck.warning_signs_present || false} onCheckedChange={c => setCurrentLocationCheck({...currentLocationCheck, warning_signs_present: c})} />
+                  <label htmlFor="chk_signs" className="text-sm cursor-pointer">
+                    <span className="font-medium">Varningsskyltar finns uppsatta</span>
+                    <p className="text-xs text-muted-foreground mt-0.5">Skyltar (t.ex. "Varning för laser") finns väl synliga vid entrén till behandlingsrummet.</p>
+                  </label>
+                </div>
+                
+                <div className="flex items-start gap-3">
+                  <Checkbox className="mt-1" id="chk_win" checked={currentLocationCheck.windows_covered || false} onCheckedChange={c => setCurrentLocationCheck({...currentLocationCheck, windows_covered: c})} />
+                  <label htmlFor="chk_win" className="text-sm cursor-pointer">
+                    <span className="font-medium">Fönster är insynsskyddade</span>
+                    <p className="text-xs text-muted-foreground mt-0.5">Fönster i rummet hindrar att farlig strålning/laserljus reflekteras eller avges utåt.</p>
+                  </label>
+                </div>
+
+                <div className="flex items-start gap-3">
+                  <Checkbox className="mt-1" id="chk_ref" checked={currentLocationCheck.no_reflecting_surfaces || false} onCheckedChange={c => setCurrentLocationCheck({...currentLocationCheck, no_reflecting_surfaces: c})} />
+                  <label htmlFor="chk_ref" className="text-sm cursor-pointer">
+                    <span className="font-medium">Inga reflekterande ytor i strålgången</span>
+                    <p className="text-xs text-muted-foreground mt-0.5">Speglar, blanka metallverktyg eller liknande saknas i riskområdet för att undvika oavsiktliga reflektioner.</p>
+                  </label>
+                </div>
+
+                <div className="flex items-start gap-3">
+                  <Checkbox className="mt-1" id="chk_glass" checked={currentLocationCheck.safety_glasses_intact || false} onCheckedChange={c => setCurrentLocationCheck({...currentLocationCheck, safety_glasses_intact: c})} />
+                  <label htmlFor="chk_glass" className="text-sm cursor-pointer">
+                    <span className="font-medium">Skyddsglasögon intakta och märkta</span>
+                    <p className="text-xs text-muted-foreground mt-0.5">Skyddsglasögon för både personal och kund är fria från repor och CE-märkta för aktuell våglängd.</p>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div className="grid gap-2 pt-2">
+              <Label>Kommentarer / Åtgärder</Label>
+              <Textarea 
+                value={currentLocationCheck.comments || ''} 
+                onChange={e => setCurrentLocationCheck({...currentLocationCheck, comments: e.target.value})} 
+                placeholder="Skriv om du hittade några brister eller om något behövde åtgärdas..."
+                className="min-h-[80px]"
+              />
+            </div>
+
+            <div className="flex gap-2 pt-4 border-t">
+              <Button onClick={() => saveLocationCheck.mutate(currentLocationCheck)} className="flex-1" disabled={saveLocationCheck.isPending}>Spara Kontroll</Button>
+              {currentLocationCheck.id && (
+                <Button variant="destructive" onClick={() => { if (confirm('Ta bort denna kontroll?')) deleteLocationCheck.mutate(currentLocationCheck.id); }} className="px-3">
+                  <Trash2 className="w-4 h-4" />
+                </Button>
               )}
             </div>
-            <div className="grid gap-2"><Label>Utförd av</Label><Input value={currentLocationCheck.checked_by || ''} onChange={e => setCurrentLocationCheck({...currentLocationCheck, checked_by: e.target.value})} /></div>
-            <div className="space-y-3 p-4 border rounded-lg bg-muted/20">
-              <div className="flex items-center gap-2"><Checkbox id="chk_signs" checked={currentLocationCheck.warning_signs_present || false} onCheckedChange={c => setCurrentLocationCheck({...currentLocationCheck, warning_signs_present: c})} /><Label htmlFor="chk_signs">Varningsskyltar finns på dörrar</Label></div>
-              <div className="flex items-center gap-2"><Checkbox id="chk_win" checked={currentLocationCheck.windows_covered || false} onCheckedChange={c => setCurrentLocationCheck({...currentLocationCheck, windows_covered: c})} /><Label htmlFor="chk_win">Fönster är insynsskyddade</Label></div>
-              <div className="flex items-center gap-2"><Checkbox id="chk_ref" checked={currentLocationCheck.no_reflecting_surfaces || false} onCheckedChange={c => setCurrentLocationCheck({...currentLocationCheck, no_reflecting_surfaces: c})} /><Label htmlFor="chk_ref">Inga reflekterande ytor i strålgången</Label></div>
-              <div className="flex items-center gap-2"><Checkbox id="chk_glass" checked={currentLocationCheck.safety_glasses_intact || false} onCheckedChange={c => setCurrentLocationCheck({...currentLocationCheck, safety_glasses_intact: c})} /><Label htmlFor="chk_glass">Skyddsglasögon är hela och CE-märkta</Label></div>
-            </div>
-            <div className="grid gap-2"><Label>Kommentarer / Åtgärder</Label><Textarea value={currentLocationCheck.comments || ''} onChange={e => setCurrentLocationCheck({...currentLocationCheck, comments: e.target.value})} /></div>
-            <Button onClick={() => saveLocationCheck.mutate(currentLocationCheck)} className="w-full">Spara Kontroll</Button>
           </div>
         </DialogContent>
       </Dialog>
