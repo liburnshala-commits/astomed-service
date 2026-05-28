@@ -8,7 +8,43 @@
     },
     "description": {
       "type": "string",
-      "description": "Kort beskrivning av metoden"
+      "description": "Syfte / Kort beskrivning av metoden"
+    },
+    "principles": {
+      "type": "string",
+      "description": "Principer f\u00f6r metoden"
+    },
+    "indications": {
+      "type": "string",
+      "description": "Indikationer (Vem \u00e4r l\u00e4mplig?)"
+    },
+    "contraindications": {
+      "type": "string",
+      "description": "Kontraindikationer"
+    },
+    "pre_visit_instructions": {
+      "type": "string",
+      "description": "Inf\u00f6r kundbes\u00f6ket"
+    },
+    "arrival_procedure": {
+      "type": "string",
+      "description": "Vid kundens ankomst"
+    },
+    "consent_and_info": {
+      "type": "string",
+      "description": "Informationsgivning & Samtycke"
+    },
+    "skin_assessment": {
+      "type": "string",
+      "description": "Hudbed\u00f6mning / Patchtest"
+    },
+    "equipment_check": {
+      "type": "string",
+      "description": "Kontroll av utrustning"
+    },
+    "hygiene_routines": {
+      "type": "string",
+      "description": "Hygienrutiner"
     },
     "authorized_roles": {
       "type": "array",
@@ -19,27 +55,55 @@
     },
     "required_competence": {
       "type": "string",
-      "description": "Vilken kompetens som kr\u00e4vs f\u00f6r att utf\u00f6ra behandlingen"
+      "description": "N\u00f6dv\u00e4ndig kompetens"
+    },
+    "step_by_step_instructions": {
+      "type": "string",
+      "description": "Steg-f\u00f6r-steg-instruktioner"
     },
     "equipment_settings": {
       "type": "string",
-      "description": "Hur den tekniska anordningen ska st\u00e4llas in"
+      "description": "Utrustningsinst\u00e4llningar"
     },
     "exposure_times": {
       "type": "string",
-      "description": "Vilka exponeringstider som ska anv\u00e4ndas"
+      "description": "Exponeringstider"
+    },
+    "staff_protective_equipment": {
+      "type": "string",
+      "description": "Skyddsutrustning f\u00f6r personal"
+    },
+    "customer_protective_equipment": {
+      "type": "string",
+      "description": "Skyddsutrustning f\u00f6r kund"
     },
     "risk_assessment": {
       "type": "string",
-      "description": "Vilka riskbed\u00f6mningar som ska g\u00f6ras inf\u00f6r varje behandlingstillf\u00e4lle"
+      "description": "Riskbed\u00f6mning under behandlingen"
     },
-    "customer_info": {
+    "immediate_aftercare": {
       "type": "string",
-      "description": "Vilken information som ska ges till den som avser att genomg\u00e5 behandlingen"
+      "description": "Omedelbar efterv\u00e5rd"
     },
-    "protective_equipment": {
+    "aftercare_info": {
       "type": "string",
-      "description": "Vilken skyddsutrustning som ska anv\u00e4ndas"
+      "description": "Information om efterv\u00e5rd (till kund)"
+    },
+    "documentation_routines": {
+      "type": "string",
+      "description": "Dokumentation i journal"
+    },
+    "cleaning_routines": {
+      "type": "string",
+      "description": "St\u00e4dning och desinfektion"
+    },
+    "risks_and_side_effects": {
+      "type": "string",
+      "description": "Risker och m\u00f6jliga biverkningar"
+    },
+    "emergency_actions": {
+      "type": "string",
+      "description": "\u00c5tg\u00e4rder vid biverkningar/skada"
     },
     "clinic_id": {
       "type": "string",

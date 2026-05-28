@@ -858,26 +858,60 @@ export default function RadiationSafety() {
               <Checkbox id="is_routine" checked={currentMethod.is_routine || false} onCheckedChange={c => setCurrentMethod({...currentMethod, is_routine: c})} />
               <Label htmlFor="is_routine">Detta är en allmän rutin (t.ex. för underhåll) snarare än en behandlingsmetod</Label>
             </div>
-            <div className="grid gap-2">
-              <Label>Beskrivning</Label>
-              <Textarea value={currentMethod.description || ''} onChange={e => setCurrentMethod({...currentMethod, description: e.target.value})} />
-            </div>
-            <div className="grid gap-2">
-              <Label>Krav på kompetens</Label>
-              <Input value={currentMethod.required_competence || ''} onChange={e => setCurrentMethod({...currentMethod, required_competence: e.target.value})} />
-            </div>
-            <div className="grid gap-2">
-              <Label>Utrustning & Inställningar</Label>
-              <Textarea value={currentMethod.equipment_settings || ''} onChange={e => setCurrentMethod({...currentMethod, equipment_settings: e.target.value})} />
-            </div>
-            <div className="grid gap-2">
-              <Label>Riskbedömning inför behandling</Label>
-              <Textarea value={currentMethod.risk_assessment || ''} onChange={e => setCurrentMethod({...currentMethod, risk_assessment: e.target.value})} />
-            </div>
-            <div className="grid gap-2">
-              <Label>Skyddsutrustning</Label>
-              <Input value={currentMethod.protective_equipment || ''} onChange={e => setCurrentMethod({...currentMethod, protective_equipment: e.target.value})} />
-            </div>
+            <Accordion type="single" collapsible className="w-full">
+              <AccordionItem value="overview">
+                <AccordionTrigger>1. Behandlingsöversikt</AccordionTrigger>
+                <AccordionContent className="space-y-4 p-1">
+                  <div className="grid gap-2"><Label>Syfte</Label><Textarea value={currentMethod.description || ''} onChange={e => setCurrentMethod({...currentMethod, description: e.target.value})} /></div>
+                  <div className="grid gap-2"><Label>Principer för metoden</Label><Textarea value={currentMethod.principles || ''} onChange={e => setCurrentMethod({...currentMethod, principles: e.target.value})} /></div>
+                  <div className="grid gap-2"><Label>Indikationer</Label><Textarea value={currentMethod.indications || ''} onChange={e => setCurrentMethod({...currentMethod, indications: e.target.value})} /></div>
+                  <div className="grid gap-2"><Label>Kontraindikationer</Label><Textarea value={currentMethod.contraindications || ''} onChange={e => setCurrentMethod({...currentMethod, contraindications: e.target.value})} /></div>
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem value="prep">
+                <AccordionTrigger>2. Förberedelser</AccordionTrigger>
+                <AccordionContent className="space-y-4 p-1">
+                  <div className="grid gap-2"><Label>Inför kundbesöket</Label><Textarea value={currentMethod.pre_visit_instructions || ''} onChange={e => setCurrentMethod({...currentMethod, pre_visit_instructions: e.target.value})} /></div>
+                  <div className="grid gap-2"><Label>Vid kundens ankomst</Label><Textarea value={currentMethod.arrival_procedure || ''} onChange={e => setCurrentMethod({...currentMethod, arrival_procedure: e.target.value})} /></div>
+                  <div className="grid gap-2"><Label>Informationsgivning & Samtycke</Label><Textarea value={currentMethod.consent_and_info || ''} onChange={e => setCurrentMethod({...currentMethod, consent_and_info: e.target.value})} /></div>
+                  <div className="grid gap-2"><Label>Hudbedömning / Patchtest</Label><Textarea value={currentMethod.skin_assessment || ''} onChange={e => setCurrentMethod({...currentMethod, skin_assessment: e.target.value})} /></div>
+                  <div className="grid gap-2"><Label>Kontroll av utrustning före start</Label><Textarea value={currentMethod.equipment_check || ''} onChange={e => setCurrentMethod({...currentMethod, equipment_check: e.target.value})} /></div>
+                  <div className="grid gap-2"><Label>Hygienrutiner</Label><Textarea value={currentMethod.hygiene_routines || ''} onChange={e => setCurrentMethod({...currentMethod, hygiene_routines: e.target.value})} /></div>
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem value="execution">
+                <AccordionTrigger>3. Utförande av Behandling</AccordionTrigger>
+                <AccordionContent className="space-y-4 p-1">
+                  <div className="grid gap-2"><Label>Krav på kompetens</Label><Input value={currentMethod.required_competence || ''} onChange={e => setCurrentMethod({...currentMethod, required_competence: e.target.value})} /></div>
+                  <div className="grid gap-2"><Label>Steg-för-steg-instruktioner</Label><Textarea value={currentMethod.step_by_step_instructions || ''} onChange={e => setCurrentMethod({...currentMethod, step_by_step_instructions: e.target.value})} /></div>
+                  <div className="grid gap-2"><Label>Utrustning & Inställningar</Label><Textarea value={currentMethod.equipment_settings || ''} onChange={e => setCurrentMethod({...currentMethod, equipment_settings: e.target.value})} /></div>
+                  <div className="grid gap-2"><Label>Exponeringstider / Antal pulser</Label><Input value={currentMethod.exposure_times || ''} onChange={e => setCurrentMethod({...currentMethod, exposure_times: e.target.value})} /></div>
+                  <div className="grid gap-2"><Label>Skyddsutrustning (Personal)</Label><Input value={currentMethod.staff_protective_equipment || ''} onChange={e => setCurrentMethod({...currentMethod, staff_protective_equipment: e.target.value})} /></div>
+                  <div className="grid gap-2"><Label>Skyddsutrustning (Kund)</Label><Input value={currentMethod.customer_protective_equipment || ''} onChange={e => setCurrentMethod({...currentMethod, customer_protective_equipment: e.target.value})} /></div>
+                  <div className="grid gap-2"><Label>Riskbedömning under behandling</Label><Textarea value={currentMethod.risk_assessment || ''} onChange={e => setCurrentMethod({...currentMethod, risk_assessment: e.target.value})} /></div>
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem value="after">
+                <AccordionTrigger>4. Efter Behandlingen</AccordionTrigger>
+                <AccordionContent className="space-y-4 p-1">
+                  <div className="grid gap-2"><Label>Omedelbar eftervård</Label><Textarea value={currentMethod.immediate_aftercare || ''} onChange={e => setCurrentMethod({...currentMethod, immediate_aftercare: e.target.value})} /></div>
+                  <div className="grid gap-2"><Label>Information om eftervård (till kund)</Label><Textarea value={currentMethod.aftercare_info || ''} onChange={e => setCurrentMethod({...currentMethod, aftercare_info: e.target.value})} /></div>
+                  <div className="grid gap-2"><Label>Dokumentation i journal</Label><Textarea value={currentMethod.documentation_routines || ''} onChange={e => setCurrentMethod({...currentMethod, documentation_routines: e.target.value})} /></div>
+                  <div className="grid gap-2"><Label>Städning och desinfektion</Label><Textarea value={currentMethod.cleaning_routines || ''} onChange={e => setCurrentMethod({...currentMethod, cleaning_routines: e.target.value})} /></div>
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem value="safety">
+                <AccordionTrigger>5. Säkerhet & Nödrutiner</AccordionTrigger>
+                <AccordionContent className="space-y-4 p-1">
+                  <div className="grid gap-2"><Label>Risker och möjliga biverkningar</Label><Textarea value={currentMethod.risks_and_side_effects || ''} onChange={e => setCurrentMethod({...currentMethod, risks_and_side_effects: e.target.value})} /></div>
+                  <div className="grid gap-2"><Label>Åtgärder vid biverkningar/skada</Label><Textarea value={currentMethod.emergency_actions || ''} onChange={e => setCurrentMethod({...currentMethod, emergency_actions: e.target.value})} /></div>
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
             <Button onClick={() => saveMethod.mutate(currentMethod)} className="w-full" disabled={saveMethod.isPending}>
               Spara Metod
             </Button>
