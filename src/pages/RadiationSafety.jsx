@@ -1105,35 +1105,71 @@ export default function RadiationSafety() {
 
       {/* Delegation Modal */}
       <Dialog open={delegationModalOpen} onOpenChange={setDelegationModalOpen}>
-        <DialogContent className="max-w-md">
-          <DialogHeader><DialogTitle>{currentDelegation.id ? 'Redigera Delegering' : 'Ny Delegering'}</DialogTitle></DialogHeader>
+        <DialogContent className="max-w-lg">
+          <DialogHeader><DialogTitle>{currentDelegation.id ? 'Redigera Ansvarsdelegering' : 'Formell Ansvarsdelegering'}</DialogTitle></DialogHeader>
           <div className="space-y-4 py-4">
-            <div className="grid gap-2"><Label>Roll/Titel</Label><Input value={currentDelegation.role_title || ''} onChange={e => setCurrentDelegation({...currentDelegation, role_title: e.target.value})} placeholder="t.ex. Strålskyddsansvarig" /></div>
-            <div className="grid gap-2"><Label>Namn på ansvarig</Label><Input value={currentDelegation.assigned_to_name || ''} onChange={e => setCurrentDelegation({...currentDelegation, assigned_to_name: e.target.value})} /></div>
-            <div className="grid gap-2"><Label>Datum tilldelat</Label>
+            <div className="bg-purple-50 text-purple-800 p-3 rounded-md text-sm mb-2">
+              Använd denna mall för att formellt delegera uppgifter, till exempel rollen som <strong>Strålskyddsansvarig</strong>. Det är viktigt att delegeringen är tydlig och accepterad.
+            </div>
+            
+            <div className="grid grid-cols-2 gap-4">
+              <div className="grid gap-2">
+                <Label>Delegerad Roll / Titel</Label>
+                <Input value={currentDelegation.role_title || ''} onChange={e => setCurrentDelegation({...currentDelegation, role_title: e.target.value})} placeholder="t.ex. Strålskyddsansvarig" />
+              </div>
+              <div className="grid gap-2">
+                <Label>Delegeras till (Namn)</Label>
+                <Input value={currentDelegation.assigned_to_name || ''} onChange={e => setCurrentDelegation({...currentDelegation, assigned_to_name: e.target.value})} placeholder="Namn på anställd" />
+              </div>
+            </div>
+            
+            <div className="grid gap-2">
+              <Label>Beskrivning av ansvarsområden och befogenheter</Label>
+              <Textarea 
+                value={currentDelegation.responsibilities || ''} 
+                onChange={e => setCurrentDelegation({...currentDelegation, responsibilities: e.target.value})} 
+                placeholder="Beskriv i detalj vad personen ansvarar för, t.ex. uppdatera metoder, hålla årlig internrevision, eller kontrollera utrustning."
+                className="min-h-[100px]"
+              />
+            </div>
+            
+            <div className="grid gap-2">
+              <Label>Datum för delegering</Label>
               {currentDelegation.id ? (
                 <div className="text-sm font-medium py-2 px-3 bg-muted/50 rounded-md border">{currentDelegation.date_assigned}</div>
               ) : (
-                <div className="text-sm font-medium py-2 px-3 bg-muted/50 rounded-md border text-muted-foreground">Sätts automatiskt vid sparning</div>
+                <div className="text-sm font-medium py-2 px-3 bg-muted/50 rounded-md border text-muted-foreground">Sätts automatiskt till dagens datum</div>
               )}
             </div>
-            <div className="grid gap-2"><Label>Ansvarsområden</Label><Textarea value={currentDelegation.responsibilities || ''} onChange={e => setCurrentDelegation({...currentDelegation, responsibilities: e.target.value})} /></div>
-            <div className="border-t pt-4 mt-4">
+
+            <div className="border border-slate-200 p-4 rounded-lg bg-slate-50 mt-4">
+              <h4 className="font-semibold text-sm mb-2 text-slate-800">Formellt Godkännande (Signering)</h4>
+              <p className="text-xs text-slate-600 mb-3">
+                Genom att kryssa i nedan intygas att ovanstående person har tagit del av, förstått och accepterat ansvarsdelegeringen.
+              </p>
               <div className="flex items-start gap-2">
-                <Checkbox id="emp_appr" checked={currentDelegation.employee_approved || false} onCheckedChange={c => setCurrentDelegation({...currentDelegation, employee_approved: c, approval_date: c ? new Date().toISOString().split('T')[0] : ''})} />
-                <label htmlFor="emp_appr" className="text-sm cursor-pointer">
-                  <span className="font-semibold">Personalen har godkänt</span>
-                  <p className="text-xs text-muted-foreground mt-1">Bekräfta att denna person godkänt att bli registrerad för detta ansvar</p>
+                <Checkbox 
+                  id="emp_appr" 
+                  checked={currentDelegation.employee_approved || false} 
+                  onCheckedChange={c => setCurrentDelegation({...currentDelegation, employee_approved: c, approval_date: c ? new Date().toISOString().split('T')[0] : ''})} 
+                />
+                <label htmlFor="emp_appr" className="text-sm cursor-pointer font-medium text-slate-800">
+                  Jag bekräftar att ansvaret har godkänts av den delegerade personen
                 </label>
               </div>
               {currentDelegation.employee_approved && (
-                <p className="text-xs text-green-600 mt-2 ml-6">Godkänd: {currentDelegation.approval_date}</p>
+                <div className="mt-2 ml-6 text-sm text-green-700 font-medium flex items-center gap-1">
+                  <CheckCircle className="w-4 h-4" /> Signerad och godkänd: {currentDelegation.approval_date}
+                </div>
               )}
             </div>
-            <div className="flex gap-2 pt-4 border-t">
-              <Button onClick={() => saveDelegation.mutate(currentDelegation)} className="flex-1">Spara</Button>
+
+            <div className="flex gap-2 pt-2">
+              <Button onClick={() => saveDelegation.mutate(currentDelegation)} className="flex-1">Spara Delegering</Button>
               {currentDelegation.id && (
-                <Button variant="destructive" onClick={() => { if (confirm('Ta bort denna delegering?')) deleteDelegation.mutate(currentDelegation.id); }} className="flex-1">Ta bort</Button>
+                <Button variant="destructive" onClick={() => { if (confirm('Ta bort denna delegering?')) deleteDelegation.mutate(currentDelegation.id); }} className="w-auto px-4">
+                  Ta bort
+                </Button>
               )}
             </div>
           </div>
