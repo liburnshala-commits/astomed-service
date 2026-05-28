@@ -929,8 +929,14 @@ export default function RadiationSafety() {
             <div className="grid grid-cols-2 gap-4">
               <div className="grid gap-2">
                 <Label>Titel</Label>
-                <Input value={currentIncident.title || ''} onChange={e => setCurrentIncident({...currentIncident, title: e.target.value})} />
+                <Input value={currentIncident.title || ''} onChange={e => setCurrentIncident({...currentIncident, title: e.target.value})} placeholder="Kort titel på händelsen" />
               </div>
+              <div className="grid gap-2">
+                <Label>Plats för händelsen</Label>
+                <Input value={currentIncident.location || ''} onChange={e => setCurrentIncident({...currentIncident, location: e.target.value})} placeholder="T.ex. Behandlingsrum 1" />
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
               <div className="grid gap-2">
                 <Label>Datum</Label>
                 {currentIncident.id ? (
@@ -939,17 +945,24 @@ export default function RadiationSafety() {
                   <div className="text-sm font-medium py-2 px-3 bg-muted/50 rounded-md border text-muted-foreground">Sätts automatiskt till dagens datum</div>
                 )}
               </div>
+              <div className="grid gap-2">
+                <Label>Maskin/Utrustning (Frivilligt)</Label>
+                <Input value={currentIncident.machine_id || ''} onChange={e => setCurrentIncident({...currentIncident, machine_id: e.target.value})} placeholder="Serie- eller modellnummer" />
+              </div>
             </div>
+            
             <div className="grid gap-2">
               <Label>Händelseförlopp</Label>
-              <Textarea value={currentIncident.description || ''} onChange={e => setCurrentIncident({...currentIncident, description: e.target.value})} />
+              <Textarea value={currentIncident.description || ''} onChange={e => setCurrentIncident({...currentIncident, description: e.target.value})} placeholder="Beskriv vad som hände i detalj..." className="min-h-[100px]" />
             </div>
             <div className="grid gap-2">
-              <Label>Vidtagna åtgärder</Label>
-              <Textarea value={currentIncident.actions_taken || ''} onChange={e => setCurrentIncident({...currentIncident, actions_taken: e.target.value})} />
+              <Label>Vidtagna åtgärder / Förbättringar</Label>
+              <Textarea value={currentIncident.actions_taken || ''} onChange={e => setCurrentIncident({...currentIncident, actions_taken: e.target.value})} placeholder="Vad har gjorts för att förhindra att det händer igen?" className="min-h-[100px]" />
             </div>
+            
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2 p-3 border rounded-md bg-muted/20">
+              <div className="space-y-3 p-3 border rounded-md bg-muted/20">
+                <Label className="font-semibold text-sm">Extern rapportering</Label>
                 <div className="flex items-center gap-2">
                   <Checkbox id="ssm" checked={currentIncident.reported_to_ssm || false} onCheckedChange={c => setCurrentIncident({...currentIncident, reported_to_ssm: c})} />
                   <Label htmlFor="ssm">Rapporterad till SSM</Label>
@@ -958,18 +971,28 @@ export default function RadiationSafety() {
                   <Checkbox id="lakemedelsverket" checked={currentIncident.reported_to_lakemedelsverket || false} onCheckedChange={c => setCurrentIncident({...currentIncident, reported_to_lakemedelsverket: c})} />
                   <Label htmlFor="lakemedelsverket">Rapporterad till Läkemedelsverket</Label>
                 </div>
+                <div className="grid gap-2 mt-2">
+                  <Label className="text-xs">Rapporterad till annan (t.ex. tillverkare, IVO)</Label>
+                  <Input value={currentIncident.reported_to_other || ''} onChange={e => setCurrentIncident({...currentIncident, reported_to_other: e.target.value})} placeholder="T.ex. Tillverkaren" className="h-8 text-sm" />
+                </div>
               </div>
-              <div className="flex items-center gap-2">
-                <Label>Status:</Label>
-                <select 
-                  className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm"
-                  value={currentIncident.status || 'open'} 
-                  onChange={e => setCurrentIncident({...currentIncident, status: e.target.value})}
-                >
-                  <option value="open">Öppen</option>
-                  <option value="investigated">Utreds</option>
-                  <option value="closed">Stängd/Åtgärdad</option>
-                </select>
+              <div className="space-y-3">
+                <div className="grid gap-2">
+                  <Label>Status på utredning:</Label>
+                  <select 
+                    className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm"
+                    value={currentIncident.status || 'open'} 
+                    onChange={e => setCurrentIncident({...currentIncident, status: e.target.value})}
+                  >
+                    <option value="open">Öppen (Ohanterad)</option>
+                    <option value="investigated">Utreds</option>
+                    <option value="closed">Stängd/Åtgärdad</option>
+                  </select>
+                </div>
+                <div className="grid gap-2">
+                  <Label>Patient/Behandlings-ID (Frivilligt)</Label>
+                  <Input value={currentIncident.treatment_id || ''} onChange={e => setCurrentIncident({...currentIncident, treatment_id: e.target.value})} placeholder="Referens till behandling" />
+                </div>
               </div>
             </div>
             <Button onClick={() => saveIncident.mutate(currentIncident)} className="w-full" disabled={saveIncident.isPending}>
