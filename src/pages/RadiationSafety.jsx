@@ -300,6 +300,11 @@ export default function RadiationSafety() {
     onSuccess: () => { queryClient.invalidateQueries(['locationChecks']); setLocationModalOpen(false); toast({ title: "Borttagen" }); }
   });
 
+  const deleteAudit = useMutation({
+    mutationFn: (id) => base44.entities.AnnualAudit.delete(id),
+    onSuccess: () => { queryClient.invalidateQueries(['annualAudits']); setAuditModalOpen(false); toast({ title: "Borttagen" }); }
+  });
+
   return (
     <div className="p-6 max-w-7xl mx-auto">
       <div className="mb-8">
@@ -1274,11 +1279,11 @@ export default function RadiationSafety() {
       </Dialog>
       {/* Location Modal */}
       <Dialog open={locationModalOpen} onOpenChange={setLocationModalOpen}>
-        <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
-          <DialogHeader><DialogTitle>{currentLocationCheck.id ? 'Redigera Lokalkontroll' : 'Ny Lokalsäkerhetskontroll'}</DialogTitle></DialogHeader>
-          <div className="space-y-4 py-4">
-            <div className="bg-amber-50 text-amber-800 p-3 rounded-md text-sm mb-2">
-              Regelbunden kontroll av behandlingsrum för att säkerställa att utrustning och lokaler uppfyller kraven från Strålsäkerhetsmyndigheten.
+        <DialogContent className="max-w-lg">
+          <DialogHeader><DialogTitle>{currentLocationCheck.id ? 'Redigera Lokalsäkerhetskontroll' : 'Checklista: Lokalsäkerhet'}</DialogTitle></DialogHeader>
+          <div className="space-y-4 py-4 max-h-[70vh] overflow-y-auto px-1">
+            <div className="bg-blue-50 text-blue-800 p-3 rounded-md text-sm mb-2">
+              Regelbunden kontroll av behandlingsrummen. Säkerställ att den fysiska miljön uppfyller säkerhetskraven för strålande verksamhet.
             </div>
 
             <div className="grid grid-cols-2 gap-4">
@@ -1287,69 +1292,65 @@ export default function RadiationSafety() {
                 {currentLocationCheck.id ? (
                   <div className="text-sm font-medium py-2 px-3 bg-muted/50 rounded-md border">{currentLocationCheck.check_date}</div>
                 ) : (
-                  <div className="text-sm font-medium py-2 px-3 bg-muted/50 rounded-md border text-muted-foreground">Sätts automatiskt till dagens datum</div>
+                  <div className="text-sm font-medium py-2 px-3 bg-muted/50 rounded-md border text-muted-foreground">Sätts automatiskt vid sparning</div>
                 )}
               </div>
               <div className="grid gap-2">
                 <Label>Kontrollerad av</Label>
-                <Input value={currentLocationCheck.checked_by || ''} onChange={e => setCurrentLocationCheck({...currentLocationCheck, checked_by: e.target.value})} placeholder="Ditt namn" />
+                <Input value={currentLocationCheck.checked_by || ''} onChange={e => setCurrentLocationCheck({...currentLocationCheck, checked_by: e.target.value})} placeholder="Namn på ansvarig" />
               </div>
             </div>
 
-            <div className="border-t pt-4 mt-4 space-y-4">
-              <Label className="font-semibold text-base">Checklista för behandlingsrum</Label>
+            <div className="border border-slate-200 rounded-md p-4 space-y-4 bg-slate-50 mt-2">
+              <h4 className="font-semibold text-sm border-b pb-2">Kontrollpunkter</h4>
               
-              <div className="p-4 bg-muted/20 border rounded-md space-y-4">
-                <div className="flex items-start gap-3">
-                  <Checkbox className="mt-1" id="chk_signs" checked={currentLocationCheck.warning_signs_present || false} onCheckedChange={c => setCurrentLocationCheck({...currentLocationCheck, warning_signs_present: c})} />
-                  <label htmlFor="chk_signs" className="text-sm cursor-pointer">
-                    <span className="font-medium">Varningsskyltar finns uppsatta</span>
-                    <p className="text-xs text-muted-foreground mt-0.5">Skyltar (t.ex. "Varning för laser") finns väl synliga vid entrén till behandlingsrummet.</p>
-                  </label>
-                </div>
-                
-                <div className="flex items-start gap-3">
-                  <Checkbox className="mt-1" id="chk_win" checked={currentLocationCheck.windows_covered || false} onCheckedChange={c => setCurrentLocationCheck({...currentLocationCheck, windows_covered: c})} />
-                  <label htmlFor="chk_win" className="text-sm cursor-pointer">
-                    <span className="font-medium">Fönster är insynsskyddade</span>
-                    <p className="text-xs text-muted-foreground mt-0.5">Fönster i rummet hindrar att farlig strålning/laserljus reflekteras eller avges utåt.</p>
-                  </label>
-                </div>
+              <div className="flex items-start gap-3">
+                <Checkbox className="mt-0.5" id="chk_signs" checked={currentLocationCheck.warning_signs_present || false} onCheckedChange={c => setCurrentLocationCheck({...currentLocationCheck, warning_signs_present: c})} />
+                <label htmlFor="chk_signs" className="text-sm cursor-pointer">
+                  <span className="font-medium text-slate-800">Varningsskyltar finns på dörrar</span>
+                  <p className="text-xs text-muted-foreground">Korrekt varselmärkning för Laser/IPL sitter väl synligt i anslutning till behandlingsrummet.</p>
+                </label>
+              </div>
 
-                <div className="flex items-start gap-3">
-                  <Checkbox className="mt-1" id="chk_ref" checked={currentLocationCheck.no_reflecting_surfaces || false} onCheckedChange={c => setCurrentLocationCheck({...currentLocationCheck, no_reflecting_surfaces: c})} />
-                  <label htmlFor="chk_ref" className="text-sm cursor-pointer">
-                    <span className="font-medium">Inga reflekterande ytor i strålgången</span>
-                    <p className="text-xs text-muted-foreground mt-0.5">Speglar, blanka metallverktyg eller liknande saknas i riskområdet för att undvika oavsiktliga reflektioner.</p>
-                  </label>
-                </div>
+              <div className="flex items-start gap-3">
+                <Checkbox className="mt-0.5" id="chk_win" checked={currentLocationCheck.windows_covered || false} onCheckedChange={c => setCurrentLocationCheck({...currentLocationCheck, windows_covered: c})} />
+                <label htmlFor="chk_win" className="text-sm cursor-pointer">
+                  <span className="font-medium text-slate-800">Fönster och öppningar är insynsskyddade</span>
+                  <p className="text-xs text-muted-foreground">Persienner eller rullgardiner är nere och förhindrar att utomstående kan exponeras för strålning.</p>
+                </label>
+              </div>
 
-                <div className="flex items-start gap-3">
-                  <Checkbox className="mt-1" id="chk_glass" checked={currentLocationCheck.safety_glasses_intact || false} onCheckedChange={c => setCurrentLocationCheck({...currentLocationCheck, safety_glasses_intact: c})} />
-                  <label htmlFor="chk_glass" className="text-sm cursor-pointer">
-                    <span className="font-medium">Skyddsglasögon intakta och märkta</span>
-                    <p className="text-xs text-muted-foreground mt-0.5">Skyddsglasögon för både personal och kund är fria från repor och CE-märkta för aktuell våglängd.</p>
-                  </label>
-                </div>
+              <div className="flex items-start gap-3">
+                <Checkbox className="mt-0.5" id="chk_ref" checked={currentLocationCheck.no_reflecting_surfaces || false} onCheckedChange={c => setCurrentLocationCheck({...currentLocationCheck, no_reflecting_surfaces: c})} />
+                <label htmlFor="chk_ref" className="text-sm cursor-pointer">
+                  <span className="font-medium text-slate-800">Inga reflekterande ytor i strålgången</span>
+                  <p className="text-xs text-muted-foreground">Speglar, tavlor eller blänkande föremål har täckts över eller tagits bort för att förhindra okontrollerad reflektion.</p>
+                </label>
+              </div>
+
+              <div className="flex items-start gap-3">
+                <Checkbox className="mt-0.5" id="chk_glass" checked={currentLocationCheck.safety_glasses_intact || false} onCheckedChange={c => setCurrentLocationCheck({...currentLocationCheck, safety_glasses_intact: c})} />
+                <label htmlFor="chk_glass" className="text-sm cursor-pointer">
+                  <span className="font-medium text-slate-800">Skyddsglasögon är intakta och CE-märkta</span>
+                  <p className="text-xs text-muted-foreground">Rätt glasögon för de våglängder som används är på plats. Glasen har inga repor och bågarna är hela.</p>
+                </label>
               </div>
             </div>
 
-            <div className="grid gap-2 pt-2">
-              <Label>Kommentarer / Åtgärder</Label>
+            <div className="grid gap-2">
+              <Label>Kommentarer och vidtagna åtgärder</Label>
               <Textarea 
                 value={currentLocationCheck.comments || ''} 
                 onChange={e => setCurrentLocationCheck({...currentLocationCheck, comments: e.target.value})} 
-                placeholder="Skriv om du hittade några brister eller om något behövde åtgärdas..."
+                placeholder="Notera eventuella brister, vilka åtgärder som vidtagits eller beställningar av ny materiel som gjorts."
                 className="min-h-[80px]"
               />
             </div>
 
-            <div className="flex gap-2 pt-4 border-t">
-              <Button onClick={() => saveLocationCheck.mutate(currentLocationCheck)} className="flex-1" disabled={saveLocationCheck.isPending}>Spara Kontroll</Button>
+            <div className="flex gap-2 pt-4">
+              <Button onClick={() => saveLocationCheck.mutate(currentLocationCheck)} className="flex-1" disabled={saveLocationCheck.isPending}>Spara Kontrollrapport</Button>
               {currentLocationCheck.id && (
-                <Button variant="destructive" onClick={() => { if (confirm('Ta bort denna kontroll?')) deleteLocationCheck.mutate(currentLocationCheck.id); }} className="px-3">
-                  <Trash2 className="w-4 h-4" />
-                </Button>
+                <Button variant="destructive" onClick={() => { if (confirm('Ta bort kontroll?')) deleteLocationCheck.mutate(currentLocationCheck.id); }} className="px-3"><Trash2 className="w-4 h-4" /></Button>
               )}
             </div>
           </div>
@@ -1358,25 +1359,82 @@ export default function RadiationSafety() {
 
       {/* Audit Modal */}
       <Dialog open={auditModalOpen} onOpenChange={setAuditModalOpen}>
-        <DialogContent className="max-w-md">
-          <DialogHeader><DialogTitle>{currentAudit.id ? 'Redigera Revision' : 'Ny Årlig Internrevision'}</DialogTitle></DialogHeader>
-          <div className="space-y-4 py-4">
-            <div className="grid gap-2"><Label>Datum</Label>
-              {currentAudit.id ? (
-                <div className="text-sm font-medium py-2 px-3 bg-muted/50 rounded-md border">{currentAudit.audit_date}</div>
-              ) : (
-                <div className="text-sm font-medium py-2 px-3 bg-muted/50 rounded-md border text-muted-foreground">Sätts automatiskt vid sparning</div>
+        <DialogContent className="max-w-xl">
+          <DialogHeader><DialogTitle>{currentAudit.id ? 'Redigera Årlig Egenkontroll' : 'Årlig Egenkontroll (Internrevision)'}</DialogTitle></DialogHeader>
+          <div className="space-y-4 py-4 max-h-[80vh] overflow-y-auto px-1">
+            <div className="bg-amber-50 text-amber-800 p-3 rounded-md text-sm mb-2">
+              Egenkontrollen (internrevision) är ett lagkrav och ska utföras minst en gång per år för att utvärdera att klinikens strålsäkerhetsarbete fungerar.
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="grid gap-2">
+                <Label>Revisionsdatum</Label>
+                {currentAudit.id ? (
+                  <div className="text-sm font-medium py-2 px-3 bg-muted/50 rounded-md border">{currentAudit.audit_date}</div>
+                ) : (
+                  <div className="text-sm font-medium py-2 px-3 bg-muted/50 rounded-md border text-muted-foreground">Sätts automatiskt vid sparning</div>
+                )}
+              </div>
+              <div className="grid gap-2">
+                <Label>Revision utförd av</Label>
+                <Input value={currentAudit.auditor_name || ''} onChange={e => setCurrentAudit({...currentAudit, auditor_name: e.target.value})} placeholder="t.ex. Strålskyddsansvarig" />
+              </div>
+            </div>
+
+            <div className="border border-slate-200 rounded-md p-4 space-y-4 bg-slate-50 mt-2">
+              <h4 className="font-semibold text-sm border-b pb-2">Granskningsområden</h4>
+              
+              <div className="flex items-start gap-3">
+                <Checkbox className="mt-0.5" id="aud_met" checked={currentAudit.methods_updated || false} onCheckedChange={c => setCurrentAudit({...currentAudit, methods_updated: c})} />
+                <label htmlFor="aud_met" className="text-sm cursor-pointer">
+                  <span className="font-medium text-slate-800">Metodbeskrivningar och rutiner är granskade</span>
+                  <p className="text-xs text-muted-foreground">Alla aktuella metoder har uppdaterats för att spegla aktuell utrustning och vetenskap/beprövad erfarenhet.</p>
+                </label>
+              </div>
+
+              <div className="flex items-start gap-3">
+                <Checkbox className="mt-0.5" id="aud_trn" checked={currentAudit.training_updated || false} onCheckedChange={c => setCurrentAudit({...currentAudit, training_updated: c})} />
+                <label htmlFor="aud_trn" className="text-sm cursor-pointer">
+                  <span className="font-medium text-slate-800">Utbildnings- och kompetensregister är uppdaterat</span>
+                  <p className="text-xs text-muted-foreground">Personalens kompetens och dokumenterade utbildningar är stämda mot de metoder som utförs.</p>
+                </label>
+              </div>
+
+              <div className="flex items-start gap-3">
+                <Checkbox className="mt-0.5" id="aud_inc" checked={currentAudit.incidents_reviewed || false} onCheckedChange={c => setCurrentAudit({...currentAudit, incidents_reviewed: c})} />
+                <label htmlFor="aud_inc" className="text-sm cursor-pointer">
+                  <span className="font-medium text-slate-800">Incidenter och avvikelser har analyserats</span>
+                  <p className="text-xs text-muted-foreground">Årets avvikelserapport har gåtts igenom. Har åtgärder gett effekt och minskat riskerna?</p>
+                </label>
+              </div>
+            </div>
+
+            <div className="grid gap-2">
+              <Label>Sammanfattning och slutsatser från årets granskning</Label>
+              <Textarea 
+                value={currentAudit.summary || ''} 
+                onChange={e => setCurrentAudit({...currentAudit, summary: e.target.value})} 
+                placeholder="Övergripande slutsatser kring klinikens strålsäkerhet. Vad har fungerat bra? Finns det återkommande brister?"
+                className="min-h-[100px]"
+              />
+            </div>
+            
+            <div className="grid gap-2">
+              <Label>Beslutade åtgärder / Handlingsplan</Label>
+              <Textarea 
+                value={currentAudit.planned_actions || ''} 
+                onChange={e => setCurrentAudit({...currentAudit, planned_actions: e.target.value})} 
+                placeholder="Vilka konkreta åtgärder behöver vidtas det kommande året för att höja säkerheten eller följa lagen?"
+                className="min-h-[100px]"
+              />
+            </div>
+
+            <div className="flex gap-2 pt-4 border-t">
+              <Button onClick={() => saveAudit.mutate(currentAudit)} className="flex-1" disabled={saveAudit.isPending}>Spara Revisionsrapport</Button>
+              {currentAudit.id && (
+                <Button variant="destructive" onClick={() => { if (confirm('Ta bort revision?')) deleteAudit.mutate(currentAudit.id); }} className="px-3"><Trash2 className="w-4 h-4" /></Button>
               )}
             </div>
-            <div className="grid gap-2"><Label>Utförd av</Label><Input value={currentAudit.auditor_name || ''} onChange={e => setCurrentAudit({...currentAudit, auditor_name: e.target.value})} /></div>
-            <div className="space-y-3 p-4 border rounded-lg bg-muted/20">
-              <div className="flex items-center gap-2"><Checkbox id="aud_met" checked={currentAudit.methods_updated || false} onCheckedChange={c => setCurrentAudit({...currentAudit, methods_updated: c})} /><Label htmlFor="aud_met">Metoder genomgångna och uppdaterade</Label></div>
-              <div className="flex items-center gap-2"><Checkbox id="aud_trn" checked={currentAudit.training_updated || false} onCheckedChange={c => setCurrentAudit({...currentAudit, training_updated: c})} /><Label htmlFor="aud_trn">Personalens utbildning är aktuell</Label></div>
-              <div className="flex items-center gap-2"><Checkbox id="aud_inc" checked={currentAudit.incidents_reviewed || false} onCheckedChange={c => setCurrentAudit({...currentAudit, incidents_reviewed: c})} /><Label htmlFor="aud_inc">Årets incidenter har analyserats</Label></div>
-            </div>
-            <div className="grid gap-2"><Label>Sammanfattning</Label><Textarea value={currentAudit.summary || ''} onChange={e => setCurrentAudit({...currentAudit, summary: e.target.value})} /></div>
-            <div className="grid gap-2"><Label>Planerade åtgärder framåt</Label><Textarea value={currentAudit.planned_actions || ''} onChange={e => setCurrentAudit({...currentAudit, planned_actions: e.target.value})} /></div>
-            <Button onClick={() => saveAudit.mutate(currentAudit)} className="w-full">Spara Revision</Button>
           </div>
         </DialogContent>
       </Dialog>
