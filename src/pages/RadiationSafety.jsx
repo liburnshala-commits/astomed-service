@@ -17,6 +17,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Plus, ShieldAlert, FileText, Activity, AlertTriangle, CheckCircle, Users, Info, Settings2, Trophy, Target, AlertCircle, CheckCircle2, Clock, BookOpen, Zap, Award, ClipboardList, ShieldCheck } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/components/ui/use-toast";
+import AnnualWheel from '@/components/safety/AnnualWheel';
 
 export default function RadiationSafety() {
   const { user } = useAuth();
@@ -256,6 +257,13 @@ export default function RadiationSafety() {
           </div>
         </CardContent>
       </Card>
+
+      <AnnualWheel 
+        audits={annualAudits} 
+        locationChecks={locationChecks} 
+        measurements={measurements} 
+        personnel={personnel} 
+      />
 
       <Accordion type="single" collapsible value={activeTab} onValueChange={setActiveTab} className="w-full space-y-4">
         <AccordionItem value="info" className="border rounded-lg bg-card overflow-hidden">
