@@ -1,6 +1,7 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { AlertCircle, CheckCircle2, Clock, CalendarDays, ArrowRight } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { differenceInDays, addYears, format } from "date-fns";
 
 export default function AnnualWheel({ audits, locationChecks, measurements, personnel, serviceRecords }) {
@@ -40,6 +41,7 @@ export default function AnnualWheel({ audits, locationChecks, measurements, pers
         <CardTitle className="text-xl flex items-center gap-2 text-slate-800">
           <CalendarDays className="w-5 h-5 text-indigo-500" />
           Klinikens Årshjul
+          <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-100 uppercase text-[10px] tracking-wider py-0 px-2 rounded-full border-none">BETA</Badge>
         </CardTitle>
         <CardDescription>
           Följ upp era årliga strålsäkerhetsuppgifter för att alltid vara inspektionsredo.
