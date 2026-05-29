@@ -49,6 +49,7 @@ const navSections = [
   {
     title: "Service",
     items: [
+      { label: "Nya Registreringar", page: "NewCustomers", icon: UsersIcon, roles: ["admin"] },
       { label: "Serviceförfrågningar", page: "PublicServiceLeads", icon: ClipboardList, roles: ["admin"] },
       { label: "Chattsupport", page: "ChatSupport", icon: MessageSquare, roles: ["admin"] },
       { label: "Serviceärenden", page: "ServiceRecords", icon: Wrench, roles: ["admin", "technician", "customer"] },
