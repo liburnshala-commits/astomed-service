@@ -26,6 +26,7 @@ import FunctionControls from './pages/FunctionControls';
 import FunctionControlForm from './pages/FunctionControlForm';
 import RadiationSafety from './pages/RadiationSafety';
 import NewCustomers from './pages/NewCustomers';
+import PendingApproval from './pages/PendingApproval';
 
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
@@ -84,6 +85,13 @@ const AuthenticatedApp = () => {
     }
   }
 
+  // Strict routing for pending customers
+  if (user && user.role === 'pending_customer' && !isPublicRoute) {
+    if (currentPath !== '/PendingApproval') {
+      return <Navigate to="/PendingApproval" replace />;
+    }
+  }
+
   // Strict routing for customers
   if (user && user.role === 'customer' && !isPublicRoute) {
     const allowedCustomerPaths = ['/CustomerDashboard', '/ClinicDevelopment', '/ServiceRecords', '/Machines', '/DeliveryControls', '/DeliveryControlForm', '/FunctionControls', '/FunctionControlForm', '/RadiationSafety'];
@@ -126,6 +134,7 @@ const AuthenticatedApp = () => {
         <Route path="/FunctionControlForm" element={<AnimatedPage><FunctionControlForm /></AnimatedPage>} />
         <Route path="/RadiationSafety" element={<AnimatedPage><LayoutWrapper currentPageName="RadiationSafety"><RadiationSafety /></LayoutWrapper></AnimatedPage>} />
         <Route path="/NewCustomers" element={<AnimatedPage><LayoutWrapper currentPageName="NewCustomers"><NewCustomers /></LayoutWrapper></AnimatedPage>} />
+        <Route path="/PendingApproval" element={<AnimatedPage><LayoutWrapper currentPageName="PendingApproval"><PendingApproval /></LayoutWrapper></AnimatedPage>} />
         {Object.entries(Pages).map(([path, Page]) => (
           <Route
             key={path}

@@ -36,7 +36,7 @@ export default function PublicRegister() {
         email: formData.email,
         password: formData.password,
         full_name: formData.full_name,
-        role: "customer"
+        role: "pending_customer"
       });
 
       setUserEmail(formData.email);
@@ -93,9 +93,9 @@ export default function PublicRegister() {
             <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4">
               <CheckCircle className="w-8 h-8 text-green-600" />
             </div>
-            <h2 className="text-2xl font-bold astomed-title mb-2">Välkommen till Astomed!</h2>
+            <h2 className="text-2xl font-bold astomed-title mb-2">Registrering mottagen!</h2>
             <p className="text-sm astomed-muted mb-6">
-              Ditt konto har skapats. Du kan nu logga in och börja använda portalen.
+              Ditt konto har skapats och väntar nu på att bli godkänt av en administratör. Du får tillgång till portalen så snart vi verifierat dina uppgifter.
             </p>
             <Button
               onClick={() => base44.auth.redirectToLogin()}

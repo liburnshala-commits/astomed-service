@@ -12,18 +12,37 @@ import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carouse
 
 export default function NewCustomers() {
   const [customers, setCustomers] = useState([]);
+  const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
 
-  const loadCustomers = async () => {
+  const loadData = async () => {
     setLoading(true);
-    // Hämta de 100 senaste kunderna
-    const data = await base44.entities.Customer.list("-created_date", 100);
-    setCustomers(data);
+    try {
+      const [customersData, usersData] = await Promise.all([
+        base44.entities.Customer.list("-created_date", 100),
+        base44.entities.User.list()
+      ]);
+      setCustomers(customersData);
+      setUsers(usersData);
+    } catch(e) {
+      console.error(e);
+    }
     setLoading(false);
   };
 
-  useEffect(() => { loadCustomers(); }, []);
+  useEffect(() => { loadData(); }, []);
+
+  const handleApprove = async (email) => {
+    if (!confirm("Vill du godkänna denna kund och ge dem åtkomst till portalen?")) return;
+    try {
+      await base44.functions.invoke('updateUserRole', { email, role: 'customer' });
+      // Reload data to see changes
+      loadData();
+    } catch(e) {
+      alert("Kunde inte godkänna kunden: " + e.message);
+    }
+  };
 
   const filtered = customers.filter(c => {
     const searchLower = search.toLowerCase();
@@ -44,7 +63,7 @@ export default function NewCustomers() {
           <h1 className="text-2xl font-bold astomed-title">Nya Kunder (Registreringar)</h1>
           <p className="astomed-subtitle text-sm mt-1">Översikt över nyligen skapade kundkonton via kundportalen</p>
         </div>
-        <Button variant="outline" size="sm" onClick={loadCustomers} className="gap-2">
+        <Button variant="outline" size="sm" onClick={loadData} className="gap-2">
           <RefreshCw className="w-4 h-4" />
           Uppdatera
         </Button>
@@ -73,7 +92,10 @@ export default function NewCustomers() {
         <>
           {/* Desktop list view */}
           <div className="hidden md:flex flex-col space-y-3">
-            {filtered.map(customer => (
+            {filtered.map(customer => {
+              const customerUser = users.find(u => u.email === customer.email);
+              const isPending = customerUser?.role === 'pending_customer';
+              return (
               <div key={customer.id} className="bg-white border rounded-xl p-5 hover:shadow-md transition-shadow">
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1 min-w-0">
@@ -82,6 +104,9 @@ export default function NewCustomers() {
                       {customer.org_number && <Badge className="text-xs bg-gray-100 text-gray-700">{customer.org_number}</Badge>}
                       {!customer.is_imported && (
                         <Badge className="text-xs bg-green-100 text-green-800">Nyregistrering</Badge>
+                      )}
+                      {isPending && (
+                        <Badge className="text-xs bg-yellow-100 text-yellow-800">Väntar på godkännande</Badge>
                       )}
                     </div>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-1 text-sm text-gray-600">
@@ -110,10 +135,16 @@ export default function NewCustomers() {
                     <Button size="sm" variant="outline" className="gap-1.5 text-xs" onClick={() => window.location.href = `/CustomerDetails?id=${customer.id}`}>
                       <Eye className="w-3.5 h-3.5" /> Gå till kundkort
                     </Button>
+                    {isPending && (
+                      <Button size="sm" className="gap-1.5 text-xs astomed-btn-primary" onClick={() => handleApprove(customer.email)}>
+                        Godkänn
+                      </Button>
+                    )}
                   </div>
                 </div>
               </div>
-            ))}
+            );
+            })}
           </div>
 
           {/* Mobile Carousel View */}
@@ -125,7 +156,10 @@ export default function NewCustomers() {
             )}
             <Carousel className="w-full" opts={{ align: "start" }}>
               <CarouselContent>
-                {filtered.map(customer => (
+                {filtered.map(customer => {
+                  const customerUser = users.find(u => u.email === customer.email);
+                  const isPending = customerUser?.role === 'pending_customer';
+                  return (
                   <CarouselItem key={customer.id} className="basis-11/12 sm:basis-8/12">
                     <Card className="bg-white shadow-sm border-slate-200 mx-1 h-full flex flex-col">
                       <CardContent className="p-4 space-y-4 flex-1 flex flex-col">
@@ -137,11 +171,18 @@ export default function NewCustomers() {
                               <span className="truncate">{customer.contact_person || 'Ingen kontaktperson'}</span>
                             </div>
                           </div>
-                          {!customer.is_imported && (
-                            <Badge className="border-0 px-2 py-0.5 text-[10px] bg-green-100 text-green-800 shrink-0">
-                              Nyregistrering
-                            </Badge>
-                          )}
+                          <div className="flex flex-col gap-1 items-end shrink-0">
+                            {!customer.is_imported && (
+                              <Badge className="border-0 px-2 py-0.5 text-[10px] bg-green-100 text-green-800">
+                                Nyregistrering
+                              </Badge>
+                            )}
+                            {isPending && (
+                              <Badge className="border-0 px-2 py-0.5 text-[10px] bg-yellow-100 text-yellow-800">
+                                Väntar
+                              </Badge>
+                            )}
+                          </div>
                         </div>
 
                         <div className="space-y-2 text-sm text-slate-700 bg-slate-50 p-3 rounded-lg border border-slate-100">
@@ -168,15 +209,21 @@ export default function NewCustomers() {
                           </div>
                         </div>
 
-                        <div className="pt-2 mt-auto">
-                          <Button className="h-11 shadow-sm w-full" variant="outline" onClick={() => window.location.href = `/CustomerDetails?id=${customer.id}`}>
-                            <Eye className="w-4 h-4 mr-2" /> Gå till kundkort
+                        <div className="pt-2 mt-auto flex gap-2">
+                          <Button className="h-11 shadow-sm flex-1" variant="outline" onClick={() => window.location.href = `/CustomerDetails?id=${customer.id}`}>
+                            <Eye className="w-4 h-4 mr-2" /> Kundkort
                           </Button>
+                          {isPending && (
+                            <Button className="h-11 shadow-sm flex-1 astomed-btn-primary" onClick={() => handleApprove(customer.email)}>
+                              Godkänn
+                            </Button>
+                          )}
                         </div>
                       </CardContent>
                     </Card>
                   </CarouselItem>
-                ))}
+                );
+                })}
               </CarouselContent>
             </Carousel>
           </div>
