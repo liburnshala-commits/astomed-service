@@ -66,6 +66,17 @@ export default function PublicRegister() {
         city: formData.city
       });
 
+      // Notifiera administratörer
+      try {
+        await base44.functions.invoke('notifyNewAccount', {
+          email: formData.email,
+          full_name: formData.full_name,
+          company_name: formData.company_name
+        });
+      } catch(e) {
+        console.error("Kunde inte skicka notifikation till admin", e);
+      }
+
       setStep(3);
     } catch (err) {
       setError(err.message || "Kunde inte spara företagsuppgifter.");
