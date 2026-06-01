@@ -97,6 +97,10 @@
       "type": "string",
       "format": "date",
       "description": "Datum f\u00f6r uppf\u00f6ljning"
+    },
+    "anagel": {
+      "type": "string",
+      "description": "Anagel"
     }
   },
   "required": [
