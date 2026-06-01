@@ -440,6 +440,7 @@ export default function ServiceContractLeads() {
               className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" 
               onChange={handleImportCSV}
               disabled={importing}
+              aria-label="Importera prospekt via CSV-fil"
             />
             <Button variant="outline" className="w-full sm:w-auto h-12 sm:h-10 text-base sm:text-sm border-dashed pointer-events-none" disabled={importing}>
               {importing ? <Loader2 className="w-5 h-5 sm:w-4 sm:h-4 mr-2 animate-spin" /> : <UploadCloud className="w-5 h-5 sm:w-4 sm:h-4 mr-2" />}
@@ -461,10 +462,11 @@ export default function ServiceContractLeads() {
               className="border-none shadow-none focus-visible:ring-0 px-0 bg-transparent h-10"
               value={searchTerm}
               onChange={e => setSearchTerm(e.target.value)}
+              aria-label="Sökfält för att filtrera prospekt"
             />
           </div>
           <Select value={statusFilter} onValueChange={setStatusFilter}>
-            <SelectTrigger className="w-full sm:w-64 h-12 sm:h-10 text-sm bg-slate-50">
+            <SelectTrigger className="w-full sm:w-64 h-12 sm:h-10 text-sm bg-slate-50" aria-label="Filtrera prospekt på status">
               <SelectValue placeholder="Filtrera på status" />
             </SelectTrigger>
             <SelectContent>
@@ -525,8 +527,9 @@ export default function ServiceContractLeads() {
                             onClick={(e) => { e.stopPropagation(); setEditingLead(lead); }}
                             className="text-slate-400 hover:text-blue-500 transition-colors"
                             title="Lägg till/redigera anteckning"
+                            aria-label="Lägg till eller redigera anteckning för detta prospekt"
                           >
-                            <Pencil className="w-3 h-3" />
+                            <Pencil className="w-3 h-3" aria-hidden="true" />
                           </button>
                         </div>
                       </td>
@@ -542,8 +545,9 @@ export default function ServiceContractLeads() {
                                 toast({ title: "Kopierad!", description: "E-postadressen kopierad." });
                               }}
                               className="ml-1 text-slate-400 hover:text-slate-700 opacity-0 group-hover:opacity-100 transition-opacity"
+                              aria-label="Kopiera e-postadress"
                             >
-                              <Copy className="w-3 h-3" />
+                              <Copy className="w-3 h-3" aria-hidden="true" />
                             </button>
                           </div>
                         )}
@@ -567,7 +571,7 @@ export default function ServiceContractLeads() {
                       </td>
                       <td className="px-2 py-3">
                         <Select value={lead.status} onValueChange={(v) => handleUpdateStatus(lead.id, v)}>
-                          <SelectTrigger className={`h-8 text-xs font-medium ${statusMap[lead.status]?.color}`}>
+                          <SelectTrigger className={`h-8 text-xs font-medium ${statusMap[lead.status]?.color}`} aria-label="Ändra status för prospekt">
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
@@ -592,18 +596,19 @@ export default function ServiceContractLeads() {
                               className="h-8 w-8 p-0 text-emerald-600 hover:bg-emerald-50 hover:text-emerald-700"
                               onClick={() => handleConvert(lead)}
                               title="Konvertera till kund/maskin"
+                              aria-label="Konvertera prospekt till kund och maskin"
                             >
-                              <ArrowRight className="w-4 h-4" />
+                              <ArrowRight className="w-4 h-4" aria-hidden="true" />
                             </Button>
                           )}
-                          <Button size="sm" variant="ghost" className="h-8 w-8 p-0 text-slate-500 hover:bg-slate-100" onClick={() => setViewingInteractions(lead)} title="Logga/visa historik">
-                            <MessageSquare className="w-4 h-4" />
+                          <Button size="sm" variant="ghost" className="h-8 w-8 p-0 text-slate-500 hover:bg-slate-100" onClick={() => setViewingInteractions(lead)} title="Logga/visa historik" aria-label="Logga eller visa historik för prospekt">
+                            <MessageSquare className="w-4 h-4" aria-hidden="true" />
                           </Button>
-                          <Button size="sm" variant="ghost" className="h-8 w-8 p-0 text-blue-500 hover:bg-blue-50" onClick={() => setEditingLead(lead)} title="Redigera">
-                            <Pencil className="w-4 h-4" />
+                          <Button size="sm" variant="ghost" className="h-8 w-8 p-0 text-blue-500 hover:bg-blue-50" onClick={() => setEditingLead(lead)} title="Redigera" aria-label="Redigera prospekt">
+                            <Pencil className="w-4 h-4" aria-hidden="true" />
                           </Button>
-                          <Button size="sm" variant="ghost" className="h-8 w-8 p-0 text-red-500 hover:bg-red-50" onClick={() => handleDelete(lead.id)} title="Ta bort">
-                            <Trash2 className="w-4 h-4" />
+                          <Button size="sm" variant="ghost" className="h-8 w-8 p-0 text-red-500 hover:bg-red-50" onClick={() => handleDelete(lead.id)} title="Ta bort" aria-label="Ta bort prospekt">
+                            <Trash2 className="w-4 h-4" aria-hidden="true" />
                           </Button>
                         </div>
                       </td>
@@ -702,9 +707,9 @@ export default function ServiceContractLeads() {
 
                       <div className="space-y-3 pt-4 border-t border-slate-100">
                         <div>
-                          <label className="text-xs font-semibold text-slate-500 mb-1.5 block uppercase tracking-wider">Status</label>
+                          <label id={`status-label-${lead.id}`} className="text-xs font-semibold text-slate-500 mb-1.5 block uppercase tracking-wider">Status</label>
                           <Select value={lead.status} onValueChange={(v) => handleUpdateStatus(lead.id, v)}>
-                            <SelectTrigger className="h-12 text-sm w-full bg-white shadow-sm border-slate-200 focus:ring-blue-100">
+                            <SelectTrigger aria-labelledby={`status-label-${lead.id}`} className="h-12 text-sm w-full bg-white shadow-sm border-slate-200 focus:ring-blue-100">
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
@@ -737,8 +742,9 @@ export default function ServiceContractLeads() {
                             <Button 
                               className="flex-1 h-11 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200 shadow-sm" 
                               onClick={() => handleConvert(lead)}
+                              aria-label="Konvertera prospekt till kund och maskin"
                             >
-                              <ArrowRight className="w-4 h-4 mr-2" /> Konvertera
+                              <ArrowRight className="w-4 h-4 mr-2" aria-hidden="true" /> Konvertera
                             </Button>
                           )}
                           <Button 
@@ -746,8 +752,9 @@ export default function ServiceContractLeads() {
                             className="h-11 px-4 text-red-500 hover:bg-red-50 hover:text-red-700 border border-transparent hover:border-red-100" 
                             onClick={() => handleDelete(lead.id)}
                             title="Ta bort"
+                            aria-label="Ta bort prospekt"
                           >
-                            <Trash2 className="w-5 h-5" />
+                            <Trash2 className="w-5 h-5" aria-hidden="true" />
                           </Button>
                         </div>
                       </div>
