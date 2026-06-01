@@ -492,6 +492,7 @@ export default function ServiceContractLeads() {
                     <th className="px-2 py-3 w-1/4">Namn</th>
                     <th className="px-2 py-3">Kontakt</th>
                     <th className="px-2 py-3">Maskin(er)</th>
+                    <th className="px-2 py-3">Anagel</th>
                     <th className="px-2 py-3 w-[160px]">Status</th>
                     <th className="px-2 py-3 text-right w-[180px]">Åtgärder</th>
                   </tr>
@@ -568,6 +569,13 @@ export default function ServiceContractLeads() {
                             );
                           })}
                         </div>
+                      </td>
+                      <td className="px-2 py-3 text-xs text-slate-600">
+                        {lead.anagel ? (
+                          <span className="capitalize">{lead.anagel}</span>
+                        ) : (
+                          <span className="text-slate-400">-</span>
+                        )}
                       </td>
                       <td className="px-2 py-3">
                         <Select value={lead.status} onValueChange={(v) => handleUpdateStatus(lead.id, v)}>
@@ -681,6 +689,13 @@ export default function ServiceContractLeads() {
                         <div className="text-sm text-slate-700 bg-amber-50/50 p-3 rounded-lg border border-amber-100">
                           <span className="font-medium text-slate-800 block mb-1">Anteckningar:</span>
                           <span className="whitespace-pre-line">{lead.notes}</span>
+                        </div>
+                      )}
+
+                      {lead.anagel && (
+                        <div className="text-sm text-slate-700 bg-slate-50 p-3 rounded-lg border border-slate-100">
+                          <span className="font-medium text-slate-800 block mb-1">Anagel:</span>
+                          <span className="capitalize">{lead.anagel}</span>
                         </div>
                       )}
 
