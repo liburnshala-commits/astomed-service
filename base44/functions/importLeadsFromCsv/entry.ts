@@ -17,19 +17,27 @@ Deno.serve(async (req) => {
             text = text.slice(1);
         }
 
-        const lines = text.split('\n').map(line => line.trim()).filter(line => line.length > 0);
-        const headers = lines[0].split(';');
+        // Importera papaparse för stabilare hantering av CSV som kan innehålla radbrytningar
+        const Papa = (await import('npm:papaparse')).default;
+
+        const parsed = Papa.parse(text, {
+            header: true,
+            skipEmptyLines: true,
+            delimiter: ';'
+        });
 
         const records = [];
-        for (let i = 1; i < lines.length; i++) {
-            const values = lines[i].split(';');
+        for (const rawRow of parsed.data) {
+            // Rensa keys ifall det finns whitespaces
             const row = {};
-            headers.forEach((header, index) => {
-                const cleanHeader = header.trim();
-                row[cleanHeader] = values[index] !== undefined ? values[index].trim() : '';
-            });
+            for (const key of Object.keys(rawRow)) {
+                row[key.trim()] = rawRow[key] ? rawRow[key].trim() : '';
+            }
 
-            if (!row.company_name) continue;
+            if (!row.company_name) {
+                console.log("Hoppade över rad på grund av saknad company_name", row);
+                continue;
+            }
 
             const lead = {
                 company_name: row.company_name,
@@ -57,13 +65,28 @@ Deno.serve(async (req) => {
             records.push(lead);
         }
 
-        // Bulk insert records
         let successCount = 0;
         let failCount = 0;
+        let skippedCount = 0;
+
+        // Fetch existing leads to avoid duplicates (based on company_name)
+        const existingLeads = await base44.asServiceRole.entities.ServiceContractLead.filter({});
+        const existingCompanyNames = new Set(existingLeads.map(l => l.company_name.trim().toLowerCase()));
         
+        const newRecords = [];
+        for (const record of records) {
+            if (existingCompanyNames.has(record.company_name.trim().toLowerCase())) {
+                skippedCount++;
+            } else {
+                newRecords.push(record);
+                existingCompanyNames.add(record.company_name.trim().toLowerCase());
+            }
+        }
+
+        // Bulk insert new records
         const chunkSize = 50;
-        for (let i = 0; i < records.length; i += chunkSize) {
-            const chunk = records.slice(i, i + chunkSize);
+        for (let i = 0; i < newRecords.length; i += chunkSize) {
+            const chunk = newRecords.slice(i, i + chunkSize);
             try {
                 await base44.asServiceRole.entities.ServiceContractLead.bulkCreate(chunk);
                 successCount += chunk.length;
@@ -82,7 +105,13 @@ Deno.serve(async (req) => {
             }
         }
 
-        return Response.json({ success: true, totalFound: records.length, successCount, failCount });
+        return Response.json({ 
+            success: true, 
+            totalFound: records.length, 
+            successCount, 
+            failCount,
+            skippedCount
+        });
     } catch (error) {
         return Response.json({ error: error.message }, { status: 500 });
     }
