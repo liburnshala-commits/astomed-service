@@ -378,6 +378,12 @@ export default function ServiceContractLeads() {
     const matchesStatus = statusFilter === "all" || l.status === statusFilter;
     return matchesSearch && matchesStatus;
   }).sort((a, b) => {
+    const aHasPhone = !!getLeadContact(a).phone;
+    const bHasPhone = !!getLeadContact(b).phone;
+    
+    if (aHasPhone && !bHasPhone) return -1;
+    if (!aHasPhone && bHasPhone) return 1;
+
     // Sort by created_date descending (newest first)
     const dateA = a.created_date ? new Date(a.created_date).getTime() : 0;
     const dateB = b.created_date ? new Date(b.created_date).getTime() : 0;
