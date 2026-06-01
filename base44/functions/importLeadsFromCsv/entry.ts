@@ -4,8 +4,12 @@ Deno.serve(async (req) => {
     try {
         const base44 = createClientFromRequest(req);
         
-        const fileUrl = "https://media.base44.com/files/public/69a9446fcb1cd4ab529479ba/977b8164f_KunderGhali-SopranosBlad1.csv";
-        const response = await fetch(fileUrl);
+        const { file_url } = await req.json();
+        if (!file_url) {
+            return Response.json({ error: "Missing file_url" }, { status: 400 });
+        }
+        
+        const response = await fetch(file_url);
         let text = await response.text();
         
         // Ta bort BOM (Byte Order Mark) om den finns

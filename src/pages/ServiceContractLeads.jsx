@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
-import { Plus, Search, Calendar as CalendarIcon, Trash2, ArrowRight, User, Building2, Phone, Mail, Copy, Pencil, Send, MessageSquare, CheckCircle2, Download } from "lucide-react";
+import { Plus, Search, Calendar as CalendarIcon, Trash2, ArrowRight, User, Building2, Phone, Mail, Copy, Pencil, Send, MessageSquare, CheckCircle2, Download, UploadCloud, Loader2 } from "lucide-react";
 import { useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
@@ -46,6 +46,7 @@ export default function ServiceContractLeads() {
   const [loading, setLoading] = useState(true);
   const [showNewLeadModal, setShowNewLeadModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState(initialSearch);
+  const [importing, setImporting] = useState(false);
 
   useEffect(() => {
     const param = new URLSearchParams(location.search).get("search");
@@ -295,6 +296,37 @@ export default function ServiceContractLeads() {
     }
   };
 
+  const handleImportCSV = async (event) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    try {
+      setImporting(true);
+      toast({ title: "Laddar upp fil...", description: "Vänligen vänta." });
+
+      const { file_url } = await base44.integrations.Core.UploadFile({ file });
+      
+      toast({ title: "Importerar...", description: "Bearbetar CSV-filen." });
+      const res = await base44.functions.invoke('importLeadsFromCsv', { file_url });
+
+      if (res.data && res.data.success) {
+        toast({ 
+          title: "Import slutförd", 
+          description: `Importerade ${res.data.successCount} prospekt. Misslyckades med ${res.data.failCount}.` 
+        });
+        fetchData();
+      } else {
+        throw new Error(res.data?.error || "Okänt fel vid import");
+      }
+    } catch (error) {
+      console.error(error);
+      toast({ title: "Import misslyckades", description: error.message, variant: "destructive" });
+    } finally {
+      setImporting(false);
+      event.target.value = ""; // Reset input
+    }
+  };
+
   const handleExportEmails = () => {
     // Generate CSV content with UTF-8 BOM for Excel compatibility
     const csvContent = "\uFEFF" 
@@ -395,6 +427,19 @@ export default function ServiceContractLeads() {
           <Button onClick={handleExportEmails} variant="outline" className="w-full sm:w-auto h-12 sm:h-10 text-base sm:text-sm border-dashed">
             <Download className="w-5 h-5 sm:w-4 sm:h-4 mr-2" /> Exportera maillista
           </Button>
+          <div className="relative w-full sm:w-auto">
+            <input 
+              type="file" 
+              accept=".csv" 
+              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" 
+              onChange={handleImportCSV}
+              disabled={importing}
+            />
+            <Button variant="outline" className="w-full sm:w-auto h-12 sm:h-10 text-base sm:text-sm border-dashed pointer-events-none" disabled={importing}>
+              {importing ? <Loader2 className="w-5 h-5 sm:w-4 sm:h-4 mr-2 animate-spin" /> : <UploadCloud className="w-5 h-5 sm:w-4 sm:h-4 mr-2" />}
+              {importing ? "Importerar..." : "Importera CSV"}
+            </Button>
+          </div>
           <Button onClick={() => setShowNewLeadModal(true)} className="astomed-btn-primary w-full sm:w-auto h-12 sm:h-10 text-base sm:text-sm">
             <Plus className="w-5 h-5 sm:w-4 sm:h-4 mr-2" /> Nytt Prospekt
           </Button>
