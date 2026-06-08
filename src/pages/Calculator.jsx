@@ -6,7 +6,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Calculator as CalcIcon, ArrowRight, AlertTriangle } from "lucide-react";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { Badge } from "@/components/ui/badge";
+import { Calculator as CalcIcon, ArrowRight, AlertTriangle, ShieldCheck, TrendingUp, Lightbulb, CheckCircle2, Info, BookOpen } from "lucide-react";
 
 export default function Calculator() {
   const [step, setStep] = useState(1);
@@ -300,73 +302,175 @@ export default function Calculator() {
             )}
 
             {step === 5 && (
-              <div className="space-y-6">
-                <div>
-                  <h3 className="font-bold text-2xl mb-1 text-emerald-900">Affärsplan</h3>
-                  <p className="text-slate-600 text-sm mt-2">
-                    Enligt Skatteverket och Almi är en väl genomarbetad affärsplan avgörande för att starta eget. 
-                    Den behövs inte bara för att du själv ska se om din idé är lönsam, utan är ofta ett stenhårt krav 
-                    från banker och investerare om du behöver finansiering, eller från Arbetsförmedlingen om du söker starta eget-bidrag.
+              <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                {/* Header Section */}
+                <div className="text-center space-y-3 pb-6 border-b">
+                  <Badge variant="outline" className="bg-primary/5 text-primary border-primary/20 mb-2">Din Personliga Affärsplan</Badge>
+                  <h3 className="font-serif font-bold text-3xl text-slate-900 tracking-tight">Klar för start?</h3>
+                  <p className="text-slate-600 max-w-2xl mx-auto leading-relaxed">
+                    Enligt experter på Almi och Skatteverket är en väl genomarbetad affärsplan avgörande. Den är ditt starkaste kort mot banker, investerare och Arbetsförmedlingen (för starta eget-bidrag). Här har vi strukturerat resan i tre enkla steg för att ge dig full kontroll.
                   </p>
-                  <p className="text-slate-500 text-sm mt-3">Här är en uppskattning baserat på dina siffror. En komplett affärsplan har skickats till din e-post!</p>
-                </div>
-                <div className="p-6 bg-emerald-50 border border-emerald-100 rounded-xl space-y-4">
-                  <div className="flex justify-between items-center pb-3 border-b border-emerald-200/50">
-                    <span className="text-emerald-800">Total uppstartsinvestering:</span>
-                    <strong className="text-lg">{Math.round(totalStartupCost).toLocaleString()} kr</strong>
-                  </div>
-                  {trainingCost > 0 && (
-                    <div className="flex justify-between items-center pb-2 text-emerald-700/70">
-                      <span className="text-xs">Varav utbildning:</span>
-                      <span className="text-xs">{Math.round(trainingCost).toLocaleString()} kr</span>
-                    </div>
-                  )}
-                  <div className="flex justify-between items-center pb-2">
-                    <span className="text-emerald-800 text-sm">Omsättning (exkl. moms):</span>
-                    <strong className="text-emerald-800 text-sm">{Math.round(monthlyRevenueExVat).toLocaleString()} kr</strong>
-                  </div>
-                  <div className="flex justify-between items-center pb-2">
-                    <span className="text-emerald-800 text-sm">Fasta kostnader (inkl. soc. avgifter):</span>
-                    <strong className="text-emerald-800 text-sm">- {Math.round(monthlyCost).toLocaleString()} kr</strong>
-                  </div>
-                  <div className="flex justify-between items-center pb-2">
-                    <span className="text-emerald-800 text-sm">Vinst före skatt:</span>
-                    <strong className="text-emerald-800 text-sm">{Math.round(monthlyProfitBeforeTax).toLocaleString()} kr</strong>
-                  </div>
-                  <div className="flex justify-between items-center pb-3 border-b border-emerald-200/50">
-                    <span className="text-emerald-800 text-sm">Bolagsskatt (20.6%):</span>
-                    <strong className="text-emerald-800 text-sm">- {Math.round(corporateTax).toLocaleString()} kr</strong>
-                  </div>
-                  <div className="flex justify-between items-center pb-3 border-b border-emerald-200/50">
-                    <span className="text-emerald-800 font-semibold">Förväntad vinst efter skatt (per månad):</span>
-                    <strong className="text-lg text-emerald-600">{Math.round(monthlyProfitAfterTax).toLocaleString()} kr</strong>
-                  </div>
-                  <div className="flex justify-between items-center pt-1">
-                    <span className="text-emerald-800 font-medium">Tid till Break-even:</span>
-                    <strong className="text-xl font-bold">{breakEvenMonths} månader</strong>
-                  </div>
-                  <div className="pt-4 pb-2">
-                    <h4 className="font-bold text-emerald-900 mb-3 border-b border-emerald-200/50 pb-2">Affärsplan Prognos (6 &amp; 12 månader)</h4>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div className="bg-white/50 p-4 rounded-lg border border-emerald-100 shadow-sm">
-                        <div className="text-emerald-800 font-semibold mb-2">6 Månader</div>
-                        <div className="text-sm flex justify-between mb-1"><span>Omsättning:</span> <span>{Math.round(revenue6Months).toLocaleString()} kr</span></div>
-                        <div className="text-sm flex justify-between mb-1"><span>Kostnader:</span> <span>-{Math.round(cost6Months).toLocaleString()} kr</span></div>
-                        <div className="text-sm flex justify-between text-emerald-600 font-bold mt-2 border-t border-emerald-100 pt-2"><span>Vinst (efter skatt):</span> <span>{Math.round(profit6Months).toLocaleString()} kr</span></div>
-                      </div>
-                      <div className="bg-white/50 p-4 rounded-lg border border-emerald-100 shadow-sm">
-                        <div className="text-emerald-800 font-semibold mb-2">12 Månader</div>
-                        <div className="text-sm flex justify-between mb-1"><span>Omsättning:</span> <span>{Math.round(revenue12Months).toLocaleString()} kr</span></div>
-                        <div className="text-sm flex justify-between mb-1"><span>Kostnader:</span> <span>-{Math.round(cost12Months).toLocaleString()} kr</span></div>
-                        <div className="text-sm flex justify-between text-emerald-600 font-bold mt-2 border-t border-emerald-100 pt-2"><span>Vinst (efter skatt):</span> <span>{Math.round(profit12Months).toLocaleString()} kr</span></div>
-                      </div>
-                    </div>
-                  </div>
-                  <p className="text-xs text-emerald-700/80 pt-2">
-                    * Break-even är beräknat på att hela uppstartsinvesteringen betalas tillbaka via din månatliga vinst efter bolagsskatt.
+                  <p className="text-sm text-primary font-medium flex items-center justify-center gap-1.5 mt-4">
+                    <CheckCircle2 className="w-4 h-4" /> En PDF har även skickats till din e-post!
                   </p>
                 </div>
-                <div className="flex flex-col sm:flex-row gap-3 mt-8">
+
+                {/* Pillar A: Lagkrav & Trygghet */}
+                <div className="space-y-4">
+                  <div className="flex items-center gap-3 border-l-4 border-slate-900 pl-3">
+                    <div className="bg-slate-100 p-2 rounded-lg"><ShieldCheck className="w-5 h-5 text-slate-700" /></div>
+                    <div>
+                      <h4 className="font-bold text-lg text-slate-900">1. Lagkrav &amp; Trygghet</h4>
+                      <p className="text-sm text-slate-500">Fundamentet. Följ dessa för att bygga ett tryggt varumärke.</p>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <Card className="shadow-sm hover:shadow-md transition-shadow">
+                      <CardContent className="p-4 space-y-2">
+                        <CheckCircle2 className="w-5 h-5 text-green-600 mb-2" />
+                        <h5 className="font-semibold text-sm">Miljöbalken</h5>
+                        <p className="text-xs text-slate-600">Yrkesmässig hygienisk verksamhet kräver anmälan till kommunen senast 6 veckor innan start.</p>
+                      </CardContent>
+                    </Card>
+                    <Card className="shadow-sm hover:shadow-md transition-shadow">
+                      <CardContent className="p-4 space-y-2">
+                        <CheckCircle2 className="w-5 h-5 text-green-600 mb-2" />
+                        <h5 className="font-semibold text-sm">Strålsäkerhet (SSMFS)</h5>
+                        <p className="text-xs text-slate-600">Kräver dokumenterad egenkontroll och godkänd skyddsutrustning vid IPL och Laser.</p>
+                      </CardContent>
+                    </Card>
+                    <Card className="shadow-sm hover:shadow-md transition-shadow">
+                      <CardContent className="p-4 space-y-2">
+                        <CheckCircle2 className="w-5 h-5 text-green-600 mb-2" />
+                        <h5 className="font-semibold text-sm">Injektionslagen</h5>
+                        <p className="text-xs text-slate-600">Vid estetiska injektioner är legitimation (läkare, ssk, tandläkare) ett lagkrav.</p>
+                      </CardContent>
+                    </Card>
+                  </div>
+                </div>
+
+                {/* Pillar B: Affärsmannaskapet */}
+                <div className="space-y-4 pt-4">
+                  <div className="flex items-center gap-3 border-l-4 border-slate-900 pl-3">
+                    <div className="bg-slate-100 p-2 rounded-lg"><BookOpen className="w-5 h-5 text-slate-700" /></div>
+                    <div>
+                      <h4 className="font-bold text-lg text-slate-900">2. Strategi &amp; Affärsmannaskap</h4>
+                      <p className="text-sm text-slate-500">Hur du fyller kliniken och skapar hållbar lönsamhet.</p>
+                    </div>
+                  </div>
+                  
+                  <Accordion type="single" collapsible className="w-full bg-white rounded-xl border shadow-sm">
+                    <AccordionItem value="item-1" className="border-b-0 px-4">
+                      <AccordionTrigger className="hover:no-underline font-semibold text-slate-800">
+                        Kundanskaffning &amp; Marknadsföring
+                      </AccordionTrigger>
+                      <AccordionContent className="text-slate-600 text-sm pb-4 leading-relaxed">
+                        Att investera i utrustning är steg ett. Steg två är att berätta för världen att du existerar. 
+                        Avsätt budget för sociala medier (Instagram/TikTok), lokal SEO (Google My Business) och influencermetoder i närområdet. 
+                        <br/><br/><em>Pro-tips: Skapa före/efter-bilder (med medgivande) - det är din starkaste säljpitch.</em>
+                      </AccordionContent>
+                    </AccordionItem>
+                    <div className="h-px bg-slate-100 mx-4" />
+                    <AccordionItem value="item-2" className="border-b-0 px-4">
+                      <AccordionTrigger className="hover:no-underline font-semibold text-slate-800">
+                        Prissättning &amp; Paketering
+                      </AccordionTrigger>
+                      <AccordionContent className="text-slate-600 text-sm pb-4 leading-relaxed">
+                        Tävla aldrig på pris, tävla på värde. Om du säljer behandlingar styckvis blir kunden prisokänslig. 
+                        Paketera istället kurer (t.ex. "Köp 5, få 1 på köpet"). Du får in likviditet direkt och säkrar ett långsiktigt resultat för kunden.
+                      </AccordionContent>
+                    </AccordionItem>
+                  </Accordion>
+                </div>
+
+                {/* Pillar C: Investeringskollen (Traffic Light) */}
+                <div className="space-y-4 pt-4">
+                  <div className="flex items-center gap-3 border-l-4 border-primary pl-3">
+                    <div className="bg-primary/10 p-2 rounded-lg"><TrendingUp className="w-5 h-5 text-primary" /></div>
+                    <div>
+                      <h4 className="font-bold text-lg text-slate-900">3. Investeringskollen</h4>
+                      <p className="text-sm text-slate-500">Kalkylen baserad på dina {formData.treatmentsPerWeek} kundbesök/vecka.</p>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+                    {/* Left: Financial Breakdown */}
+                    <div className="md:col-span-8 p-6 bg-slate-50 border rounded-xl space-y-4">
+                      <div className="flex justify-between items-center pb-3 border-b border-slate-200">
+                        <span className="text-slate-600 font-medium">Uppstartsinvestering</span>
+                        <strong className="text-lg">{Math.round(totalStartupCost).toLocaleString()} kr</strong>
+                      </div>
+                      
+                      <div className="space-y-2 py-2">
+                        <div className="flex justify-between text-sm">
+                          <span className="text-slate-500">Snittomsättning/mån (ex. moms):</span>
+                          <span className="font-medium text-slate-700">{Math.round(monthlyRevenueExVat).toLocaleString()} kr</span>
+                        </div>
+                        <div className="flex justify-between text-sm">
+                          <span className="text-slate-500">Löpande kostnader inkl. lön:</span>
+                          <span className="font-medium text-slate-700">- {Math.round(monthlyCost).toLocaleString()} kr</span>
+                        </div>
+                        <div className="flex justify-between text-sm">
+                          <span className="text-slate-500">Bolagsskatt (20.6%):</span>
+                          <span className="font-medium text-slate-700">- {Math.round(corporateTax).toLocaleString()} kr</span>
+                        </div>
+                      </div>
+
+                      <div className="flex justify-between items-center pt-3 border-t border-slate-200">
+                        <span className="font-bold text-slate-800">Vinst efter skatt / mån</span>
+                        <strong className="text-xl text-primary">{Math.round(monthlyProfitAfterTax).toLocaleString()} kr</strong>
+                      </div>
+                    </div>
+
+                    {/* Right: Break Even Traffic Light */}
+                    <div className={
+                      `md:col-span-4 p-6 rounded-xl border flex flex-col items-center justify-center text-center space-y-3 transition-colors ` + 
+                      (parseFloat(breakEvenMonths) < 6 ? "bg-green-50 border-green-200 text-green-900" : 
+                       parseFloat(breakEvenMonths) <= 12 ? "bg-amber-50 border-amber-200 text-amber-900" : 
+                       "bg-red-50 border-red-200 text-red-900")
+                    }>
+                      <div className="text-sm font-semibold uppercase tracking-wider opacity-80">Break-Even</div>
+                      <div className="text-4xl font-black">{breakEvenMonths}</div>
+                      <div className="text-sm opacity-90">månader</div>
+                      <div className="text-xs mt-2 opacity-80 pt-2 border-t border-current/10">
+                        {parseFloat(breakEvenMonths) < 6 ? "Fantastiskt! Din ROI är mycket snabb. Du har sunda marginaler." : 
+                         parseFloat(breakEvenMonths) <= 12 ? "Hälsosam investering. Full återbetalning inom ett år." : 
+                         "Långsiktig investering. Se över om du kan öka antalet kunder eller minska fasta utgifter."}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Forecast */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                    <div className="bg-white p-5 rounded-xl border shadow-sm relative overflow-hidden">
+                      <div className="absolute top-0 right-0 w-16 h-16 bg-primary/5 rounded-bl-full" />
+                      <div className="font-bold text-slate-800 mb-3">6 Månader Prognos</div>
+                      <div className="space-y-1.5 text-sm">
+                        <div className="flex justify-between"><span className="text-slate-500">Omsättning</span> <span className="font-medium">{Math.round(revenue6Months).toLocaleString()} kr</span></div>
+                        <div className="flex justify-between"><span className="text-slate-500">Kostnader</span> <span className="font-medium text-red-600/80">-{Math.round(cost6Months).toLocaleString()} kr</span></div>
+                        <div className="flex justify-between pt-2 mt-1 border-t"><span className="font-bold text-slate-700">Ren Vinst</span> <span className="font-bold text-primary">{Math.round(profit6Months).toLocaleString()} kr</span></div>
+                      </div>
+                    </div>
+                    <div className="bg-white p-5 rounded-xl border shadow-sm relative overflow-hidden">
+                      <div className="absolute top-0 right-0 w-16 h-16 bg-primary/5 rounded-bl-full" />
+                      <div className="font-bold text-slate-800 mb-3">1 År Prognos</div>
+                      <div className="space-y-1.5 text-sm">
+                        <div className="flex justify-between"><span className="text-slate-500">Omsättning</span> <span className="font-medium">{Math.round(revenue12Months).toLocaleString()} kr</span></div>
+                        <div className="flex justify-between"><span className="text-slate-500">Kostnader</span> <span className="font-medium text-red-600/80">-{Math.round(cost12Months).toLocaleString()} kr</span></div>
+                        <div className="flex justify-between pt-2 mt-1 border-t"><span className="font-bold text-slate-700">Ren Vinst</span> <span className="font-bold text-primary">{Math.round(profit12Months).toLocaleString()} kr</span></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-blue-50/50 border border-blue-100 p-4 rounded-xl flex gap-3 text-blue-900 mt-6">
+                  <Lightbulb className="w-5 h-5 shrink-0 text-blue-600 mt-0.5" />
+                  <div className="text-sm leading-relaxed">
+                    <strong>Ett tips från marknaden:</strong> Det finns inget som heter "passiv inkomst" den första tiden. Succén ligger i en dedikerad kundupplevelse och konsekvent närvaro i sociala kanaler. Utbildning (som du valt) bygger förtroende och är din snabbaste väg till lönsamhet.
+                  </div>
+                </div>
+
+                <div className="flex flex-col sm:flex-row gap-3 pt-6 border-t">
                   <Button variant="outline" size="lg" onClick={() => setStep(4)}>Tillbaka till uppgifter</Button>
                   <Button size="lg" className="flex-1" onClick={() => { setStep(1); setFormData({...formData, fullName: "", email: "", phone: "", company: ""}); }}>Gör en ny beräkning</Button>
                 </div>
