@@ -75,10 +75,16 @@ export default function Calculator() {
   const breakEvenMonths = selectedMachine && monthlyProfitAfterTax > 0 ? (totalStartupCost / monthlyProfitAfterTax).toFixed(1) : "N/A";
 
   return (
-    <div className="min-h-screen bg-slate-50 p-6 flex items-center justify-center">
-      <div className="max-w-3xl w-full">
-        <Card className="shadow-lg border-0">
-          <CardHeader className="bg-slate-900 text-white rounded-t-xl">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-teal-900 to-slate-800 p-6 flex items-center justify-center relative overflow-hidden">
+      {/* Dekorativa geometriska former som bakgrund */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-40 -right-40 w-80 h-80 rounded-full bg-teal-700 opacity-10 blur-3xl" />
+        <div className="absolute top-1/2 -left-32 w-64 h-64 rounded-full bg-blue-600 opacity-5 blur-3xl" />
+        <div className="absolute bottom-0 right-1/3 w-96 h-96 rounded-full bg-teal-600 opacity-5 blur-3xl" />
+      </div>
+      <div className="max-w-3xl w-full relative z-10">
+        <Card className="shadow-2xl border-0 bg-white/95 backdrop-blur">
+          <CardHeader className="bg-gradient-to-r from-teal-700 to-slate-800 text-white rounded-t-xl">
             <CardTitle className="flex items-center gap-2"><CalcIcon /> Klinikkalkylator</CardTitle>
             <CardDescription className="text-slate-300">Beräkna din investering och väg till lönsamhet</CardDescription>
           </CardHeader>
