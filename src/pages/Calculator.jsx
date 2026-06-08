@@ -17,12 +17,12 @@ const astomedCategories = [
     description: "Vi på Astomed levererar utrustning för permanent hårborttagning. Hos oss hittar du IPL-Laser, Diodlaser och Alexandrit-laser som behandlar flera olika hår- och hudtyper.",
     image: "https://astomed.se/cdn/shop/files/harborttagning-astomed.jpg?v=1780057540&width=360",
     machines: [
-      { id: "aldix", name: "Aldix Smart Laser", subtitle: "Permanent hårborttagning", description: "Laserhårborttagning med välbeprövad diodlaser", image: "https://astomed.se/cdn/shop/files/Aldix-smart-laser-astomed_641a1065-8411-4a13-88f0-dc814e6999ff.png?v=1777023855&width=360", price: 0 },
-      { id: "pento", name: "Pento Laser", subtitle: "Laserbehandling", description: "Utrustning som ger resultat med YAG- och Alexandritlaser", image: "https://astomed.se/cdn/shop/files/Pento-astomed_cf1f9d36-4e60-49f1-98ab-7128fe3e8555.png?v=1777023891&width=360", price: 0 },
-      { id: "splendorx", name: "Splendor X", subtitle: "Permanent hårborttagning", description: "Laserutrustning i världsklass från välkända Lumenis", image: "https://astomed.se/cdn/shop/files/Splendor-astomed_44e60ad1-527b-4c98-af94-01f04c08a9e1.png?v=1777023900&width=360", price: 0 },
-      { id: "clearlight", name: "Clear light IPL", subtitle: "Skin rejuvenation", description: "Välbeprövad IPL som behandlar flera indikationer", image: "https://astomed.se/cdn/shop/files/Clearlight-ipl-astomed_22012080-31ca-4dee-97ea-8297bae9c6c6.png?v=1777023054&width=360", price: 0 },
-      { id: "sopranoice", name: "Soprano Ice", subtitle: "Permanent hårborttagning", description: "#1 på hårborttagning i Sverige sedan 10 år tillbaka", image: "https://astomed.se/cdn/shop/files/Soprano.png?v=1777030661&width=360", price: 0 },
-      { id: "sopranotitanium", name: "Soprano Titanium", subtitle: "Permanent hårborttagning", description: "Laserhårborttagning i toppklass med tre-i en teknologi", image: "https://astomed.se/cdn/shop/files/Soprano-titanium.png?v=1777030764&width=360", price: 0 }
+      { id: "aldix", name: "Aldix Smart Laser", subtitle: "Permanent hårborttagning", description: "Laserhårborttagning med välbeprövad diodlaser", image: "https://astomed.se/cdn/shop/files/Aldix-smart-laser-astomed_641a1065-8411-4a13-88f0-dc814e6999ff.png?v=1777023855&width=360", price: 300000 },
+      { id: "pento", name: "Pento Laser", subtitle: "Laserbehandling", description: "Utrustning som ger resultat med YAG- och Alexandritlaser", image: "https://astomed.se/cdn/shop/files/Pento-astomed_cf1f9d36-4e60-49f1-98ab-7128fe3e8555.png?v=1777023891&width=360", price: 300000 },
+      { id: "splendorx", name: "Splendor X", subtitle: "Permanent hårborttagning", description: "Laserutrustning i världsklass från välkända Lumenis", image: "https://astomed.se/cdn/shop/files/Splendor-astomed_44e60ad1-527b-4c98-af94-01f04c08a9e1.png?v=1777023900&width=360", price: 300000 },
+      { id: "clearlight", name: "Clear light IPL", subtitle: "Skin rejuvenation", description: "Välbeprövad IPL som behandlar flera indikationer", image: "https://astomed.se/cdn/shop/files/Clearlight-ipl-astomed_22012080-31ca-4dee-97ea-8297bae9c6c6.png?v=1777023054&width=360", price: 300000 },
+      { id: "sopranoice", name: "Soprano Ice", subtitle: "Permanent hårborttagning", description: "#1 på hårborttagning i Sverige sedan 10 år tillbaka", image: "https://astomed.se/cdn/shop/files/Soprano.png?v=1777030661&width=360", price: 300000 },
+      { id: "sopranotitanium", name: "Soprano Titanium", subtitle: "Permanent hårborttagning", description: "Laserhårborttagning i toppklass med tre-i en teknologi", image: "https://astomed.se/cdn/shop/files/Soprano-titanium.png?v=1777030764&width=360", price: 300000 }
     ]
   },
   {
@@ -31,9 +31,9 @@ const astomedCategories = [
     description: "Tatueringsborttagning med laser är idag den säkraste och mest effektiva metoden för att bleka eller helt avlägsna oönskade tatueringar utan att skada den omgivande huden.",
     image: "https://astomed.se/cdn/shop/files/tattoo-astomed.jpg?v=1780063168&width=360",
     machines: [
-      { id: "picolo", name: "Picolo", subtitle: "Tatueringsborttagning", description: "PicoLO laseroptek tatueringsborttagning & hudföryngring", image: "https://astomed.se/cdn/shop/files/PICOLO.png?v=1777031074&width=360", price: 0 },
-      { id: "helios", name: "Helios III", subtitle: "Tatueringsborttagning", description: "YAG Laser med 4 handenheter för alla tatueringsfärger", image: "https://astomed.se/cdn/shop/files/HELIOSIII_f1abc78e-5eea-4a9a-aea3-844587184f7b.png?v=1777033137&width=360", price: 0 },
-      { id: "pento_t", name: "Pento Laser", subtitle: "Tatueringsborttagning", description: "Utrustning som ger resultat med YAG- och Alexandritlaser", image: "https://astomed.se/cdn/shop/files/Pento-astomed_cf1f9d36-4e60-49f1-98ab-7128fe3e8555.png?v=1777023891&width=360", price: 0 }
+      { id: "picolo", name: "Picolo", subtitle: "Tatueringsborttagning", description: "PicoLO laseroptek tatueringsborttagning & hudföryngring", image: "https://astomed.se/cdn/shop/files/PICOLO.png?v=1777031074&width=360", price: 300000 },
+      { id: "helios", name: "Helios III", subtitle: "Tatueringsborttagning", description: "YAG Laser med 4 handenheter för alla tatueringsfärger", image: "https://astomed.se/cdn/shop/files/HELIOSIII_f1abc78e-5eea-4a9a-aea3-844587184f7b.png?v=1777033137&width=360", price: 300000 },
+      { id: "pento_t", name: "Pento Laser", subtitle: "Tatueringsborttagning", description: "Utrustning som ger resultat med YAG- och Alexandritlaser", image: "https://astomed.se/cdn/shop/files/Pento-astomed_cf1f9d36-4e60-49f1-98ab-7128fe3e8555.png?v=1777023891&width=360", price: 300000 }
     ]
   },
   {
@@ -42,16 +42,16 @@ const astomedCategories = [
     description: "Hudföryngring är ett samlingsnamn för olika hudvårdsmetoder som syftar till att återge huden dess spänst, minska rynkor och jämna ut hudtonen.",
     image: "https://astomed.se/cdn/shop/files/hudforyngring-astomed.jpg?v=1780063667&width=360",
     machines: [
-      { id: "dermadrop", name: "Dermadrop", subtitle: "Hudföryngring", description: "En världsunik teknologi för anti-ageing behandling", image: "https://astomed.se/cdn/shop/files/Dermadrop-Astomed_18342eda-1761-416f-9301-b77252032001.png?v=1777023000&width=360", price: 0 },
-      { id: "hydrabeauty", name: "Hydra Beauty 2", subtitle: "Ansiktsbehandling", description: "Med tre teknologier i en och samma utrustning", image: "https://astomed.se/cdn/shop/files/HYDRA-BEAUTY2-ASTOMED.png?v=1777023406&width=360", price: 0 },
-      { id: "ioxo", name: "IOXO Laser", subtitle: "Hudföryngring", description: "Erbiumlaser med överlägsen teknologi och smärtfri behandling", image: "https://astomed.se/cdn/shop/files/IOXO-laser.png?v=1777032520&width=360", price: 0 },
-      { id: "powershape", name: "Powershape 2", subtitle: "Bindvävsmassage", description: "Tre-i-en teknologi med RF, Vakum och laser.", image: "https://astomed.se/cdn/shop/files/Powershape.png?v=1777032793&width=360", price: 0 },
-      { id: "focusdual", name: "Focus Dual", subtitle: "Hudföryngring", description: "Hifu + Fraktionerad RF needling för effektiv hudföryngring", image: "https://astomed.se/cdn/shop/files/Focus-astomed_5b2bbc84-c61f-4bcc-83b7-83187aae3a0d.png?v=1777023906&width=360", price: 0 },
-      { id: "mezotix", name: "Mezotix", subtitle: "Öppna kanaler", description: "Hudföryngring genom öppna kanaler ned i huden", image: "https://astomed.se/cdn/shop/files/Mezotix.png?v=1777032973&width=360", price: 0 },
-      { id: "indiba", name: "Indiba Elite NS", subtitle: "Radiofrekvens", description: "Hudförbättrande behandling för kropp och ansikte", image: "https://astomed.se/cdn/shop/files/Indiba.png?v=1777033074&width=360", price: 0 },
-      { id: "fractionco2", name: "Fraction CO2", subtitle: "Fraktionell laser", description: "Nya generationens fraktionerade CO2 laser för kropp och ansikte.", image: "https://astomed.se/cdn/shop/files/Fraction.png?v=1777031026&width=360", price: 0 },
-      { id: "carbomed", name: "Carbomed", subtitle: "Carboxyterapi", description: "Injektionsbehandling med medicinsk koldioxid som har läkande effekt", image: "https://astomed.se/cdn/shop/files/Carbomed.png?v=1777033204&width=360", price: 0 },
-      { id: "refit", name: "Refit", subtitle: "Hudåtstramning", description: "Stramar åt huden med hjälp av radiofrekvens (RF)", image: "https://astomed.se/cdn/shop/files/Refit.png?v=1777032357&width=360", price: 0 }
+      { id: "dermadrop", name: "Dermadrop", subtitle: "Hudföryngring", description: "En världsunik teknologi för anti-ageing behandling", image: "https://astomed.se/cdn/shop/files/Dermadrop-Astomed_18342eda-1761-416f-9301-b77252032001.png?v=1777023000&width=360", price: 300000 },
+      { id: "hydrabeauty", name: "Hydra Beauty 2", subtitle: "Ansiktsbehandling", description: "Med tre teknologier i en och samma utrustning", image: "https://astomed.se/cdn/shop/files/HYDRA-BEAUTY2-ASTOMED.png?v=1777023406&width=360", price: 300000 },
+      { id: "ioxo", name: "IOXO Laser", subtitle: "Hudföryngring", description: "Erbiumlaser med överlägsen teknologi och smärtfri behandling", image: "https://astomed.se/cdn/shop/files/IOXO-laser.png?v=1777032520&width=360", price: 300000 },
+      { id: "powershape", name: "Powershape 2", subtitle: "Bindvävsmassage", description: "Tre-i-en teknologi med RF, Vakum och laser.", image: "https://astomed.se/cdn/shop/files/Powershape.png?v=1777032793&width=360", price: 300000 },
+      { id: "focusdual", name: "Focus Dual", subtitle: "Hudföryngring", description: "Hifu + Fraktionerad RF needling för effektiv hudföryngring", image: "https://astomed.se/cdn/shop/files/Focus-astomed_5b2bbc84-c61f-4bcc-83b7-83187aae3a0d.png?v=1777023906&width=360", price: 300000 },
+      { id: "mezotix", name: "Mezotix", subtitle: "Öppna kanaler", description: "Hudföryngring genom öppna kanaler ned i huden", image: "https://astomed.se/cdn/shop/files/Mezotix.png?v=1777032973&width=360", price: 300000 },
+      { id: "indiba", name: "Indiba Elite NS", subtitle: "Radiofrekvens", description: "Hudförbättrande behandling för kropp och ansikte", image: "https://astomed.se/cdn/shop/files/Indiba.png?v=1777033074&width=360", price: 300000 },
+      { id: "fractionco2", name: "Fraction CO2", subtitle: "Fraktionell laser", description: "Nya generationens fraktionerade CO2 laser för kropp och ansikte.", image: "https://astomed.se/cdn/shop/files/Fraction.png?v=1777031026&width=360", price: 300000 },
+      { id: "carbomed", name: "Carbomed", subtitle: "Carboxyterapi", description: "Injektionsbehandling med medicinsk koldioxid som har läkande effekt", image: "https://astomed.se/cdn/shop/files/Carbomed.png?v=1777033204&width=360", price: 300000 },
+      { id: "refit", name: "Refit", subtitle: "Hudåtstramning", description: "Stramar åt huden med hjälp av radiofrekvens (RF)", image: "https://astomed.se/cdn/shop/files/Refit.png?v=1777032357&width=360", price: 300000 }
     ]
   },
   {
@@ -60,9 +60,9 @@ const astomedCategories = [
     description: "Pigmenteringar är mörka fläckar på huden som uppstår när kroppen överproducerar melanin. Med utrustning från Astomed kan du behandla dessa hudproblem enkelt och effektivt.",
     image: "https://astomed.se/cdn/shop/files/Pigment-astomed.jpg?v=1780064267&width=360",
     machines: [
-      { id: "cryopen", name: "Cryopen O+", subtitle: "Cryoterapi", description: "Peka och frys! På 20 sekunder eliminerar du oönskade hudfläckar", image: "https://astomed.se/cdn/shop/files/Cryopen_bf185c87-971c-4743-9001-669abfafcca8.png?v=1777032103&width=360", price: 0 },
-      { id: "cryoiq", name: "Cryo IQ", subtitle: "Cryoterapi", description: "Frys bort vårtor och hudfläckar enkelt och smärtfritt", image: "https://astomed.se/cdn/shop/files/Cryo-iq.png?v=1777033475&width=360", price: 0 },
-      { id: "clearlight_p", name: "Clear light IPL", subtitle: "Skin rejuvenation", description: "Välbeprövad IPL som behandlar flera indikationer", image: "https://astomed.se/cdn/shop/files/Clearlight-ipl-astomed_22012080-31ca-4dee-97ea-8297bae9c6c6.png?v=1777023054&width=360", price: 0 }
+      { id: "cryopen", name: "Cryopen O+", subtitle: "Cryoterapi", description: "Peka och frys! På 20 sekunder eliminerar du oönskade hudfläckar", image: "https://astomed.se/cdn/shop/files/Cryopen_bf185c87-971c-4743-9001-669abfafcca8.png?v=1777032103&width=360", price: 300000 },
+      { id: "cryoiq", name: "Cryo IQ", subtitle: "Cryoterapi", description: "Frys bort vårtor och hudfläckar enkelt och smärtfritt", image: "https://astomed.se/cdn/shop/files/Cryo-iq.png?v=1777033475&width=360", price: 300000 },
+      { id: "clearlight_p", name: "Clear light IPL", subtitle: "Skin rejuvenation", description: "Välbeprövad IPL som behandlar flera indikationer", image: "https://astomed.se/cdn/shop/files/Clearlight-ipl-astomed_22012080-31ca-4dee-97ea-8297bae9c6c6.png?v=1777023054&width=360", price: 300000 }
     ]
   },
   {
@@ -71,14 +71,14 @@ const astomedCategories = [
     description: "Vi har utrustning för många olika typer av behandlingar inom skönhet men även hälsa. Kroppen läker inifrån och även ålderstecken kan reduceras.",
     image: "https://astomed.se/cdn/shop/files/maskiner-astomed-2-1.webp?v=1777021758&width=360",
     machines: [
-      { id: "coolshaping", name: "Coolshaping 2", subtitle: "Fettfrysning", description: "Frys bort fett med Coolshaping 2 som använder 4 handenheter", image: "https://astomed.se/cdn/shop/files/Coolshaping2.png?v=1777032099&width=360", price: 0 },
-      { id: "reoxy", name: "Reoxy", subtitle: "Syreterapi", description: "Andas och lev ett bättre liv, med innovativ andningsterapi", image: "https://astomed.se/cdn/shop/files/Reoxy-astomed.png?v=1777022741&width=360", price: 0 },
-      { id: "cmslim", name: "CMSlim", subtitle: "Kroppsskulptering", description: "Som att utföra 20 000 situps eller squats på 30 minuter", image: "https://astomed.se/cdn/shop/files/CMslim.png?v=1777032274&width=360", price: 0 },
-      { id: "hbot", name: "HBOT", subtitle: "Syrekammare", description: "Bli Starkare och friskare med HBOT syrekammare.", image: "https://astomed.se/cdn/shop/files/HBot.jpg?v=1777032737&width=360", price: 0 },
-      { id: "rokutsug", name: "TBH Health Pro", subtitle: "Rökutsug", description: "Ordenligt skydd under laserbehandlingar är en säker investering", image: "https://astomed.se/cdn/shop/files/Rokutsug.png?v=1777033562&width=360", price: 0 },
-      { id: "cryoshot", name: "Cryoshot", subtitle: "Luftkylare", description: "Minska obehag och smärta under behandlingarna", image: "https://astomed.se/cdn/shop/files/Cryoshot-luftkylare.jpg?v=1777033714&width=360", price: 0 },
-      { id: "asto", name: "Asto", subtitle: "Behandlingssäng", description: "Elektrisk behandlingssäng med 5 motorer", image: "https://astomed.se/cdn/shop/files/Behandlingssang.png?v=1777035752&width=360", price: 0 },
-      { id: "brite", name: "Brite LED", subtitle: "Klinikbelysning", description: "Bra belysning är ett måste för en säker arbetsmiljö", image: "https://astomed.se/cdn/shop/files/Halo.png?v=1777035670&width=360", price: 0 }
+      { id: "coolshaping", name: "Coolshaping 2", subtitle: "Fettfrysning", description: "Frys bort fett med Coolshaping 2 som använder 4 handenheter", image: "https://astomed.se/cdn/shop/files/Coolshaping2.png?v=1777032099&width=360", price: 300000 },
+      { id: "reoxy", name: "Reoxy", subtitle: "Syreterapi", description: "Andas och lev ett bättre liv, med innovativ andningsterapi", image: "https://astomed.se/cdn/shop/files/Reoxy-astomed.png?v=1777022741&width=360", price: 300000 },
+      { id: "cmslim", name: "CMSlim", subtitle: "Kroppsskulptering", description: "Som att utföra 20 000 situps eller squats på 30 minuter", image: "https://astomed.se/cdn/shop/files/CMslim.png?v=1777032274&width=360", price: 300000 },
+      { id: "hbot", name: "HBOT", subtitle: "Syrekammare", description: "Bli Starkare och friskare med HBOT syrekammare.", image: "https://astomed.se/cdn/shop/files/HBot.jpg?v=1777032737&width=360", price: 300000 },
+      { id: "rokutsug", name: "TBH Health Pro", subtitle: "Rökutsug", description: "Ordenligt skydd under laserbehandlingar är en säker investering", image: "https://astomed.se/cdn/shop/files/Rokutsug.png?v=1777033562&width=360", price: 300000 },
+      { id: "cryoshot", name: "Cryoshot", subtitle: "Luftkylare", description: "Minska obehag och smärta under behandlingarna", image: "https://astomed.se/cdn/shop/files/Cryoshot-luftkylare.jpg?v=1777033714&width=360", price: 300000 },
+      { id: "asto", name: "Asto", subtitle: "Behandlingssäng", description: "Elektrisk behandlingssäng med 5 motorer", image: "https://astomed.se/cdn/shop/files/Behandlingssang.png?v=1777035752&width=360", price: 300000 },
+      { id: "brite", name: "Brite LED", subtitle: "Klinikbelysning", description: "Bra belysning är ett måste för en säker arbetsmiljö", image: "https://astomed.se/cdn/shop/files/Halo.png?v=1777035670&width=360", price: 300000 }
     ]
   }
 ];
