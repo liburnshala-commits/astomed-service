@@ -140,43 +140,96 @@ export default function Calculator() {
             )}
             
             {step === 2 && (
-              <div className="space-y-6">
-                <div>
-                  <h3 className="font-bold text-xl mb-1">Lagar, Krav {"&"} Uppstartskostnader</h3>
-                  <p className="text-slate-500 text-sm">Viktig information och engångskostnader för att starta din klinik.</p>
+              <div className="space-y-8 animate-in fade-in slide-in-from-right-4 duration-500">
+                <div className="text-center space-y-3 pb-6 border-b">
+                  <Badge variant="outline" className="bg-primary/5 text-primary border-primary/20 mb-2">Steg 2 av 4</Badge>
+                  <h3 className="font-serif font-bold text-3xl text-slate-900 tracking-tight">Regelverk {"&"} Uppstart</h3>
+                  <p className="text-slate-600 max-w-2xl mx-auto leading-relaxed">
+                    Att driva en professionell klinik innebär ett stort förtroende från dina kunder. 
+                    Därför finns det viktiga lagar att förhålla sig till. Genom att ha koll på dessa från dag ett 
+                    säkrar du en trygg verksamhet och undviker onödiga böter.
+                  </p>
                 </div>
                 
-                <div className="bg-amber-50 border border-amber-200 p-4 rounded-xl space-y-3 text-sm text-amber-900">
-                  <div className="flex gap-2 font-semibold items-center text-amber-950">
-                    <AlertTriangle className="w-5 h-5" /> Viktigt att veta inför start
+                {/* Pedagogisk Regelverks-sektion */}
+                <div className="space-y-4">
+                  <div className="flex items-center gap-3 border-l-4 border-slate-900 pl-3 mb-4">
+                    <div className="bg-slate-100 p-2 rounded-lg"><ShieldCheck className="w-5 h-5 text-slate-700" /></div>
+                    <div>
+                      <h4 className="font-bold text-lg text-slate-900">Ditt Juridiska Ansvar</h4>
+                      <p className="text-sm text-slate-500">Detta gäller generellt för kliniker i Sverige</p>
+                    </div>
                   </div>
-                  <ul className="list-disc pl-5 space-y-2">
-                    <li><strong>Anmälningsplikt:</strong> Yrkesmässig hygienisk verksamhet (t.ex. laser, IPL) kräver en anmälan till kommunens miljö- och hälsoskyddsnämnd, ofta senast 6 veckor innan start.</li>
-                    <li><strong>Lagar {"&"} Krav:</strong> Verksamheten lyder under Miljöbalken och Strålsäkerhetsmyndighetens föreskrifter (SSMFS). Egenkontroll, dokumentation och skyddsutrustning är ett krav.</li>
-                    <li><strong>Injektionslagen:</strong> Gäller estetiska injektioner. Detta kräver att utföraren är legitimerad läkare, tandläkare eller sjuksköterska.</li>
-                  </ul>
+
+                  <Accordion type="single" collapsible className="w-full bg-white rounded-xl border shadow-sm" defaultValue="item-1">
+                    <AccordionItem value="item-1" className="border-b px-4">
+                      <AccordionTrigger className="hover:no-underline font-semibold text-slate-800">
+                        <div className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-primary" /> Anmälningsplikt till Kommunen</div>
+                      </AccordionTrigger>
+                      <AccordionContent className="text-slate-600 text-sm pb-4 leading-relaxed">
+                        Som yrkesmässig utövare av hygieniska behandlingar (exempelvis laser, IPL eller injektioner) <strong>måste du anmäla din verksamhet</strong> till miljö- och hälsoskyddsnämnden i din kommun. 
+                        <br/><br/>
+                        <em>Viktigt:</em> Denna anmälan måste skickas in <strong>senast 6 veckor innan</strong> du tar emot din första kund. Kommunen tar ut en avgift för detta, vilket vi lagt in i kalkylen nedan.
+                      </AccordionContent>
+                    </AccordionItem>
+
+                    <AccordionItem value="item-2" className="border-b px-4">
+                      <AccordionTrigger className="hover:no-underline font-semibold text-slate-800">
+                        <div className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-primary" /> Miljöbalken {"&"} Egenkontroll</div>
+                      </AccordionTrigger>
+                      <AccordionContent className="text-slate-600 text-sm pb-4 leading-relaxed">
+                        Din klinik lyder under Miljöbalken, vars syfte är att skydda människors hälsa. 
+                        Det innebär att du är skyldig att ha ett skriftligt system för <strong>egenkontroll</strong>. 
+                        Du behöver rutiner för städning, hygien, smittrening av verktyg och hantering av riskavfall. 
+                        Utan dokumenterad egenkontroll kan du få miljösanktionsavgifter vid en inspektion.
+                      </AccordionContent>
+                    </AccordionItem>
+
+                    <AccordionItem value="item-3" className="border-b px-4">
+                      <AccordionTrigger className="hover:no-underline font-semibold text-slate-800">
+                        <div className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-primary" /> Strålsäkerhet (SSMFS) {"&"} Injektionslagen</div>
+                      </AccordionTrigger>
+                      <AccordionContent className="text-slate-600 text-sm pb-4 leading-relaxed">
+                        <strong>Arbetar du med Laser eller IPL?</strong> Då måste du följa Strålsäkerhetsmyndighetens föreskrifter. Detta kräver bl.a. godkända skyddsglasögon för din utrustnings specifika våglängd, varningsskyltar och avskärmning.
+                        <br/><br/>
+                        <strong>Injektionsbehandlingar?</strong> Estetiska injektioner (som fillers/botox) får sedan 2021 enligt lag <em>endast</em> utföras av legitimerade läkare, tandläkare eller sjuksköterskor.
+                      </AccordionContent>
+                    </AccordionItem>
+                  </Accordion>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 pt-2">
-                   <div className="space-y-2">
-                     <Label>Avgift till kommunen (kr)</Label>
-                     <Input type="number" value={formData.municipalityFee} onChange={e => handleUpdate("municipalityFee", Number(e.target.value))}/>
-                     <p className="text-xs text-slate-500">Engångsavgift för anmälan (ca 2000-5000 kr)</p>
-                   </div>
-                   <div className="space-y-2">
-                     <Label>Behandlingsstol {"&"} Inredning (kr)</Label>
-                     <Input type="number" value={formData.interiorCost} onChange={e => handleUpdate("interiorCost", Number(e.target.value))}/>
-                     <p className="text-xs text-slate-500">Möbler, brits, belysning etc.</p>
-                   </div>
-                   <div className="space-y-2">
-                     <Label>Övriga uppstartskostnader (kr)</Label>
-                     <Input type="number" value={formData.otherStartup} onChange={e => handleUpdate("otherStartup", Number(e.target.value))}/>
-                     <p className="text-xs text-slate-500">Bolagsregistrering, företagslogga, etc.</p>
-                   </div>
+                {/* Uppstartskostnader */}
+                <div className="pt-6 border-t mt-6">
+                  <div className="flex items-center gap-3 border-l-4 border-slate-900 pl-3 mb-6">
+                    <div className="bg-slate-100 p-2 rounded-lg"><CalcIcon className="w-5 h-5 text-slate-700" /></div>
+                    <div>
+                      <h4 className="font-bold text-lg text-slate-900">Engångskostnader</h4>
+                      <p className="text-sm text-slate-500">Investeringar för uppstarten (exklusive din maskin)</p>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6 bg-slate-50 p-6 rounded-xl border border-slate-100">
+                     <div className="space-y-2">
+                       <Label className="text-slate-700 font-semibold">Kommunens Avgift (kr)</Label>
+                       <Input type="number" className="bg-white" value={formData.municipalityFee} onChange={e => handleUpdate("municipalityFee", Number(e.target.value))}/>
+                       <p className="text-xs text-slate-500 flex items-start gap-1"><Info className="w-3 h-3 mt-0.5 shrink-0" /> För anmälan av hygienisk verksamhet.</p>
+                     </div>
+                     <div className="space-y-2">
+                       <Label className="text-slate-700 font-semibold">Inredning {"&"} Brits (kr)</Label>
+                       <Input type="number" className="bg-white" value={formData.interiorCost} onChange={e => handleUpdate("interiorCost", Number(e.target.value))}/>
+                       <p className="text-xs text-slate-500 flex items-start gap-1"><Info className="w-3 h-3 mt-0.5 shrink-0" /> Möbler och belysning.</p>
+                     </div>
+                     <div className="space-y-2">
+                       <Label className="text-slate-700 font-semibold">Övrigt Uppstart (kr)</Label>
+                       <Input type="number" className="bg-white" value={formData.otherStartup} onChange={e => handleUpdate("otherStartup", Number(e.target.value))}/>
+                       <p className="text-xs text-slate-500 flex items-start gap-1"><Info className="w-3 h-3 mt-0.5 shrink-0" /> Företagslogga, reg. bevis etc.</p>
+                     </div>
+                  </div>
                 </div>
-                <div className="pt-4 flex flex-col sm:flex-row gap-3">
-                  <Button variant="outline" size="lg" onClick={() => setStep(1)}>Tillbaka</Button>
-                  <Button size="lg" className="flex-1" onClick={() => setStep(3)}>Nästa steg</Button>
+
+                <div className="pt-6 flex flex-col sm:flex-row gap-3 border-t">
+                  <Button variant="outline" size="lg" onClick={() => setStep(1)} className="sm:w-1/3">Tillbaka</Button>
+                  <Button size="lg" className="flex-1" onClick={() => setStep(3)}>Förstått! Vidare till intäkterna <ArrowRight className="ml-2 w-4 h-4" /></Button>
                 </div>
               </div>
             )}
