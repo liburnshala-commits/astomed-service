@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Calculator as CalcIcon, ArrowRight, AlertTriangle } from "lucide-react";
 
 export default function Calculator() {
@@ -12,6 +13,7 @@ export default function Calculator() {
   const [products, setProducts] = useState([]);
   const [formData, setFormData] = useState({
     machineId: "",
+    trainingIds: [],
     rent: 15000,
     salary: 35000,
     treatmentsPerWeek: 20,
@@ -35,8 +37,12 @@ export default function Calculator() {
 
   const handleUpdate = (field, value) => setFormData(prev => ({ ...prev, [field]: value }));
 
-  const machines = products.filter(p => p.category === "Ny utrustning" || p.category === "Paket");
+  const machines = products.filter(p => p.category === "Ny utrustning");
+  const trainings = products.filter(p => p.category === "Utbildning");
   const selectedMachine = machines.find(m => m.id === formData.machineId);
+
+  const selectedTrainings = trainings.filter(t => formData.trainingIds.includes(t.id));
+  const trainingCost = selectedTrainings.reduce((sum, t) => sum + (t.suggested_retail_price || 0), 0);
 
   // Skatter och avgifter
   const vatRate = formData.isAesthetic ? 0.25 : 0;
@@ -49,7 +55,7 @@ export default function Calculator() {
   const monthlyCost = formData.rent + totalSalaryCost + formData.bookingSystem + formData.insuranceAndOther + (formData.treatmentsPerWeek * 4 * 100); 
   
   const machinePrice = selectedMachine?.suggested_retail_price || 0;
-  const totalStartupCost = machinePrice + formData.municipalityFee + formData.interiorCost + formData.otherStartup;
+  const totalStartupCost = machinePrice + trainingCost + formData.municipalityFee + formData.interiorCost + formData.otherStartup;
   
   const monthlyProfitBeforeTax = monthlyRevenueExVat - monthlyCost;
   const corporateTax = monthlyProfitBeforeTax > 0 ? monthlyProfitBeforeTax * 0.206 : 0; // Bolagsskatt 20.6%
@@ -95,6 +101,34 @@ export default function Calculator() {
                     </SelectContent>
                   </Select>
                 </div>
+
+                {trainings.length > 0 && (
+                  <div className="space-y-3 pt-4 border-t">
+                    <Label>Välj utbildningar (Frivilligt)</Label>
+                    <div className="space-y-2">
+                      {trainings.map(t => (
+                        <div key={t.id} className="flex items-center space-x-2 bg-white p-3 rounded-lg border">
+                          <Checkbox 
+                            id={`training-${t.id}`}
+                            checked={formData.trainingIds.includes(t.id)}
+                            onCheckedChange={(checked) => {
+                              if (checked) {
+                                handleUpdate("trainingIds", [...formData.trainingIds, t.id]);
+                              } else {
+                                handleUpdate("trainingIds", formData.trainingIds.filter(id => id !== t.id));
+                              }
+                            }}
+                          />
+                          <Label htmlFor={`training-${t.id}`} className="flex-1 cursor-pointer font-normal">
+                            {t.name}
+                          </Label>
+                          <span className="text-sm font-semibold">{t.suggested_retail_price?.toLocaleString()} kr</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
                 <div className="pt-4">
                   <Button size="lg" className="w-full sm:w-auto" onClick={() => setStep(2)} disabled={!formData.machineId}>
                     Nästa steg <ArrowRight className="ml-2 w-4 h-4"/>
@@ -235,6 +269,8 @@ export default function Calculator() {
                             monthlyProfitAfterTax,
                             breakEvenMonths,
                             totalStartupCost,
+                            machinePrice,
+                            trainingCost,
                             monthlyRevenueExVat,
                             monthlyCost,
                             corporateTax,
@@ -274,6 +310,12 @@ export default function Calculator() {
                     <span className="text-emerald-800">Total uppstartsinvestering:</span>
                     <strong className="text-lg">{Math.round(totalStartupCost).toLocaleString()} kr</strong>
                   </div>
+                  {trainingCost > 0 && (
+                    <div className="flex justify-between items-center pb-2 text-emerald-700/70">
+                      <span className="text-xs">Varav utbildning:</span>
+                      <span className="text-xs">{Math.round(trainingCost).toLocaleString()} kr</span>
+                    </div>
+                  )}
                   <div className="flex justify-between items-center pb-2">
                     <span className="text-emerald-800 text-sm">Omsättning (exkl. moms):</span>
                     <strong className="text-emerald-800 text-sm">{Math.round(monthlyRevenueExVat).toLocaleString()} kr</strong>

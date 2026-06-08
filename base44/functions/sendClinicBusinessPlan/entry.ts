@@ -31,7 +31,10 @@ Deno.serve(async (req) => {
         doc.setFontSize(11);
         doc.setTextColor(50, 50, 50);
         let y = 70;
-        doc.text(`Utrustning:`, 20, y); doc.text(`${Math.round(calculated.totalStartupCost - formData.municipalityFee - formData.interiorCost - formData.otherStartup).toLocaleString()} kr`, 150, y, {align: 'right'}); y += 8;
+        doc.text(`Utrustning:`, 20, y); doc.text(`${Math.round(calculated.machinePrice).toLocaleString()} kr`, 150, y, {align: 'right'}); y += 8;
+        if (calculated.trainingCost > 0) {
+            doc.text(`Utbildning(ar):`, 20, y); doc.text(`${Math.round(calculated.trainingCost).toLocaleString()} kr`, 150, y, {align: 'right'}); y += 8;
+        }
         doc.text(`Anmälan kommun:`, 20, y); doc.text(`${Math.round(formData.municipalityFee).toLocaleString()} kr`, 150, y, {align: 'right'}); y += 8;
         doc.text(`Inredning & stol:`, 20, y); doc.text(`${Math.round(formData.interiorCost).toLocaleString()} kr`, 150, y, {align: 'right'}); y += 8;
         doc.text(`Övrigt (Registrering etc):`, 20, y); doc.text(`${Math.round(formData.otherStartup).toLocaleString()} kr`, 150, y, {align: 'right'}); y += 12;
