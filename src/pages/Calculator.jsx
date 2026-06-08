@@ -85,8 +85,17 @@ export default function Calculator() {
       <div className="max-w-3xl w-full relative z-10">
         <Card className="shadow-2xl border-0 bg-white/95 backdrop-blur">
           <CardHeader className="bg-gradient-to-r from-teal-700 to-slate-800 text-white rounded-t-xl">
-            <CardTitle className="flex items-center gap-2"><CalcIcon /> Klinikkalkylator</CardTitle>
-            <CardDescription className="text-slate-300">Beräkna din investering och väg till lönsamhet</CardDescription>
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-10 h-10 rounded-lg overflow-hidden flex items-center justify-center bg-white/20">
+                <div className="w-full h-full bg-white flex items-center justify-center font-bold text-teal-700 text-xs">AST</div>
+              </div>
+              <div>
+                <div className="font-bold text-white text-sm tracking-wide">Astomed Pro</div>
+                <div className="text-xs text-white/70">Klinikkalkylator</div>
+              </div>
+            </div>
+            <CardTitle className="flex items-center gap-2"><CalcIcon /> Beräkna din investering</CardTitle>
+            <CardDescription className="text-slate-200">En väg till lönsamhet på 6 minuter</CardDescription>
           </CardHeader>
           <CardContent className="p-6 md:p-8">
             
