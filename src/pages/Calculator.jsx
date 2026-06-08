@@ -10,6 +10,79 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Badge } from "@/components/ui/badge";
 import { Calculator as CalcIcon, ArrowRight, AlertTriangle, ShieldCheck, TrendingUp, Lightbulb, CheckCircle2, Info, BookOpen } from "lucide-react";
 
+const astomedCategories = [
+  {
+    id: "harborttagning",
+    title: "Permanent hårborttagning",
+    description: "Vi på Astomed levererar utrustning för permanent hårborttagning. Hos oss hittar du IPL-Laser, Diodlaser och Alexandrit-laser som behandlar flera olika hår- och hudtyper.",
+    image: "https://astomed.se/cdn/shop/files/harborttagning-astomed.jpg?v=1780057540&width=360",
+    machines: [
+      { id: "aldix", name: "Aldix Smart Laser", subtitle: "Permanent hårborttagning", description: "Laserhårborttagning med välbeprövad diodlaser", image: "https://astomed.se/cdn/shop/files/Aldix-smart-laser-astomed_641a1065-8411-4a13-88f0-dc814e6999ff.png?v=1777023855&width=360", price: 0 },
+      { id: "pento", name: "Pento Laser", subtitle: "Laserbehandling", description: "Utrustning som ger resultat med YAG- och Alexandritlaser", image: "https://astomed.se/cdn/shop/files/Pento-astomed_cf1f9d36-4e60-49f1-98ab-7128fe3e8555.png?v=1777023891&width=360", price: 0 },
+      { id: "splendorx", name: "Splendor X", subtitle: "Permanent hårborttagning", description: "Laserutrustning i världsklass från välkända Lumenis", image: "https://astomed.se/cdn/shop/files/Splendor-astomed_44e60ad1-527b-4c98-af94-01f04c08a9e1.png?v=1777023900&width=360", price: 0 },
+      { id: "clearlight", name: "Clear light IPL", subtitle: "Skin rejuvenation", description: "Välbeprövad IPL som behandlar flera indikationer", image: "https://astomed.se/cdn/shop/files/Clearlight-ipl-astomed_22012080-31ca-4dee-97ea-8297bae9c6c6.png?v=1777023054&width=360", price: 0 },
+      { id: "sopranoice", name: "Soprano Ice", subtitle: "Permanent hårborttagning", description: "#1 på hårborttagning i Sverige sedan 10 år tillbaka", image: "https://astomed.se/cdn/shop/files/Soprano.png?v=1777030661&width=360", price: 0 },
+      { id: "sopranotitanium", name: "Soprano Titanium", subtitle: "Permanent hårborttagning", description: "Laserhårborttagning i toppklass med tre-i en teknologi", image: "https://astomed.se/cdn/shop/files/Soprano-titanium.png?v=1777030764&width=360", price: 0 }
+    ]
+  },
+  {
+    id: "tatuering",
+    title: "Tatueringsborttagning",
+    description: "Tatueringsborttagning med laser är idag den säkraste och mest effektiva metoden för att bleka eller helt avlägsna oönskade tatueringar utan att skada den omgivande huden.",
+    image: "https://astomed.se/cdn/shop/files/tattoo-astomed.jpg?v=1780063168&width=360",
+    machines: [
+      { id: "picolo", name: "Picolo", subtitle: "Tatueringsborttagning", description: "PicoLO laseroptek tatueringsborttagning & hudföryngring", image: "https://astomed.se/cdn/shop/files/PICOLO.png?v=1777031074&width=360", price: 0 },
+      { id: "helios", name: "Helios III", subtitle: "Tatueringsborttagning", description: "YAG Laser med 4 handenheter för alla tatueringsfärger", image: "https://astomed.se/cdn/shop/files/HELIOSIII_f1abc78e-5eea-4a9a-aea3-844587184f7b.png?v=1777033137&width=360", price: 0 },
+      { id: "pento_t", name: "Pento Laser", subtitle: "Tatueringsborttagning", description: "Utrustning som ger resultat med YAG- och Alexandritlaser", image: "https://astomed.se/cdn/shop/files/Pento-astomed_cf1f9d36-4e60-49f1-98ab-7128fe3e8555.png?v=1777023891&width=360", price: 0 }
+    ]
+  },
+  {
+    id: "hudforyngring",
+    title: "Hudföryngring",
+    description: "Hudföryngring är ett samlingsnamn för olika hudvårdsmetoder som syftar till att återge huden dess spänst, minska rynkor och jämna ut hudtonen.",
+    image: "https://astomed.se/cdn/shop/files/hudforyngring-astomed.jpg?v=1780063667&width=360",
+    machines: [
+      { id: "dermadrop", name: "Dermadrop", subtitle: "Hudföryngring", description: "En världsunik teknologi för anti-ageing behandling", image: "https://astomed.se/cdn/shop/files/Dermadrop-Astomed_18342eda-1761-416f-9301-b77252032001.png?v=1777023000&width=360", price: 0 },
+      { id: "hydrabeauty", name: "Hydra Beauty 2", subtitle: "Ansiktsbehandling", description: "Med tre teknologier i en och samma utrustning", image: "https://astomed.se/cdn/shop/files/HYDRA-BEAUTY2-ASTOMED.png?v=1777023406&width=360", price: 0 },
+      { id: "ioxo", name: "IOXO Laser", subtitle: "Hudföryngring", description: "Erbiumlaser med överlägsen teknologi och smärtfri behandling", image: "https://astomed.se/cdn/shop/files/IOXO-laser.png?v=1777032520&width=360", price: 0 },
+      { id: "powershape", name: "Powershape 2", subtitle: "Bindvävsmassage", description: "Tre-i-en teknologi med RF, Vakum och laser.", image: "https://astomed.se/cdn/shop/files/Powershape.png?v=1777032793&width=360", price: 0 },
+      { id: "focusdual", name: "Focus Dual", subtitle: "Hudföryngring", description: "Hifu + Fraktionerad RF needling för effektiv hudföryngring", image: "https://astomed.se/cdn/shop/files/Focus-astomed_5b2bbc84-c61f-4bcc-83b7-83187aae3a0d.png?v=1777023906&width=360", price: 0 },
+      { id: "mezotix", name: "Mezotix", subtitle: "Öppna kanaler", description: "Hudföryngring genom öppna kanaler ned i huden", image: "https://astomed.se/cdn/shop/files/Mezotix.png?v=1777032973&width=360", price: 0 },
+      { id: "indiba", name: "Indiba Elite NS", subtitle: "Radiofrekvens", description: "Hudförbättrande behandling för kropp och ansikte", image: "https://astomed.se/cdn/shop/files/Indiba.png?v=1777033074&width=360", price: 0 },
+      { id: "fractionco2", name: "Fraction CO2", subtitle: "Fraktionell laser", description: "Nya generationens fraktionerade CO2 laser för kropp och ansikte.", image: "https://astomed.se/cdn/shop/files/Fraction.png?v=1777031026&width=360", price: 0 },
+      { id: "carbomed", name: "Carbomed", subtitle: "Carboxyterapi", description: "Injektionsbehandling med medicinsk koldioxid som har läkande effekt", image: "https://astomed.se/cdn/shop/files/Carbomed.png?v=1777033204&width=360", price: 0 },
+      { id: "refit", name: "Refit", subtitle: "Hudåtstramning", description: "Stramar åt huden med hjälp av radiofrekvens (RF)", image: "https://astomed.se/cdn/shop/files/Refit.png?v=1777032357&width=360", price: 0 }
+    ]
+  },
+  {
+    id: "pigmenteringar",
+    title: "Pigmenteringar",
+    description: "Pigmenteringar är mörka fläckar på huden som uppstår när kroppen överproducerar melanin. Med utrustning från Astomed kan du behandla dessa hudproblem enkelt och effektivt.",
+    image: "https://astomed.se/cdn/shop/files/Pigment-astomed.jpg?v=1780064267&width=360",
+    machines: [
+      { id: "cryopen", name: "Cryopen O+", subtitle: "Cryoterapi", description: "Peka och frys! På 20 sekunder eliminerar du oönskade hudfläckar", image: "https://astomed.se/cdn/shop/files/Cryopen_bf185c87-971c-4743-9001-669abfafcca8.png?v=1777032103&width=360", price: 0 },
+      { id: "cryoiq", name: "Cryo IQ", subtitle: "Cryoterapi", description: "Frys bort vårtor och hudfläckar enkelt och smärtfritt", image: "https://astomed.se/cdn/shop/files/Cryo-iq.png?v=1777033475&width=360", price: 0 },
+      { id: "clearlight_p", name: "Clear light IPL", subtitle: "Skin rejuvenation", description: "Välbeprövad IPL som behandlar flera indikationer", image: "https://astomed.se/cdn/shop/files/Clearlight-ipl-astomed_22012080-31ca-4dee-97ea-8297bae9c6c6.png?v=1777023054&width=360", price: 0 }
+    ]
+  },
+  {
+    id: "ovriga",
+    title: "Övriga maskiner",
+    description: "Vi har utrustning för många olika typer av behandlingar inom skönhet men även hälsa. Kroppen läker inifrån och även ålderstecken kan reduceras.",
+    image: "https://astomed.se/cdn/shop/files/maskiner-astomed-2-1.webp?v=1777021758&width=360",
+    machines: [
+      { id: "coolshaping", name: "Coolshaping 2", subtitle: "Fettfrysning", description: "Frys bort fett med Coolshaping 2 som använder 4 handenheter", image: "https://astomed.se/cdn/shop/files/Coolshaping2.png?v=1777032099&width=360", price: 0 },
+      { id: "reoxy", name: "Reoxy", subtitle: "Syreterapi", description: "Andas och lev ett bättre liv, med innovativ andningsterapi", image: "https://astomed.se/cdn/shop/files/Reoxy-astomed.png?v=1777022741&width=360", price: 0 },
+      { id: "cmslim", name: "CMSlim", subtitle: "Kroppsskulptering", description: "Som att utföra 20 000 situps eller squats på 30 minuter", image: "https://astomed.se/cdn/shop/files/CMslim.png?v=1777032274&width=360", price: 0 },
+      { id: "hbot", name: "HBOT", subtitle: "Syrekammare", description: "Bli Starkare och friskare med HBOT syrekammare.", image: "https://astomed.se/cdn/shop/files/HBot.jpg?v=1777032737&width=360", price: 0 },
+      { id: "rokutsug", name: "TBH Health Pro", subtitle: "Rökutsug", description: "Ordenligt skydd under laserbehandlingar är en säker investering", image: "https://astomed.se/cdn/shop/files/Rokutsug.png?v=1777033562&width=360", price: 0 },
+      { id: "cryoshot", name: "Cryoshot", subtitle: "Luftkylare", description: "Minska obehag och smärta under behandlingarna", image: "https://astomed.se/cdn/shop/files/Cryoshot-luftkylare.jpg?v=1777033714&width=360", price: 0 },
+      { id: "asto", name: "Asto", subtitle: "Behandlingssäng", description: "Elektrisk behandlingssäng med 5 motorer", image: "https://astomed.se/cdn/shop/files/Behandlingssang.png?v=1777035752&width=360", price: 0 },
+      { id: "brite", name: "Brite LED", subtitle: "Klinikbelysning", description: "Bra belysning är ett måste för en säker arbetsmiljö", image: "https://astomed.se/cdn/shop/files/Halo.png?v=1777035670&width=360", price: 0 }
+    ]
+  }
+];
+
 export default function Calculator() {
   const [step, setStep] = useState(1);
   const [products, setProducts] = useState([]);
@@ -40,9 +113,14 @@ export default function Calculator() {
 
   const handleUpdate = (field, value) => setFormData(prev => ({ ...prev, [field]: value }));
 
-  const machines = products.filter(p => p.category === "Ny utrustning");
   const trainings = products.filter(p => p.category === "Utbildning");
-  const selectedMachines = machines.filter(m => formData.machineIds.includes(m.id));
+
+  const allCategoryMachines = astomedCategories.flatMap(c => c.machines);
+  // Använd de inbyggda priserna från config, eller hämta från DB om de finns där.
+  const selectedMachines = allCategoryMachines.filter(m => formData.machineIds.includes(m.id)).map(m => {
+    const dbProduct = products.find(p => p.name.toLowerCase().includes(m.name.toLowerCase()));
+    return { ...m, price: dbProduct ? (dbProduct.suggested_retail_price || m.price) : m.price };
+  });
 
   const selectedTrainings = trainings.filter(t => formData.trainingIds.includes(t.id));
   const trainingCost = selectedTrainings.reduce((sum, t) => sum + (t.suggested_retail_price || 0), 0);
@@ -51,14 +129,14 @@ export default function Calculator() {
   const vatRate = formData.isAesthetic ? 0.25 : 0;
   const priceExVat = formData.pricePerTreatment / (1 + vatRate);
   const monthlyRevenueExVat = formData.treatmentsPerWeek * 4 * priceExVat;
-  
+
   const socialFees = formData.salary * 0.3142; // Arbetsgivaravgifter ca 31.42%
   const totalSalaryCost = formData.salary + socialFees;
   const serviceAgreementCost = formData.includeServiceAgreement ? 1495 : 0;
-  
+
   const monthlyCost = formData.rent + totalSalaryCost + formData.bookingSystem + formData.insuranceAndOther + (formData.treatmentsPerWeek * 4 * 100) + serviceAgreementCost; 
-  
-  const machinePrice = selectedMachines.reduce((sum, m) => sum + (m.suggested_retail_price || 0), 0);
+
+  const machinePrice = selectedMachines.reduce((sum, m) => sum + m.price, 0);
   const totalStartupCost = machinePrice + trainingCost + formData.municipalityFee + formData.interiorCost + formData.otherStartup;
   
   const monthlyProfitBeforeTax = monthlyRevenueExVat - monthlyCost;
@@ -111,39 +189,71 @@ export default function Calculator() {
                   <h3 className="font-bold text-xl mb-1">Vad vill du arbeta med?</h3>
                   <p className="text-slate-500 text-sm">Börja med att välja vilken maskin du är intresserad av att investera i.</p>
                 </div>
-                <div className="space-y-4">
-                  <Label className="text-base">Välj utrustning (Flerval möjligt)</Label>
-                  <div className="space-y-3">
-                    {machines.map(m => (
-                      <div key={m.id} className={`bg-white p-4 rounded-xl border-2 shadow-sm transition-all flex flex-col gap-2 ${formData.machineIds.includes(m.id) ? 'border-teal-600 bg-teal-50/30' : 'border-slate-200 hover:border-teal-300'}`}>
-                        <div className="flex items-start space-x-3">
-                          <Checkbox 
-                            id={`machine-${m.id}`}
-                            checked={formData.machineIds.includes(m.id)}
-                            onCheckedChange={(checked) => {
-                              if (checked) {
-                                handleUpdate("machineIds", [...formData.machineIds, m.id]);
-                              } else {
-                                handleUpdate("machineIds", formData.machineIds.filter(id => id !== m.id));
-                              }
-                            }}
-                            className="mt-1"
-                          />
-                          <div className="flex-1">
-                            <Label htmlFor={`machine-${m.id}`} className="text-base font-bold text-slate-800 cursor-pointer flex justify-between items-center w-full">
-                              <span>{m.name}</span>
-                              <Badge variant="secondary" className="bg-slate-100 text-slate-700 font-semibold border-none">{m.suggested_retail_price?.toLocaleString()} kr</Badge>
-                            </Label>
-                            {m.description && (
-                              <p className="text-sm text-slate-500 mt-2 leading-relaxed">
-                                {m.description}
-                              </p>
-                            )}
-                          </div>
+                <div className="space-y-6">
+                  {astomedCategories.map(category => (
+                    <div key={category.id} className="bg-white rounded-xl border-2 border-slate-100 overflow-hidden shadow-sm">
+                      <div className="flex flex-col sm:flex-row border-b border-slate-100">
+                        <div className="w-full sm:w-1/3 min-h-[140px] bg-slate-100 relative">
+                           <img src={category.image} alt={category.title} className="absolute inset-0 w-full h-full object-cover" />
+                        </div>
+                        <div className="p-5 sm:w-2/3 flex flex-col justify-center">
+                           <h4 className="font-bold text-lg text-slate-800">{category.title}</h4>
+                           <p className="text-sm text-slate-500 mt-2 leading-relaxed">{category.description}</p>
                         </div>
                       </div>
-                    ))}
-                  </div>
+                      <div className="p-4 grid grid-cols-1 sm:grid-cols-2 gap-4 bg-slate-50/50">
+                        {category.machines.map(m => {
+                          const dbProduct = products.find(p => p.name.toLowerCase().includes(m.name.toLowerCase()));
+                          const price = dbProduct ? (dbProduct.suggested_retail_price || m.price) : m.price;
+                          
+                          return (
+                            <div 
+                              key={m.id} 
+                              className={`bg-white p-3 rounded-lg border-2 shadow-sm transition-all flex flex-col gap-2 ${formData.machineIds.includes(m.id) ? 'border-teal-600 bg-teal-50/30' : 'border-slate-200 hover:border-teal-300'}`}
+                            >
+                              <div className="flex items-start space-x-3">
+                                <Checkbox 
+                                  id={`machine-${m.id}`}
+                                  checked={formData.machineIds.includes(m.id)}
+                                  onCheckedChange={(checked) => {
+                                    if (checked) {
+                                      handleUpdate("machineIds", [...formData.machineIds, m.id]);
+                                    } else {
+                                      handleUpdate("machineIds", formData.machineIds.filter(id => id !== m.id));
+                                    }
+                                  }}
+                                  className="mt-1 shrink-0"
+                                />
+                                <div className="flex-1 min-w-0">
+                                  <Label htmlFor={`machine-${m.id}`} className="cursor-pointer block">
+                                    <div className="flex items-center gap-3 mb-2">
+                                      {m.image && <img src={m.image} alt={m.name} className="w-10 h-10 object-contain rounded bg-slate-50" />}
+                                      <div className="flex-1">
+                                        <div className="text-sm font-bold text-slate-800">{m.name}</div>
+                                        <div className="text-[10px] text-teal-600 font-semibold uppercase tracking-wider">{m.subtitle}</div>
+                                      </div>
+                                    </div>
+                                    <p className="text-xs text-slate-500 mt-1 leading-relaxed">
+                                      {m.description}
+                                    </p>
+                                    {price > 0 ? (
+                                      <div className="mt-3 text-xs font-semibold text-slate-700 bg-slate-100 inline-block px-2 py-1 rounded">
+                                        {price.toLocaleString()} kr
+                                      </div>
+                                    ) : (
+                                      <div className="mt-3 text-xs font-medium text-slate-400 italic">
+                                        Pris på förfrågan
+                                      </div>
+                                    )}
+                                  </Label>
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  ))}
                 </div>
 
                 {trainings.length > 0 && (
