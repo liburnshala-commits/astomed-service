@@ -89,10 +89,10 @@ export default function Calculator() {
   const [formData, setFormData] = useState({
     machineIds: [],
     trainingIds: [],
+    machineStats: {},
     rent: 15000,
-    salary: 35000,
-    treatmentsPerWeek: 20,
-    pricePerTreatment: 1500,
+    salaryPerEmployee: 35000,
+    employeeCount: 1,
     isAesthetic: true,
     fullName: "",
     company: "",
@@ -127,14 +127,20 @@ export default function Calculator() {
 
   // Skatter och avgifter
   const vatRate = formData.isAesthetic ? 0.25 : 0;
-  const priceExVat = formData.pricePerTreatment / (1 + vatRate);
-  const monthlyRevenueExVat = formData.treatmentsPerWeek * 4 * priceExVat;
 
-  const socialFees = formData.salary * 0.3142; // Arbetsgivaravgifter ca 31.42%
-  const totalSalaryCost = formData.salary + socialFees;
-  const serviceAgreementCost = formData.includeServiceAgreement ? 1495 : 0;
+  let totalTreatmentsPerWeek = 0;
+  const monthlyRevenueExVat = selectedMachines.reduce((sum, m) => {
+    const stat = formData.machineStats[m.id] || { price: 1500, treatments: 20 };
+    const priceEx = stat.price / (1 + vatRate);
+    totalTreatmentsPerWeek += Number(stat.treatments);
+    return sum + (Number(stat.treatments) * 4 * priceEx);
+  }, 0);
 
-  const monthlyCost = formData.rent + totalSalaryCost + formData.bookingSystem + formData.insuranceAndOther + (formData.treatmentsPerWeek * 4 * 100) + serviceAgreementCost; 
+  const socialFees = formData.salaryPerEmployee * formData.employeeCount * 0.3142; // Arbetsgivaravgifter ca 31.42%
+  const totalSalaryCost = (formData.salaryPerEmployee * formData.employeeCount) + socialFees;
+  const serviceAgreementCost = formData.includeServiceAgreement ? (1495 * selectedMachines.length) : 0;
+
+  const monthlyCost = formData.rent + totalSalaryCost + formData.bookingSystem + formData.insuranceAndOther + (totalTreatmentsPerWeek * 4 * 100) + serviceAgreementCost; 
 
   const machinePrice = selectedMachines.reduce((sum, m) => sum + m.price, 0);
   const totalStartupCost = machinePrice + trainingCost + formData.municipalityFee + formData.interiorCost + formData.otherStartup;
@@ -216,11 +222,17 @@ export default function Calculator() {
                                   id={`machine-${m.id}`}
                                   checked={formData.machineIds.includes(m.id)}
                                   onCheckedChange={(checked) => {
+                                    let newIds = [];
                                     if (checked) {
-                                      handleUpdate("machineIds", [...formData.machineIds, m.id]);
+                                      newIds = [...formData.machineIds, m.id];
                                     } else {
-                                      handleUpdate("machineIds", formData.machineIds.filter(id => id !== m.id));
+                                      newIds = formData.machineIds.filter(id => id !== m.id);
                                     }
+                                    setFormData(prev => ({
+                                      ...prev,
+                                      machineIds: newIds,
+                                      employeeCount: Math.max(prev.employeeCount, newIds.length)
+                                    }));
                                   }}
                                   className="mt-1 shrink-0"
                                 />
@@ -404,18 +416,47 @@ export default function Calculator() {
                      </Select>
                      <p className="text-xs text-slate-500">Estetiska behandlingar är i regel momsbelagda.</p>
                    </div>
+                   <div className="sm:col-span-2 space-y-4 mb-4">
+                     <h4 className="font-bold text-lg text-slate-800 border-b pb-2">Behandlingar {"&"} Priser per maskin</h4>
+                     {selectedMachines.map(m => {
+                       const stat = formData.machineStats[m.id] || { price: 1500, treatments: 20 };
+                       return (
+                         <div key={m.id} className="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                           <h5 className="font-semibold text-slate-800 mb-3">{m.name}</h5>
+                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                             <div className="space-y-2">
+                               <Label>Snittpris / behandling (inkl. moms)</Label>
+                               <Input type="number" value={stat.price} onChange={e => {
+                                 setFormData(prev => ({
+                                   ...prev, machineStats: { ...prev.machineStats, [m.id]: { ...stat, price: Number(e.target.value) } }
+                                 }));
+                               }}/>
+                             </div>
+                             <div className="space-y-2">
+                               <Label>Behandlingar / vecka</Label>
+                               <Input type="number" value={stat.treatments} onChange={e => {
+                                 setFormData(prev => ({
+                                   ...prev, machineStats: { ...prev.machineStats, [m.id]: { ...stat, treatments: Number(e.target.value) } }
+                                 }));
+                               }}/>
+                             </div>
+                           </div>
+                         </div>
+                       );
+                     })}
+                   </div>
+
                    <div className="space-y-2">
-                     <Label>Snittpris / behandling (inkl. moms)</Label>
-                     <Input type="number" value={formData.pricePerTreatment} onChange={e => handleUpdate("pricePerTreatment", Number(e.target.value))}/>
+                     <Label>Antal anställda (heltid)</Label>
+                     <Input type="number" min="1" value={formData.employeeCount} onChange={e => handleUpdate("employeeCount", Math.max(1, Number(e.target.value)))}/>
+                     {formData.employeeCount < selectedMachines.length && (
+                       <p className="text-xs text-amber-600 font-medium">Tips: Med {selectedMachines.length} maskiner kan du behöva fler anställda.</p>
+                     )}
                    </div>
                    <div className="space-y-2">
-                     <Label>Förväntade behandlingar / vecka</Label>
-                     <Input type="number" value={formData.treatmentsPerWeek} onChange={e => handleUpdate("treatmentsPerWeek", Number(e.target.value))}/>
-                   </div>
-                   <div className="space-y-2">
-                     <Label>Lön (brutto, kr/mån)</Label>
-                     <Input type="number" value={formData.salary} onChange={e => handleUpdate("salary", Number(e.target.value))}/>
-                     <p className="text-xs text-slate-500">Sociala avgifter (31,42%) läggs till i kalkylen.</p>
+                     <Label>Snittlön (brutto per anställd)</Label>
+                     <Input type="number" value={formData.salaryPerEmployee} onChange={e => handleUpdate("salaryPerEmployee", Number(e.target.value))}/>
+                     <p className="text-xs text-slate-500">Sociala avgifter (31,42%) läggs till per anställd.</p>
                    </div>
                    <div className="space-y-2">
                      <Label>Hyra (exkl. moms, kr/mån)</Label>
@@ -448,7 +489,7 @@ export default function Calculator() {
                          <div className="flex-1 space-y-2">
                            <Label htmlFor="service-agreement" className="text-base font-bold text-slate-900 cursor-pointer flex flex-wrap items-center gap-2" onClick={(e) => e.stopPropagation()}>
                              Astomed Serviceavtal Trygghet
-                             <Badge variant="secondary" className="bg-teal-100 text-teal-800 border-none hover:bg-teal-200">1 495 kr/mån</Badge>
+                             <Badge variant="secondary" className="bg-teal-100 text-teal-800 border-none hover:bg-teal-200">1 495 kr/mån per maskin</Badge>
                            </Label>
                            <p className="text-sm text-slate-600 leading-relaxed">
                              Ett aktivt serviceavtal eliminerar oväntade utgifter och ger dig dokumenterad servicehistorik vilket gör din klinik <strong>redo för de nya lagkraven (SSMFS 2026:1)</strong>. Ingår: regelbunden funktions- och säkerhetskontroll, fri teknisk support och en förutsägbar, fast månadskostnad.
@@ -499,7 +540,10 @@ export default function Calculator() {
                       setIsSubmitting(true);
                       try {
                         await base44.functions.invoke("sendClinicBusinessPlan", { 
-                          formData, 
+                          formData: {
+                            ...formData,
+                            treatmentsPerWeek: totalTreatmentsPerWeek
+                          }, 
                           calculated: {
                             monthlyProfitAfterTax,
                             breakEvenMonths,
@@ -622,7 +666,7 @@ export default function Calculator() {
                     <div className="bg-primary/10 p-2 rounded-lg"><TrendingUp className="w-5 h-5 text-primary" /></div>
                     <div>
                       <h4 className="font-bold text-lg text-slate-900">3. Investeringskollen</h4>
-                      <p className="text-sm text-slate-500">Kalkylen baserad på dina {formData.treatmentsPerWeek} kundbesök/vecka.</p>
+                      <p className="text-sm text-slate-500">Kalkylen baserad på totalt {totalTreatmentsPerWeek} kundbesök/vecka.</p>
                     </div>
                   </div>
 
