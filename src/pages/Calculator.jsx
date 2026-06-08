@@ -16,6 +16,7 @@ export default function Calculator() {
     salary: 35000,
     treatmentsPerWeek: 20,
     pricePerTreatment: 1500,
+    isAesthetic: true,
     email: "",
     phone: "",
     municipalityFee: 3000,
@@ -34,15 +35,24 @@ export default function Calculator() {
   const machines = products.filter(p => p.category === "Ny utrustning" || p.category === "Paket");
   const selectedMachine = machines.find(m => m.id === formData.machineId);
 
-  const weeklyRevenue = formData.treatmentsPerWeek * formData.pricePerTreatment;
-  const monthlyRevenue = weeklyRevenue * 4;
-  const monthlyCost = formData.rent + formData.salary + formData.bookingSystem + formData.insuranceAndOther + (formData.treatmentsPerWeek * 4 * 100); 
+  // Skatter och avgifter
+  const vatRate = formData.isAesthetic ? 0.25 : 0;
+  const priceExVat = formData.pricePerTreatment / (1 + vatRate);
+  const monthlyRevenueExVat = formData.treatmentsPerWeek * 4 * priceExVat;
+  
+  const socialFees = formData.salary * 0.3142; // Arbetsgivaravgifter ca 31.42%
+  const totalSalaryCost = formData.salary + socialFees;
+  
+  const monthlyCost = formData.rent + totalSalaryCost + formData.bookingSystem + formData.insuranceAndOther + (formData.treatmentsPerWeek * 4 * 100); 
   
   const machinePrice = selectedMachine?.suggested_retail_price || 0;
   const totalStartupCost = machinePrice + formData.municipalityFee + formData.interiorCost + formData.otherStartup;
   
-  const monthlyProfit = monthlyRevenue - monthlyCost;
-  const breakEvenMonths = selectedMachine && monthlyProfit > 0 ? (totalStartupCost / monthlyProfit).toFixed(1) : "N/A";
+  const monthlyProfitBeforeTax = monthlyRevenueExVat - monthlyCost;
+  const corporateTax = monthlyProfitBeforeTax > 0 ? monthlyProfitBeforeTax * 0.206 : 0; // Bolagsskatt 20.6%
+  const monthlyProfitAfterTax = monthlyProfitBeforeTax - corporateTax;
+  
+  const breakEvenMonths = selectedMachine && monthlyProfitAfterTax > 0 ? (totalStartupCost / monthlyProfitAfterTax).toFixed(1) : "N/A";
 
   return (
     <div className="min-h-screen bg-slate-50 p-6 flex items-center justify-center">
@@ -131,12 +141,32 @@ export default function Calculator() {
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                    <div className="space-y-2">
-                     <Label>Hyra (kr/mån)</Label>
-                     <Input type="number" value={formData.rent} onChange={e => handleUpdate("rent", Number(e.target.value))}/>
+                     <Label>Momspliktig behandling?</Label>
+                     <Select value={formData.isAesthetic ? "yes" : "no"} onValueChange={(v) => handleUpdate("isAesthetic", v === "yes")}>
+                       <SelectTrigger className="h-10"><SelectValue /></SelectTrigger>
+                       <SelectContent>
+                         <SelectItem value="yes">Ja, Estetisk (25% moms)</SelectItem>
+                         <SelectItem value="no">Nej, Medicinsk (0% moms)</SelectItem>
+                       </SelectContent>
+                     </Select>
+                     <p className="text-xs text-slate-500">Estetiska behandlingar är i regel momsbelagda.</p>
                    </div>
                    <div className="space-y-2">
-                     <Label>Lön {"&"} Personalkostnader (kr/mån)</Label>
+                     <Label>Snittpris / behandling (inkl. moms)</Label>
+                     <Input type="number" value={formData.pricePerTreatment} onChange={e => handleUpdate("pricePerTreatment", Number(e.target.value))}/>
+                   </div>
+                   <div className="space-y-2">
+                     <Label>Förväntade behandlingar / vecka</Label>
+                     <Input type="number" value={formData.treatmentsPerWeek} onChange={e => handleUpdate("treatmentsPerWeek", Number(e.target.value))}/>
+                   </div>
+                   <div className="space-y-2">
+                     <Label>Lön (brutto, kr/mån)</Label>
                      <Input type="number" value={formData.salary} onChange={e => handleUpdate("salary", Number(e.target.value))}/>
+                     <p className="text-xs text-slate-500">Sociala avgifter (31,42%) läggs till i kalkylen.</p>
+                   </div>
+                   <div className="space-y-2">
+                     <Label>Hyra (exkl. moms, kr/mån)</Label>
+                     <Input type="number" value={formData.rent} onChange={e => handleUpdate("rent", Number(e.target.value))}/>
                    </div>
                    <div className="space-y-2">
                      <Label>Bokningssystem (t.ex. Bokadirekt)</Label>
@@ -145,14 +175,6 @@ export default function Calculator() {
                    <div className="space-y-2">
                      <Label>Försäkring {"&"} Marknadsföring (kr/mån)</Label>
                      <Input type="number" value={formData.insuranceAndOther} onChange={e => handleUpdate("insuranceAndOther", Number(e.target.value))}/>
-                   </div>
-                   <div className="space-y-2">
-                     <Label>Förväntade behandlingar / vecka</Label>
-                     <Input type="number" value={formData.treatmentsPerWeek} onChange={e => handleUpdate("treatmentsPerWeek", Number(e.target.value))}/>
-                   </div>
-                   <div className="space-y-2">
-                     <Label>Snittpris / behandling (kr)</Label>
-                     <Input type="number" value={formData.pricePerTreatment} onChange={e => handleUpdate("pricePerTreatment", Number(e.target.value))}/>
                    </div>
                 </div>
                 <div className="pt-4 flex flex-col sm:flex-row gap-3">
@@ -171,18 +193,34 @@ export default function Calculator() {
                 <div className="p-6 bg-emerald-50 border border-emerald-100 rounded-xl space-y-4">
                   <div className="flex justify-between items-center pb-3 border-b border-emerald-200/50">
                     <span className="text-emerald-800">Total uppstartsinvestering:</span>
-                    <strong className="text-lg">{totalStartupCost.toLocaleString()} kr</strong>
+                    <strong className="text-lg">{Math.round(totalStartupCost).toLocaleString()} kr</strong>
+                  </div>
+                  <div className="flex justify-between items-center pb-2">
+                    <span className="text-emerald-800 text-sm">Omsättning (exkl. moms):</span>
+                    <strong className="text-emerald-800 text-sm">{Math.round(monthlyRevenueExVat).toLocaleString()} kr</strong>
+                  </div>
+                  <div className="flex justify-between items-center pb-2">
+                    <span className="text-emerald-800 text-sm">Fasta kostnader (inkl. soc. avgifter):</span>
+                    <strong className="text-emerald-800 text-sm">- {Math.round(monthlyCost).toLocaleString()} kr</strong>
+                  </div>
+                  <div className="flex justify-between items-center pb-2">
+                    <span className="text-emerald-800 text-sm">Vinst före skatt:</span>
+                    <strong className="text-emerald-800 text-sm">{Math.round(monthlyProfitBeforeTax).toLocaleString()} kr</strong>
                   </div>
                   <div className="flex justify-between items-center pb-3 border-b border-emerald-200/50">
-                    <span className="text-emerald-800">Förväntad vinst per månad:</span>
-                    <strong className="text-lg text-emerald-600">{monthlyProfit.toLocaleString()} kr</strong>
+                    <span className="text-emerald-800 text-sm">Bolagsskatt (20.6%):</span>
+                    <strong className="text-emerald-800 text-sm">- {Math.round(corporateTax).toLocaleString()} kr</strong>
                   </div>
-                  <div className="flex justify-between items-center">
+                  <div className="flex justify-between items-center pb-3 border-b border-emerald-200/50">
+                    <span className="text-emerald-800 font-semibold">Förväntad vinst efter skatt (per månad):</span>
+                    <strong className="text-lg text-emerald-600">{Math.round(monthlyProfitAfterTax).toLocaleString()} kr</strong>
+                  </div>
+                  <div className="flex justify-between items-center pt-1">
                     <span className="text-emerald-800 font-medium">Tid till Break-even:</span>
                     <strong className="text-xl font-bold">{breakEvenMonths} månader</strong>
                   </div>
                   <p className="text-xs text-emerald-700/80 pt-2">
-                    * Break-even är beräknat på att hela uppstartsinvesteringen betalas tillbaka via din månatliga vinst.
+                    * Break-even är beräknat på att hela uppstartsinvesteringen betalas tillbaka via din månatliga vinst efter bolagsskatt.
                   </p>
                 </div>
                 <div className="space-y-3 pt-4 border-t border-slate-100">
