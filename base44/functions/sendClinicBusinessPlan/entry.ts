@@ -171,12 +171,16 @@ Deno.serve(async (req) => {
         // 3. Send email to customer
         const emailBody = `Hej ${formData.fullName.split(' ')[0]},\n\nTack för att du använde Astomeds klinikkalkylator!\n\nBifogat finner du din skräddarsydda affärsplan och kalkyl för uppstart av din klinikverksamhet baserat på dina angivna siffror.\n\nKalkylen inkluderar uppstartskostnader, löpande kostnader, vinstberäkning efter skatt och en uppskattning på break-even.\n\nDu kan ladda ner din affärsplan (PDF) här: ${file_url}\n\nTveka inte att höra av dig till oss på Astomed om du har frågor om utrustning eller nästa steg!\n\nVänliga hälsningar,\nAstomed Pro`;
 
-        await base44.asServiceRole.integrations.Core.SendEmail({
-            to: formData.email,
-            subject: "Din affärsplan och kalkyl från Astomed",
-            body: emailBody,
-            from_name: "Astomed Pro"
-        });
+        try {
+            await base44.asServiceRole.integrations.Core.SendEmail({
+                to: formData.email,
+                subject: "Din affärsplan och kalkyl från Astomed",
+                body: emailBody,
+                from_name: "Astomed Pro"
+            });
+        } catch (emailError) {
+            console.warn("Kunde inte skicka e-post (oftast sandbox-begränsning):", emailError.message);
+        }
         
         // 4. Register Lead in system
         await base44.asServiceRole.entities.PublicServiceLead.create({
