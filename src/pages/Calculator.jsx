@@ -466,7 +466,7 @@ export default function Calculator() {
                      <Input type="number" value={formData.rent} onChange={e => handleUpdate("rent", Number(e.target.value))}/>
                    </div>
                    <div className="space-y-2">
-                     <Label>Bokningssystem (t.ex. Bokadirekt)</Label>
+                     <Label>Bokningssystem (t.ex. Bokadirekt, kr/mån)</Label>
                      <Input type="number" value={formData.bookingSystem} onChange={e => handleUpdate("bookingSystem", Number(e.target.value))}/>
                    </div>
                    <div className="space-y-2">
