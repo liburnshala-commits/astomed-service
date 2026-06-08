@@ -29,7 +29,8 @@ export default function Calculator() {
     interiorCost: 25000,
     otherStartup: 10000,
     bookingSystem: 799,
-    insuranceAndOther: 2000
+    insuranceAndOther: 2000,
+    includeServiceAgreement: true
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -53,8 +54,9 @@ export default function Calculator() {
   
   const socialFees = formData.salary * 0.3142; // Arbetsgivaravgifter ca 31.42%
   const totalSalaryCost = formData.salary + socialFees;
+  const serviceAgreementCost = formData.includeServiceAgreement ? 1495 : 0;
   
-  const monthlyCost = formData.rent + totalSalaryCost + formData.bookingSystem + formData.insuranceAndOther + (formData.treatmentsPerWeek * 4 * 100); 
+  const monthlyCost = formData.rent + totalSalaryCost + formData.bookingSystem + formData.insuranceAndOther + (formData.treatmentsPerWeek * 4 * 100) + serviceAgreementCost; 
   
   const machinePrice = selectedMachine?.suggested_retail_price || 0;
   const totalStartupCost = machinePrice + trainingCost + formData.municipalityFee + formData.interiorCost + formData.otherStartup;
@@ -292,8 +294,36 @@ export default function Calculator() {
                      <Label>Försäkring {"&"} Marknadsföring (kr/mån)</Label>
                      <Input type="number" value={formData.insuranceAndOther} onChange={e => handleUpdate("insuranceAndOther", Number(e.target.value))}/>
                    </div>
+
+                   {/* Astomed Serviceavtal */}
+                   <div className="sm:col-span-2 pt-4 mt-2 border-t">
+                     <div 
+                       className={`p-5 rounded-xl border-2 transition-all cursor-pointer ${formData.includeServiceAgreement ? 'border-teal-600 bg-teal-50/50' : 'border-slate-200 bg-white hover:border-teal-300'}`} 
+                       onClick={() => handleUpdate("includeServiceAgreement", !formData.includeServiceAgreement)}
+                     >
+                       <div className="flex items-start gap-4">
+                         <div className="mt-1">
+                           <Checkbox 
+                             id="service-agreement" 
+                             checked={formData.includeServiceAgreement} 
+                             onCheckedChange={(c) => handleUpdate("includeServiceAgreement", c)}
+                             onClick={(e) => e.stopPropagation()}
+                           />
+                         </div>
+                         <div className="flex-1 space-y-2">
+                           <Label htmlFor="service-agreement" className="text-base font-bold text-slate-900 cursor-pointer flex flex-wrap items-center gap-2" onClick={(e) => e.stopPropagation()}>
+                             Astomed Serviceavtal Trygghet
+                             <Badge variant="secondary" className="bg-teal-100 text-teal-800 border-none hover:bg-teal-200">1 495 kr/mån</Badge>
+                           </Label>
+                           <p className="text-sm text-slate-600 leading-relaxed">
+                             Ett aktivt serviceavtal eliminerar oväntade utgifter och ger dig dokumenterad servicehistorik vilket gör din klinik <strong>redo för de nya lagkraven (SSMFS 2026:1)</strong>. Ingår: regelbunden funktions- och säkerhetskontroll, fri teknisk support och en förutsägbar, fast månadskostnad.
+                           </p>
+                         </div>
+                       </div>
+                     </div>
+                   </div>
                 </div>
-                <div className="pt-4 flex flex-col sm:flex-row gap-3">
+                <div className="pt-6 flex flex-col sm:flex-row gap-3">
                   <Button variant="outline" size="lg" onClick={() => setStep(2)}>Tillbaka</Button>
                   <Button size="lg" className="flex-1" onClick={() => setStep(4)}>Gå vidare</Button>
                 </div>
