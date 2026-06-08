@@ -89,7 +89,11 @@ export default function Calculator() {
           <CardHeader className="bg-gradient-to-r from-teal-700 to-slate-800 text-white rounded-t-xl">
             <div className="flex items-center gap-3 mb-3">
               <div className="w-10 h-10 rounded-lg overflow-hidden flex items-center justify-center bg-white/20">
-                <div className="w-full h-full bg-white flex items-center justify-center font-bold text-teal-700 text-xs">AST</div>
+                <img 
+                  src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69a9446fcb1cd4ab529479ba/bc2852de1_channels4_profile-2.jpg" 
+                  alt="Astomed" 
+                  className="w-full h-full object-cover"
+                />
               </div>
               <div>
                 <div className="font-bold text-white text-sm tracking-wide">Astomed Pro</div>
