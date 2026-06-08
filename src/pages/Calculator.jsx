@@ -302,8 +302,13 @@ export default function Calculator() {
             {step === 5 && (
               <div className="space-y-6">
                 <div>
-                  <h3 className="font-bold text-xl mb-1">Ditt Resultat</h3>
-                  <p className="text-slate-500 text-sm">Här är en uppskattning baserat på dina siffror. En komplett affärsplan har skickats till din e-post!</p>
+                  <h3 className="font-bold text-2xl mb-1 text-emerald-900">Affärsplan</h3>
+                  <p className="text-slate-600 text-sm mt-2">
+                    Enligt Skatteverket och Almi är en väl genomarbetad affärsplan avgörande för att starta eget. 
+                    Den behövs inte bara för att du själv ska se om din idé är lönsam, utan är ofta ett stenhårt krav 
+                    från banker och investerare om du behöver finansiering, eller från Arbetsförmedlingen om du söker starta eget-bidrag.
+                  </p>
+                  <p className="text-slate-500 text-sm mt-3">Här är en uppskattning baserat på dina siffror. En komplett affärsplan har skickats till din e-post!</p>
                 </div>
                 <div className="p-6 bg-emerald-50 border border-emerald-100 rounded-xl space-y-4">
                   <div className="flex justify-between items-center pb-3 border-b border-emerald-200/50">
