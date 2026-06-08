@@ -14,7 +14,7 @@ export default function Calculator() {
   const [step, setStep] = useState(1);
   const [products, setProducts] = useState([]);
   const [formData, setFormData] = useState({
-    machineId: "",
+    machineIds: [],
     trainingIds: [],
     rent: 15000,
     salary: 35000,
@@ -42,7 +42,7 @@ export default function Calculator() {
 
   const machines = products.filter(p => p.category === "Ny utrustning");
   const trainings = products.filter(p => p.category === "Utbildning");
-  const selectedMachine = machines.find(m => m.id === formData.machineId);
+  const selectedMachines = machines.filter(m => formData.machineIds.includes(m.id));
 
   const selectedTrainings = trainings.filter(t => formData.trainingIds.includes(t.id));
   const trainingCost = selectedTrainings.reduce((sum, t) => sum + (t.suggested_retail_price || 0), 0);
@@ -58,7 +58,7 @@ export default function Calculator() {
   
   const monthlyCost = formData.rent + totalSalaryCost + formData.bookingSystem + formData.insuranceAndOther + (formData.treatmentsPerWeek * 4 * 100) + serviceAgreementCost; 
   
-  const machinePrice = selectedMachine?.suggested_retail_price || 0;
+  const machinePrice = selectedMachines.reduce((sum, m) => sum + (m.suggested_retail_price || 0), 0);
   const totalStartupCost = machinePrice + trainingCost + formData.municipalityFee + formData.interiorCost + formData.otherStartup;
   
   const monthlyProfitBeforeTax = monthlyRevenueExVat - monthlyCost;
@@ -74,7 +74,7 @@ export default function Calculator() {
   const cost12Months = monthlyCost * 12;
   const profit12Months = monthlyProfitAfterTax * 12;
   
-  const breakEvenMonths = selectedMachine && monthlyProfitAfterTax > 0 ? (totalStartupCost / monthlyProfitAfterTax).toFixed(1) : "N/A";
+  const breakEvenMonths = selectedMachines.length > 0 && monthlyProfitAfterTax > 0 ? (totalStartupCost / monthlyProfitAfterTax).toFixed(1) : "N/A";
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-teal-900 to-slate-800 p-6 flex items-center justify-center relative overflow-hidden">
@@ -111,18 +111,39 @@ export default function Calculator() {
                   <h3 className="font-bold text-xl mb-1">Vad vill du arbeta med?</h3>
                   <p className="text-slate-500 text-sm">Börja med att välja vilken maskin du är intresserad av att investera i.</p>
                 </div>
-                <div className="space-y-3">
-                  <Label>Välj utrustning</Label>
-                  <Select value={formData.machineId} onValueChange={(v) => handleUpdate("machineId", v)}>
-                    <SelectTrigger className="h-12"><SelectValue placeholder="Välj maskin..." /></SelectTrigger>
-                    <SelectContent>
-                      {machines.map(m => (
-                        <SelectItem key={m.id} value={m.id}>
-                          {m.name} ({m.suggested_retail_price?.toLocaleString()} kr)
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                <div className="space-y-4">
+                  <Label className="text-base">Välj utrustning (Flerval möjligt)</Label>
+                  <div className="space-y-3">
+                    {machines.map(m => (
+                      <div key={m.id} className={`bg-white p-4 rounded-xl border-2 shadow-sm transition-all flex flex-col gap-2 ${formData.machineIds.includes(m.id) ? 'border-teal-600 bg-teal-50/30' : 'border-slate-200 hover:border-teal-300'}`}>
+                        <div className="flex items-start space-x-3">
+                          <Checkbox 
+                            id={`machine-${m.id}`}
+                            checked={formData.machineIds.includes(m.id)}
+                            onCheckedChange={(checked) => {
+                              if (checked) {
+                                handleUpdate("machineIds", [...formData.machineIds, m.id]);
+                              } else {
+                                handleUpdate("machineIds", formData.machineIds.filter(id => id !== m.id));
+                              }
+                            }}
+                            className="mt-1"
+                          />
+                          <div className="flex-1">
+                            <Label htmlFor={`machine-${m.id}`} className="text-base font-bold text-slate-800 cursor-pointer flex justify-between items-center w-full">
+                              <span>{m.name}</span>
+                              <Badge variant="secondary" className="bg-slate-100 text-slate-700 font-semibold border-none">{m.suggested_retail_price?.toLocaleString()} kr</Badge>
+                            </Label>
+                            {m.description && (
+                              <p className="text-sm text-slate-500 mt-2 leading-relaxed">
+                                {m.description}
+                              </p>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
 
                 {trainings.length > 0 && (
@@ -153,7 +174,7 @@ export default function Calculator() {
                 )}
 
                 <div className="pt-4">
-                  <Button size="lg" className="w-full sm:w-auto" onClick={() => setStep(2)} disabled={!formData.machineId}>
+                  <Button size="lg" className="w-full sm:w-auto" onClick={() => setStep(2)} disabled={formData.machineIds.length === 0}>
                     Nästa steg <ArrowRight className="ml-2 w-4 h-4"/>
                   </Button>
                 </div>
@@ -385,7 +406,7 @@ export default function Calculator() {
                             cost12Months,
                             profit12Months
                           },
-                          machineName: selectedMachine?.name 
+                          machineName: selectedMachines.map(m => m.name).join(", ")
                         });
                         setStep(5);
                       } catch (err) {
