@@ -17,6 +17,8 @@ export default function Calculator() {
     treatmentsPerWeek: 20,
     pricePerTreatment: 1500,
     isAesthetic: true,
+    fullName: "",
+    company: "",
     email: "",
     phone: "",
     municipalityFee: 3000,
@@ -25,6 +27,7 @@ export default function Calculator() {
     bookingSystem: 799,
     insuranceAndOther: 2000
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     base44.entities.Product.list().then(setProducts).catch(console.error);
@@ -179,7 +182,7 @@ export default function Calculator() {
                 </div>
                 <div className="pt-4 flex flex-col sm:flex-row gap-3">
                   <Button variant="outline" size="lg" onClick={() => setStep(2)}>Tillbaka</Button>
-                  <Button size="lg" className="flex-1" onClick={() => setStep(4)}>Se resultat</Button>
+                  <Button size="lg" className="flex-1" onClick={() => setStep(4)}>Gå vidare</Button>
                 </div>
               </div>
             )}
@@ -187,8 +190,69 @@ export default function Calculator() {
             {step === 4 && (
               <div className="space-y-6">
                 <div>
+                  <h3 className="font-bold text-xl mb-1">Dina Kontaktuppgifter</h3>
+                  <p className="text-slate-500 text-sm">Fyll i dina uppgifter för att se kalkylen och få en komplett affärsplan skickad till din e-post.</p>
+                </div>
+                <div className="space-y-4">
+                   <div className="space-y-2">
+                     <Label>För- och Efternamn *</Label>
+                     <Input placeholder="Anna Andersson" value={formData.fullName} onChange={e => handleUpdate("fullName", e.target.value)}/>
+                   </div>
+                   <div className="space-y-2">
+                     <Label>E-postadress *</Label>
+                     <Input type="email" placeholder="anna@kliniken.se" value={formData.email} onChange={e => handleUpdate("email", e.target.value)}/>
+                   </div>
+                   <div className="space-y-2">
+                     <Label>Telefonnummer *</Label>
+                     <Input type="tel" placeholder="070-123 45 67" value={formData.phone} onChange={e => handleUpdate("phone", e.target.value)}/>
+                   </div>
+                   <div className="space-y-2">
+                     <Label>Företagsnamn (Frivilligt)</Label>
+                     <Input placeholder="Min Klinik AB" value={formData.company} onChange={e => handleUpdate("company", e.target.value)}/>
+                   </div>
+                </div>
+                <div className="pt-4 flex flex-col sm:flex-row gap-3">
+                  <Button variant="outline" size="lg" onClick={() => setStep(3)} disabled={isSubmitting}>Tillbaka</Button>
+                  <Button 
+                    size="lg" 
+                    className="flex-1" 
+                    disabled={!formData.fullName || !formData.email || !formData.phone || isSubmitting}
+                    onClick={async () => {
+                      setIsSubmitting(true);
+                      try {
+                        await base44.functions.invoke("sendClinicBusinessPlan", { 
+                          formData, 
+                          calculated: {
+                            monthlyProfitAfterTax,
+                            breakEvenMonths,
+                            totalStartupCost,
+                            monthlyRevenueExVat,
+                            monthlyCost,
+                            corporateTax
+                          },
+                          machineName: selectedMachine?.name 
+                        });
+                        setStep(5);
+                      } catch (err) {
+                        console.error(err);
+                        alert("Ett fel uppstod när planen skulle skickas, men du kan fortfarande se resultatet.");
+                        setStep(5);
+                      } finally {
+                        setIsSubmitting(false);
+                      }
+                    }}
+                  >
+                    {isSubmitting ? "Skapar affärsplan..." : "Se Resultat & Skicka Affärsplan"}
+                  </Button>
+                </div>
+              </div>
+            )}
+
+            {step === 5 && (
+              <div className="space-y-6">
+                <div>
                   <h3 className="font-bold text-xl mb-1">Ditt Resultat</h3>
-                  <p className="text-slate-500 text-sm">Här är en uppskattning baserat på dina siffror.</p>
+                  <p className="text-slate-500 text-sm">Här är en uppskattning baserat på dina siffror. En komplett affärsplan har skickats till din e-post!</p>
                 </div>
                 <div className="p-6 bg-emerald-50 border border-emerald-100 rounded-xl space-y-4">
                   <div className="flex justify-between items-center pb-3 border-b border-emerald-200/50">
@@ -223,13 +287,9 @@ export default function Calculator() {
                     * Break-even är beräknat på att hela uppstartsinvesteringen betalas tillbaka via din månatliga vinst efter bolagsskatt.
                   </p>
                 </div>
-                <div className="space-y-3 pt-4 border-t border-slate-100">
-                  <Label>Ange e-post för att få hela affärsplanen och regelverket som PDF</Label>
-                  <Input type="email" placeholder="din.email@bolag.se" value={formData.email} onChange={e => handleUpdate("email", e.target.value)} />
-                  <div className="flex flex-col sm:flex-row gap-3 mt-4">
-                    <Button variant="outline" size="lg" onClick={() => setStep(3)}>Tillbaka</Button>
-                    <Button size="lg" className="flex-1" onClick={() => alert("Funktion för att generera och skicka PDF kommer i nästa steg!")}>Skicka analys</Button>
-                  </div>
+                <div className="flex flex-col sm:flex-row gap-3 mt-8">
+                  <Button variant="outline" size="lg" onClick={() => setStep(4)}>Tillbaka till uppgifter</Button>
+                  <Button size="lg" className="flex-1" onClick={() => { setStep(1); setFormData({...formData, fullName: "", email: "", phone: "", company: ""}); }}>Gör en ny beräkning</Button>
                 </div>
               </div>
             )}
