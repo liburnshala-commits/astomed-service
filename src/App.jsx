@@ -27,6 +27,7 @@ import FunctionControlForm from './pages/FunctionControlForm';
 import RadiationSafety from './pages/RadiationSafety';
 import NewCustomers from './pages/NewCustomers';
 import PendingApproval from './pages/PendingApproval';
+import Calculator from './pages/Calculator';
 
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
@@ -63,7 +64,7 @@ const AuthenticatedApp = () => {
   }, [user]);
 
   // Public routes that don't require authentication
-  const isPublicRoute = currentPath === '/' || currentPath === '/PublicServiceRequest';
+  const isPublicRoute = currentPath === '/' || currentPath === '/PublicServiceRequest' || currentPath === '/Calculator';
 
   // Show loading spinner while checking app public settings or auth (skip for public routes)
   if (!isPublicRoute && (isLoadingPublicSettings || isLoadingAuth)) {
@@ -135,6 +136,7 @@ const AuthenticatedApp = () => {
         <Route path="/RadiationSafety" element={<AnimatedPage><LayoutWrapper currentPageName="RadiationSafety"><RadiationSafety /></LayoutWrapper></AnimatedPage>} />
         <Route path="/NewCustomers" element={<AnimatedPage><LayoutWrapper currentPageName="NewCustomers"><NewCustomers /></LayoutWrapper></AnimatedPage>} />
         <Route path="/PendingApproval" element={<AnimatedPage><LayoutWrapper currentPageName="PendingApproval"><PendingApproval /></LayoutWrapper></AnimatedPage>} />
+        <Route path="/Calculator" element={<AnimatedPage><Calculator /></AnimatedPage>} />
         {Object.entries(Pages).map(([path, Page]) => (
           <Route
             key={path}
