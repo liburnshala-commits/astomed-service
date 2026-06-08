@@ -83,10 +83,41 @@ Deno.serve(async (req) => {
         y += 20;
         if (y > 250) { doc.addPage(); y = 20; }
         
+        // Prognos 6 & 12 månader
+        doc.setFontSize(14);
+        doc.setTextColor(27, 58, 58);
+        doc.text('4. Affärsplan Prognos (6 & 12 månader)', 20, y); y += 10;
+        
+        doc.setFontSize(11);
+        doc.setTextColor(50, 50, 50);
+        
+        // 6 Månader
+        doc.setFont(undefined, 'bold');
+        doc.text(`6 Månader`, 20, y); y += 8;
+        doc.setFont(undefined, 'normal');
+        doc.text(`Total omsättning:`, 20, y); doc.text(`${Math.round(calculated.revenue6Months).toLocaleString()} kr`, 150, y, {align: 'right'}); y += 6;
+        doc.text(`Totala kostnader:`, 20, y); doc.text(`- ${Math.round(calculated.cost6Months).toLocaleString()} kr`, 150, y, {align: 'right'}); y += 6;
+        doc.setFont(undefined, 'bold');
+        doc.text(`Vinst (efter skatt):`, 20, y); doc.text(`${Math.round(calculated.profit6Months).toLocaleString()} kr`, 150, y, {align: 'right'}); y += 12;
+        doc.setFont(undefined, 'normal');
+
+        // 12 Månader
+        doc.setFont(undefined, 'bold');
+        doc.text(`12 Månader`, 20, y); y += 8;
+        doc.setFont(undefined, 'normal');
+        doc.text(`Total omsättning:`, 20, y); doc.text(`${Math.round(calculated.revenue12Months).toLocaleString()} kr`, 150, y, {align: 'right'}); y += 6;
+        doc.text(`Totala kostnader:`, 20, y); doc.text(`- ${Math.round(calculated.cost12Months).toLocaleString()} kr`, 150, y, {align: 'right'}); y += 6;
+        doc.setFont(undefined, 'bold');
+        doc.text(`Vinst (efter skatt):`, 20, y); doc.text(`${Math.round(calculated.profit12Months).toLocaleString()} kr`, 150, y, {align: 'right'}); y += 12;
+        doc.setFont(undefined, 'normal');
+
+        y += 10;
+        if (y > 250) { doc.addPage(); y = 20; }
+        
         // Regelverk
         doc.setFontSize(14);
         doc.setTextColor(27, 58, 58);
-        doc.text('4. Checklista Regelverk & Lagar', 20, y); y += 10;
+        doc.text('5. Checklista Regelverk & Lagar', 20, y); y += 10;
         doc.setFontSize(10);
         doc.setTextColor(80, 80, 80);
         const rules = [

@@ -55,6 +55,15 @@ export default function Calculator() {
   const corporateTax = monthlyProfitBeforeTax > 0 ? monthlyProfitBeforeTax * 0.206 : 0; // Bolagsskatt 20.6%
   const monthlyProfitAfterTax = monthlyProfitBeforeTax - corporateTax;
   
+  // 6 & 12 month projection
+  const revenue6Months = monthlyRevenueExVat * 6;
+  const cost6Months = monthlyCost * 6;
+  const profit6Months = monthlyProfitAfterTax * 6;
+
+  const revenue12Months = monthlyRevenueExVat * 12;
+  const cost12Months = monthlyCost * 12;
+  const profit12Months = monthlyProfitAfterTax * 12;
+  
   const breakEvenMonths = selectedMachine && monthlyProfitAfterTax > 0 ? (totalStartupCost / monthlyProfitAfterTax).toFixed(1) : "N/A";
 
   return (
@@ -228,7 +237,13 @@ export default function Calculator() {
                             totalStartupCost,
                             monthlyRevenueExVat,
                             monthlyCost,
-                            corporateTax
+                            corporateTax,
+                            revenue6Months,
+                            cost6Months,
+                            profit6Months,
+                            revenue12Months,
+                            cost12Months,
+                            profit12Months
                           },
                           machineName: selectedMachine?.name 
                         });
@@ -282,6 +297,23 @@ export default function Calculator() {
                   <div className="flex justify-between items-center pt-1">
                     <span className="text-emerald-800 font-medium">Tid till Break-even:</span>
                     <strong className="text-xl font-bold">{breakEvenMonths} månader</strong>
+                  </div>
+                  <div className="pt-4 pb-2">
+                    <h4 className="font-bold text-emerald-900 mb-3 border-b border-emerald-200/50 pb-2">Affärsplan Prognos (6 &amp; 12 månader)</h4>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div className="bg-white/50 p-4 rounded-lg border border-emerald-100 shadow-sm">
+                        <div className="text-emerald-800 font-semibold mb-2">6 Månader</div>
+                        <div className="text-sm flex justify-between mb-1"><span>Omsättning:</span> <span>{Math.round(revenue6Months).toLocaleString()} kr</span></div>
+                        <div className="text-sm flex justify-between mb-1"><span>Kostnader:</span> <span>-{Math.round(cost6Months).toLocaleString()} kr</span></div>
+                        <div className="text-sm flex justify-between text-emerald-600 font-bold mt-2 border-t border-emerald-100 pt-2"><span>Vinst (efter skatt):</span> <span>{Math.round(profit6Months).toLocaleString()} kr</span></div>
+                      </div>
+                      <div className="bg-white/50 p-4 rounded-lg border border-emerald-100 shadow-sm">
+                        <div className="text-emerald-800 font-semibold mb-2">12 Månader</div>
+                        <div className="text-sm flex justify-between mb-1"><span>Omsättning:</span> <span>{Math.round(revenue12Months).toLocaleString()} kr</span></div>
+                        <div className="text-sm flex justify-between mb-1"><span>Kostnader:</span> <span>-{Math.round(cost12Months).toLocaleString()} kr</span></div>
+                        <div className="text-sm flex justify-between text-emerald-600 font-bold mt-2 border-t border-emerald-100 pt-2"><span>Vinst (efter skatt):</span> <span>{Math.round(profit12Months).toLocaleString()} kr</span></div>
+                      </div>
+                    </div>
                   </div>
                   <p className="text-xs text-emerald-700/80 pt-2">
                     * Break-even är beräknat på att hela uppstartsinvesteringen betalas tillbaka via din månatliga vinst efter bolagsskatt.
