@@ -136,8 +136,11 @@ export default function Calculator() {
     return sum + (Number(stat.treatments) * 4 * priceEx);
   }, 0);
 
-  const socialFees = formData.salaryPerEmployee * formData.employeeCount * 0.3142; // Arbetsgivaravgifter ca 31.42%
-  const totalSalaryCost = (formData.salaryPerEmployee * formData.employeeCount) + socialFees;
+  const baseSalaryTotal = formData.salaryPerEmployee * formData.employeeCount;
+  const socialFees = baseSalaryTotal * 0.3142; // Arbetsgivaravgifter 31.42%
+  const vacationPay = baseSalaryTotal * 0.12; // Semesterersättning 12%
+  const pensionAndInsurance = baseSalaryTotal * 0.10; // Tjänstepension & försäkringar ~10%
+  const totalSalaryCost = baseSalaryTotal + socialFees + vacationPay + pensionAndInsurance;
   const serviceAgreementCost = formData.includeServiceAgreement ? (1495 * selectedMachines.length) : 0;
 
   const monthlyCost = formData.rent + totalSalaryCost + formData.bookingSystem + formData.insuranceAndOther + (totalTreatmentsPerWeek * 4 * 100) + serviceAgreementCost; 
@@ -456,7 +459,7 @@ export default function Calculator() {
                    <div className="space-y-2">
                      <Label>Snittlön (brutto per anställd)</Label>
                      <Input type="number" value={formData.salaryPerEmployee} onChange={e => handleUpdate("salaryPerEmployee", Number(e.target.value))}/>
-                     <p className="text-xs text-slate-500">Sociala avgifter (31,42%) läggs till per anställd.</p>
+                     <p className="text-xs text-slate-500">Kalkylen lägger automatiskt till sociala avgifter (31,42%), semesterersättning (12%) samt pension/försäkringar (~10%) på lönen.</p>
                    </div>
                    <div className="space-y-2">
                      <Label>Hyra (exkl. moms, kr/mån)</Label>
