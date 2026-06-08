@@ -118,8 +118,8 @@ export default function Calculator() {
   const allCategoryMachines = astomedCategories.flatMap(c => c.machines);
   // Använd de inbyggda priserna från config, eller hämta från DB om de finns där.
   const selectedMachines = allCategoryMachines.filter(m => formData.machineIds.includes(m.id)).map(m => {
-    const dbProduct = products.find(p => p.name.toLowerCase().includes(m.name.toLowerCase()));
-    return { ...m, price: dbProduct ? (dbProduct.suggested_retail_price || m.price) : m.price };
+    const dbProduct = products.find(p => p.name.toLowerCase() === m.name.toLowerCase());
+    return { ...m, price: (dbProduct && dbProduct.suggested_retail_price > 0) ? dbProduct.suggested_retail_price : m.price };
   });
 
   const selectedTrainings = trainings.filter(t => formData.trainingIds.includes(t.id));
@@ -212,8 +212,9 @@ export default function Calculator() {
                       </div>
                       <div className="p-4 grid grid-cols-1 sm:grid-cols-2 gap-4 bg-slate-50/50">
                         {category.machines.map(m => {
-                          const dbProduct = products.find(p => p.name.toLowerCase().includes(m.name.toLowerCase()));
-                          const price = dbProduct ? (dbProduct.suggested_retail_price || m.price) : m.price;
+                          const dbProduct = products.find(p => p.name.toLowerCase() === m.name.toLowerCase());
+                          // Använd alltid det hårdkodade priset om databasen har pris = 0, eller om vi saknar produkt.
+                          const price = (dbProduct && dbProduct.suggested_retail_price > 0) ? dbProduct.suggested_retail_price : m.price;
                           
                           return (
                             <div 
