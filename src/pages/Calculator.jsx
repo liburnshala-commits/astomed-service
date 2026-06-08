@@ -103,7 +103,10 @@ export default function Calculator() {
     otherStartup: 10000,
     bookingSystem: 799,
     insuranceAndOther: 2000,
-    includeServiceAgreement: true
+    includeServiceAgreement: true,
+    financingType: "leasing", // "cash" or "leasing"
+    leasingInterestRate: 11,
+    leasingMonths: 60
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -143,11 +146,21 @@ export default function Calculator() {
   const totalSalaryCost = baseSalaryTotal + socialFees + vacationPay + pensionAndInsurance;
   const serviceAgreementCost = formData.includeServiceAgreement ? (1495 * selectedMachines.length) : 0;
 
-  const monthlyCost = formData.rent + totalSalaryCost + formData.bookingSystem + formData.insuranceAndOther + (totalTreatmentsPerWeek * 4 * 100) + serviceAgreementCost; 
-
   const machinePrice = selectedMachines.reduce((sum, m) => sum + m.price, 0);
   const totalStartupCost = machinePrice + trainingCost + formData.municipalityFee + formData.interiorCost + formData.otherStartup;
   
+  let monthlyLeasingCost = 0;
+  if (formData.financingType === "leasing") {
+    const principal = machinePrice + trainingCost;
+    if (principal > 0 && formData.leasingMonths > 0) {
+      const r = (formData.leasingInterestRate / 100) / 12;
+      const n = formData.leasingMonths;
+      monthlyLeasingCost = r === 0 ? principal / n : principal * (r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
+    }
+  }
+
+  const monthlyCost = formData.rent + totalSalaryCost + formData.bookingSystem + formData.insuranceAndOther + (totalTreatmentsPerWeek * 4 * 100) + serviceAgreementCost + monthlyLeasingCost; 
+
   const monthlyProfitBeforeTax = monthlyRevenueExVat - monthlyCost;
   const corporateTax = monthlyProfitBeforeTax > 0 ? monthlyProfitBeforeTax * 0.206 : 0; // Bolagsskatt 20.6%
   const monthlyProfitAfterTax = monthlyProfitBeforeTax - corporateTax;
@@ -397,12 +410,99 @@ export default function Calculator() {
 
                 <div className="pt-6 flex flex-col sm:flex-row gap-3 border-t">
                   <Button variant="outline" size="lg" onClick={() => setStep(1)} className="sm:w-1/3">Tillbaka</Button>
-                  <Button size="lg" className="flex-1" onClick={() => setStep(3)}>Förstått! Vidare till intäkterna <ArrowRight className="ml-2 w-4 h-4" /></Button>
+                  <Button size="lg" className="flex-1" onClick={() => setStep(3)}>Vidare till finansiering <ArrowRight className="ml-2 w-4 h-4" /></Button>
                 </div>
               </div>
             )}
 
             {step === 3 && (
+              <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
+                <div className="text-center space-y-3 pb-6 border-b">
+                  <Badge variant="outline" className="bg-primary/5 text-primary border-primary/20 mb-2">Steg 3 av 5</Badge>
+                  <h3 className="font-serif font-bold text-3xl text-slate-900 tracking-tight">Finansiering</h3>
+                  <p className="text-slate-600 max-w-2xl mx-auto leading-relaxed">
+                    Hur vill du finansiera din utrustning? Det vanligaste alternativet är leasing, vilket binder mindre kapital vid uppstart.
+                  </p>
+                </div>
+
+                <div className="space-y-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div 
+                      className={`p-5 rounded-xl border-2 transition-all cursor-pointer ${formData.financingType === 'leasing' ? 'border-teal-600 bg-teal-50/50' : 'border-slate-200 bg-white hover:border-teal-300'}`} 
+                      onClick={() => handleUpdate("financingType", "leasing")}
+                    >
+                      <div className="flex items-start gap-4">
+                        <Checkbox 
+                          checked={formData.financingType === 'leasing'} 
+                          onCheckedChange={() => handleUpdate("financingType", "leasing")}
+                        />
+                        <div>
+                          <Label className="text-base font-bold text-slate-900 cursor-pointer">Leasingavtal</Label>
+                          <p className="text-sm text-slate-600 mt-1">Dela upp kostnaden månadsvis</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div 
+                      className={`p-5 rounded-xl border-2 transition-all cursor-pointer ${formData.financingType === 'cash' ? 'border-teal-600 bg-teal-50/50' : 'border-slate-200 bg-white hover:border-teal-300'}`} 
+                      onClick={() => handleUpdate("financingType", "cash")}
+                    >
+                      <div className="flex items-start gap-4">
+                        <Checkbox 
+                          checked={formData.financingType === 'cash'} 
+                          onCheckedChange={() => handleUpdate("financingType", "cash")}
+                        />
+                        <div>
+                          <Label className="text-base font-bold text-slate-900 cursor-pointer">Direktköp</Label>
+                          <p className="text-sm text-slate-600 mt-1">Betala hela summan direkt</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {formData.financingType === "leasing" && (
+                    <div className="bg-slate-50 p-6 rounded-xl border border-slate-100 space-y-4">
+                      <h4 className="font-bold text-lg text-slate-800">Leasinguppgifter</h4>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <div className="space-y-2">
+                          <Label className="text-slate-700 font-semibold">Avtalstid (månader)</Label>
+                          <Select value={String(formData.leasingMonths)} onValueChange={(v) => handleUpdate("leasingMonths", Number(v))}>
+                            <SelectTrigger className="bg-white"><SelectValue /></SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="24">24 månader</SelectItem>
+                              <SelectItem value="36">36 månader</SelectItem>
+                              <SelectItem value="48">48 månader</SelectItem>
+                              <SelectItem value="60">60 månader</SelectItem>
+                              <SelectItem value="72">72 månader</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div className="space-y-2">
+                          <Label className="text-slate-700 font-semibold">Uppskattad kalkylränta (%)</Label>
+                          <Input type="number" className="bg-white" value={formData.leasingInterestRate} onChange={e => handleUpdate("leasingInterestRate", Number(e.target.value))}/>
+                          <p className="text-xs text-slate-500 leading-tight">
+                            Detta är endast ett exempel på en kalkylränta. Din faktiska ränta sätts individuellt vid en kreditprövning.
+                          </p>
+                        </div>
+                      </div>
+                      <div className="pt-4 border-t border-slate-200">
+                        <div className="flex justify-between items-center text-slate-700">
+                          <span>Uppskattad månadskostnad för utrustning:</span>
+                          <span className="font-bold text-lg">{Math.round(monthlyLeasingCost).toLocaleString()} kr</span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                <div className="pt-6 flex flex-col sm:flex-row gap-3 border-t">
+                  <Button variant="outline" size="lg" onClick={() => setStep(2)} className="sm:w-1/3">Tillbaka</Button>
+                  <Button size="lg" className="flex-1" onClick={() => setStep(4)}>Gå vidare till intäkterna <ArrowRight className="ml-2 w-4 h-4" /></Button>
+                </div>
+              </div>
+            )}
+
+            {step === 5 && (
               <div className="space-y-6">
                 <div>
                   <h3 className="font-bold text-xl mb-1">Löpande Månadskostnader {"&"} Intäkter</h3>
@@ -504,8 +604,8 @@ export default function Calculator() {
                    </div>
                 </div>
                 <div className="pt-6 flex flex-col sm:flex-row gap-3">
-                  <Button variant="outline" size="lg" onClick={() => setStep(2)}>Tillbaka</Button>
-                  <Button size="lg" className="flex-1" onClick={() => setStep(4)}>Gå vidare</Button>
+                  <Button variant="outline" size="lg" onClick={() => setStep(3)}>Tillbaka</Button>
+                  <Button size="lg" className="flex-1" onClick={() => setStep(5)}>Gå vidare</Button>
                 </div>
               </div>
             )}
@@ -535,7 +635,7 @@ export default function Calculator() {
                    </div>
                 </div>
                 <div className="pt-4 flex flex-col sm:flex-row gap-3">
-                  <Button variant="outline" size="lg" onClick={() => setStep(3)} disabled={isSubmitting}>Tillbaka</Button>
+                  <Button variant="outline" size="lg" onClick={() => setStep(4)} disabled={isSubmitting}>Tillbaka</Button>
                   <Button 
                     size="lg" 
                     className="flex-1" 
@@ -562,15 +662,16 @@ export default function Calculator() {
                             profit6Months,
                             revenue12Months,
                             cost12Months,
-                            profit12Months
+                            profit12Months,
+                            monthlyLeasingCost
                           },
                           machineName: selectedMachines.map(m => m.name).join(", ")
                         });
-                        setStep(5);
+                        setStep(6);
                       } catch (err) {
                         console.error(err);
                         alert("Ett fel uppstod när planen skulle skickas, men du kan fortfarande se resultatet.");
-                        setStep(5);
+                        setStep(6);
                       } finally {
                         setIsSubmitting(false);
                       }
@@ -582,7 +683,7 @@ export default function Calculator() {
               </div>
             )}
 
-            {step === 5 && (
+            {step === 6 && (
               <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
                 {/* Header Section */}
                 <div className="text-center space-y-3 pb-6 border-b">
@@ -752,7 +853,7 @@ export default function Calculator() {
                 </div>
 
                 <div className="flex flex-col sm:flex-row gap-3 pt-6 border-t">
-                  <Button variant="outline" size="lg" onClick={() => setStep(4)}>Tillbaka till uppgifter</Button>
+                  <Button variant="outline" size="lg" onClick={() => setStep(5)}>Tillbaka till uppgifter</Button>
                   <Button size="lg" className="flex-1" onClick={() => { setStep(1); setFormData({...formData, fullName: "", email: "", phone: "", company: ""}); }}>Gör en ny beräkning</Button>
                 </div>
               </div>

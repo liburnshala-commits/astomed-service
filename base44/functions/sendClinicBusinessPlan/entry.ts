@@ -60,6 +60,9 @@ Deno.serve(async (req) => {
 
         doc.text(`Månadsomsättning (exkl moms):`, 20, y); doc.text(`${Math.round(calculated.monthlyRevenueExVat).toLocaleString()} kr`, 150, y, {align: 'right'}); y += 8;
         doc.text(`Hyra:`, 20, y); doc.text(`- ${Math.round(formData.rent).toLocaleString()} kr`, 150, y, {align: 'right'}); y += 8;
+        if (calculated.monthlyLeasingCost > 0) {
+            doc.text(`Leasing utrustning (${formData.leasingMonths} mån):`, 20, y); doc.text(`- ${Math.round(calculated.monthlyLeasingCost).toLocaleString()} kr`, 150, y, {align: 'right'}); y += 8;
+        }
         doc.text(`Lön inkl. avg., semester & försäkring:`, 20, y); doc.text(`- ${Math.round(totalSalaryPerMonth).toLocaleString()} kr`, 150, y, {align: 'right'}); y += 8;
         doc.text(`Bokningssystem m.m:`, 20, y); doc.text(`- ${Math.round(formData.bookingSystem).toLocaleString()} kr`, 150, y, {align: 'right'}); y += 8;
         doc.text(`Försäkring & Marknadsföring:`, 20, y); doc.text(`- ${Math.round(formData.insuranceAndOther).toLocaleString()} kr`, 150, y, {align: 'right'}); y += 8;
@@ -104,6 +107,9 @@ Deno.serve(async (req) => {
         doc.setFont(undefined, 'normal');
         doc.text(`Omsättning (exkl moms):`, 20, y); doc.text(`${Math.round(calculated.revenue6Months).toLocaleString()} kr`, 150, y, {align: 'right'}); y += 6;
         doc.text(`Hyra:`, 20, y); doc.text(`- ${Math.round(formData.rent * 6).toLocaleString()} kr`, 150, y, {align: 'right'}); y += 6;
+        if (calculated.monthlyLeasingCost > 0) {
+            doc.text(`Leasing utrustning:`, 20, y); doc.text(`- ${Math.round(calculated.monthlyLeasingCost * 6).toLocaleString()} kr`, 150, y, {align: 'right'}); y += 6;
+        }
         doc.text(`Lön inkl. avg., semester & försäkring:`, 20, y); doc.text(`- ${Math.round(totalSalaryPerMonth * 6).toLocaleString()} kr`, 150, y, {align: 'right'}); y += 6;
         doc.text(`Bokningssystem m.m:`, 20, y); doc.text(`- ${Math.round(formData.bookingSystem * 6).toLocaleString()} kr`, 150, y, {align: 'right'}); y += 6;
         doc.text(`Försäkring & Marknadsföring:`, 20, y); doc.text(`- ${Math.round(formData.insuranceAndOther * 6).toLocaleString()} kr`, 150, y, {align: 'right'}); y += 6;
@@ -126,6 +132,9 @@ Deno.serve(async (req) => {
         doc.setFont(undefined, 'normal');
         doc.text(`Omsättning (exkl moms):`, 20, y); doc.text(`${Math.round(calculated.revenue12Months).toLocaleString()} kr`, 150, y, {align: 'right'}); y += 6;
         doc.text(`Hyra:`, 20, y); doc.text(`- ${Math.round(formData.rent * 12).toLocaleString()} kr`, 150, y, {align: 'right'}); y += 6;
+        if (calculated.monthlyLeasingCost > 0) {
+            doc.text(`Leasing utrustning:`, 20, y); doc.text(`- ${Math.round(calculated.monthlyLeasingCost * 12).toLocaleString()} kr`, 150, y, {align: 'right'}); y += 6;
+        }
         doc.text(`Lön inkl. avg., semester & försäkring:`, 20, y); doc.text(`- ${Math.round(totalSalaryPerMonth * 12).toLocaleString()} kr`, 150, y, {align: 'right'}); y += 6;
         doc.text(`Bokningssystem m.m:`, 20, y); doc.text(`- ${Math.round(formData.bookingSystem * 12).toLocaleString()} kr`, 150, y, {align: 'right'}); y += 6;
         doc.text(`Försäkring & Marknadsföring:`, 20, y); doc.text(`- ${Math.round(formData.insuranceAndOther * 12).toLocaleString()} kr`, 150, y, {align: 'right'}); y += 6;
