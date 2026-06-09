@@ -629,17 +629,33 @@ export default function Calculator() {
                      })}
                    </div>
 
-                   <div className="space-y-2">
-                     <Label>Antal anställda (heltid)</Label>
-                     <Input type="number" min="1" className="bg-white text-slate-900 font-medium" value={formData.employeeCount} onChange={e => handleUpdate("employeeCount", Math.max(1, Number(e.target.value)))}/>
-                     {formData.employeeCount < selectedMachines.length && (
-                       <p className="text-xs text-amber-600 font-medium">Tips: Med {selectedMachines.length} maskiner kan du behöva fler anställda.</p>
-                     )}
-                   </div>
-                   <div className="space-y-2">
-                     <Label>Snittlön (brutto per anställd)</Label>
-                     <Input type="number" className="bg-white text-slate-900 font-medium" value={formData.salaryPerEmployee} onChange={e => handleUpdate("salaryPerEmployee", Number(e.target.value))}/>
-                     <p className="text-xs text-slate-500">Kalkylen lägger automatiskt till sociala avgifter (31,42%), semesterersättning (12%) samt pension/försäkringar (~10%) på lönen.</p>
+                   <div className="sm:col-span-2 mt-4 bg-slate-900 rounded-xl overflow-hidden relative shadow-sm text-white border border-slate-800">
+                     <div className="absolute inset-0 z-0">
+                       <img src="https://astomed.se/cdn/shop/files/PICOLO.png?v=1777031074" alt="Picolo Laser" className="w-full h-full object-cover opacity-30 mix-blend-luminosity" />
+                       <div className="absolute inset-0 bg-gradient-to-r from-slate-900/95 to-teal-900/80" />
+                     </div>
+                     
+                     <div className="relative z-10 p-6 sm:p-8">
+                       <h4 className="font-bold text-xl text-white mb-2">Personal {"&"} Löner</h4>
+                       <p className="text-teal-50 text-sm mb-6 max-w-lg opacity-90">
+                         Att ha rätt personal är avgörande. Beräkna dina personalkostnader för att se hur det påverkar lönsamheten.
+                       </p>
+                       
+                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                         <div className="space-y-2">
+                           <Label className="text-teal-50">Antal anställda (heltid)</Label>
+                           <Input type="number" min="1" className="bg-white/10 border-white/20 text-white font-medium focus:bg-white/20" value={formData.employeeCount} onChange={e => handleUpdate("employeeCount", Math.max(1, Number(e.target.value)))}/>
+                           {formData.employeeCount < selectedMachines.length && (
+                             <p className="text-xs text-amber-300 font-medium mt-1">Tips: Med {selectedMachines.length} maskiner kan du behöva fler anställda.</p>
+                           )}
+                         </div>
+                         <div className="space-y-2">
+                           <Label className="text-teal-50">Snittlön (brutto per anställd)</Label>
+                           <Input type="number" className="bg-white/10 border-white/20 text-white font-medium focus:bg-white/20" value={formData.salaryPerEmployee} onChange={e => handleUpdate("salaryPerEmployee", Number(e.target.value))}/>
+                           <p className="text-xs text-teal-100/70 mt-1">Kalkylen lägger till sociala avgifter (31,42%), semester (12%) {"&"} pension (~10%).</p>
+                         </div>
+                       </div>
+                     </div>
                    </div>
                    
                    <div className="sm:col-span-2 pt-4 border-t">
