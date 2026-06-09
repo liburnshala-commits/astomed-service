@@ -87,6 +87,7 @@ export default function Calculator() {
   const [step, setStep] = useState(1);
   const [products, setProducts] = useState([]);
   const [formData, setFormData] = useState({
+    categoryIds: [],
     machineIds: [],
     trainingIds: [],
     machineStats: {},
@@ -265,7 +266,7 @@ export default function Calculator() {
 
                 <div className="pt-6 flex justify-end border-t">
                   <Button size="lg" className="w-full sm:w-auto" onClick={() => setStep(2)}>
-                    Utforska vår utrustning <ArrowRight className="ml-2 w-4 h-4"/>
+                    Välj arbetsområden <ArrowRight className="ml-2 w-4 h-4"/>
                   </Button>
                 </div>
               </div>
@@ -274,14 +275,61 @@ export default function Calculator() {
             {step === 2 && (
               <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
                 <div className="text-center space-y-3 pb-6 border-b">
-                  <Badge variant="outline" className="bg-primary/5 text-primary border-primary/20 mb-2">Utrustning {"&"} Support</Badge>
-                  <h3 className="font-bold text-2xl mb-1">Vad vill du arbeta med?</h3>
+                  <Badge variant="outline" className="bg-primary/5 text-primary border-primary/20 mb-2">Behandlingsområden</Badge>
+                  <h3 className="font-bold text-2xl mb-1">Vad vill du jobba med?</h3>
                   <p className="text-slate-500 text-sm max-w-2xl mx-auto">
-                    Välj det område och utrustning du är intresserad av. <strong>I varje köp ingår vår Astomed-garanti:</strong> Omfattande utbildning, startkit för egenkontroll samt löpande rådgivning för en trygg uppstart och driftsättning.
+                    Välj de behandlingsområden du vill erbjuda på din klinik. Du kan välja ett eller flera områden.
+                  </p>
+                </div>
+                
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {astomedCategories.map(category => (
+                    <div 
+                      key={category.id}
+                      className={`p-5 rounded-xl border-2 transition-all cursor-pointer flex flex-col gap-2 ${formData.categoryIds.includes(category.id) ? 'border-teal-600 bg-teal-50/50' : 'border-slate-200 bg-white hover:border-teal-300'}`} 
+                      onClick={() => {
+                        const isSelected = formData.categoryIds.includes(category.id);
+                        handleUpdate("categoryIds", isSelected 
+                          ? formData.categoryIds.filter(id => id !== category.id)
+                          : [...formData.categoryIds, category.id]
+                        );
+                      }}
+                    >
+                      <div className="flex items-start gap-4">
+                        <Checkbox 
+                          checked={formData.categoryIds.includes(category.id)} 
+                          onCheckedChange={() => {}} 
+                          className="mt-1"
+                        />
+                        <div>
+                          <Label className="text-base font-bold text-slate-900 cursor-pointer">{category.title}</Label>
+                          <p className="text-sm text-slate-600 mt-1">{category.description}</p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="pt-6 flex flex-col sm:flex-row gap-3 border-t">
+                  <Button variant="outline" size="lg" onClick={() => setStep(1)} className="sm:w-1/3">Tillbaka</Button>
+                  <Button size="lg" className="flex-1" onClick={() => setStep(3)} disabled={formData.categoryIds.length === 0}>
+                    Se rekommenderad utrustning <ArrowRight className="ml-2 w-4 h-4"/>
+                  </Button>
+                </div>
+              </div>
+            )}
+
+            {step === 3 && (
+              <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
+                <div className="text-center space-y-3 pb-6 border-b">
+                  <Badge variant="outline" className="bg-primary/5 text-primary border-primary/20 mb-2">Utrustning {"&"} Support</Badge>
+                  <h3 className="font-bold text-2xl mb-1">Välj din utrustning</h3>
+                  <p className="text-slate-500 text-sm max-w-2xl mx-auto">
+                    Här är utrustning som passar för dina valda områden. <strong>I varje köp ingår vår Astomed-garanti:</strong> Omfattande utbildning, startkit för egenkontroll samt löpande rådgivning för en trygg uppstart och driftsättning.
                   </p>
                 </div>
                 <div className="space-y-6">
-                  {astomedCategories.map(category => (
+                  {astomedCategories.filter(c => formData.categoryIds.length === 0 || formData.categoryIds.includes(c.id)).map(category => (
                     <div key={category.id} className="bg-white rounded-xl border-2 border-slate-100 overflow-hidden shadow-sm">
                       <div className="flex flex-col sm:flex-row border-b border-slate-100">
                         <div className="w-full sm:w-1/3 min-h-[140px] bg-slate-100 relative">
@@ -382,15 +430,15 @@ export default function Calculator() {
                 )}
 
                 <div className="pt-6 flex flex-col sm:flex-row gap-3 border-t">
-                  <Button variant="outline" size="lg" onClick={() => setStep(1)} className="sm:w-1/3">Tillbaka</Button>
-                  <Button size="lg" className="flex-1" onClick={() => setStep(3)} disabled={formData.machineIds.length === 0}>
+                  <Button variant="outline" size="lg" onClick={() => setStep(2)} className="sm:w-1/3">Tillbaka</Button>
+                  <Button size="lg" className="flex-1" onClick={() => setStep(4)} disabled={formData.machineIds.length === 0}>
                     Vidare till regelverk {"&"} strålskydd <ArrowRight className="ml-2 w-4 h-4"/>
                   </Button>
                 </div>
               </div>
             )}
             
-            {step === 3 && (
+            {step === 4 && (
               <div className="space-y-8 animate-in fade-in slide-in-from-right-4 duration-500">
                 <div className="text-center space-y-3 pb-6 border-b">
                   <Badge variant="outline" className="bg-primary/5 text-primary border-primary/20 mb-2">Löpande Trygghet</Badge>
@@ -477,13 +525,13 @@ export default function Calculator() {
                 </div>
 
                 <div className="pt-6 flex flex-col sm:flex-row gap-3 border-t">
-                  <Button variant="outline" size="lg" onClick={() => setStep(2)} className="sm:w-1/3">Tillbaka</Button>
-                  <Button size="lg" className="flex-1" onClick={() => setStep(4)}>Vidare till finansiering <ArrowRight className="ml-2 w-4 h-4" /></Button>
+                  <Button variant="outline" size="lg" onClick={() => setStep(3)} className="sm:w-1/3">Tillbaka</Button>
+                  <Button size="lg" className="flex-1" onClick={() => setStep(5)}>Vidare till finansiering <ArrowRight className="ml-2 w-4 h-4" /></Button>
                 </div>
               </div>
             )}
 
-            {step === 4 && (
+            {step === 5 && (
               <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
                 <div className="text-center space-y-3 pb-6 border-b">
                   <Badge variant="outline" className="bg-primary/5 text-primary border-primary/20 mb-2">Finansiering</Badge>
@@ -564,13 +612,13 @@ export default function Calculator() {
                 </div>
 
                 <div className="pt-6 flex flex-col sm:flex-row gap-3 border-t">
-                  <Button variant="outline" size="lg" onClick={() => setStep(3)} className="sm:w-1/3">Tillbaka</Button>
-                  <Button size="lg" className="flex-1" onClick={() => setStep(5)}>Gå vidare till ekonomi <ArrowRight className="ml-2 w-4 h-4" /></Button>
+                  <Button variant="outline" size="lg" onClick={() => setStep(4)} className="sm:w-1/3">Tillbaka</Button>
+                  <Button size="lg" className="flex-1" onClick={() => setStep(6)}>Gå vidare till ekonomi <ArrowRight className="ml-2 w-4 h-4" /></Button>
                 </div>
               </div>
             )}
 
-            {step === 5 && (
+            {step === 6 && (
               <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
                 <div className="text-center space-y-3 pb-6 border-b">
                   <Badge variant="outline" className="bg-primary/5 text-primary border-primary/20 mb-2">Ekonomi</Badge>
@@ -673,13 +721,13 @@ export default function Calculator() {
                    </div>
                 </div>
                 <div className="pt-6 flex flex-col sm:flex-row gap-3 border-t">
-                  <Button variant="outline" size="lg" onClick={() => setStep(4)} className="sm:w-1/3">Tillbaka</Button>
-                  <Button size="lg" className="flex-1" onClick={() => setStep(6)}>Gå vidare till slutförande <ArrowRight className="ml-2 w-4 h-4" /></Button>
+                  <Button variant="outline" size="lg" onClick={() => setStep(5)} className="sm:w-1/3">Tillbaka</Button>
+                  <Button size="lg" className="flex-1" onClick={() => setStep(7)}>Gå vidare till slutförande <ArrowRight className="ml-2 w-4 h-4" /></Button>
                 </div>
               </div>
             )}
 
-            {step === 6 && (
+            {step === 7 && (
               <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
                 <div className="text-center space-y-3 pb-6 border-b">
                   <Badge variant="outline" className="bg-primary/5 text-primary border-primary/20 mb-2">Avslutande steg</Badge>
@@ -705,7 +753,7 @@ export default function Calculator() {
                    </div>
                 </div>
                 <div className="pt-6 flex flex-col sm:flex-row gap-3 border-t">
-                  <Button variant="outline" size="lg" onClick={() => setStep(5)} disabled={isSubmitting} className="sm:w-1/3">Tillbaka</Button>
+                  <Button variant="outline" size="lg" onClick={() => setStep(6)} disabled={isSubmitting} className="sm:w-1/3">Tillbaka</Button>
                   <Button 
                     size="lg" 
                     className="flex-1" 
@@ -737,11 +785,11 @@ export default function Calculator() {
                           },
                           machineName: selectedMachines.map(m => m.name).join(", ")
                         });
-                        setStep(7);
+                        setStep(8);
                       } catch (err) {
                         console.error(err);
                         alert("Ett fel uppstod när planen skulle skickas, men du kan fortfarande se resultatet.");
-                        setStep(7);
+                        setStep(8);
                       } finally {
                         setIsSubmitting(false);
                       }
@@ -753,7 +801,7 @@ export default function Calculator() {
               </div>
             )}
 
-            {step === 7 && (
+            {step === 8 && (
               <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
                 {/* Header Section */}
                 <div className="text-center space-y-3 pb-6 border-b">
@@ -923,8 +971,8 @@ export default function Calculator() {
                 </div>
 
                 <div className="flex flex-col sm:flex-row gap-3 pt-6 border-t">
-                  <Button variant="outline" size="lg" onClick={() => setStep(6)} className="sm:w-1/3">Tillbaka till uppgifter</Button>
-                  <Button size="lg" className="flex-1" onClick={() => { setStep(1); setFormData({...formData, fullName: "", email: "", phone: "", company: ""}); }}>Gör en ny beräkning</Button>
+                  <Button variant="outline" size="lg" onClick={() => setStep(7)} className="sm:w-1/3">Tillbaka till uppgifter</Button>
+                  <Button size="lg" className="flex-1" onClick={() => { setStep(1); setFormData({...formData, categoryIds: [], machineIds: [], trainingIds: [], fullName: "", email: "", phone: "", company: ""}); }}>Gör en ny beräkning</Button>
                 </div>
               </div>
             )}
