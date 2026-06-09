@@ -286,7 +286,7 @@ export default function Calculator() {
                   {astomedCategories.map(category => (
                     <div 
                       key={category.id}
-                      className={`p-5 rounded-xl border-2 transition-all cursor-pointer flex flex-col gap-2 ${formData.categoryIds.includes(category.id) ? 'border-teal-600 bg-teal-50/50' : 'border-slate-200 bg-white hover:border-teal-300'}`} 
+                      className={`rounded-xl border-2 transition-all cursor-pointer overflow-hidden flex flex-col ${formData.categoryIds.includes(category.id) ? 'border-teal-600' : 'border-slate-200 hover:border-teal-300'}`} 
                       onClick={() => {
                         const isSelected = formData.categoryIds.includes(category.id);
                         handleUpdate("categoryIds", isSelected 
@@ -295,16 +295,22 @@ export default function Calculator() {
                         );
                       }}
                     >
-                      <div className="flex items-start gap-4">
-                        <Checkbox 
-                          checked={formData.categoryIds.includes(category.id)} 
-                          onCheckedChange={() => {}} 
-                          className="mt-1"
-                        />
-                        <div>
-                          <Label className="text-base font-bold text-slate-900 cursor-pointer">{category.title}</Label>
-                          <p className="text-sm text-slate-600 mt-1">{category.description}</p>
+                      <div className="relative h-40 bg-slate-100 overflow-hidden">
+                        {category.image && (
+                          <img src={category.image} alt={category.title} className="w-full h-full object-cover" />
+                        )}
+                        <div className={`absolute inset-0 transition-all ${formData.categoryIds.includes(category.id) ? 'bg-teal-600/20' : 'bg-black/0'}`} />
+                      </div>
+                      <div className={`p-5 flex-1 flex flex-col gap-3 ${formData.categoryIds.includes(category.id) ? 'bg-teal-50' : 'bg-white'}`}>
+                        <div className="flex items-start gap-3">
+                          <Checkbox 
+                            checked={formData.categoryIds.includes(category.id)} 
+                            onCheckedChange={() => {}} 
+                            className="mt-0.5"
+                          />
+                          <Label className="text-base font-bold text-slate-900 cursor-pointer flex-1">{category.title}</Label>
                         </div>
+                        <p className="text-sm text-slate-600">{category.description}</p>
                       </div>
                     </div>
                   ))}
