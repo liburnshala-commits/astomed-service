@@ -450,55 +450,50 @@ export default function Calculator() {
             {step === 4 && (
               <div className="space-y-8 animate-in fade-in slide-in-from-right-4 duration-500">
                 <div className="text-center space-y-3 pb-6 border-b">
-                  <Badge variant="outline" className="bg-primary/5 text-primary border-primary/20 mb-2">Löpande Trygghet</Badge>
-                  <h3 className="font-serif font-bold text-3xl text-slate-900 tracking-tight">Regelverk {"&"} Strålskydd</h3>
+                  <Badge variant="outline" className="bg-primary/5 text-primary border-primary/20 mb-2">Trygghet {"&"} Samarbete</Badge>
+                  <h3 className="font-serif font-bold text-3xl text-slate-900 tracking-tight">Grattis till ett klokt val!</h3>
                   <p className="text-slate-600 max-w-2xl mx-auto leading-relaxed">
-                    När din utrustning är på plats slutar inte vårt stöd. Vi hjälper dig att <strong>upprätthålla strålskydd och lagkrav</strong> genom tillgång till vår kundportal för dokumentation, färdiga guider för egenkontroll och via våra serviceavtal säkerställs klinikens drift.
+                    Med Astomed som partner får du inte bara fantastisk utrustning, du får en <strong>trygg och långsiktig partner</strong>. Vi hjälper dig hela vägen så att du kan fokusera på dina kunder, medan vi tillsammans ser till att alla regelverk uppfylls på ett smidigt sätt.
                   </p>
                 </div>
                 
                 {/* Pedagogisk Regelverks-sektion */}
                 <div className="space-y-4">
-                  <div className="flex items-center gap-3 border-l-4 border-slate-900 pl-3 mb-4">
-                    <div className="bg-slate-100 p-2 rounded-lg"><ShieldCheck className="w-5 h-5 text-slate-700" /></div>
+                  <div className="flex items-center gap-3 border-l-4 border-teal-500 pl-3 mb-4">
+                    <div className="bg-teal-50 p-2 rounded-lg"><ShieldCheck className="w-5 h-5 text-teal-700" /></div>
                     <div>
-                      <h4 className="font-bold text-lg text-slate-900">Ditt Juridiska Ansvar</h4>
-                      <p className="text-sm text-slate-500">Detta gäller generellt för kliniker i Sverige</p>
+                      <h4 className="font-bold text-lg text-slate-900">Så här hjälper vi dig</h4>
+                      <p className="text-sm text-slate-500">Tillsammans säkerställer vi en trygg och laglig verksamhet</p>
                     </div>
                   </div>
 
                   <Accordion type="single" collapsible className="w-full bg-white rounded-xl border shadow-sm" defaultValue="item-1">
                     <AccordionItem value="item-1" className="border-b px-4">
                       <AccordionTrigger className="hover:no-underline font-semibold text-slate-800">
-                        <div className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-primary" /> Anmälningsplikt till Kommunen</div>
+                        <div className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-teal-600" /> Anmälan till Kommunen</div>
                       </AccordionTrigger>
                       <AccordionContent className="text-slate-600 text-sm pb-4 leading-relaxed">
-                        Som yrkesmässig utövare av hygieniska behandlingar (exempelvis laser, IPL eller injektioner) <strong>måste du anmäla din verksamhet</strong> till miljö- och hälsoskyddsnämnden i din kommun. 
-                        <br/><br/>
-                        <em>Viktigt:</em> Denna anmälan måste skickas in <strong>senast 6 veckor innan</strong> du tar emot din första kund. Kommunen tar ut en avgift för detta, vilket vi lagt in i kalkylen nedan.
+                        När du startar din verksamhet behöver du göra en anmälan till kommunen. Du behöver inte oroa dig – <strong>vi guidar dig genom hela processen</strong>. Vi hjälper dig att förbereda rätt underlag och skicka in din anmälan i god tid (senast 6 veckor före start) så att din verksamhet är fullt godkänd från dag ett.
                       </AccordionContent>
                     </AccordionItem>
 
                     <AccordionItem value="item-2" className="border-b px-4">
                       <AccordionTrigger className="hover:no-underline font-semibold text-slate-800">
-                        <div className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-primary" /> Miljöbalken {"&"} Egenkontroll</div>
+                        <div className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-teal-600" /> Egenkontroll {"&"} Rutiner</div>
                       </AccordionTrigger>
                       <AccordionContent className="text-slate-600 text-sm pb-4 leading-relaxed">
-                        Din klinik lyder under Miljöbalken, vars syfte är att skydda människors hälsa. 
-                        Det innebär att du är skyldig att ha ett skriftligt system för <strong>egenkontroll</strong>. 
-                        Du behöver rutiner för städning, hygien, smittrening av verktyg och hantering av riskavfall. 
-                        Utan dokumenterad egenkontroll kan du få miljösanktionsavgifter vid en inspektion.
+                        För att din klinik ska följa Miljöbalken behövs ett system för egenkontroll. <strong>Det fixar vi enkelt tillsammans.</strong> Du får tillgång till färdiga mallar och smidiga checklistor för allt från städ- och hygienrutiner till riskavfallshantering. Med vårt stöd har du alltid full koll vid eventuella inspektioner.
                       </AccordionContent>
                     </AccordionItem>
 
                     <AccordionItem value="item-3" className="border-b px-4">
                       <AccordionTrigger className="hover:no-underline font-semibold text-slate-800">
-                        <div className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-primary" /> Strålsäkerhet (SSMFS) {"&"} Injektionslagen</div>
+                        <div className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-teal-600" /> Strålsäkerhet {"&"} Injektionslagen</div>
                       </AccordionTrigger>
                       <AccordionContent className="text-slate-600 text-sm pb-4 leading-relaxed">
-                        <strong>Arbetar du med Laser eller IPL?</strong> Då måste du följa Strålsäkerhetsmyndighetens föreskrifter. Detta kräver bl.a. godkända skyddsglasögon för din utrustnings specifika våglängd, varningsskyltar och avskärmning.
+                        <strong>Arbetar du med Laser eller IPL?</strong> Vi hjälper dig att uppfylla Strålsäkerhetsmyndighetens (SSM) krav. Vi ser till att du har rätt dokumentation, godkända skyddsglasögon och skyltning på plats. 
                         <br/><br/>
-                        <strong>Injektionsbehandlingar?</strong> Estetiska injektioner (som fillers/botox) får sedan 2021 enligt lag <em>endast</em> utföras av legitimerade läkare, tandläkare eller sjuksköterskor.
+                        <strong>Injektionsbehandlingar?</strong> Vi vägleder dig kring lagkraven så att du och dina kunder känner er trygga med att alla estetiska injektioner utförs på ett korrekt och certifierat sätt.
                       </AccordionContent>
                     </AccordionItem>
                   </Accordion>
