@@ -17,12 +17,12 @@ const astomedCategories = [
     description: "Vi på Astomed levererar utrustning för permanent hårborttagning. Hos oss hittar du IPL-Laser, Diodlaser och Alexandrit-laser som behandlar flera olika hår- och hudtyper.",
     image: "https://astomed.se/cdn/shop/files/harborttagning-astomed.jpg?v=1780057540&width=360",
     machines: [
-      { id: "aldix", name: "Aldix Smart Laser", subtitle: "Permanent hårborttagning", description: "Laserhårborttagning med välbeprövad diodlaser", image: "https://astomed.se/cdn/shop/files/Aldix-smart-laser-astomed_641a1065-8411-4a13-88f0-dc814e6999ff.png?v=1777023855&width=360", price: 300000 },
-      { id: "pento", name: "Pento Laser", subtitle: "Laserbehandling", description: "Utrustning som ger resultat med YAG- och Alexandritlaser", image: "https://astomed.se/cdn/shop/files/Pento-astomed_cf1f9d36-4e60-49f1-98ab-7128fe3e8555.png?v=1777023891&width=360", price: 300000 },
-      { id: "splendorx", name: "Splendor X", subtitle: "Permanent hårborttagning", description: "Laserutrustning i världsklass från välkända Lumenis", image: "https://astomed.se/cdn/shop/files/Splendor-astomed_44e60ad1-527b-4c98-af94-01f04c08a9e1.png?v=1777023900&width=360", price: 1500000 },
-      { id: "clearlight", name: "Clear light IPL", subtitle: "Skin rejuvenation", description: "Välbeprövad IPL som behandlar flera indikationer", image: "https://astomed.se/cdn/shop/files/Clearlight-ipl-astomed_22012080-31ca-4dee-97ea-8297bae9c6c6.png?v=1777023054&width=360", price: 300000 },
-      { id: "sopranoice", name: "Soprano Ice", subtitle: "Permanent hårborttagning", description: "#1 på hårborttagning i Sverige sedan 10 år tillbaka", image: "https://astomed.se/cdn/shop/files/Soprano.png?v=1777030661&width=360", price: 300000 },
-      { id: "sopranotitanium", name: "Soprano Titanium", subtitle: "Permanent hårborttagning", description: "Laserhårborttagning i toppklass med tre-i en teknologi", image: "https://astomed.se/cdn/shop/files/Soprano-titanium.png?v=1777030764&width=360", price: 300000 }
+      { id: "aldix", name: "Aldix Smart Laser", subtitle: "Permanent hårborttagning", description: "Laserhårborttagning med välbeprövad diodlaser", image: "https://astomed.se/cdn/shop/files/Aldix-smart-laser-astomed_641a1065-8411-4a13-88f0-dc814e6999ff.png?v=1777023855&width=360", price: 350000, leasingPrice: 7071 },
+      { id: "pento", name: "Pento Laser", subtitle: "Laserbehandling", description: "Utrustning som ger resultat med YAG- och Alexandritlaser", image: "https://astomed.se/cdn/shop/files/Pento-astomed_cf1f9d36-4e60-49f1-98ab-7128fe3e8555.png?v=1777023891&width=360", price: 775000, leasingPrice: 15199 },
+      { id: "splendorx", name: "Splendor X", subtitle: "Permanent hårborttagning", description: "Laserutrustning i världsklass från välkända Lumenis", image: "https://astomed.se/cdn/shop/files/Splendor-astomed_44e60ad1-527b-4c98-af94-01f04c08a9e1.png?v=1777023900&width=360", price: 1330000, leasingPrice: 25646 },
+      { id: "clearlight", name: "Clear light IPL", subtitle: "Skin rejuvenation", description: "Välbeprövad IPL som behandlar flera indikationer", image: "https://astomed.se/cdn/shop/files/Clearlight-ipl-astomed_22012080-31ca-4dee-97ea-8297bae9c6c6.png?v=1777023054&width=360", price: 278000, leasingPrice: 5616 },
+      { id: "sopranoice", name: "Soprano Ice Platinum", subtitle: "Permanent hårborttagning", description: "#1 på hårborttagning i Sverige sedan 10 år tillbaka", image: "https://astomed.se/cdn/shop/files/Soprano.png?v=1777030661&width=360", price: 624000, leasingPrice: 12443 },
+      { id: "sopranotitanium", name: "Soprano Titanium", subtitle: "Permanent hårborttagning", description: "Laserhårborttagning i toppklass med tre-i en teknologi", image: "https://astomed.se/cdn/shop/files/Soprano-titanium.png?v=1777030764&width=360", price: 885000, leasingPrice: 17469 }
     ]
   },
   {
@@ -31,9 +31,9 @@ const astomedCategories = [
     description: "Tatueringsborttagning med laser är idag den säkraste och mest effektiva metoden för att bleka eller helt avlägsna oönskade tatueringar utan att skada den omgivande huden.",
     image: "https://astomed.se/cdn/shop/files/tattoo-astomed.jpg?v=1780063168&width=360",
     machines: [
-      { id: "picolo", name: "Picolo", subtitle: "Tatueringsborttagning", description: "PicoLO laseroptek tatueringsborttagning & hudföryngring", image: "https://astomed.se/cdn/shop/files/PICOLO.png?v=1777031074&width=360", price: 300000 },
-      { id: "helios", name: "Helios III", subtitle: "Tatueringsborttagning", description: "YAG Laser med 4 handenheter för alla tatueringsfärger", image: "https://astomed.se/cdn/shop/files/HELIOSIII_f1abc78e-5eea-4a9a-aea3-844587184f7b.png?v=1777033137&width=360", price: 300000 },
-      { id: "pento_t", name: "Pento Laser", subtitle: "Tatueringsborttagning", description: "Utrustning som ger resultat med YAG- och Alexandritlaser", image: "https://astomed.se/cdn/shop/files/Pento-astomed_cf1f9d36-4e60-49f1-98ab-7128fe3e8555.png?v=1777023891&width=360", price: 300000 }
+      { id: "picolo", name: "Picolo Laser", subtitle: "Tatueringsborttagning", description: "PicoLO laseroptek tatueringsborttagning & hudföryngring", image: "https://astomed.se/cdn/shop/files/PICOLO.png?v=1777031074&width=360", price: 890000, leasingPrice: 17568 },
+      { id: "helios", name: "Helios III", subtitle: "Tatueringsborttagning", description: "YAG Laser med 4 handenheter för alla tatueringsfärger", image: "https://astomed.se/cdn/shop/files/HELIOSIII_f1abc78e-5eea-4a9a-aea3-844587184f7b.png?v=1777033137&width=360", price: 429000, leasingPrice: 8667 },
+      { id: "pento_t", name: "Pento Laser", subtitle: "Tatueringsborttagning", description: "Utrustning som ger resultat med YAG- och Alexandritlaser", image: "https://astomed.se/cdn/shop/files/Pento-astomed_cf1f9d36-4e60-49f1-98ab-7128fe3e8555.png?v=1777023891&width=360", price: 775000, leasingPrice: 15199 }
     ]
   },
   {
@@ -42,16 +42,16 @@ const astomedCategories = [
     description: "Hudföryngring är ett samlingsnamn för olika hudvårdsmetoder som syftar till att återge huden dess spänst, minska rynkor och jämna ut hudtonen.",
     image: "https://astomed.se/cdn/shop/files/hudforyngring-astomed.jpg?v=1780063667&width=360",
     machines: [
-      { id: "dermadrop", name: "Dermadrop", subtitle: "Hudföryngring", description: "En världsunik teknologi för anti-ageing behandling", image: "https://astomed.se/cdn/shop/files/Dermadrop-Astomed_18342eda-1761-416f-9301-b77252032001.png?v=1777023000&width=360", price: 300000 },
-      { id: "hydrabeauty", name: "Hydra Beauty 2", subtitle: "Ansiktsbehandling", description: "Med tre teknologier i en och samma utrustning", image: "https://astomed.se/cdn/shop/files/HYDRA-BEAUTY2-ASTOMED.png?v=1777023406&width=360", price: 300000 },
-      { id: "ioxo", name: "IOXO Laser", subtitle: "Hudföryngring", description: "Erbiumlaser med överlägsen teknologi och smärtfri behandling", image: "https://astomed.se/cdn/shop/files/IOXO-laser.png?v=1777032520&width=360", price: 300000 },
-      { id: "powershape", name: "Powershape 2", subtitle: "Bindvävsmassage", description: "Tre-i-en teknologi med RF, Vakum och laser.", image: "https://astomed.se/cdn/shop/files/Powershape.png?v=1777032793&width=360", price: 300000 },
-      { id: "focusdual", name: "Focus Dual", subtitle: "Hudföryngring", description: "Hifu + Fraktionerad RF needling för effektiv hudföryngring", image: "https://astomed.se/cdn/shop/files/Focus-astomed_5b2bbc84-c61f-4bcc-83b7-83187aae3a0d.png?v=1777023906&width=360", price: 300000 },
-      { id: "mezotix", name: "Mezotix", subtitle: "Öppna kanaler", description: "Hudföryngring genom öppna kanaler ned i huden", image: "https://astomed.se/cdn/shop/files/Mezotix.png?v=1777032973&width=360", price: 300000 },
-      { id: "indiba", name: "Indiba Elite NS", subtitle: "Radiofrekvens", description: "Hudförbättrande behandling för kropp och ansikte", image: "https://astomed.se/cdn/shop/files/Indiba.png?v=1777033074&width=360", price: 300000 },
-      { id: "fractionco2", name: "Fraction CO2", subtitle: "Fraktionell laser", description: "Nya generationens fraktionerade CO2 laser för kropp och ansikte.", image: "https://astomed.se/cdn/shop/files/Fraction.png?v=1777031026&width=360", price: 300000 },
-      { id: "carbomed", name: "Carbomed", subtitle: "Carboxyterapi", description: "Injektionsbehandling med medicinsk koldioxid som har läkande effekt", image: "https://astomed.se/cdn/shop/files/Carbomed.png?v=1777033204&width=360", price: 300000 },
-      { id: "refit", name: "Refit", subtitle: "Hudåtstramning", description: "Stramar åt huden med hjälp av radiofrekvens (RF)", image: "https://astomed.se/cdn/shop/files/Refit.png?v=1777032357&width=360", price: 300000 }
+      { id: "dermadrop", name: "Dermadrop", subtitle: "Hudföryngring", description: "En världsunik teknologi för anti-ageing behandling", image: "https://astomed.se/cdn/shop/files/Dermadrop-Astomed_18342eda-1761-416f-9301-b77252032001.png?v=1777023000&width=360", price: 229000, leasingPrice: 4570 },
+      { id: "hydrabeauty", name: "Hydra Beauty 2", subtitle: "Ansiktsbehandling", description: "Med tre teknologier i en och samma utrustning", image: "https://astomed.se/cdn/shop/files/HYDRA-BEAUTY2-ASTOMED.png?v=1777023406&width=360", price: 129000, leasingPrice: 2594 },
+      { id: "ioxo", name: "IOXO Laser", subtitle: "Hudföryngring", description: "Erbiumlaser med överlägsen teknologi och smärtfri behandling", image: "https://astomed.se/cdn/shop/files/IOXO-laser.png?v=1777032520&width=360", price: 285000, leasingPrice: 5758 },
+      { id: "powershape", name: "PowerShape 2", subtitle: "Bindvävsmassage", description: "Tre-i-en teknologi med RF, Vakum och laser.", image: "https://astomed.se/cdn/shop/files/Powershape.png?v=1777032793&width=360", price: 330000, leasingPrice: 6667 },
+      { id: "focusdual", name: "Focus Dual", subtitle: "Hudföryngring", description: "Hifu + Fraktionerad RF needling för effektiv hudföryngring", image: "https://astomed.se/cdn/shop/files/Focus-astomed_5b2bbc84-c61f-4bcc-83b7-83187aae3a0d.png?v=1777023906&width=360", price: 386000, leasingPrice: 7798 },
+      { id: "mezotix", name: "Mezotix", subtitle: "Öppna kanaler", description: "Hudföryngring genom öppna kanaler ned i huden", image: "https://astomed.se/cdn/shop/files/Mezotix.png?v=1777032973&width=360", price: 198000, leasingPrice: 4150 },
+      { id: "indiba", name: "Indiba RF", subtitle: "Radiofrekvens", description: "Hudförbättrande behandling för kropp och ansikte", image: "https://astomed.se/cdn/shop/files/Indiba.png?v=1777033074&width=360", price: 395000, leasingPrice: 7980 },
+      { id: "fractionco2", name: "Fraction CO2", subtitle: "Fraktionell laser", description: "Nya generationens fraktionerade CO2 laser för kropp och ansikte.", image: "https://astomed.se/cdn/shop/files/Fraction.png?v=1777031026&width=360", price: 328000, leasingPrice: 6626 },
+      { id: "carbomed", name: "Carbomed", subtitle: "Carboxyterapi", description: "Injektionsbehandling med medicinsk koldioxid som har läkande effekt", image: "https://astomed.se/cdn/shop/files/Carbomed.png?v=1777033204&width=360", price: 129000, leasingPrice: 2606 },
+      { id: "refit", name: "Refit", subtitle: "Hudåtstramning", description: "Stramar åt huden med hjälp av radiofrekvens (RF)", image: "https://astomed.se/cdn/shop/files/Refit.png?v=1777032357&width=360", price: 300000, leasingPrice: 6000 }
     ]
   },
   {
@@ -60,9 +60,9 @@ const astomedCategories = [
     description: "Pigmenteringar är mörka fläckar på huden som uppstår när kroppen överproducerar melanin. Med utrustning från Astomed kan du behandla dessa hudproblem enkelt och effektivt.",
     image: "https://astomed.se/cdn/shop/files/Pigment-astomed.jpg?v=1780064267&width=360",
     machines: [
-      { id: "cryopen", name: "Cryopen O+", subtitle: "Cryoterapi", description: "Peka och frys! På 20 sekunder eliminerar du oönskade hudfläckar", image: "https://astomed.se/cdn/shop/files/Cryopen_bf185c87-971c-4743-9001-669abfafcca8.png?v=1777032103&width=360", price: 300000 },
-      { id: "cryoiq", name: "Cryo IQ", subtitle: "Cryoterapi", description: "Frys bort vårtor och hudfläckar enkelt och smärtfritt", image: "https://astomed.se/cdn/shop/files/Cryo-iq.png?v=1777033475&width=360", price: 300000 },
-      { id: "clearlight_p", name: "Clear light IPL", subtitle: "Skin rejuvenation", description: "Välbeprövad IPL som behandlar flera indikationer", image: "https://astomed.se/cdn/shop/files/Clearlight-ipl-astomed_22012080-31ca-4dee-97ea-8297bae9c6c6.png?v=1777023054&width=360", price: 300000 }
+      { id: "cryopen", name: "Cryopen O+", subtitle: "Cryoterapi", description: "Peka och frys! På 20 sekunder eliminerar du oönskade hudfläckar", image: "https://astomed.se/cdn/shop/files/Cryopen_bf185c87-971c-4743-9001-669abfafcca8.png?v=1777032103&width=360", price: 23500, leasingPrice: null },
+      { id: "cryoiq", name: "Cryo IQ", subtitle: "Cryoterapi", description: "Frys bort vårtor och hudfläckar enkelt och smärtfritt", image: "https://astomed.se/cdn/shop/files/Cryo-iq.png?v=1777033475&width=360", price: 6950, leasingPrice: null },
+      { id: "clearlight_p", name: "Clear light IPL", subtitle: "Skin rejuvenation", description: "Välbeprövad IPL som behandlar flera indikationer", image: "https://astomed.se/cdn/shop/files/Clearlight-ipl-astomed_22012080-31ca-4dee-97ea-8297bae9c6c6.png?v=1777023054&width=360", price: 278000, leasingPrice: 5616 }
     ]
   },
   {
@@ -71,14 +71,14 @@ const astomedCategories = [
     description: "Vi har utrustning för många olika typer av behandlingar inom skönhet men även hälsa. Kroppen läker inifrån och även ålderstecken kan reduceras.",
     image: "https://astomed.se/cdn/shop/files/maskiner-astomed-2-1.webp?v=1777021758&width=360",
     machines: [
-      { id: "coolshaping", name: "Coolshaping 2", subtitle: "Fettfrysning", description: "Frys bort fett med Coolshaping 2 som använder 4 handenheter", image: "https://astomed.se/cdn/shop/files/Coolshaping2.png?v=1777032099&width=360", price: 300000 },
-      { id: "reoxy", name: "Reoxy", subtitle: "Syreterapi", description: "Andas och lev ett bättre liv, med innovativ andningsterapi", image: "https://astomed.se/cdn/shop/files/Reoxy-astomed.png?v=1777022741&width=360", price: 300000 },
-      { id: "cmslim", name: "CMSlim", subtitle: "Kroppsskulptering", description: "Som att utföra 20 000 situps eller squats på 30 minuter", image: "https://astomed.se/cdn/shop/files/CMslim.png?v=1777032274&width=360", price: 300000 },
-      { id: "hbot", name: "HBOT", subtitle: "Syrekammare", description: "Bli Starkare och friskare med HBOT syrekammare.", image: "https://astomed.se/cdn/shop/files/HBot.jpg?v=1777032737&width=360", price: 300000 },
-      { id: "rokutsug", name: "TBH Health Pro", subtitle: "Rökutsug", description: "Ordenligt skydd under laserbehandlingar är en säker investering", image: "https://astomed.se/cdn/shop/files/Rokutsug.png?v=1777033562&width=360", price: 300000 },
-      { id: "cryoshot", name: "Cryoshot", subtitle: "Luftkylare", description: "Minska obehag och smärta under behandlingarna", image: "https://astomed.se/cdn/shop/files/Cryoshot-luftkylare.jpg?v=1777033714&width=360", price: 300000 },
-      { id: "asto", name: "Asto", subtitle: "Behandlingssäng", description: "Elektrisk behandlingssäng med 5 motorer", image: "https://astomed.se/cdn/shop/files/Behandlingssang.png?v=1777035752&width=360", price: 300000 },
-      { id: "brite", name: "Brite LED", subtitle: "Klinikbelysning", description: "Bra belysning är ett måste för en säker arbetsmiljö", image: "https://astomed.se/cdn/shop/files/Halo.png?v=1777035670&width=360", price: 300000 }
+      { id: "coolshaping", name: "Coolshaping 2", subtitle: "Fettfrysning", description: "Frys bort fett med Coolshaping 2 som använder 4 handenheter", image: "https://astomed.se/cdn/shop/files/Coolshaping2.png?v=1777032099&width=360", price: 285000, leasingPrice: 5758 },
+      { id: "reoxy", name: "Reoxy", subtitle: "Syreterapi", description: "Andas och lev ett bättre liv, med innovativ andningsterapi", image: "https://astomed.se/cdn/shop/files/Reoxy-astomed.png?v=1777022741&width=360", price: 229000, leasingPrice: 4570 },
+      { id: "cmslim", name: "CMSlim", subtitle: "Kroppsskulptering", description: "Som att utföra 20 000 situps eller squats på 30 minuter", image: "https://astomed.se/cdn/shop/files/CMslim.png?v=1777032274&width=360", price: 295000, leasingPrice: 5960 },
+      { id: "hbot", name: "Oxyhelp", subtitle: "Syrekammare", description: "Bli Starkare och friskare med HBOT syrekammare.", image: "https://astomed.se/cdn/shop/files/HBot.jpg?v=1777032737&width=360", price: 545000, leasingPrice: 10648 },
+      { id: "rokutsug", name: "TBH Health Pro", subtitle: "Rökutsug", description: "Ordenligt skydd under laserbehandlingar är en säker investering", image: "https://astomed.se/cdn/shop/files/Rokutsug.png?v=1777033562&width=360", price: 24000, leasingPrice: null },
+      { id: "cryoshot", name: "Eskimo luftkylare", subtitle: "Luftkylare", description: "Minska obehag och smärta under behandlingarna", image: "https://astomed.se/cdn/shop/files/Cryoshot-luftkylare.jpg?v=1777033714&width=360", price: 39000, leasingPrice: null },
+      { id: "asto", name: "Astomed behandlingssäng", subtitle: "Behandlingssäng", description: "Elektrisk behandlingssäng med 5 motorer", image: "https://astomed.se/cdn/shop/files/Behandlingssang.png?v=1777035752&width=360", price: 19800, leasingPrice: null },
+      { id: "brite", name: "Brite LED", subtitle: "Klinikbelysning", description: "Bra belysning är ett måste för en säker arbetsmiljö", image: "https://astomed.se/cdn/shop/files/Halo.png?v=1777035670&width=360", price: 10200, leasingPrice: null }
     ]
   }
 ];
@@ -147,18 +147,17 @@ export default function Calculator() {
   const totalSalaryCost = baseSalaryTotal + socialFees + vacationPay + pensionAndInsurance;
   const serviceAgreementCost = formData.includeServiceAgreement ? (1495 * selectedMachines.length) : 0;
 
-  const machinePrice = selectedMachines.reduce((sum, m) => sum + m.price, 0);
-  const totalStartupCost = machinePrice + trainingCost + formData.municipalityFee + formData.interiorCost + formData.otherStartup;
+  // Maskiner som har ett leasingpris leasas, medan övriga betalas vid start
+  const machinesBoughtDirectly = selectedMachines.filter(m => !m.leasingPrice);
+  const machinesLeased = selectedMachines.filter(m => m.leasingPrice);
+
+  const machineStartupCost = machinesBoughtDirectly.reduce((sum, m) => sum + m.price, 0);
+  const totalStartupCost = machineStartupCost + trainingCost + formData.municipalityFee + formData.interiorCost + formData.otherStartup;
+  const machinePrice = selectedMachines.reduce((sum, m) => sum + m.price, 0); // För databasen/rapporten
   
-  let monthlyLeasingCost = 0;
-  if (formData.financingType === "leasing") {
-    const principal = machinePrice + trainingCost;
-    if (principal > 0 && formData.leasingMonths > 0) {
-      const r = (formData.leasingInterestRate / 100) / 12;
-      const n = formData.leasingMonths;
-      monthlyLeasingCost = r === 0 ? principal / n : principal * (r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
-    }
-  }
+  // Månadskostnad för utrustning är leasingpriser på de valda maskinerna
+  // Om träningar ingår kan de behöva leasas, men här antar vi att summan av leasingpriserna räcker.
+  let monthlyLeasingCost = machinesLeased.reduce((sum, m) => sum + m.leasingPrice, 0);
 
   const monthlyCost = formData.rent + totalSalaryCost + formData.bookingSystem + formData.insuranceAndOther + (totalTreatmentsPerWeek * 4 * 100) + serviceAgreementCost + monthlyLeasingCost; 
 
@@ -349,7 +348,7 @@ export default function Calculator() {
                       <div className="p-4 grid grid-cols-1 sm:grid-cols-2 gap-4 bg-slate-50/50">
                         {category.machines.map(m => {
                           const dbProduct = products.find(p => p.name.toLowerCase() === m.name.toLowerCase());
-                          // Använd alltid det hårdkodade priset om databasen har pris = 0, eller om vi saknar produkt.
+                          // Om leasingpris finns, visa det, annars fall tillbaka på ordinarie pris (för tillbehör)
                           const price = (dbProduct && dbProduct.suggested_retail_price > 0) ? dbProduct.suggested_retail_price : m.price;
                           
                           return (
@@ -388,9 +387,13 @@ export default function Calculator() {
                                     <p className="text-xs text-slate-500 mt-1 leading-relaxed">
                                       {m.description}
                                     </p>
-                                    {price > 0 ? (
+                                    {m.leasingPrice ? (
                                       <div className="mt-3 text-xs font-semibold text-slate-700 bg-slate-100 inline-block px-2 py-1 rounded">
-                                        {price.toLocaleString()} kr
+                                        Finansiering från: {m.leasingPrice.toLocaleString()} kr/mån
+                                      </div>
+                                    ) : price > 0 ? (
+                                      <div className="mt-3 text-xs font-semibold text-slate-700 bg-slate-100 inline-block px-2 py-1 rounded">
+                                        Pris: {price.toLocaleString()} kr
                                       </div>
                                     ) : (
                                       <div className="mt-3 text-xs font-medium text-slate-400 italic">
@@ -561,28 +564,7 @@ export default function Calculator() {
                   {formData.financingType === "leasing" && (
                     <div className="bg-slate-50 p-6 rounded-xl border border-slate-100 space-y-4">
                       <h4 className="font-bold text-lg text-slate-800">Leasinguppgifter</h4>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                        <div className="space-y-2">
-                          <Label className="text-slate-700 font-semibold">Avtalstid (månader)</Label>
-                          <Select value={String(formData.leasingMonths)} onValueChange={(v) => handleUpdate("leasingMonths", Number(v))}>
-                            <SelectTrigger className="bg-white"><SelectValue /></SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="24">24 månader</SelectItem>
-                              <SelectItem value="36">36 månader</SelectItem>
-                              <SelectItem value="48">48 månader</SelectItem>
-                              <SelectItem value="60">60 månader</SelectItem>
-                              <SelectItem value="72">72 månader</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
-                        <div className="space-y-2">
-                          <Label className="text-slate-700 font-semibold">Uppskattad kalkylränta (%)</Label>
-                          <Input type="number" className="bg-white" value={formData.leasingInterestRate} onChange={e => handleUpdate("leasingInterestRate", Number(e.target.value))}/>
-                          <p className="text-xs text-slate-500 leading-tight">
-                            Detta är endast ett exempel på en kalkylränta. Din faktiska ränta sätts individuellt vid en kreditprövning.
-                          </p>
-                        </div>
-                      </div>
+                      <p className="text-sm text-slate-600">Baserat på aktuella rekommenderade marknadspriser för leasingavtal från Astomed.</p>
                       <div className="pt-4 border-t border-slate-200">
                         <div className="flex justify-between items-center text-slate-700">
                           <span>Uppskattad månadskostnad för utrustning:</span>
