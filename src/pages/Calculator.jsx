@@ -345,67 +345,70 @@ export default function Calculator() {
                            <p className="text-sm text-slate-500 mt-2 leading-relaxed">{category.description}</p>
                         </div>
                       </div>
-                      <div className="p-4 grid grid-cols-1 sm:grid-cols-2 gap-4 bg-slate-50/50">
-                        {category.machines.map(m => {
-                          const dbProduct = products.find(p => p.name.toLowerCase() === m.name.toLowerCase());
-                          // Om leasingpris finns, visa det, annars fall tillbaka på ordinarie pris (för tillbehör)
-                          const price = (dbProduct && dbProduct.suggested_retail_price > 0) ? dbProduct.suggested_retail_price : m.price;
-                          
-                          return (
-                            <div 
-                              key={m.id} 
-                              className={`bg-white p-3 rounded-lg border-2 shadow-sm transition-all flex flex-col gap-2 ${formData.machineIds.includes(m.id) ? 'border-teal-600 bg-teal-50/30' : 'border-slate-200 hover:border-teal-300'}`}
-                            >
-                              <div className="flex items-start space-x-3">
-                                <Checkbox 
-                                  id={`machine-${m.id}`}
-                                  checked={formData.machineIds.includes(m.id)}
-                                  onCheckedChange={(checked) => {
-                                    let newIds = [];
-                                    if (checked) {
-                                      newIds = [...formData.machineIds, m.id];
-                                    } else {
-                                      newIds = formData.machineIds.filter(id => id !== m.id);
-                                    }
-                                    setFormData(prev => ({
-                                      ...prev,
-                                      machineIds: newIds,
-                                      employeeCount: Math.max(prev.employeeCount, newIds.length)
-                                    }));
-                                  }}
-                                  className="mt-1 shrink-0"
-                                />
-                                <div className="flex-1 min-w-0">
-                                  <Label htmlFor={`machine-${m.id}`} className="cursor-pointer block">
-                                    <div className="flex items-center gap-3 mb-2">
-                                      {m.image && <img src={m.image} alt={m.name} className="w-10 h-10 object-contain rounded bg-slate-50" />}
-                                      <div className="flex-1">
-                                        <div className="text-sm font-bold text-slate-800">{m.name}</div>
-                                        <div className="text-[10px] text-teal-600 font-semibold uppercase tracking-wider">{m.subtitle}</div>
-                                      </div>
+                      <div className="p-4 bg-slate-50/50">
+                        <div className="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-4 -mx-4 px-4 sm:mx-0 sm:px-0">
+                          {category.machines.map(m => {
+                            const dbProduct = products.find(p => p.name.toLowerCase() === m.name.toLowerCase());
+                            const price = (dbProduct && dbProduct.suggested_retail_price > 0) ? dbProduct.suggested_retail_price : m.price;
+                            
+                            return (
+                              <div 
+                                key={m.id} 
+                                className={`shrink-0 snap-center w-[260px] sm:w-[280px] bg-white rounded-xl border-2 shadow-sm transition-all flex flex-col overflow-hidden ${formData.machineIds.includes(m.id) ? 'border-teal-600 ring-2 ring-teal-600/20' : 'border-slate-200 hover:border-teal-300'}`}
+                              >
+                                {m.image && (
+                                  <div className="h-44 bg-white relative border-b border-slate-100 p-4 flex items-center justify-center">
+                                    <img src={m.image} alt={m.name} className="max-h-full max-w-full object-contain mix-blend-multiply" />
+                                    <div className="absolute top-3 left-3 bg-white/90 backdrop-blur rounded-full p-1 shadow-sm">
+                                      <Checkbox 
+                                        id={`machine-${m.id}`}
+                                        checked={formData.machineIds.includes(m.id)}
+                                        onCheckedChange={(checked) => {
+                                          let newIds = [];
+                                          if (checked) {
+                                            newIds = [...formData.machineIds, m.id];
+                                          } else {
+                                            newIds = formData.machineIds.filter(id => id !== m.id);
+                                          }
+                                          setFormData(prev => ({
+                                            ...prev,
+                                            machineIds: newIds,
+                                            employeeCount: Math.max(prev.employeeCount, newIds.length)
+                                          }));
+                                        }}
+                                        className="data-[state=checked]:bg-teal-600 data-[state=checked]:border-teal-600"
+                                      />
                                     </div>
-                                    <p className="text-xs text-slate-500 mt-1 leading-relaxed">
+                                  </div>
+                                )}
+                                <div className="p-4 flex-1 flex flex-col">
+                                  <Label htmlFor={`machine-${m.id}`} className="cursor-pointer flex-1 flex flex-col">
+                                    <div className="text-[10px] text-teal-600 font-bold uppercase tracking-wider mb-1">{m.subtitle}</div>
+                                    <div className="text-base font-bold text-slate-800 mb-2 leading-tight">{m.name}</div>
+                                    <p className="text-xs text-slate-500 leading-relaxed mb-4 flex-1">
                                       {m.description}
                                     </p>
-                                    {m.leasingPrice ? (
-                                      <div className="mt-3 text-xs font-semibold text-slate-700 bg-slate-100 inline-block px-2 py-1 rounded">
-                                        Finansiering från: {m.leasingPrice.toLocaleString()} kr/mån
-                                      </div>
-                                    ) : price > 0 ? (
-                                      <div className="mt-3 text-xs font-semibold text-slate-700 bg-slate-100 inline-block px-2 py-1 rounded">
-                                        Pris: {price.toLocaleString()} kr
-                                      </div>
-                                    ) : (
-                                      <div className="mt-3 text-xs font-medium text-slate-400 italic">
-                                        Pris på förfrågan
-                                      </div>
-                                    )}
+                                    <div className="mt-auto pt-3 border-t border-slate-100">
+                                      {m.leasingPrice ? (
+                                        <div className="text-xs font-semibold text-slate-800 bg-slate-100 inline-block px-2.5 py-1.5 rounded-md w-full text-center">
+                                          Från {m.leasingPrice.toLocaleString()} kr/mån
+                                        </div>
+                                      ) : price > 0 ? (
+                                        <div className="text-xs font-semibold text-slate-800 bg-slate-100 inline-block px-2.5 py-1.5 rounded-md w-full text-center">
+                                          Pris: {price.toLocaleString()} kr
+                                        </div>
+                                      ) : (
+                                        <div className="text-xs font-medium text-slate-400 italic text-center w-full">
+                                          Pris på förfrågan
+                                        </div>
+                                      )}
+                                    </div>
                                   </Label>
                                 </div>
                               </div>
-                            </div>
-                          );
-                        })}
+                            );
+                          })}
+                        </div>
                       </div>
                     </div>
                   ))}
@@ -512,12 +515,12 @@ export default function Calculator() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-slate-50 p-6 rounded-xl border border-slate-100">
                      <div className="space-y-2">
                        <Label className="text-slate-700 font-semibold">Inredning {"&"} Brits (kr)</Label>
-                       <Input type="number" className="bg-white" value={formData.interiorCost} onChange={e => handleUpdate("interiorCost", Number(e.target.value))}/>
+                       <Input type="number" className="bg-white text-slate-900 font-medium" value={formData.interiorCost} onChange={e => handleUpdate("interiorCost", Number(e.target.value))}/>
                        <p className="text-xs text-slate-500 flex items-start gap-1"><Info className="w-3 h-3 mt-0.5 shrink-0" /> Möbler och belysning.</p>
                      </div>
                      <div className="space-y-2">
                        <Label className="text-slate-700 font-semibold">Övriga Kostnader (kr)</Label>
-                       <Input type="number" className="bg-white" value={formData.otherStartup} onChange={e => handleUpdate("otherStartup", Number(e.target.value))}/>
+                       <Input type="number" className="bg-white text-slate-900 font-medium" value={formData.otherStartup} onChange={e => handleUpdate("otherStartup", Number(e.target.value))}/>
                        <p className="text-xs text-slate-500 flex items-start gap-1"><Info className="w-3 h-3 mt-0.5 shrink-0" /> El, vatten, avfall och andra utgifter.</p>
                      </div>
                   </div>
@@ -606,7 +609,7 @@ export default function Calculator() {
                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                              <div className="space-y-2">
                                <Label>Snittpris / behandling (inkl. moms)</Label>
-                               <Input type="number" value={stat.price} onChange={e => {
+                               <Input type="number" className="bg-white text-slate-900 font-medium" value={stat.price} onChange={e => {
                                  setFormData(prev => ({
                                    ...prev, machineStats: { ...prev.machineStats, [m.id]: { ...stat, price: Number(e.target.value) } }
                                  }));
@@ -614,7 +617,7 @@ export default function Calculator() {
                              </div>
                              <div className="space-y-2">
                                <Label>Behandlingar / vecka</Label>
-                               <Input type="number" value={stat.treatments} onChange={e => {
+                               <Input type="number" className="bg-white text-slate-900 font-medium" value={stat.treatments} onChange={e => {
                                  setFormData(prev => ({
                                    ...prev, machineStats: { ...prev.machineStats, [m.id]: { ...stat, treatments: Number(e.target.value) } }
                                  }));
@@ -628,27 +631,37 @@ export default function Calculator() {
 
                    <div className="space-y-2">
                      <Label>Antal anställda (heltid)</Label>
-                     <Input type="number" min="1" value={formData.employeeCount} onChange={e => handleUpdate("employeeCount", Math.max(1, Number(e.target.value)))}/>
+                     <Input type="number" min="1" className="bg-white text-slate-900 font-medium" value={formData.employeeCount} onChange={e => handleUpdate("employeeCount", Math.max(1, Number(e.target.value)))}/>
                      {formData.employeeCount < selectedMachines.length && (
                        <p className="text-xs text-amber-600 font-medium">Tips: Med {selectedMachines.length} maskiner kan du behöva fler anställda.</p>
                      )}
                    </div>
                    <div className="space-y-2">
                      <Label>Snittlön (brutto per anställd)</Label>
-                     <Input type="number" value={formData.salaryPerEmployee} onChange={e => handleUpdate("salaryPerEmployee", Number(e.target.value))}/>
+                     <Input type="number" className="bg-white text-slate-900 font-medium" value={formData.salaryPerEmployee} onChange={e => handleUpdate("salaryPerEmployee", Number(e.target.value))}/>
                      <p className="text-xs text-slate-500">Kalkylen lägger automatiskt till sociala avgifter (31,42%), semesterersättning (12%) samt pension/försäkringar (~10%) på lönen.</p>
                    </div>
-                   <div className="space-y-2">
-                     <Label>Hyra (exkl. moms, kr/mån)</Label>
-                     <Input type="number" value={formData.rent} onChange={e => handleUpdate("rent", Number(e.target.value))}/>
-                   </div>
-                   <div className="space-y-2">
-                     <Label>Bokningssystem (t.ex. Bokadirekt, kr/mån)</Label>
-                     <Input type="number" value={formData.bookingSystem} onChange={e => handleUpdate("bookingSystem", Number(e.target.value))}/>
-                   </div>
-                   <div className="space-y-2">
-                     <Label>Försäkring {"&"} Marknadsföring (kr/mån)</Label>
-                     <Input type="number" value={formData.insuranceAndOther} onChange={e => handleUpdate("insuranceAndOther", Number(e.target.value))}/>
+                   
+                   <div className="sm:col-span-2 pt-4 border-t">
+                     <h4 className="font-bold text-lg text-slate-800 mb-1">Egenkostnader {"&"} Fasta utgifter</h4>
+                     <p className="text-sm text-slate-600 mb-4">
+                       Här anger du dina fasta månadsutgifter som hyra och försäkringar. <strong>Har du redan en befintlig salong eller klinik?</strong> Då kanske du inte behöver räkna med någon extra hyra här – sätt i så fall hyran till 0 kr.
+                     </p>
+                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                       <div className="space-y-2">
+                         <Label>Hyra (exkl. moms, kr/mån)</Label>
+                         <Input type="number" className="bg-white text-slate-900 font-medium" value={formData.rent} onChange={e => handleUpdate("rent", Number(e.target.value))}/>
+                         <p className="text-xs text-slate-500">Valfritt. Kan sättas till 0 om du redan har en lokal.</p>
+                       </div>
+                       <div className="space-y-2">
+                         <Label>Bokningssystem (t.ex. Bokadirekt, kr/mån)</Label>
+                         <Input type="number" className="bg-white text-slate-900 font-medium" value={formData.bookingSystem} onChange={e => handleUpdate("bookingSystem", Number(e.target.value))}/>
+                       </div>
+                       <div className="space-y-2">
+                         <Label>Försäkring {"&"} Marknadsföring (kr/mån)</Label>
+                         <Input type="number" className="bg-white text-slate-900 font-medium" value={formData.insuranceAndOther} onChange={e => handleUpdate("insuranceAndOther", Number(e.target.value))}/>
+                       </div>
+                     </div>
                    </div>
 
                    {/* Astomed Serviceavtal */}
@@ -696,19 +709,19 @@ export default function Calculator() {
                 <div className="space-y-4">
                    <div className="space-y-2">
                      <Label>För- och Efternamn *</Label>
-                     <Input placeholder="Anna Andersson" value={formData.fullName} onChange={e => handleUpdate("fullName", e.target.value)}/>
+                     <Input className="bg-white text-slate-900 font-medium placeholder:text-slate-400 placeholder:font-normal" placeholder="Anna Andersson" value={formData.fullName} onChange={e => handleUpdate("fullName", e.target.value)}/>
                    </div>
                    <div className="space-y-2">
                      <Label>E-postadress *</Label>
-                     <Input type="email" placeholder="anna@kliniken.se" value={formData.email} onChange={e => handleUpdate("email", e.target.value)}/>
+                     <Input type="email" className="bg-white text-slate-900 font-medium placeholder:text-slate-400 placeholder:font-normal" placeholder="anna@kliniken.se" value={formData.email} onChange={e => handleUpdate("email", e.target.value)}/>
                    </div>
                    <div className="space-y-2">
                      <Label>Telefonnummer *</Label>
-                     <Input type="tel" placeholder="070-123 45 67" value={formData.phone} onChange={e => handleUpdate("phone", e.target.value)}/>
+                     <Input type="tel" className="bg-white text-slate-900 font-medium placeholder:text-slate-400 placeholder:font-normal" placeholder="070-123 45 67" value={formData.phone} onChange={e => handleUpdate("phone", e.target.value)}/>
                    </div>
                    <div className="space-y-2">
                      <Label>Företagsnamn (Frivilligt)</Label>
-                     <Input placeholder="Min Klinik AB" value={formData.company} onChange={e => handleUpdate("company", e.target.value)}/>
+                     <Input className="bg-white text-slate-900 font-medium placeholder:text-slate-400 placeholder:font-normal" placeholder="Min Klinik AB" value={formData.company} onChange={e => handleUpdate("company", e.target.value)}/>
                    </div>
                 </div>
                 <div className="pt-6 flex flex-col sm:flex-row gap-3 border-t">
