@@ -511,21 +511,16 @@ export default function Calculator() {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6 bg-slate-50 p-6 rounded-xl border border-slate-100">
-                     <div className="space-y-2">
-                       <Label className="text-slate-700 font-semibold">Kommunens Avgift (kr)</Label>
-                       <Input type="number" className="bg-white" value={formData.municipalityFee} onChange={e => handleUpdate("municipalityFee", Number(e.target.value))}/>
-                       <p className="text-xs text-slate-500 flex items-start gap-1"><Info className="w-3 h-3 mt-0.5 shrink-0" /> För anmälan av hygienisk verksamhet.</p>
-                     </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-slate-50 p-6 rounded-xl border border-slate-100">
                      <div className="space-y-2">
                        <Label className="text-slate-700 font-semibold">Inredning {"&"} Brits (kr)</Label>
                        <Input type="number" className="bg-white" value={formData.interiorCost} onChange={e => handleUpdate("interiorCost", Number(e.target.value))}/>
                        <p className="text-xs text-slate-500 flex items-start gap-1"><Info className="w-3 h-3 mt-0.5 shrink-0" /> Möbler och belysning.</p>
                      </div>
                      <div className="space-y-2">
-                       <Label className="text-slate-700 font-semibold">Övrigt Uppstart (kr)</Label>
+                       <Label className="text-slate-700 font-semibold">Övriga Kostnader (kr)</Label>
                        <Input type="number" className="bg-white" value={formData.otherStartup} onChange={e => handleUpdate("otherStartup", Number(e.target.value))}/>
-                       <p className="text-xs text-slate-500 flex items-start gap-1"><Info className="w-3 h-3 mt-0.5 shrink-0" /> Företagslogga, reg. bevis etc.</p>
+                       <p className="text-xs text-slate-500 flex items-start gap-1"><Info className="w-3 h-3 mt-0.5 shrink-0" /> El, vatten, avfall och andra utgifter.</p>
                      </div>
                   </div>
                 </div>
