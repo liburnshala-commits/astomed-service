@@ -543,36 +543,17 @@ export default function Calculator() {
                 </div>
 
                 <div className="space-y-6">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div 
-                      className={`p-5 rounded-xl border-2 transition-all cursor-pointer ${formData.financingType === 'leasing' ? 'border-teal-600 bg-teal-50/50' : 'border-slate-200 bg-white hover:border-teal-300'}`} 
-                      onClick={() => handleUpdate("financingType", "leasing")}
-                    >
-                      <div className="flex items-start gap-4">
-                        <Checkbox 
-                          checked={formData.financingType === 'leasing'} 
-                          onCheckedChange={() => handleUpdate("financingType", "leasing")}
-                        />
-                        <div>
-                          <Label className="text-base font-bold text-slate-900 cursor-pointer">Leasingavtal</Label>
-                          <p className="text-sm text-slate-600 mt-1">Dela upp kostnaden månadsvis</p>
+                  <div className="bg-white p-5 rounded-xl border-2 border-teal-600 bg-teal-50/50">
+                    <div className="flex items-start gap-4">
+                      <div className="mt-1">
+                        <div className="w-6 h-6 rounded border-2 border-teal-600 bg-teal-600 flex items-center justify-center">
+                          <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
                         </div>
                       </div>
-                    </div>
-
-                    <div 
-                      className={`p-5 rounded-xl border-2 transition-all cursor-pointer ${formData.financingType === 'cash' ? 'border-teal-600 bg-teal-50/50' : 'border-slate-200 bg-white hover:border-teal-300'}`} 
-                      onClick={() => handleUpdate("financingType", "cash")}
-                    >
-                      <div className="flex items-start gap-4">
-                        <Checkbox 
-                          checked={formData.financingType === 'cash'} 
-                          onCheckedChange={() => handleUpdate("financingType", "cash")}
-                        />
-                        <div>
-                          <Label className="text-base font-bold text-slate-900 cursor-pointer">Direktköp</Label>
-                          <p className="text-sm text-slate-600 mt-1">Betala hela summan direkt</p>
-                        </div>
+                      <div>
+                        <Label className="text-base font-bold text-slate-900 cursor-pointer">Leasingavtal</Label>
+                        <p className="text-sm text-slate-600 mt-1">Det mest flexibla alternativet. Dela upp kostnaden månadsvis utan att binda upp stort kapital vid uppstart.</p>
+                        <p className="text-xs text-slate-500 mt-2"><em>Intresserad av direktköp? Kontakta oss för ett möte så diskuterar vi dina behov och alternativen.</em></p>
                       </div>
                     </div>
                   </div>
