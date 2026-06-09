@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Checkbox } from "@/components/ui/checkbox";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
-import { Calculator as CalcIcon, ArrowRight, AlertTriangle, ShieldCheck, TrendingUp, Lightbulb, CheckCircle2, Info, BookOpen } from "lucide-react";
+import { Calculator as CalcIcon, ArrowRight, AlertTriangle, ShieldCheck, TrendingUp, Lightbulb, CheckCircle2, Info, BookOpen, ClipboardCheck, GraduationCap, Wrench, FileText, Handshake } from "lucide-react";
 
 const astomedCategories = [
   {
@@ -206,10 +206,79 @@ export default function Calculator() {
           <CardContent className="p-6 md:p-8">
             
             {step === 1 && (
-              <div className="space-y-6">
-                <div>
-                  <h3 className="font-bold text-xl mb-1">Vad vill du arbeta med?</h3>
-                  <p className="text-slate-500 text-sm">Börja med att välja vilken maskin du är intresserad av att investera i.</p>
+              <div className="space-y-8 animate-in fade-in slide-in-from-right-4 duration-500">
+                <div className="text-center space-y-3 pb-6 border-b">
+                  <Badge variant="outline" className="bg-primary/5 text-primary border-primary/20 mb-2">Astomed som partner</Badge>
+                  <h3 className="font-serif font-bold text-3xl text-slate-900 tracking-tight">Vi bygger din klinik tillsammans</h3>
+                  <p className="text-slate-600 max-w-2xl mx-auto leading-relaxed">
+                    Innan vi tittar på specifik utrustning vill vi visa hur vi stöttar dig genom hela din kliniks livscykel. Vi är inte bara en maskinleverantör, vi är din helhetspartner för trygg klinikutveckling.
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <Card className="border-slate-200 shadow-sm">
+                    <CardContent className="p-5 flex gap-4">
+                      <div className="bg-teal-50 p-3 rounded-lg h-fit"><Handshake className="w-6 h-6 text-teal-700" /></div>
+                      <div>
+                        <h4 className="font-bold text-slate-900">Process {"&"} Start</h4>
+                        <p className="text-sm text-slate-600 mt-1">Vi hjälper dig med affärsplan, finansieringslösningar och guidar dig genom de anmälningar som krävs till kommunen.</p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                  <Card className="border-slate-200 shadow-sm">
+                    <CardContent className="p-5 flex gap-4">
+                      <div className="bg-teal-50 p-3 rounded-lg h-fit"><ShieldCheck className="w-6 h-6 text-teal-700" /></div>
+                      <div>
+                        <h4 className="font-bold text-slate-900">Regelverk {"&"} Säkerhet</h4>
+                        <p className="text-sm text-slate-600 mt-1">Få stöd att uppfylla kraven från SSMFS och Miljöbalken, inklusive egenkontroll och upprättande av skyddsrutiner.</p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                  <Card className="border-slate-200 shadow-sm">
+                    <CardContent className="p-5 flex gap-4">
+                      <div className="bg-teal-50 p-3 rounded-lg h-fit"><GraduationCap className="w-6 h-6 text-teal-700" /></div>
+                      <div>
+                        <h4 className="font-bold text-slate-900">Utbildning {"&"} Kompetens</h4>
+                        <p className="text-sm text-slate-600 mt-1">Gedigna certifieringsutbildningar för dig och din personal, samt löpande kunskapslyft för att ni alltid ska ligga i framkant.</p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                  <Card className="border-slate-200 shadow-sm">
+                    <CardContent className="p-5 flex gap-4">
+                      <div className="bg-teal-50 p-3 rounded-lg h-fit"><Wrench className="w-6 h-6 text-teal-700" /></div>
+                      <div>
+                        <h4 className="font-bold text-slate-900">Service {"&"} Drift</h4>
+                        <p className="text-sm text-slate-600 mt-1">Våra serviceavtal säkerställer att er utrustning fungerar tryggt, minimerar driftstopp och ger snabb teknisk support.</p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                  <Card className="border-slate-200 shadow-sm sm:col-span-2">
+                    <CardContent className="p-5 flex gap-4">
+                      <div className="bg-teal-50 p-3 rounded-lg h-fit"><FileText className="w-6 h-6 text-teal-700" /></div>
+                      <div>
+                        <h4 className="font-bold text-slate-900">Portal {"&"} Aktuell info</h4>
+                        <p className="text-sm text-slate-600 mt-1">I vår kundportal får du direkt tillgång till dina certifikat, behandlingsprotokoll, serviceloggar och den senaste branschinformationen.</p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+
+                <div className="pt-6 flex justify-end border-t">
+                  <Button size="lg" className="w-full sm:w-auto" onClick={() => setStep(2)}>
+                    Utforska vår utrustning <ArrowRight className="ml-2 w-4 h-4"/>
+                  </Button>
+                </div>
+              </div>
+            )}
+
+            {step === 2 && (
+              <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
+                <div className="text-center space-y-3 pb-6 border-b">
+                  <Badge variant="outline" className="bg-primary/5 text-primary border-primary/20 mb-2">Utrustning {"&"} Support</Badge>
+                  <h3 className="font-bold text-2xl mb-1">Vad vill du arbeta med?</h3>
+                  <p className="text-slate-500 text-sm max-w-2xl mx-auto">
+                    Välj det område och utrustning du är intresserad av. <strong>I varje köp ingår vår Astomed-garanti:</strong> Omfattande utbildning, startkit för egenkontroll samt löpande rådgivning för en trygg uppstart och driftsättning.
+                  </p>
                 </div>
                 <div className="space-y-6">
                   {astomedCategories.map(category => (
@@ -312,23 +381,22 @@ export default function Calculator() {
                   </div>
                 )}
 
-                <div className="pt-4">
-                  <Button size="lg" className="w-full sm:w-auto" onClick={() => setStep(2)} disabled={formData.machineIds.length === 0}>
-                    Nästa steg <ArrowRight className="ml-2 w-4 h-4"/>
+                <div className="pt-6 flex flex-col sm:flex-row gap-3 border-t">
+                  <Button variant="outline" size="lg" onClick={() => setStep(1)} className="sm:w-1/3">Tillbaka</Button>
+                  <Button size="lg" className="flex-1" onClick={() => setStep(3)} disabled={formData.machineIds.length === 0}>
+                    Vidare till regelverk {"&"} strålskydd <ArrowRight className="ml-2 w-4 h-4"/>
                   </Button>
                 </div>
               </div>
             )}
             
-            {step === 2 && (
+            {step === 3 && (
               <div className="space-y-8 animate-in fade-in slide-in-from-right-4 duration-500">
                 <div className="text-center space-y-3 pb-6 border-b">
-                  <Badge variant="outline" className="bg-primary/5 text-primary border-primary/20 mb-2">Steg 2 av 4</Badge>
-                  <h3 className="font-serif font-bold text-3xl text-slate-900 tracking-tight">Regelverk {"&"} Uppstart</h3>
+                  <Badge variant="outline" className="bg-primary/5 text-primary border-primary/20 mb-2">Löpande Trygghet</Badge>
+                  <h3 className="font-serif font-bold text-3xl text-slate-900 tracking-tight">Regelverk {"&"} Strålskydd</h3>
                   <p className="text-slate-600 max-w-2xl mx-auto leading-relaxed">
-                    Att driva en professionell klinik innebär ett stort förtroende från dina kunder. 
-                    Därför finns det viktiga lagar att förhålla sig till. Genom att ha koll på dessa från dag ett 
-                    säkrar du en trygg verksamhet och undviker onödiga böter.
+                    När din utrustning är på plats slutar inte vårt stöd. Vi hjälper dig att <strong>upprätthålla strålskydd och lagkrav</strong> genom tillgång till vår kundportal för dokumentation, färdiga guider för egenkontroll och via våra serviceavtal säkerställs klinikens drift.
                   </p>
                 </div>
                 
@@ -409,16 +477,16 @@ export default function Calculator() {
                 </div>
 
                 <div className="pt-6 flex flex-col sm:flex-row gap-3 border-t">
-                  <Button variant="outline" size="lg" onClick={() => setStep(1)} className="sm:w-1/3">Tillbaka</Button>
-                  <Button size="lg" className="flex-1" onClick={() => setStep(3)}>Vidare till finansiering <ArrowRight className="ml-2 w-4 h-4" /></Button>
+                  <Button variant="outline" size="lg" onClick={() => setStep(2)} className="sm:w-1/3">Tillbaka</Button>
+                  <Button size="lg" className="flex-1" onClick={() => setStep(4)}>Vidare till finansiering <ArrowRight className="ml-2 w-4 h-4" /></Button>
                 </div>
               </div>
             )}
 
-            {step === 3 && (
+            {step === 4 && (
               <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
                 <div className="text-center space-y-3 pb-6 border-b">
-                  <Badge variant="outline" className="bg-primary/5 text-primary border-primary/20 mb-2">Steg 3 av 5</Badge>
+                  <Badge variant="outline" className="bg-primary/5 text-primary border-primary/20 mb-2">Finansiering</Badge>
                   <h3 className="font-serif font-bold text-3xl text-slate-900 tracking-tight">Finansiering</h3>
                   <p className="text-slate-600 max-w-2xl mx-auto leading-relaxed">
                     Hur vill du finansiera din utrustning? Det vanligaste alternativet är leasing, vilket binder mindre kapital vid uppstart.
@@ -496,17 +564,18 @@ export default function Calculator() {
                 </div>
 
                 <div className="pt-6 flex flex-col sm:flex-row gap-3 border-t">
-                  <Button variant="outline" size="lg" onClick={() => setStep(2)} className="sm:w-1/3">Tillbaka</Button>
-                  <Button size="lg" className="flex-1" onClick={() => setStep(4)}>Gå vidare till intäkterna <ArrowRight className="ml-2 w-4 h-4" /></Button>
+                  <Button variant="outline" size="lg" onClick={() => setStep(3)} className="sm:w-1/3">Tillbaka</Button>
+                  <Button size="lg" className="flex-1" onClick={() => setStep(5)}>Gå vidare till ekonomi <ArrowRight className="ml-2 w-4 h-4" /></Button>
                 </div>
               </div>
             )}
 
             {step === 5 && (
-              <div className="space-y-6">
-                <div>
-                  <h3 className="font-bold text-xl mb-1">Löpande Månadskostnader {"&"} Intäkter</h3>
-                  <p className="text-slate-500 text-sm">Fyll i dina förväntade löpande kostnader och priser för att se lönsamheten per månad.</p>
+              <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
+                <div className="text-center space-y-3 pb-6 border-b">
+                  <Badge variant="outline" className="bg-primary/5 text-primary border-primary/20 mb-2">Ekonomi</Badge>
+                  <h3 className="font-bold text-2xl mb-1">Löpande Månadskostnader {"&"} Intäkter</h3>
+                  <p className="text-slate-500 text-sm max-w-2xl mx-auto">Fyll i dina förväntade löpande kostnader och priser för att se lönsamheten per månad.</p>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                    <div className="space-y-2">
@@ -603,18 +672,19 @@ export default function Calculator() {
                      </div>
                    </div>
                 </div>
-                <div className="pt-6 flex flex-col sm:flex-row gap-3">
-                  <Button variant="outline" size="lg" onClick={() => setStep(3)}>Tillbaka</Button>
-                  <Button size="lg" className="flex-1" onClick={() => setStep(5)}>Gå vidare</Button>
+                <div className="pt-6 flex flex-col sm:flex-row gap-3 border-t">
+                  <Button variant="outline" size="lg" onClick={() => setStep(4)} className="sm:w-1/3">Tillbaka</Button>
+                  <Button size="lg" className="flex-1" onClick={() => setStep(6)}>Gå vidare till slutförande <ArrowRight className="ml-2 w-4 h-4" /></Button>
                 </div>
               </div>
             )}
 
-            {step === 4 && (
-              <div className="space-y-6">
-                <div>
-                  <h3 className="font-bold text-xl mb-1">Dina Kontaktuppgifter</h3>
-                  <p className="text-slate-500 text-sm">Fyll i dina uppgifter för att se kalkylen och få en komplett affärsplan skickad till din e-post.</p>
+            {step === 6 && (
+              <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
+                <div className="text-center space-y-3 pb-6 border-b">
+                  <Badge variant="outline" className="bg-primary/5 text-primary border-primary/20 mb-2">Avslutande steg</Badge>
+                  <h3 className="font-bold text-2xl mb-1">Dina Kontaktuppgifter</h3>
+                  <p className="text-slate-500 text-sm max-w-2xl mx-auto">Fyll i dina uppgifter för att se kalkylen och få en komplett affärsplan skickad till din e-post.</p>
                 </div>
                 <div className="space-y-4">
                    <div className="space-y-2">
@@ -634,8 +704,8 @@ export default function Calculator() {
                      <Input placeholder="Min Klinik AB" value={formData.company} onChange={e => handleUpdate("company", e.target.value)}/>
                    </div>
                 </div>
-                <div className="pt-4 flex flex-col sm:flex-row gap-3">
-                  <Button variant="outline" size="lg" onClick={() => setStep(4)} disabled={isSubmitting}>Tillbaka</Button>
+                <div className="pt-6 flex flex-col sm:flex-row gap-3 border-t">
+                  <Button variant="outline" size="lg" onClick={() => setStep(5)} disabled={isSubmitting} className="sm:w-1/3">Tillbaka</Button>
                   <Button 
                     size="lg" 
                     className="flex-1" 
@@ -667,11 +737,11 @@ export default function Calculator() {
                           },
                           machineName: selectedMachines.map(m => m.name).join(", ")
                         });
-                        setStep(6);
+                        setStep(7);
                       } catch (err) {
                         console.error(err);
                         alert("Ett fel uppstod när planen skulle skickas, men du kan fortfarande se resultatet.");
-                        setStep(6);
+                        setStep(7);
                       } finally {
                         setIsSubmitting(false);
                       }
@@ -683,7 +753,7 @@ export default function Calculator() {
               </div>
             )}
 
-            {step === 6 && (
+            {step === 7 && (
               <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
                 {/* Header Section */}
                 <div className="text-center space-y-3 pb-6 border-b">
@@ -853,7 +923,7 @@ export default function Calculator() {
                 </div>
 
                 <div className="flex flex-col sm:flex-row gap-3 pt-6 border-t">
-                  <Button variant="outline" size="lg" onClick={() => setStep(5)}>Tillbaka till uppgifter</Button>
+                  <Button variant="outline" size="lg" onClick={() => setStep(6)} className="sm:w-1/3">Tillbaka till uppgifter</Button>
                   <Button size="lg" className="flex-1" onClick={() => { setStep(1); setFormData({...formData, fullName: "", email: "", phone: "", company: ""}); }}>Gör en ny beräkning</Button>
                 </div>
               </div>
