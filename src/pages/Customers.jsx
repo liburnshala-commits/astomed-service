@@ -3,7 +3,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { createPageUrl } from "@/utils";
 import { Link } from "react-router-dom";
-import { Plus, Search, Building2, Phone, Mail, ExternalLink, Trash2, UserPlus, Check, Copy, Loader2, Database, Upload } from "lucide-react";
+import { Plus, Search, Building2, Phone, Mail, ExternalLink, Trash2, UserPlus, Check, Copy, Loader2, Database, Upload, MessageSquare } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,6 +15,7 @@ import DeleteCustomerDialog from "@/components/gdpr/DeleteCustomerDialog.jsx";
 import CustomerLatestInteraction from "@/components/customers/CustomerLatestInteraction.jsx";
 import ImportCustomersModal from "@/components/customers/ImportCustomersModal.jsx";
 import SendSmsModal from "@/components/customers/SendSmsModal";
+import SendBulkSmsModal from "@/components/customers/SendBulkSmsModal";
 import { useAuth } from "@/lib/AuthContext";
 
 export default function Customers() {
@@ -29,6 +30,7 @@ export default function Customers() {
   const [cleaningData, setCleaningData] = useState(false);
   const [showImport, setShowImport] = useState(false);
   const [smsCustomer, setSmsCustomer] = useState(null);
+  const [showBulkSms, setShowBulkSms] = useState(false);
 
   const { user } = useAuth();
   const userRole = user?.role;
@@ -422,7 +424,7 @@ export default function Customers() {
           </h1>
           <p className="astomed-subtitle text-sm">{filtered.length} kunder {filterParam === "signed" ? "visas" : "registrerade"}</p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 flex-wrap justify-end">
           {userRole === "admin" && (
             <Button 
               onClick={cleanDeletedCustomers} 
@@ -434,14 +436,19 @@ export default function Customers() {
               ) : (
                 <Database className="w-4 h-4 mr-2" />
               )}
-              Rensa raderade kunder
+              <span className="hidden sm:inline">Rensa raderade</span>
+            </Button>
+          )}
+          {userRole === "admin" && (
+            <Button onClick={() => setShowBulkSms(true)} variant="outline" className="text-blue-600 border-blue-200 hover:bg-blue-50">
+              <MessageSquare className="w-4 h-4 sm:mr-2" /> <span className="hidden sm:inline">Mass-SMS</span>
             </Button>
           )}
           <Button onClick={() => setShowImport(true)} variant="outline" className="border-dashed">
-            <Upload className="w-4 h-4 mr-2" /> Importera
+            <Upload className="w-4 h-4 sm:mr-2" /> <span className="hidden sm:inline">Importera</span>
           </Button>
           <Button onClick={() => { setEditing(null); setShowForm(true); }} className="astomed-btn-primary">
-            <Plus className="w-4 h-4 mr-2" /> Ny kund
+            <Plus className="w-4 h-4 sm:mr-2" /> <span className="hidden sm:inline">Ny kund</span>
           </Button>
         </div>
       </div>
@@ -500,6 +507,10 @@ export default function Customers() {
 
       {smsCustomer && (
         <SendSmsModal customer={smsCustomer} onClose={() => setSmsCustomer(null)} />
+      )}
+
+      {showBulkSms && (
+        <SendBulkSmsModal customers={filtered} onClose={() => setShowBulkSms(false)} />
       )}
 
       {deletingCustomer && (
