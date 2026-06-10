@@ -300,16 +300,21 @@ Deno.serve(async (req) => {
             console.warn("Kunde inte skicka e-post (oftast sandbox-begränsning):", emailError.message);
         }
         
-        // 4. Register Lead in system
-        await base44.asServiceRole.entities.PublicServiceLead.create({
+        // 4. Register Lead in system as ClinicCalculation
+        await base44.asServiceRole.entities.ClinicCalculation.create({
             company_name: formData.company || formData.fullName,
             contact_person: formData.fullName,
             email: formData.email,
-            phone: formData.phone,
-            notes: `Lead från Klinikkalkylatorn. Valt utrustning: ${machineName}. Beräknad break-even: ${calculated.breakEvenMonths} månader.`,
-            status: "new",
-            service_description: "Klinikkalkylator - Intresseanmälan",
-            machine_name: machineName || "Okänd maskin"
+            phone: formData.phone || "",
+            machines: machineName || "Okänd maskin",
+            break_even_months: calculated.breakEvenMonths || 0,
+            roi_1_month: calculated.roi1Month || 0,
+            roi_6_months: calculated.roi6Months || 0,
+            roi_12_months: calculated.roi12Months || 0,
+            monthly_revenue: calculated.monthlyRevenueExVat || 0,
+            monthly_profit: calculated.monthlyProfitAfterTax || 0,
+            pdf_url: file_url,
+            status: "new"
         });
 
         return Response.json({ success: true, file_url });

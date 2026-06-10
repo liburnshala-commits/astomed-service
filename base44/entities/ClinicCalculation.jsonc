@@ -1,0 +1,101 @@
+{
+  "name": "ClinicCalculation",
+  "type": "object",
+  "properties": {
+    "contact_person": {
+      "type": "string",
+      "description": "Kontaktperson"
+    },
+    "company_name": {
+      "type": "string",
+      "description": "F\u00f6retagsnamn"
+    },
+    "email": {
+      "type": "string",
+      "description": "E-post"
+    },
+    "phone": {
+      "type": "string",
+      "description": "Telefon"
+    },
+    "machines": {
+      "type": "string",
+      "description": "Valda maskiner"
+    },
+    "break_even_months": {
+      "type": "number",
+      "description": "M\u00e5nader till Break-even"
+    },
+    "roi_1_month": {
+      "type": "number",
+      "description": "ROI 1 M\u00e5nad (%)"
+    },
+    "roi_6_months": {
+      "type": "number",
+      "description": "ROI 6 M\u00e5nader (%)"
+    },
+    "roi_12_months": {
+      "type": "number",
+      "description": "ROI 12 M\u00e5nader (%)"
+    },
+    "monthly_revenue": {
+      "type": "number",
+      "description": "M\u00e5nadsoms\u00e4ttning"
+    },
+    "monthly_profit": {
+      "type": "number",
+      "description": "M\u00e5nadsvinst"
+    },
+    "pdf_url": {
+      "type": "string",
+      "description": "L\u00e4nk till kalkyl (PDF)"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "new",
+        "contacted",
+        "closed"
+      ],
+      "default": "new",
+      "description": "Status"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Anteckningar"
+    }
+  },
+  "required": [
+    "contact_person",
+    "email",
+    "machines"
+  ],
+  "rls": {
+    "create": {},
+    "read": {
+      "user_condition": {
+        "role": {
+          "$in": [
+            "admin",
+            "technician"
+          ]
+        }
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": {
+          "$in": [
+            "admin",
+            "technician"
+          ]
+        }
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

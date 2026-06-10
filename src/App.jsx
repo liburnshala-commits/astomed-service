@@ -28,6 +28,7 @@ import RadiationSafety from './pages/RadiationSafety';
 import NewCustomers from './pages/NewCustomers';
 import PendingApproval from './pages/PendingApproval';
 import Calculator from './pages/Calculator';
+import ClinicCalculations from './pages/ClinicCalculations';
 
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
@@ -138,6 +139,7 @@ const AuthenticatedApp = () => {
         <Route path="/NewCustomers" element={<AnimatedPage><LayoutWrapper currentPageName="NewCustomers"><NewCustomers /></LayoutWrapper></AnimatedPage>} />
         <Route path="/PendingApproval" element={<AnimatedPage><LayoutWrapper currentPageName="PendingApproval"><PendingApproval /></LayoutWrapper></AnimatedPage>} />
         <Route path="/Calculator" element={<AnimatedPage><Calculator /></AnimatedPage>} />
+        <Route path="/ClinicCalculations" element={<AnimatedPage><LayoutWrapper currentPageName="ClinicCalculations"><ClinicCalculations /></LayoutWrapper></AnimatedPage>} />
         {Object.entries(Pages).map(([path, Page]) => (
           <Route
             key={path}
