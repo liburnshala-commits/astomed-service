@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import CustomerInteractions from "@/components/customers/CustomerInteractions";
 import ServiceContractModal from "@/components/machines/ServiceContractModal";
 import ServiceReportModal from "@/components/service/ServiceReportModal.jsx";
+import SendSmsModal from "@/components/customers/SendSmsModal";
 import { format } from "date-fns";
 import { sv } from "date-fns/locale";
 import { useAuth } from "@/lib/AuthContext";
@@ -46,6 +47,7 @@ export default function CustomerDetails() {
   
   const [contractMachine, setContractMachine] = useState(null);
   const [reportData, setReportData] = useState(null);
+  const [showSmsModal, setShowSmsModal] = useState(false);
   
   const handleContractSave = async (form) => {
     await base44.entities.Machine.update(contractMachine.id, form);
@@ -129,8 +131,18 @@ export default function CustomerDetails() {
                 {customer.phone && (
                   <div>
                     <div className="text-xs font-medium text-slate-400 mb-0.5">Telefon</div>
-                    <div className="text-sm font-medium text-slate-700 flex items-center gap-1.5">
-                      <Phone className="w-3.5 h-3.5 text-slate-400" /> {customer.phone}
+                    <div className="flex items-center gap-3">
+                      <div className="text-sm font-medium text-slate-700 flex items-center gap-1.5">
+                        <Phone className="w-3.5 h-3.5 text-slate-400" /> {customer.phone}
+                      </div>
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        className="h-6 text-xs px-2"
+                        onClick={() => setShowSmsModal(true)}
+                      >
+                        Skicka SMS
+                      </Button>
                     </div>
                   </div>
                 )}
@@ -283,6 +295,13 @@ export default function CustomerDetails() {
           machine={reportData.machine}
           customer={reportData.customer}
           onClose={() => setReportData(null)}
+        />
+      )}
+
+      {showSmsModal && (
+        <SendSmsModal 
+          customer={customer} 
+          onClose={() => setShowSmsModal(false)} 
         />
       )}
     </div>
