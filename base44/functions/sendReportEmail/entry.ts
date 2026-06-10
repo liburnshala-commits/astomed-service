@@ -78,7 +78,7 @@ Deno.serve(async (req) => {
 </html>
     `;
 
-    await base44.integrations.Core.SendEmail({
+    await base44.functions.invoke('sendSmtpEmail', {
       to: customerEmail,
       subject,
       body,

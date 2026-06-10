@@ -38,7 +38,7 @@ Deno.serve(async (req) => {
             </div>
         `;
 
-        await base44.asServiceRole.integrations.Core.SendEmail({
+        await base44.asServiceRole.functions.invoke('sendSmtpEmail', {
             to: 'liburn@astomed.se',
             from_name: 'Astomed Service',
             subject: `Ny serviceförfrågan från ${data.company_name}`,

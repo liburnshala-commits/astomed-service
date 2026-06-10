@@ -155,7 +155,7 @@ Deno.serve(async (req) => {
 </body>
 </html>`;
 
-            await base44.integrations.Core.SendEmail({
+            await base44.functions.invoke('sendSmtpEmail', {
               to: customer.email,
               subject: title,
               body: emailHtml,

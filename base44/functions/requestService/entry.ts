@@ -40,7 +40,7 @@ ${message ? `\nMeddelande från kunden:\n${message}` : ''}
 Med vänliga hälsningar,
 Astomed Pro – Systemmeddelande`;
 
-    await base44.asServiceRole.integrations.Core.SendEmail({
+    await base44.asServiceRole.functions.invoke('sendSmtpEmail', {
       to: 'info@astomed.se',
       subject: internalSubject,
       body: internalBody,
@@ -62,7 +62,7 @@ Tel: 08 – 410 779 00
 E-post: info@astomed.se
 www.astomed.se`;
 
-    await base44.asServiceRole.integrations.Core.SendEmail({
+    await base44.asServiceRole.functions.invoke('sendSmtpEmail', {
       to: customerEmail,
       subject: confirmSubject,
       body: confirmBody,

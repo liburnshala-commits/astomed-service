@@ -40,7 +40,7 @@ Deno.serve(async (req) => {
                     Astomed Service
                 `;
 
-                await base44.asServiceRole.integrations.Core.SendEmail({
+                await base44.asServiceRole.functions.invoke('sendSmtpEmail', {
                     to: customer.email,
                     subject: subject,
                     body: body,

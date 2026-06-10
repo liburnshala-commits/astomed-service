@@ -290,7 +290,7 @@ Deno.serve(async (req) => {
 `;
 
         try {
-            await base44.asServiceRole.integrations.Core.SendEmail({
+            await base44.asServiceRole.functions.invoke('sendSmtpEmail', {
                 to: formData.email,
                 subject: "Din affärsplan och kalkyl från Astomed",
                 body: emailBody,

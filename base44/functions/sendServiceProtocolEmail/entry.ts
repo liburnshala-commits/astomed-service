@@ -45,7 +45,7 @@ Med vänlig hälsning,
 Astomed Service
         `;
 
-        await base44.integrations.Core.SendEmail({
+        await base44.functions.invoke('sendSmtpEmail', {
             to: customer.email,
             subject: `Serviceprotokoll för ${machine.model}`,
             body: emailBody
