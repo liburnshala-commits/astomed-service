@@ -175,6 +175,10 @@ export default function Calculator() {
   const profit12Months = monthlyProfitAfterTax * 12;
   
   const breakEvenMonths = selectedMachines.length > 0 && monthlyProfitAfterTax > 0 ? (totalStartupCost / monthlyProfitAfterTax).toFixed(1) : "N/A";
+  
+  const roi1Month = totalStartupCost > 0 ? ((monthlyProfitAfterTax / totalStartupCost) * 100).toFixed(1) : 0;
+  const roi6Months = totalStartupCost > 0 ? ((profit6Months / totalStartupCost) * 100).toFixed(1) : 0;
+  const roi12Months = totalStartupCost > 0 ? ((profit12Months / totalStartupCost) * 100).toFixed(1) : 0;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-teal-900 to-slate-800 p-6 flex items-center justify-center relative overflow-hidden">
@@ -835,7 +839,10 @@ export default function Calculator() {
                             revenue12Months,
                             cost12Months,
                             profit12Months,
-                            monthlyLeasingCost
+                            monthlyLeasingCost,
+                            roi1Month,
+                            roi6Months,
+                            roi12Months
                           },
                           machineName: selectedMachines.map(m => m.name).join(", ")
                         });
@@ -974,6 +981,10 @@ export default function Calculator() {
                         <span className="font-bold text-slate-800">Vinst efter skatt / mån</span>
                         <strong className="text-xl text-primary">{Math.round(monthlyProfitAfterTax).toLocaleString()} kr</strong>
                       </div>
+                      <div className="flex justify-between items-center pt-1">
+                        <span className="text-sm font-bold text-slate-800">Avkastning på investering (ROI)</span>
+                        <strong className="text-sm text-primary">{roi1Month}%</strong>
+                      </div>
                     </div>
 
                     {/* Right: Break Even Traffic Light */}
@@ -1003,6 +1014,7 @@ export default function Calculator() {
                         <div className="flex justify-between"><span className="text-slate-500">Omsättning</span> <span className="font-medium">{Math.round(revenue6Months).toLocaleString()} kr</span></div>
                         <div className="flex justify-between"><span className="text-slate-500">Kostnader</span> <span className="font-medium text-red-600/80">-{Math.round(cost6Months).toLocaleString()} kr</span></div>
                         <div className="flex justify-between pt-2 mt-1 border-t"><span className="font-bold text-slate-700">Ren Vinst</span> <span className="font-bold text-primary">{Math.round(profit6Months).toLocaleString()} kr</span></div>
+                        <div className="flex justify-between"><span className="text-slate-500">ROI</span> <span className="font-bold text-primary">{roi6Months}%</span></div>
                       </div>
                     </div>
                     <div className="bg-white p-5 rounded-xl border shadow-sm relative overflow-hidden">
@@ -1012,6 +1024,7 @@ export default function Calculator() {
                         <div className="flex justify-between"><span className="text-slate-500">Omsättning</span> <span className="font-medium">{Math.round(revenue12Months).toLocaleString()} kr</span></div>
                         <div className="flex justify-between"><span className="text-slate-500">Kostnader</span> <span className="font-medium text-red-600/80">-{Math.round(cost12Months).toLocaleString()} kr</span></div>
                         <div className="flex justify-between pt-2 mt-1 border-t"><span className="font-bold text-slate-700">Ren Vinst</span> <span className="font-bold text-primary">{Math.round(profit12Months).toLocaleString()} kr</span></div>
+                        <div className="flex justify-between"><span className="text-slate-500">ROI</span> <span className="font-bold text-primary">{roi12Months}%</span></div>
                       </div>
                     </div>
                   </div>

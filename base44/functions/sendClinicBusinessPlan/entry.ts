@@ -108,6 +108,8 @@ Deno.serve(async (req) => {
         doc.setFontSize(12);
         doc.setFont(undefined, 'bold');
         doc.text(`Vinst efter skatt per månad:`, 20, y); doc.text(`${Math.round(calculated.monthlyProfitAfterTax).toLocaleString()} kr`, 150, y, {align: 'right'});
+        y += 8;
+        doc.text(`Avkastning på investering (ROI):`, 20, y); doc.text(`${calculated.roi1Month}%`, 150, y, {align: 'right'});
         doc.setFont(undefined, 'normal');
         y += 20;
 
@@ -157,7 +159,8 @@ Deno.serve(async (req) => {
         doc.text(`Bolagsskatt (20.6%):`, 20, y); doc.text(`- ${Math.round(calculated.corporateTax * 6).toLocaleString()} kr`, 150, y, {align: 'right'}); y += 8;
         
         doc.setFont(undefined, 'bold');
-        doc.text(`Vinst (efter skatt):`, 20, y); doc.text(`${Math.round(calculated.profit6Months).toLocaleString()} kr`, 150, y, {align: 'right'}); y += 14;
+        doc.text(`Vinst (efter skatt):`, 20, y); doc.text(`${Math.round(calculated.profit6Months).toLocaleString()} kr`, 150, y, {align: 'right'}); y += 6;
+        doc.text(`ROI (6 Månader):`, 20, y); doc.text(`${calculated.roi6Months}%`, 150, y, {align: 'right'}); y += 14;
         doc.setFont(undefined, 'normal');
 
         if (y > 200) { doc.addPage(); y = 20; }
@@ -182,7 +185,8 @@ Deno.serve(async (req) => {
         doc.text(`Bolagsskatt (20.6%):`, 20, y); doc.text(`- ${Math.round(calculated.corporateTax * 12).toLocaleString()} kr`, 150, y, {align: 'right'}); y += 8;
 
         doc.setFont(undefined, 'bold');
-        doc.text(`Vinst (efter skatt):`, 20, y); doc.text(`${Math.round(calculated.profit12Months).toLocaleString()} kr`, 150, y, {align: 'right'}); y += 12;
+        doc.text(`Vinst (efter skatt):`, 20, y); doc.text(`${Math.round(calculated.profit12Months).toLocaleString()} kr`, 150, y, {align: 'right'}); y += 6;
+        doc.text(`ROI (12 Månader):`, 20, y); doc.text(`${calculated.roi12Months}%`, 150, y, {align: 'right'}); y += 12;
         doc.setFont(undefined, 'normal');
 
         y += 10;
