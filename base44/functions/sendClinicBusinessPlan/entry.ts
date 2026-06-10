@@ -9,28 +9,59 @@ Deno.serve(async (req) => {
         // 1. Generate PDF
         const doc = new jsPDF();
         
-        doc.setFontSize(22);
-        doc.setTextColor(27, 58, 58); // Astomed dark green
-        doc.text('Affärsplan: Din Klinikutveckling', 20, 20);
+        // Header background
+        doc.setFillColor(27, 58, 58);
+        doc.rect(0, 0, 210, 45, 'F');
 
-        doc.setFontSize(11);
-        doc.setTextColor(100, 100, 100);
-        doc.text(`Skapad för: ${formData.fullName} ${formData.company ? `(${formData.company})` : ''}`, 20, 30);
-        doc.text(`Utrustning: ${machineName}`, 20, 36);
-        doc.text(`Datum: ${new Date().toLocaleDateString()}`, 20, 42);
+        // Fetch and add logo as base64
+        try {
+            const logoResponse = await fetch('https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69a9446fcb1cd4ab529479ba/0060a5b35_channels4_profile-2.jpg');
+            const logoBlob = await logoResponse.arrayBuffer();
+            const logoBase64 = btoa(String.fromCharCode(...new Uint8Array(logoBlob)));
+            doc.addImage('data:image/jpeg;base64,' + logoBase64, 'JPEG', 15, 8, 25, 25);
+        } catch (logoError) {
+            console.log('Logo loading skipped');
+        }
 
-        doc.setLineWidth(0.5);
-        doc.setDrawColor(200, 200, 200);
+        // Title
+        doc.setFontSize(24);
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(255, 255, 255);
+        doc.text('Affärsplan', 50, 22);
+
+        // Astomed details
+        doc.setFontSize(9);
+        doc.setFont('helvetica', 'normal');
+        doc.text('Astomed AB | Org.nr: 556709-9964 | Jägerhorns väg 5 | 141 75 Kungens kurva', 50, 30);
+
+        // Reset color to black
+        doc.setTextColor(0, 0, 0);
+
+        // Divider line
+        doc.setDrawColor(58, 158, 158);
         doc.line(20, 48, 190, 48);
 
-        // Uppstartskostnader
-        doc.setFontSize(14);
-        doc.setTextColor(27, 58, 58);
-        doc.text('1. Uppstartsinvesteringar', 20, 60);
-
         doc.setFontSize(11);
-        doc.setTextColor(50, 50, 50);
-        let y = 70;
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(27, 58, 58);
+        doc.text('DINA UPPGIFTER', 20, 55);
+
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(9);
+        doc.text(`Skapad för: ${formData.fullName} ${formData.company ? `(${formData.company})` : ''}`, 20, 62);
+        doc.text(`Utrustning: ${machineName}`, 20, 67);
+        doc.text(`Datum: ${new Date().toLocaleDateString()}`, 20, 72);
+
+        // Uppstartskostnader
+        doc.setFontSize(12);
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(27, 58, 58);
+        doc.text('1. UPPSTARTSINVESTERINGAR', 20, 85);
+
+        doc.setFontSize(10);
+        doc.setFont('helvetica', 'normal');
+        doc.setTextColor(0, 0, 0);
+        let y = 95;
         doc.text(`Utrustning:`, 20, y); doc.text(`${Math.round(calculated.machinePrice).toLocaleString()} kr`, 150, y, {align: 'right'}); y += 8;
         if (calculated.trainingCost > 0) {
             doc.text(`Utbildning(ar):`, 20, y); doc.text(`${Math.round(calculated.trainingCost).toLocaleString()} kr`, 150, y, {align: 'right'}); y += 8;
@@ -46,12 +77,14 @@ Deno.serve(async (req) => {
         y += 20;
 
         // Löpande Intäkter & Kostnader
-        doc.setFontSize(14);
+        doc.setFontSize(12);
+        doc.setFont('helvetica', 'bold');
         doc.setTextColor(27, 58, 58);
-        doc.text('2. Månatlig Omsättning & Driftskostnader', 20, y); y += 10;
+        doc.text('2. MÅNATLIG OMSÄTTNING & DRIFTSKOSTNADER', 20, y); y += 10;
         
-        doc.setFontSize(11);
-        doc.setTextColor(50, 50, 50);
+        doc.setFontSize(10);
+        doc.setFont('helvetica', 'normal');
+        doc.setTextColor(0, 0, 0);
         const totalSalaryPerMonth = (formData.salaryPerEmployee || formData.salary || 0) * (formData.employeeCount || 1) * (1 + 0.3142 + 0.12 + 0.10);
         const treatmentsPerWeek = formData.treatmentsPerWeek || 0;
 
@@ -80,11 +113,13 @@ Deno.serve(async (req) => {
         y += 20;
 
         // ROI
-        doc.setFontSize(14);
+        doc.setFontSize(12);
+        doc.setFont('helvetica', 'bold');
         doc.setTextColor(27, 58, 58);
-        doc.text('3. Resultat & Break-even', 20, y); y += 10;
-        doc.setFontSize(11);
-        doc.setTextColor(50, 50, 50);
+        doc.text('3. RESULTAT & BREAK-EVEN', 20, y); y += 10;
+        doc.setFontSize(10);
+        doc.setFont('helvetica', 'normal');
+        doc.setTextColor(0, 0, 0);
         doc.text(`Beräknad tid till break-even (återbetald uppstart):`, 20, y); 
         doc.setFont(undefined, 'bold');
         doc.text(`${calculated.breakEvenMonths} månader`, 150, y, {align: 'right'});
@@ -94,12 +129,14 @@ Deno.serve(async (req) => {
         if (y > 250) { doc.addPage(); y = 20; }
         
         // Prognos 6 & 12 månader
-        doc.setFontSize(14);
+        doc.setFontSize(12);
+        doc.setFont('helvetica', 'bold');
         doc.setTextColor(27, 58, 58);
-        doc.text('4. Affärsplan Prognos (6 & 12 månader)', 20, y); y += 10;
+        doc.text('4. AFFÄRSPLAN PROGNOS (6 & 12 MÅNADER)', 20, y); y += 10;
         
-        doc.setFontSize(11);
-        doc.setTextColor(50, 50, 50);
+        doc.setFontSize(10);
+        doc.setFont('helvetica', 'normal');
+        doc.setTextColor(0, 0, 0);
         
         // 6 Månader
         doc.setFont(undefined, 'bold');
@@ -153,11 +190,13 @@ Deno.serve(async (req) => {
         if (y > 250) { doc.addPage(); y = 20; }
         
         // Regelverk
-        doc.setFontSize(14);
+        doc.setFontSize(12);
+        doc.setFont('helvetica', 'bold');
         doc.setTextColor(27, 58, 58);
-        doc.text('5. Checklista Regelverk & Lagar', 20, y); y += 10;
+        doc.text('5. CHECKLISTA REGELVERK & LAGAR', 20, y); y += 10;
         doc.setFontSize(10);
-        doc.setTextColor(80, 80, 80);
+        doc.setFont('helvetica', 'normal');
+        doc.setTextColor(0, 0, 0);
         const rules = [
             "Anmälan till Miljö- och hälsoskyddsnämnden (Senast 6 veckor innan start).",
             "Följa Miljöbalken och bedriva Egenkontroll.",
@@ -185,6 +224,7 @@ Deno.serve(async (req) => {
 <div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #333333; max-width: 600px; margin: 0 auto;">
     <!-- Header -->
     <div style="background-color: #1b3a3a; padding: 30px 20px; text-align: center; color: white;">
+        <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69a9446fcb1cd4ab529479ba/0060a5b35_channels4_profile-2.jpg" alt="Astomed Logo" style="width: 80px; height: auto; margin-bottom: 15px; border-radius: 50%;" />
         <h1 style="margin: 0; font-size: 28px; font-weight: bold; letter-spacing: 0.5px;">ASTOMED</h1>
         <p style="margin: 5px 0 0 0; font-size: 14px; letter-spacing: 1px;">PROFESSIONELL UTRUSTNING</p>
     </div>
