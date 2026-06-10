@@ -65,8 +65,8 @@ const AuthenticatedApp = () => {
   }, [user]);
 
   // Public routes that don't require authentication
-  const lowerPath = currentPath.toLowerCase();
-  const isPublicRoute = lowerPath === '/' || lowerPath === '/publicservicerequest' || lowerPath === '/calculator';
+  const cleanPath = currentPath.toLowerCase().split('?')[0].replace(/\/$/, '') || '/';
+  const isPublicRoute = cleanPath === '/' || cleanPath === '/publicservicerequest' || cleanPath === '/calculator';
 
   // Show loading spinner while checking app public settings or auth (skip for public routes)
   if (!isPublicRoute && (isLoadingPublicSettings || isLoadingAuth)) {
