@@ -201,7 +201,9 @@ Deno.serve(async (req) => {
             email: formData.email,
             phone: formData.phone,
             description: `Lead från Klinikkalkylatorn. Valt utrustning: ${machineName}. Beräknad break-even: ${calculated.breakEvenMonths} månader.`,
-            status: "new"
+            status: "new",
+            service_description: "Klinikkalkylator - Intresseanmälan",
+            machine_name: machineName || "Okänd maskin"
         });
 
         return Response.json({ success: true, file_url });
