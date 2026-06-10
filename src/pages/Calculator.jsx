@@ -372,8 +372,7 @@ export default function Calculator() {
                                           }
                                           setFormData(prev => ({
                                             ...prev,
-                                            machineIds: newIds,
-                                            employeeCount: Math.max(prev.employeeCount, newIds.length)
+                                            machineIds: newIds
                                           }));
                                         }}
                                         className="data-[state=checked]:bg-teal-600 data-[state=checked]:border-teal-600"

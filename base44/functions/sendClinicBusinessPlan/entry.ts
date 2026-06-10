@@ -233,7 +233,7 @@ Deno.serve(async (req) => {
     
     <!-- Content -->
     <div style="padding: 40px 30px; background-color: #ffffff;">
-        <p style="font-size: 15px; line-height: 1.8; color: #333333; margin-top: 0;">Hej ${formData.fullName.split(' ')[0]},</p>
+        <p style="font-size: 15px; line-height: 1.8; color: #333333; margin-top: 0;">Hej ${(formData.fullName || 'Kund').split(' ')[0]},</p>
         
         <p style="font-size: 15px; line-height: 1.8; color: #333333;">Tack för att du använde Astomeds klinikkalkylator! Din skräddarsydda affärsplan och kalkyl för uppstart av din klinikverksamhet är nu klar och väntande på att ladda ner.</p>
         
