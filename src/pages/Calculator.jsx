@@ -444,14 +444,81 @@ export default function Calculator() {
                 <div className="pt-6 flex flex-col sm:flex-row gap-3 border-t">
                   <Button variant="outline" size="lg" onClick={() => setStep(2)} className="sm:w-1/3">Tillbaka</Button>
                   <Button size="lg" className="flex-1" onClick={() => setStep(4)} disabled={formData.machineIds.length === 0}>
-                    Vidare till regelverk {"&"} strålskydd <ArrowRight className="ml-2 w-4 h-4"/>
+                    Vidare till tilläggstjänster {"&"} produkter <ArrowRight className="ml-2 w-4 h-4"/>
                   </Button>
                 </div>
-              </div>
-            )}
-            
-            {step === 4 && (
-              <div className="space-y-8 animate-in fade-in slide-in-from-right-4 duration-500">
+                </div>
+                )}
+
+                {step === 4 && (
+                <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
+                <div className="text-center space-y-3 pb-6 border-b">
+                  <Badge variant="outline" className="bg-primary/5 text-primary border-primary/20 mb-2">Mer än bara maskiner</Badge>
+                  <h3 className="font-bold text-2xl mb-1">Tilläggstjänster, Utbildning &amp; Hudvård</h3>
+                  <p className="text-slate-500 text-sm max-w-2xl mx-auto">
+                    För att din klinik ska bli framgångsrik erbjuder vi ett komplett utbud av tjänster och produkter som kompletterar din utrustning.
+                  </p>
+                </div>
+
+                <div className="space-y-6">
+                  {/* Tilläggstjänster */}
+                  <div className="bg-slate-50 p-6 rounded-xl border border-slate-100">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="bg-teal-100 p-2 rounded-lg"><Wrench className="w-5 h-5 text-teal-700" /></div>
+                      <h4 className="font-bold text-lg text-slate-800">Tilläggstjänster kring Klinikutrustning</h4>
+                    </div>
+                    <p className="text-sm text-slate-600 leading-relaxed">
+                      Din utrustning är kärnan i din verksamhet, och vi ser till att den alltid fungerar optimalt. Vi erbjuder trygga <strong>serviceavtal</strong>, årliga <strong>funktionskontroller</strong> och snabb teknisk support. Dessutom hjälper vi dig med förmånliga <strong>finansieringslösningar</strong> och leasingupplägg som är skräddarsydda för klinikverksamhet.
+                    </p>
+                  </div>
+
+                  {/* Utbildningar */}
+                  <div className="bg-slate-50 p-6 rounded-xl border border-slate-100">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="bg-teal-100 p-2 rounded-lg"><GraduationCap className="w-5 h-5 text-teal-700" /></div>
+                      <h4 className="font-bold text-lg text-slate-800">Våra Utbildningar</h4>
+                    </div>
+                    <p className="text-sm text-slate-600 leading-relaxed mb-4">
+                      Kunskap är nyckeln till nöjda kunder och hög säkerhet. Vi erbjuder certifierande utbildningar inom bland annat:
+                    </p>
+                    <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-slate-600">
+                      <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-teal-600" /> Laser &amp; IPL (Grund och Avancerad)</li>
+                      <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-teal-600" /> Estetiska Injektioner</li>
+                      <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-teal-600" /> Hudvård &amp; Kemisk Peeling</li>
+                      <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-teal-600" /> Microneedling</li>
+                    </ul>
+                  </div>
+
+                  {/* Hudvårdsprodukter */}
+                  <div className="bg-slate-50 p-6 rounded-xl border border-slate-100">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="bg-teal-100 p-2 rounded-lg"><Lightbulb className="w-5 h-5 text-teal-700" /></div>
+                      <h4 className="font-bold text-lg text-slate-800">Hudvårdsprodukter för Klinik &amp; Hemmabruk</h4>
+                    </div>
+                    <p className="text-sm text-slate-600 leading-relaxed mb-4">
+                      Förstärk resultaten av dina maskinbehandlingar med resultatinriktad hudvård. Vi tillhandahåller professionella produkter för:
+                    </p>
+                    <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-slate-600">
+                      <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-teal-600" /> Kemiska peels &amp; Salongsbehandlingar</li>
+                      <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-teal-600" /> Anti-age &amp; Hudföryngring</li>
+                      <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-teal-600" /> Lugnande eftervård &amp; Återfuktning</li>
+                      <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-teal-600" /> Pigmentreducering &amp; Solskydd</li>
+                    </ul>
+                    <p className="text-xs text-slate-500 mt-4 italic">Med rätt hudvård ökar du inte bara kundens resultat, utan skapar även en lukrativ merförsäljning på kliniken.</p>
+                  </div>
+                </div>
+
+                <div className="pt-6 flex flex-col sm:flex-row gap-3 border-t">
+                  <Button variant="outline" size="lg" onClick={() => setStep(3)} className="sm:w-1/3">Tillbaka</Button>
+                  <Button size="lg" className="flex-1" onClick={() => setStep(5)}>
+                    Vidare till regelverk &amp; strålskydd <ArrowRight className="ml-2 w-4 h-4"/>
+                  </Button>
+                </div>
+                </div>
+                )}
+
+                {step === 5 && (
+                <div className="space-y-8 animate-in fade-in slide-in-from-right-4 duration-500">
                 <div className="text-center space-y-3 pb-6 border-b">
                   <Badge variant="outline" className="bg-primary/5 text-primary border-primary/20 mb-2">Trygghet {"&"} Samarbete</Badge>
                   <h3 className="font-serif font-bold text-3xl text-slate-900 tracking-tight">Grattis till ett klokt val!</h3>
@@ -527,13 +594,13 @@ export default function Calculator() {
                 </div>
 
                 <div className="pt-6 flex flex-col sm:flex-row gap-3 border-t">
-                  <Button variant="outline" size="lg" onClick={() => setStep(3)} className="sm:w-1/3">Tillbaka</Button>
-                  <Button size="lg" className="flex-1" onClick={() => setStep(5)}>Vidare till finansiering <ArrowRight className="ml-2 w-4 h-4" /></Button>
+                  <Button variant="outline" size="lg" onClick={() => setStep(4)} className="sm:w-1/3">Tillbaka</Button>
+                  <Button size="lg" className="flex-1" onClick={() => setStep(6)}>Vidare till finansiering <ArrowRight className="ml-2 w-4 h-4" /></Button>
                 </div>
               </div>
             )}
 
-            {step === 5 && (
+            {step === 6 && (
               <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
                 <div className="text-center space-y-3 pb-6 border-b">
                   <Badge variant="outline" className="bg-primary/5 text-primary border-primary/20 mb-2">Finansiering</Badge>
@@ -574,13 +641,13 @@ export default function Calculator() {
                 </div>
 
                 <div className="pt-6 flex flex-col sm:flex-row gap-3 border-t">
-                  <Button variant="outline" size="lg" onClick={() => setStep(4)} className="sm:w-1/3">Tillbaka</Button>
-                  <Button size="lg" className="flex-1" onClick={() => setStep(6)}>Gå vidare till ekonomi <ArrowRight className="ml-2 w-4 h-4" /></Button>
+                  <Button variant="outline" size="lg" onClick={() => setStep(5)} className="sm:w-1/3">Tillbaka</Button>
+                  <Button size="lg" className="flex-1" onClick={() => setStep(7)}>Gå vidare till ekonomi <ArrowRight className="ml-2 w-4 h-4" /></Button>
                 </div>
               </div>
             )}
 
-            {step === 6 && (
+            {step === 7 && (
               <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
                 <div className="text-center space-y-3 pb-6 border-b">
                   <Badge variant="outline" className="bg-primary/5 text-primary border-primary/20 mb-2">Ekonomi</Badge>
@@ -709,13 +776,13 @@ export default function Calculator() {
                    </div>
                 </div>
                 <div className="pt-6 flex flex-col sm:flex-row gap-3 border-t">
-                  <Button variant="outline" size="lg" onClick={() => setStep(5)} className="sm:w-1/3">Tillbaka</Button>
-                  <Button size="lg" className="flex-1" onClick={() => setStep(7)}>Gå vidare till slutförande <ArrowRight className="ml-2 w-4 h-4" /></Button>
+                  <Button variant="outline" size="lg" onClick={() => setStep(6)} className="sm:w-1/3">Tillbaka</Button>
+                  <Button size="lg" className="flex-1" onClick={() => setStep(8)}>Gå vidare till slutförande <ArrowRight className="ml-2 w-4 h-4" /></Button>
                 </div>
               </div>
             )}
 
-            {step === 7 && (
+            {step === 8 && (
               <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
                 <div className="text-center space-y-3 pb-6 border-b">
                   <Badge variant="outline" className="bg-primary/5 text-primary border-primary/20 mb-2">Avslutande steg</Badge>
@@ -789,7 +856,7 @@ export default function Calculator() {
               </div>
             )}
 
-            {step === 8 && (
+            {step === 9 && (
               <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
                 {/* Header Section */}
                 <div className="text-center space-y-3 pb-6 border-b">
@@ -959,7 +1026,7 @@ export default function Calculator() {
                 </div>
 
                 <div className="flex flex-col sm:flex-row gap-3 pt-6 border-t">
-                  <Button variant="outline" size="lg" onClick={() => setStep(7)} className="sm:w-1/3">Tillbaka till uppgifter</Button>
+                  <Button variant="outline" size="lg" onClick={() => setStep(8)} className="sm:w-1/3">Tillbaka till uppgifter</Button>
                   <Button size="lg" className="flex-1" onClick={() => { setStep(1); setFormData({...formData, categoryIds: [], machineIds: [], trainingIds: [], fullName: "", email: "", phone: "", company: ""}); }}>Gör en ny beräkning</Button>
                 </div>
               </div>
