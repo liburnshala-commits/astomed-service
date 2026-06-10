@@ -40,7 +40,7 @@ Astomed AB
 Jägerhorns väg 5
 141 75 Kungens Kurva`;
 
-        await base44.functions.invoke('sendSmtpEmail', {
+        await base44.integrations.Core.SendEmail({
             from_name: "Astomed Service",
             to: to,
             subject: subject,

@@ -46,7 +46,7 @@ Deno.serve(async (req) => {
     }
 
     // Example 1: Service Request Confirmation
-    await base44.functions.invoke('sendSmtpEmail', {
+    await base44.integrations.Core.SendEmail({
       to: emailTo,
       from_name: "Astomed Service",
       subject: 'Bekräftelse - Din serviceförfrågan har mottagits',
@@ -73,7 +73,7 @@ Deno.serve(async (req) => {
     });
 
     // Example 2: Service Reminder
-    await base44.functions.invoke('sendSmtpEmail', {
+    await base44.integrations.Core.SendEmail({
       to: emailTo,
       from_name: "Astomed Service",
       subject: 'Påminnelse: Din maskin behöver service snart',
@@ -97,7 +97,7 @@ Deno.serve(async (req) => {
     });
 
     // Example 3: Quote/Kostnadsförslag
-    await base44.functions.invoke('sendSmtpEmail', {
+    await base44.integrations.Core.SendEmail({
       to: emailTo,
       from_name: "Astomed Service",
       subject: 'Kostnadsförslag för servicearbete',
@@ -125,7 +125,7 @@ Deno.serve(async (req) => {
     });
 
     // Example 4: Service Contract Offer
-    await base44.functions.invoke('sendSmtpEmail', {
+    await base44.integrations.Core.SendEmail({
       to: emailTo,
       from_name: "Astomed Service",
       subject: 'Serviceavtal - Kostnadsfri konsultation',
@@ -161,7 +161,7 @@ Deno.serve(async (req) => {
     });
 
     // Example 5: Service Report/Rapport
-    await base44.functions.invoke('sendSmtpEmail', {
+    await base44.integrations.Core.SendEmail({
       to: emailTo,
       from_name: "Astomed Service",
       subject: 'Servicerapport - Servicebesök avslutad',
@@ -198,7 +198,7 @@ Deno.serve(async (req) => {
     });
 
     // Example 6: Contract Renewal Reminder
-    await base44.functions.invoke('sendSmtpEmail', {
+    await base44.integrations.Core.SendEmail({
       to: emailTo,
       from_name: "Astomed Service",
       subject: 'Bekräftelse: Ditt serviceavtal förnyades',
@@ -232,7 +232,7 @@ Deno.serve(async (req) => {
     });
 
     // Example 7: Payment Confirmation
-    await base44.functions.invoke('sendSmtpEmail', {
+    await base44.integrations.Core.SendEmail({
       to: emailTo,
       from_name: "Astomed Ekonomi",
       subject: 'Betalningsbekräftelse - Astomed',

@@ -13,7 +13,7 @@ Deno.serve(async (req) => {
         // Skicka ett e-postmeddelande till varje administratör
         for (const admin of admins) {
             if (admin.email) {
-                await base44.asServiceRole.functions.invoke('sendSmtpEmail', {
+                await base44.asServiceRole.integrations.Core.SendEmail({
                     to: admin.email,
                     subject: "Nytt konto skapat i Astomed Pro",
                     body: `Ett nytt kundkonto har registrerats via den publika sidan.\n\nNamn: ${full_name || 'Okänt'}\nE-post: ${email || 'Okänt'}\nFöretag: ${company_name || 'Okänt'}\nDatum: ${new Date().toLocaleString('sv-SE')}`

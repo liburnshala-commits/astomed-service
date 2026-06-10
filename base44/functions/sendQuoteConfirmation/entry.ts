@@ -133,7 +133,7 @@ Deno.serve(async (req) => {
 
     // Email to customer
     if (customer?.email) {
-      promises.push(base44.functions.invoke('sendSmtpEmail', {
+      promises.push(base44.integrations.Core.SendEmail({
         to: customer.email,
         subject: `Orderbekräftelse – ${machine?.model || 'serviceärende'} (SN: ${machine?.serial_number || '–'})`,
         body: orderHtml(customer.contact_person, true),
@@ -147,7 +147,7 @@ Deno.serve(async (req) => {
       const users = await base44.asServiceRole.entities.User.list();
       const techUser = users.find(u => u.full_name === record.technician_name);
       if (techUser?.email) {
-        promises.push(base44.functions.invoke('sendSmtpEmail', {
+        promises.push(base44.integrations.Core.SendEmail({
           to: techUser.email,
           subject: `Order godkänd – ${customer?.company_name || ''} / ${machine?.model || ''} (SN: ${machine?.serial_number || '–'})`,
           body: orderHtml(record.technician_name, false),

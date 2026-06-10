@@ -126,7 +126,7 @@ Deno.serve(async (req) => {
             </div>
             `;
 
-            await base44.asServiceRole.functions.invoke('sendSmtpEmail', {
+            await base44.asServiceRole.integrations.Core.SendEmail({
                 to: data.email,
                 from_name: "Astomed Service",
                 subject: "Bekräftelse: Vi har mottagit din serviceförfrågan",

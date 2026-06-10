@@ -130,7 +130,7 @@ Deno.serve(async (req) => {
 
     // Send the custom welcome email
     try {
-      await base44.asServiceRole.functions.invoke('sendSmtpEmail', {
+      await base44.asServiceRole.integrations.Core.SendEmail({
         to: email,
         subject: `Välkommen till Astomed Service - ${roleNameSv}`,
         body: emailHtml,

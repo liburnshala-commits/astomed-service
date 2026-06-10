@@ -29,7 +29,7 @@ Deno.serve(async (req) => {
 
         const sendToAll = async (emails, subject, body) => {
             for (const email of emails) {
-                await base44.asServiceRole.functions.invoke('sendSmtpEmail', { to: email, subject, body });
+                await base44.asServiceRole.integrations.Core.SendEmail({ to: email, subject, body });
             }
         };
 

@@ -31,7 +31,7 @@ Med vänliga hälsningar,
 Team Astomed Support`;
 
             // Skicka mailet
-            await base44.asServiceRole.functions.invoke('sendSmtpEmail', {
+            await base44.asServiceRole.integrations.Core.SendEmail({
                 to: conv.guest_email,
                 subject: "Vi är på väg – din chatt med Astomed Support!",
                 body: emailBody,
