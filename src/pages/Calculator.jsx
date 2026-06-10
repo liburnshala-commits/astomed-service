@@ -86,6 +86,7 @@ const astomedCategories = [
 export default function Calculator() {
   const [step, setStep] = useState(1);
   const [products, setProducts] = useState([]);
+  const [templates, setTemplates] = useState([]);
   const [formData, setFormData] = useState({
     categoryIds: [],
     machineIds: [],
@@ -113,6 +114,7 @@ export default function Calculator() {
 
   useEffect(() => {
     base44.entities.Product.list().then(setProducts).catch(console.error);
+    base44.entities.ServiceAgreementTemplate.list().then(setTemplates).catch(console.error);
   }, []);
 
   const handleUpdate = (field, value) => setFormData(prev => ({ ...prev, [field]: value }));
@@ -145,7 +147,16 @@ export default function Calculator() {
   const vacationPay = baseSalaryTotal * 0.12; // Semesterersättning 12%
   const pensionAndInsurance = baseSalaryTotal * 0.10; // Tjänstepension & försäkringar ~10%
   const totalSalaryCost = baseSalaryTotal + socialFees + vacationPay + pensionAndInsurance;
-  const serviceAgreementCost = formData.includeServiceAgreement ? (1495 * selectedMachines.length) : 0;
+  
+  const serviceAgreementBaseCost = selectedMachines.reduce((sum, m) => {
+    const template = templates.find(t => t.name.toLowerCase().includes(m.name.toLowerCase()) || m.name.toLowerCase().includes(t.name.toLowerCase()));
+    let price = template && template.price_per_month ? template.price_per_month : 399;
+    return sum + price;
+  }, 0);
+  
+  const hasServiceDiscount = selectedMachines.length > 1;
+  const serviceAgreementDiscountedCost = hasServiceDiscount ? serviceAgreementBaseCost * 0.9 : serviceAgreementBaseCost;
+  const serviceAgreementCost = formData.includeServiceAgreement ? serviceAgreementDiscountedCost : 0;
 
   // Maskiner som har ett leasingpris leasas, medan övriga betalas vid start
   const machinesBoughtDirectly = selectedMachines.filter(m => !m.leasingPrice);
@@ -767,11 +778,20 @@ export default function Calculator() {
                          </div>
                          <div className="flex-1 space-y-2">
                            <Label htmlFor="service-agreement" className="text-base font-bold text-slate-900 cursor-pointer flex flex-wrap items-center gap-2" onClick={(e) => e.stopPropagation()}>
-                             Astomed Serviceavtal Trygghet
-                             <Badge variant="secondary" className="bg-teal-100 text-teal-800 border-none hover:bg-teal-200">1 495 kr/mån per maskin</Badge>
+                             Astomed Serviceavtal Trygghet (gäller vald utrustning)
+                             <Badge variant="secondary" className="bg-teal-100 text-teal-800 border-none hover:bg-teal-200">
+                               {selectedMachines.length === 0 ? "Välj maskiner" : hasServiceDiscount ? (
+                                 <span>
+                                   <span className="line-through opacity-70 mr-1">{Math.round(serviceAgreementBaseCost).toLocaleString()} kr</span>
+                                   {Math.round(serviceAgreementDiscountedCost).toLocaleString()} kr/mån (-10%)
+                                 </span>
+                               ) : (
+                                 <span>{Math.round(serviceAgreementDiscountedCost).toLocaleString()} kr/mån</span>
+                               )}
+                             </Badge>
                            </Label>
                            <p className="text-sm text-slate-600 leading-relaxed">
-                             Ett aktivt serviceavtal eliminerar oväntade utgifter och ger dig dokumenterad servicehistorik vilket gör din klinik <strong>redo för de nya lagkraven (SSMFS 2026:1)</strong>. Ingår: regelbunden funktions- och säkerhetskontroll, fri teknisk support och en förutsägbar, fast månadskostnad.
+                             Ett aktivt serviceavtal eliminerar oväntade utgifter och ger dig dokumenterad servicehistorik vilket gör din klinik <strong>redo för de nya lagkraven (SSMFS 2026:1)</strong>. Ingår: regelbunden funktions- och säkerhetskontroll, fri teknisk support och en förutsägbar, fast månadskostnad. Priset baseras på din valda utrustning.
                            </p>
                          </div>
                        </div>
@@ -842,7 +862,8 @@ export default function Calculator() {
                             monthlyLeasingCost,
                             roi1Month,
                             roi6Months,
-                            roi12Months
+                            roi12Months,
+                            serviceAgreementCost
                           },
                           machineName: selectedMachines.map(m => m.name).join(", ")
                         });
