@@ -200,7 +200,7 @@ Deno.serve(async (req) => {
             contact_person: formData.fullName,
             email: formData.email,
             phone: formData.phone,
-            description: `Lead från Klinikkalkylatorn. Valt utrustning: ${machineName}. Beräknad break-even: ${calculated.breakEvenMonths} månader.`,
+            notes: `Lead från Klinikkalkylatorn. Valt utrustning: ${machineName}. Beräknad break-even: ${calculated.breakEvenMonths} månader.`,
             status: "new",
             service_description: "Klinikkalkylator - Intresseanmälan",
             machine_name: machineName || "Okänd maskin"

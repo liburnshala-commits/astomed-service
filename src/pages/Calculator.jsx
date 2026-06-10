@@ -843,7 +843,7 @@ export default function Calculator() {
                         setStep(9);
                       } catch (err) {
                         console.error(err);
-                        alert("Ett fel uppstod när planen skulle skickas, men du kan fortfarande se resultatet.");
+                        alert(`Ett fel uppstod när planen skulle skickas: ${err?.data?.error || err?.message || err}. Du kan fortfarande se resultatet.`);
                         setStep(9);
                       } finally {
                         setIsSubmitting(false);
