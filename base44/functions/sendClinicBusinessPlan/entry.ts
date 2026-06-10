@@ -62,7 +62,6 @@ Deno.serve(async (req) => {
         doc.setFont('helvetica', 'normal');
         doc.setTextColor(0, 0, 0);
         let y = 95;
-        doc.text(`Utrustning:`, 20, y); doc.text(`${Math.round(calculated.machinePrice).toLocaleString()} kr`, 150, y, {align: 'right'}); y += 8;
         if (calculated.trainingCost > 0) {
             doc.text(`Utbildning(ar):`, 20, y); doc.text(`${Math.round(calculated.trainingCost).toLocaleString()} kr`, 150, y, {align: 'right'}); y += 8;
         }
