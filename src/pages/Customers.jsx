@@ -14,6 +14,7 @@ import CustomerForm from "@/components/customers/CustomerForm.jsx";
 import DeleteCustomerDialog from "@/components/gdpr/DeleteCustomerDialog.jsx";
 import CustomerLatestInteraction from "@/components/customers/CustomerLatestInteraction.jsx";
 import ImportCustomersModal from "@/components/customers/ImportCustomersModal.jsx";
+import SendSmsModal from "@/components/customers/SendSmsModal";
 import { useAuth } from "@/lib/AuthContext";
 
 export default function Customers() {
@@ -27,6 +28,7 @@ export default function Customers() {
   const [deletingCustomer, setDeletingCustomer] = useState(null);
   const [cleaningData, setCleaningData] = useState(false);
   const [showImport, setShowImport] = useState(false);
+  const [smsCustomer, setSmsCustomer] = useState(null);
 
   const { user } = useAuth();
   const userRole = user?.role;
@@ -321,7 +323,12 @@ export default function Customers() {
             {customer.org_number && <p className="text-xs astomed-muted ml-6 mb-2">Org.nr: {customer.org_number}</p>}
             <div className="grid sm:grid-cols-3 gap-2 ml-6">
               {customer.contact_person && <div className="text-sm astomed-subtitle">👤 {customer.contact_person}</div>}
-              {customer.phone && <div className="text-sm astomed-subtitle flex items-center gap-1"><Phone className="w-3 h-3" /> {customer.phone}</div>}
+              {customer.phone && (
+                <div className="text-sm astomed-subtitle flex items-center gap-1">
+                  <Phone className="w-3 h-3" /> {customer.phone}
+                  <Button variant="outline" size="sm" className="h-5 text-[10px] px-1.5 ml-1" onClick={(e) => { e.preventDefault(); e.stopPropagation(); setSmsCustomer(customer); }}>SMS</Button>
+                </div>
+              )}
               {customer.email && <div className="text-sm astomed-subtitle flex items-center gap-1"><Mail className="w-3 h-3" /> {customer.email}</div>}
             </div>
             {(customer.address || customer.city) && (
@@ -489,6 +496,10 @@ export default function Customers() {
           onClose={() => setShowImport(false)}
           onImported={() => load()}
         />
+      )}
+
+      {smsCustomer && (
+        <SendSmsModal customer={smsCustomer} onClose={() => setSmsCustomer(null)} />
       )}
 
       {deletingCustomer && (
