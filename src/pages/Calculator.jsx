@@ -988,10 +988,48 @@ export default function Calculator() {
                           <span className="text-slate-500">Snittomsättning/mån (ex. moms):</span>
                           <span className="font-medium text-slate-700">{Math.round(monthlyRevenueExVat).toLocaleString()} kr</span>
                         </div>
-                        <div className="flex justify-between text-sm">
-                          <span className="text-slate-500">Löpande kostnader inkl. lön:</span>
-                          <span className="font-medium text-slate-700">- {Math.round(monthlyCost).toLocaleString()} kr</span>
-                        </div>
+                        
+                        <Accordion type="single" collapsible className="w-full">
+                          <AccordionItem value="costs-breakdown" className="border-b-0">
+                            <AccordionTrigger className="py-2 hover:no-underline flex justify-between w-full">
+                              <span className="text-slate-500 font-normal">Löpande kostnader inkl. lön:</span>
+                              <span className="font-medium text-slate-700">- {Math.round(monthlyCost).toLocaleString()} kr</span>
+                            </AccordionTrigger>
+                            <AccordionContent className="bg-slate-100/50 rounded-lg p-3 space-y-2 text-xs">
+                              <div className="flex justify-between text-slate-600">
+                                <span>Hyra:</span>
+                                <span>{Math.round(formData.rent).toLocaleString()} kr</span>
+                              </div>
+                              <div className="flex justify-between text-slate-600">
+                                <span>Personalkostnad (inkl avgifter):</span>
+                                <span>{Math.round(totalSalaryCost).toLocaleString()} kr</span>
+                              </div>
+                              <div className="flex justify-between text-slate-600">
+                                <span>Leasing av maskiner:</span>
+                                <span>{Math.round(monthlyLeasingCost).toLocaleString()} kr</span>
+                              </div>
+                              {serviceAgreementCost > 0 && (
+                                <div className="flex justify-between text-slate-600">
+                                  <span>Serviceavtal:</span>
+                                  <span>{Math.round(serviceAgreementCost).toLocaleString()} kr</span>
+                                </div>
+                              )}
+                              <div className="flex justify-between text-slate-600">
+                                <span>Bokningssystem:</span>
+                                <span>{Math.round(formData.bookingSystem).toLocaleString()} kr</span>
+                              </div>
+                              <div className="flex justify-between text-slate-600">
+                                <span>Försäkring & Marknadsföring:</span>
+                                <span>{Math.round(formData.insuranceAndOther).toLocaleString()} kr</span>
+                              </div>
+                              <div className="flex justify-between text-slate-600">
+                                <span>Förbrukningsmaterial:</span>
+                                <span>{Math.round(totalTreatmentsPerWeek * 4 * 100).toLocaleString()} kr</span>
+                              </div>
+                            </AccordionContent>
+                          </AccordionItem>
+                        </Accordion>
+                        
                         <div className="flex justify-between text-sm">
                           <span className="text-slate-500">Bolagsskatt (20.6%):</span>
                           <span className="font-medium text-slate-700">- {Math.round(corporateTax).toLocaleString()} kr</span>
@@ -1033,7 +1071,48 @@ export default function Calculator() {
                       <div className="font-bold text-slate-800 mb-3">6 Månader Prognos</div>
                       <div className="space-y-1.5 text-sm">
                         <div className="flex justify-between"><span className="text-slate-500">Omsättning</span> <span className="font-medium">{Math.round(revenue6Months).toLocaleString()} kr</span></div>
-                        <div className="flex justify-between"><span className="text-slate-500">Kostnader</span> <span className="font-medium text-red-600/80">-{Math.round(cost6Months).toLocaleString()} kr</span></div>
+                        
+                        <Accordion type="single" collapsible className="w-full">
+                          <AccordionItem value="costs-breakdown-6" className="border-b-0">
+                            <AccordionTrigger className="py-1 hover:no-underline flex justify-between w-full">
+                              <span className="text-slate-500 font-normal">Kostnader</span>
+                              <span className="font-medium text-red-600/80">-{Math.round(cost6Months).toLocaleString()} kr</span>
+                            </AccordionTrigger>
+                            <AccordionContent className="bg-slate-100/50 rounded-lg p-3 mt-1 space-y-2 text-xs">
+                              <div className="flex justify-between text-slate-600">
+                                <span>Hyra:</span>
+                                <span>{Math.round(formData.rent * 6).toLocaleString()} kr</span>
+                              </div>
+                              <div className="flex justify-between text-slate-600">
+                                <span>Personalkostnad (inkl avgifter):</span>
+                                <span>{Math.round(totalSalaryCost * 6).toLocaleString()} kr</span>
+                              </div>
+                              <div className="flex justify-between text-slate-600">
+                                <span>Leasing av maskiner:</span>
+                                <span>{Math.round(monthlyLeasingCost * 6).toLocaleString()} kr</span>
+                              </div>
+                              {serviceAgreementCost > 0 && (
+                                <div className="flex justify-between text-slate-600">
+                                  <span>Serviceavtal:</span>
+                                  <span>{Math.round(serviceAgreementCost * 6).toLocaleString()} kr</span>
+                                </div>
+                              )}
+                              <div className="flex justify-between text-slate-600">
+                                <span>Bokningssystem:</span>
+                                <span>{Math.round(formData.bookingSystem * 6).toLocaleString()} kr</span>
+                              </div>
+                              <div className="flex justify-between text-slate-600">
+                                <span>Försäkring & Marknadsföring:</span>
+                                <span>{Math.round(formData.insuranceAndOther * 6).toLocaleString()} kr</span>
+                              </div>
+                              <div className="flex justify-between text-slate-600">
+                                <span>Förbrukningsmaterial:</span>
+                                <span>{Math.round(totalTreatmentsPerWeek * 4 * 100 * 6).toLocaleString()} kr</span>
+                              </div>
+                            </AccordionContent>
+                          </AccordionItem>
+                        </Accordion>
+                        
                         <div className="flex justify-between pt-2 mt-1 border-t"><span className="font-bold text-slate-700">Ren Vinst</span> <span className="font-bold text-primary">{Math.round(profit6Months).toLocaleString()} kr</span></div>
                         <div className="flex justify-between"><span className="text-slate-500">ROI</span> <span className="font-bold text-primary">{roi6Months}%</span></div>
                       </div>
@@ -1043,7 +1122,48 @@ export default function Calculator() {
                       <div className="font-bold text-slate-800 mb-3">1 År Prognos</div>
                       <div className="space-y-1.5 text-sm">
                         <div className="flex justify-between"><span className="text-slate-500">Omsättning</span> <span className="font-medium">{Math.round(revenue12Months).toLocaleString()} kr</span></div>
-                        <div className="flex justify-between"><span className="text-slate-500">Kostnader</span> <span className="font-medium text-red-600/80">-{Math.round(cost12Months).toLocaleString()} kr</span></div>
+                        
+                        <Accordion type="single" collapsible className="w-full">
+                          <AccordionItem value="costs-breakdown-12" className="border-b-0">
+                            <AccordionTrigger className="py-1 hover:no-underline flex justify-between w-full">
+                              <span className="text-slate-500 font-normal">Kostnader</span>
+                              <span className="font-medium text-red-600/80">-{Math.round(cost12Months).toLocaleString()} kr</span>
+                            </AccordionTrigger>
+                            <AccordionContent className="bg-slate-100/50 rounded-lg p-3 mt-1 space-y-2 text-xs">
+                              <div className="flex justify-between text-slate-600">
+                                <span>Hyra:</span>
+                                <span>{Math.round(formData.rent * 12).toLocaleString()} kr</span>
+                              </div>
+                              <div className="flex justify-between text-slate-600">
+                                <span>Personalkostnad (inkl avgifter):</span>
+                                <span>{Math.round(totalSalaryCost * 12).toLocaleString()} kr</span>
+                              </div>
+                              <div className="flex justify-between text-slate-600">
+                                <span>Leasing av maskiner:</span>
+                                <span>{Math.round(monthlyLeasingCost * 12).toLocaleString()} kr</span>
+                              </div>
+                              {serviceAgreementCost > 0 && (
+                                <div className="flex justify-between text-slate-600">
+                                  <span>Serviceavtal:</span>
+                                  <span>{Math.round(serviceAgreementCost * 12).toLocaleString()} kr</span>
+                                </div>
+                              )}
+                              <div className="flex justify-between text-slate-600">
+                                <span>Bokningssystem:</span>
+                                <span>{Math.round(formData.bookingSystem * 12).toLocaleString()} kr</span>
+                              </div>
+                              <div className="flex justify-between text-slate-600">
+                                <span>Försäkring & Marknadsföring:</span>
+                                <span>{Math.round(formData.insuranceAndOther * 12).toLocaleString()} kr</span>
+                              </div>
+                              <div className="flex justify-between text-slate-600">
+                                <span>Förbrukningsmaterial:</span>
+                                <span>{Math.round(totalTreatmentsPerWeek * 4 * 100 * 12).toLocaleString()} kr</span>
+                              </div>
+                            </AccordionContent>
+                          </AccordionItem>
+                        </Accordion>
+                        
                         <div className="flex justify-between pt-2 mt-1 border-t"><span className="font-bold text-slate-700">Ren Vinst</span> <span className="font-bold text-primary">{Math.round(profit12Months).toLocaleString()} kr</span></div>
                         <div className="flex justify-between"><span className="text-slate-500">ROI</span> <span className="font-bold text-primary">{roi12Months}%</span></div>
                       </div>
