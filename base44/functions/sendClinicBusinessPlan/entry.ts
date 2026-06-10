@@ -181,7 +181,46 @@ Deno.serve(async (req) => {
         });
 
         // 3. Send email to customer
-        const emailBody = `Hej ${formData.fullName.split(' ')[0]},\n\nTack för att du använde Astomeds klinikkalkylator!\n\nBifogat finner du din skräddarsydda affärsplan och kalkyl för uppstart av din klinikverksamhet baserat på dina angivna siffror.\n\nKalkylen inkluderar uppstartskostnader, löpande kostnader, vinstberäkning efter skatt och en uppskattning på break-even.\n\nDu kan ladda ner din affärsplan (PDF) här: ${file_url}\n\nTveka inte att höra av dig till oss på Astomed om du har frågor om utrustning eller nästa steg!\n\nVänliga hälsningar,\nAstomed Pro`;
+        const emailBody = `
+<div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #334155; max-width: 600px; margin: 0 auto; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);">
+    <div style="text-align: center; padding: 30px 20px; background: linear-gradient(to right, #0f766e, #1e293b);">
+        <h1 style="color: #ffffff; margin: 0; font-size: 28px; letter-spacing: 1px;">Astomed Pro</h1>
+        <p style="margin: 5px 0 0 0; color: #cbd5e1; font-size: 16px;">Din partner för klinikutveckling</p>
+    </div>
+    
+    <div style="padding: 40px 30px; background-color: #ffffff;">
+        <h2 style="color: #0f766e; margin-top: 0; font-size: 22px;">Hej ${formData.fullName.split(' ')[0]}!</h2>
+        <p style="font-size: 16px; line-height: 1.6; color: #475569;">Tack för att du använde Astomeds klinikkalkylator. Din skräddarsydda affärsplan och kalkyl för uppstart av din klinikverksamhet är nu klar.</p>
+        
+        <div style="background-color: #f8fafc; border-left: 4px solid #0d9488; padding: 20px; border-radius: 0 8px 8px 0; margin: 30px 0; text-align: center;">
+            <p style="margin-top: 0; font-weight: 600; color: #1e293b; font-size: 16px;">Klicka på knappen nedan för att ladda ner din affärsplan (PDF)</p>
+            <a href="${file_url}" style="display: inline-block; background-color: #0d9488; color: #ffffff; text-decoration: none; padding: 14px 28px; border-radius: 8px; font-weight: bold; font-size: 16px; margin-top: 15px; box-shadow: 0 2px 4px rgba(13, 148, 136, 0.3);">Ladda ner Affärsplan</a>
+        </div>
+
+        <h3 style="color: #1e293b; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; margin-top: 40px; font-size: 20px;">Mer än bara maskiner</h3>
+        <p style="font-size: 15px; line-height: 1.6; color: #475569;">Vi på Astomed stöttar dig genom hela din kliniks livscykel. Utöver utrustning i världsklass hjälper vi dig med:</p>
+        
+        <ul style="padding-left: 20px; color: #475569; font-size: 15px; line-height: 1.8;">
+            <li style="margin-bottom: 12px;"><strong>Service & Support:</strong> Trygga serviceavtal, årliga funktionskontroller och snabb teknisk support.</li>
+            <li style="margin-bottom: 12px;"><strong>Utbildning & Kompetens:</strong> Certifierande utbildningar inom Laser, IPL, injektioner och resultatinriktad hudvård.</li>
+            <li style="margin-bottom: 12px;"><strong>Regelverk & Lagar:</strong> Kostnadsfri guidning vid anmälan till kommunen, mallar för egenkontroll och strålsäkerhet (SSMFS).</li>
+            <li style="margin-bottom: 12px;"><strong>Affärsutveckling:</strong> Professionella hudvårdsprodukter, förbrukningsmaterial och strategisk rådgivning.</li>
+        </ul>
+
+        <div style="margin-top: 40px; border-top: 1px solid #e2e8f0; padding-top: 30px;">
+            <p style="font-size: 15px; line-height: 1.6; color: #475569;">Har du några frågor om din kalkyl, våra maskiner eller hur vi kan hjälpa dig att ta nästa steg? Tveka inte att svara på detta mail eller kontakta oss direkt.</p>
+            
+            <p style="margin-top: 30px; margin-bottom: 5px; font-size: 16px; color: #475569;">Vänliga hälsningar,</p>
+            <p style="font-weight: bold; color: #0f766e; margin-top: 0; font-size: 18px;">Astomed Pro-teamet</p>
+        </div>
+    </div>
+    
+    <div style="background-color: #f1f5f9; color: #64748b; text-align: center; padding: 20px; font-size: 13px; border-top: 1px solid #e2e8f0;">
+        <p style="margin: 0 0 5px 0;">Astomed Sverige AB</p>
+        <p style="margin: 0;">© ${new Date().getFullYear()} Alla rättigheter förbehållna.</p>
+    </div>
+</div>
+`;
 
         try {
             await base44.asServiceRole.integrations.Core.SendEmail({
