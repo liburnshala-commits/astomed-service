@@ -1027,7 +1027,7 @@ export default function Calculator() {
 
                 <div className="flex flex-col sm:flex-row gap-3 pt-6 border-t">
                   <Button variant="outline" size="lg" onClick={() => setStep(8)} className="sm:w-1/3">Tillbaka till uppgifter</Button>
-                  <Button size="lg" className="flex-1" onClick={() => { setStep(1); setFormData({...formData, categoryIds: [], machineIds: [], trainingIds: [], fullName: "", email: "", phone: "", company: ""}); }}>Gör en ny beräkning</Button>
+                  <Button size="lg" className="flex-1" onClick={() => window.location.reload()}>Gör en ny beräkning</Button>
                 </div>
               </div>
             )}
