@@ -168,6 +168,7 @@ export default function PublicServiceRequest() {
       {/* Hero Section */}
       <section className="relative bg-[#002B3C] text-white py-24 px-6 md:px-12 overflow-hidden">
         <div className="absolute inset-0 opacity-20 bg-[url('https://wp.klinikutrustning.se/wp-content/uploads/2024/04/full-image-desktop-1024x465.jpg')] bg-cover bg-center"></div>
+        <div className="absolute inset-0 bg-[#002B3C]/60 md:bg-transparent"></div>
         <div className="absolute inset-0 bg-gradient-to-r from-[#002B3C] 60% to-transparent hidden md:block"></div>
         <div className="relative max-w-7xl mx-auto z-10 grid md:grid-cols-2 gap-12 items-center">
           <div>

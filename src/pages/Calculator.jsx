@@ -192,16 +192,16 @@ export default function Calculator() {
   const roi12Months = totalStartupCost > 0 ? ((profit12Months / totalStartupCost) * 100).toFixed(1) : 0;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-teal-900 to-slate-800 p-6 flex items-center justify-center relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-teal-900 to-slate-900 p-3 sm:p-6 flex items-center justify-center relative overflow-hidden">
       {/* Dekorativa geometriska former som bakgrund */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-80 h-80 rounded-full bg-teal-700 opacity-10 blur-3xl" />
-        <div className="absolute top-1/2 -left-32 w-64 h-64 rounded-full bg-blue-600 opacity-5 blur-3xl" />
-        <div className="absolute bottom-0 right-1/3 w-96 h-96 rounded-full bg-teal-600 opacity-5 blur-3xl" />
+        <div className="absolute -top-40 -right-40 w-96 h-96 rounded-full bg-purple-600 opacity-20 blur-3xl" />
+        <div className="absolute top-1/2 -left-32 w-80 h-80 rounded-full bg-blue-500 opacity-10 blur-3xl" />
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 rounded-full bg-teal-500 opacity-20 blur-3xl" />
       </div>
-      <div className="max-w-3xl w-full relative z-10">
-        <Card className="shadow-2xl border-0 bg-white/95 backdrop-blur">
-          <CardHeader className="bg-gradient-to-r from-teal-700 to-slate-800 text-white rounded-t-xl">
+      <div className="max-w-3xl w-full relative z-10 my-4 sm:my-0">
+        <Card className="shadow-2xl border-0 bg-white/95 backdrop-blur rounded-2xl overflow-hidden">
+          <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-slate-800 text-white">
             <div className="flex items-center gap-3 mb-3">
               <div className="w-10 h-10 rounded-lg overflow-hidden flex items-center justify-center bg-white/20">
                 <img 
@@ -218,7 +218,7 @@ export default function Calculator() {
             <CardTitle className="flex items-center gap-2"><CalcIcon /> Beräkna din investering</CardTitle>
             <CardDescription className="text-slate-200">En väg till lönsamhet på 6 minuter</CardDescription>
           </CardHeader>
-          <CardContent className="p-6 md:p-8">
+          <CardContent className="p-4 sm:p-6 md:p-8">
             
             {step === 1 && (
               <div className="space-y-8 animate-in fade-in slide-in-from-right-4 duration-500">
@@ -231,45 +231,45 @@ export default function Calculator() {
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <Card className="border-slate-200 shadow-sm">
-                    <CardContent className="p-5 flex gap-4">
-                      <div className="bg-teal-50 p-3 rounded-lg h-fit"><Handshake className="w-6 h-6 text-teal-700" /></div>
+                  <Card className="border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                    <CardContent className="p-4 sm:p-5 flex gap-4">
+                      <div className="bg-blue-50 p-3 rounded-xl h-fit"><Handshake className="w-6 h-6 text-blue-600" /></div>
                       <div>
                         <h4 className="font-bold text-slate-900">Process {"&"} Start</h4>
                         <p className="text-sm text-slate-600 mt-1">Vi hjälper dig med affärsplan, finansieringslösningar och guidar dig genom de anmälningar som krävs till kommunen.</p>
                       </div>
                     </CardContent>
                   </Card>
-                  <Card className="border-slate-200 shadow-sm">
-                    <CardContent className="p-5 flex gap-4">
-                      <div className="bg-teal-50 p-3 rounded-lg h-fit"><ShieldCheck className="w-6 h-6 text-teal-700" /></div>
+                  <Card className="border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                    <CardContent className="p-4 sm:p-5 flex gap-4">
+                      <div className="bg-emerald-50 p-3 rounded-xl h-fit"><ShieldCheck className="w-6 h-6 text-emerald-600" /></div>
                       <div>
                         <h4 className="font-bold text-slate-900">Regelverk {"&"} Säkerhet</h4>
                         <p className="text-sm text-slate-600 mt-1">Få stöd att uppfylla kraven från SSMFS och Miljöbalken, inklusive egenkontroll och upprättande av skyddsrutiner.</p>
                       </div>
                     </CardContent>
                   </Card>
-                  <Card className="border-slate-200 shadow-sm">
-                    <CardContent className="p-5 flex gap-4">
-                      <div className="bg-teal-50 p-3 rounded-lg h-fit"><GraduationCap className="w-6 h-6 text-teal-700" /></div>
+                  <Card className="border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                    <CardContent className="p-4 sm:p-5 flex gap-4">
+                      <div className="bg-purple-50 p-3 rounded-xl h-fit"><GraduationCap className="w-6 h-6 text-purple-600" /></div>
                       <div>
                         <h4 className="font-bold text-slate-900">Utbildning {"&"} Kompetens</h4>
                         <p className="text-sm text-slate-600 mt-1">Gedigna certifieringsutbildningar för dig och din personal, samt löpande kunskapslyft för att ni alltid ska ligga i framkant.</p>
                       </div>
                     </CardContent>
                   </Card>
-                  <Card className="border-slate-200 shadow-sm">
-                    <CardContent className="p-5 flex gap-4">
-                      <div className="bg-teal-50 p-3 rounded-lg h-fit"><Wrench className="w-6 h-6 text-teal-700" /></div>
+                  <Card className="border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                    <CardContent className="p-4 sm:p-5 flex gap-4">
+                      <div className="bg-orange-50 p-3 rounded-xl h-fit"><Wrench className="w-6 h-6 text-orange-600" /></div>
                       <div>
                         <h4 className="font-bold text-slate-900">Service {"&"} Drift</h4>
                         <p className="text-sm text-slate-600 mt-1">Våra serviceavtal säkerställer att er utrustning fungerar tryggt, minimerar driftstopp och ger snabb teknisk support.</p>
                       </div>
                     </CardContent>
                   </Card>
-                  <Card className="border-slate-200 shadow-sm sm:col-span-2">
-                    <CardContent className="p-5 flex gap-4">
-                      <div className="bg-teal-50 p-3 rounded-lg h-fit"><FileText className="w-6 h-6 text-teal-700" /></div>
+                  <Card className="border-slate-200 shadow-sm hover:shadow-md transition-shadow sm:col-span-2">
+                    <CardContent className="p-4 sm:p-5 flex gap-4">
+                      <div className="bg-rose-50 p-3 rounded-xl h-fit"><FileText className="w-6 h-6 text-rose-600" /></div>
                       <div>
                         <h4 className="font-bold text-slate-900">Portal {"&"} Aktuell info</h4>
                         <p className="text-sm text-slate-600 mt-1">I vår kundportal får du direkt tillgång till dina certifikat, behandlingsprotokoll, serviceloggar och den senaste branschinformationen.</p>
@@ -369,7 +369,7 @@ export default function Calculator() {
                             return (
                               <div 
                                 key={m.id} 
-                                className={`shrink-0 snap-center w-[260px] sm:w-[280px] bg-white rounded-xl border-2 shadow-sm transition-all flex flex-col overflow-hidden ${formData.machineIds.includes(m.id) ? 'border-teal-600 ring-2 ring-teal-600/20' : 'border-slate-200 hover:border-teal-300'}`}
+                                className={`shrink-0 snap-center w-[85vw] max-w-[280px] sm:w-[280px] bg-white rounded-xl border-2 shadow-sm transition-all flex flex-col overflow-hidden ${formData.machineIds.includes(m.id) ? 'border-teal-600 ring-2 ring-teal-600/20' : 'border-slate-200 hover:border-teal-300'}`}
                               >
                                 {m.image && (
                                   <div className="h-44 bg-white relative border-b border-slate-100 p-4 flex items-center justify-center">
@@ -476,9 +476,9 @@ export default function Calculator() {
 
                 <div className="space-y-6">
                   {/* Tilläggstjänster */}
-                  <div className="bg-slate-50 p-6 rounded-xl border border-slate-100">
+                  <div className="bg-blue-50/50 p-5 sm:p-6 rounded-xl border border-blue-100">
                     <div className="flex items-center gap-3 mb-4">
-                      <div className="bg-teal-100 p-2 rounded-lg"><Wrench className="w-5 h-5 text-teal-700" /></div>
+                      <div className="bg-blue-100 p-2 rounded-lg"><Wrench className="w-5 h-5 text-blue-700" /></div>
                       <h4 className="font-bold text-lg text-slate-800">Tilläggstjänster kring Klinikutrustning</h4>
                     </div>
                     <p className="text-sm text-slate-600 leading-relaxed">
@@ -487,9 +487,9 @@ export default function Calculator() {
                   </div>
 
                   {/* Utbildningar */}
-                  <div className="bg-slate-50 p-6 rounded-xl border border-slate-100">
+                  <div className="bg-purple-50/50 p-5 sm:p-6 rounded-xl border border-purple-100">
                     <div className="flex items-center gap-3 mb-4">
-                      <div className="bg-teal-100 p-2 rounded-lg"><GraduationCap className="w-5 h-5 text-teal-700" /></div>
+                      <div className="bg-purple-100 p-2 rounded-lg"><GraduationCap className="w-5 h-5 text-purple-700" /></div>
                       <h4 className="font-bold text-lg text-slate-800">Våra Utbildningar</h4>
                     </div>
                     <p className="text-sm text-slate-600 leading-relaxed mb-4">
@@ -504,9 +504,9 @@ export default function Calculator() {
                   </div>
 
                   {/* Hudvårdsprodukter */}
-                  <div className="bg-slate-50 p-6 rounded-xl border border-slate-100">
+                  <div className="bg-amber-50/50 p-5 sm:p-6 rounded-xl border border-amber-100">
                     <div className="flex items-center gap-3 mb-4">
-                      <div className="bg-teal-100 p-2 rounded-lg"><Lightbulb className="w-5 h-5 text-teal-700" /></div>
+                      <div className="bg-amber-100 p-2 rounded-lg"><Lightbulb className="w-5 h-5 text-amber-700" /></div>
                       <h4 className="font-bold text-lg text-slate-800">Hudvårdsprodukter för Klinik &amp; Hemmabruk</h4>
                     </div>
                     <p className="text-sm text-slate-600 leading-relaxed mb-4">
@@ -593,15 +593,15 @@ export default function Calculator() {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-slate-50 p-6 rounded-xl border border-slate-100">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 bg-slate-50 p-5 md:p-6 rounded-xl border border-slate-100">
                      <div className="space-y-2">
                        <Label className="text-slate-700 font-semibold">Inredning {"&"} Brits (kr)</Label>
-                       <Input type="number" className="bg-white text-slate-900 font-medium" value={formData.interiorCost} onChange={e => handleUpdate("interiorCost", Number(e.target.value))}/>
+                       <Input type="number" className="bg-white text-slate-900 font-medium h-11" value={formData.interiorCost} onChange={e => handleUpdate("interiorCost", Number(e.target.value))}/>
                        <p className="text-xs text-slate-500 flex items-start gap-1"><Info className="w-3 h-3 mt-0.5 shrink-0" /> Möbler och belysning.</p>
                      </div>
                      <div className="space-y-2">
                        <Label className="text-slate-700 font-semibold">Övriga Kostnader (kr)</Label>
-                       <Input type="number" className="bg-white text-slate-900 font-medium" value={formData.otherStartup} onChange={e => handleUpdate("otherStartup", Number(e.target.value))}/>
+                       <Input type="number" className="bg-white text-slate-900 font-medium h-11" value={formData.otherStartup} onChange={e => handleUpdate("otherStartup", Number(e.target.value))}/>
                        <p className="text-xs text-slate-500 flex items-start gap-1"><Info className="w-3 h-3 mt-0.5 shrink-0" /> El, vatten, avfall och andra utgifter.</p>
                      </div>
                   </div>
