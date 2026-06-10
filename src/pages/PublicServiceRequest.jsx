@@ -158,6 +158,7 @@ export default function PublicServiceRequest() {
            <a href="#tjanster" className="hover:text-[#3a9e9e] transition-colors">Våra tjänster</a>
            <a href="#ssm-lagen" className="hover:text-[#3a9e9e] transition-colors">Nya SSM-lagen</a>
            <a href="#anmalan" className="hover:text-[#3a9e9e] transition-colors">Serviceavtal</a>
+           <button onClick={() => navigate('/Calculator')} className="text-[#3a9e9e] font-bold hover:text-white transition-colors">Klinikkalkylator</button>
            <a href="https://www.stralsakerhetsmyndigheten.se/omraden/kroppsbehandlingar/anmalan-av-estetisk-verksamhet/" target="_blank" rel="noopener noreferrer" className="text-[#3a9e9e] font-bold hover:text-white transition-colors">Anmäl din klinik</a>
         </div>
         <Button onClick={() => base44.auth.redirectToLogin()} variant="outline" className="text-[#1b3a3a] bg-white hover:bg-slate-100 border-0 hidden sm:flex">
@@ -185,6 +186,9 @@ export default function PublicServiceRequest() {
                   Teckna Serviceavtal
                 </Button>
               </a>
+              <Button onClick={() => navigate('/Calculator')} size="lg" variant="outline" className="bg-transparent text-white border-white/30 hover:bg-white/10 hover:text-white h-14 px-8">
+                Räkna på klinikens lönsamhet
+              </Button>
               <a href="#ssm-lagen">
                 <Button size="lg" variant="outline" className="bg-transparent text-white border-white/30 hover:bg-white/10 hover:text-white h-14 px-8">
                   Läs om nya lagen

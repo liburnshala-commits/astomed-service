@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
+import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -84,6 +85,7 @@ const astomedCategories = [
 ];
 
 export default function Calculator() {
+  const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const [products, setProducts] = useState([]);
   const [templates, setTemplates] = useState([]);
@@ -201,7 +203,10 @@ export default function Calculator() {
       </div>
       <div className="max-w-3xl w-full relative z-10 my-4 sm:my-0">
         <Card className="shadow-2xl border-0 bg-white/95 backdrop-blur rounded-2xl overflow-hidden">
-          <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-slate-800 text-white">
+          <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-slate-800 text-white relative">
+            <Button variant="ghost" size="sm" onClick={() => navigate('/')} className="absolute right-4 top-4 text-white hover:bg-white/20">
+              Avbryt / Hem
+            </Button>
             <div className="flex items-center gap-3 mb-3">
               <div className="w-10 h-10 rounded-lg overflow-hidden flex items-center justify-center bg-white/20">
                 <img 
