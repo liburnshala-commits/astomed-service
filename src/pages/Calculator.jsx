@@ -808,7 +808,7 @@ export default function Calculator() {
                    </div>
                 </div>
                 <div className="pt-6 flex flex-col sm:flex-row gap-3 border-t">
-                  <Button variant="outline" size="lg" onClick={() => setStep(6)} disabled={isSubmitting} className="sm:w-1/3">Tillbaka</Button>
+                  <Button variant="outline" size="lg" onClick={() => setStep(7)} disabled={isSubmitting} className="sm:w-1/3">Tillbaka</Button>
                   <Button 
                     size="lg" 
                     className="flex-1" 
@@ -840,11 +840,11 @@ export default function Calculator() {
                           },
                           machineName: selectedMachines.map(m => m.name).join(", ")
                         });
-                        setStep(8);
+                        setStep(9);
                       } catch (err) {
                         console.error(err);
                         alert("Ett fel uppstod när planen skulle skickas, men du kan fortfarande se resultatet.");
-                        setStep(8);
+                        setStep(9);
                       } finally {
                         setIsSubmitting(false);
                       }
