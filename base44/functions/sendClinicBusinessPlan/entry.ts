@@ -182,42 +182,66 @@ Deno.serve(async (req) => {
 
         // 3. Send email to customer
         const emailBody = `
-<div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #334155; max-width: 600px; margin: 0 auto; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);">
-    <div style="text-align: center; padding: 30px 20px; background: linear-gradient(to right, #0f766e, #1e293b);">
-        <h1 style="color: #ffffff; margin: 0; font-size: 28px; letter-spacing: 1px;">Astomed Pro</h1>
-        <p style="margin: 5px 0 0 0; color: #cbd5e1; font-size: 16px;">Din partner för klinikutveckling</p>
+<div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #333333; max-width: 600px; margin: 0 auto;">
+    <!-- Header -->
+    <div style="background-color: #1b3a3a; padding: 30px 20px; text-align: center; color: white;">
+        <h1 style="margin: 0; font-size: 28px; font-weight: bold; letter-spacing: 0.5px;">ASTOMED</h1>
+        <p style="margin: 5px 0 0 0; font-size: 14px; letter-spacing: 1px;">PROFESSIONELL UTRUSTNING</p>
     </div>
     
+    <!-- Divider line -->
+    <div style="height: 3px; background-color: #3a9e9e;"></div>
+    
+    <!-- Content -->
     <div style="padding: 40px 30px; background-color: #ffffff;">
-        <h2 style="color: #0f766e; margin-top: 0; font-size: 22px;">Hej ${formData.fullName.split(' ')[0]}!</h2>
-        <p style="font-size: 16px; line-height: 1.6; color: #475569;">Tack för att du använde Astomeds klinikkalkylator. Din skräddarsydda affärsplan och kalkyl för uppstart av din klinikverksamhet är nu klar.</p>
+        <p style="font-size: 15px; line-height: 1.8; color: #333333; margin-top: 0;">Hej ${formData.fullName.split(' ')[0]},</p>
         
-        <div style="background-color: #f8fafc; border-left: 4px solid #0d9488; padding: 20px; border-radius: 0 8px 8px 0; margin: 30px 0; text-align: center;">
-            <p style="margin-top: 0; font-weight: 600; color: #1e293b; font-size: 16px;">Klicka på knappen nedan för att ladda ner din affärsplan (PDF)</p>
-            <a href="${file_url}" style="display: inline-block; background-color: #0d9488; color: #ffffff; text-decoration: none; padding: 14px 28px; border-radius: 8px; font-weight: bold; font-size: 16px; margin-top: 15px; box-shadow: 0 2px 4px rgba(13, 148, 136, 0.3);">Ladda ner Affärsplan</a>
+        <p style="font-size: 15px; line-height: 1.8; color: #333333;">Tack för att du använde Astomeds klinikkalkylator! Din skräddarsydda affärsplan och kalkyl för uppstart av din klinikverksamhet är nu klar och väntande på att ladda ner.</p>
+        
+        <!-- CTA Button -->
+        <div style="margin: 35px 0; text-align: center;">
+            <a href="${file_url}" style="display: inline-block; background-color: #1b3a3a; color: #ffffff; text-decoration: none; padding: 16px 40px; font-size: 16px; font-weight: bold; letter-spacing: 0.5px; border: 1px solid #1b3a3a;">LADDA NER AFFÄRSPLAN</a>
         </div>
-
-        <h3 style="color: #1e293b; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; margin-top: 40px; font-size: 20px;">Mer än bara maskiner</h3>
-        <p style="font-size: 15px; line-height: 1.6; color: #475569;">Vi på Astomed stöttar dig genom hela din kliniks livscykel. Utöver utrustning i världsklass hjälper vi dig med:</p>
         
-        <ul style="padding-left: 20px; color: #475569; font-size: 15px; line-height: 1.8;">
-            <li style="margin-bottom: 12px;"><strong>Service & Support:</strong> Trygga serviceavtal, årliga funktionskontroller och snabb teknisk support.</li>
-            <li style="margin-bottom: 12px;"><strong>Utbildning & Kompetens:</strong> Certifierande utbildningar inom Laser, IPL, injektioner och resultatinriktad hudvård.</li>
-            <li style="margin-bottom: 12px;"><strong>Regelverk & Lagar:</strong> Kostnadsfri guidning vid anmälan till kommunen, mallar för egenkontroll och strålsäkerhet (SSMFS).</li>
-            <li style="margin-bottom: 12px;"><strong>Affärsutveckling:</strong> Professionella hudvårdsprodukter, förbrukningsmaterial och strategisk rådgivning.</li>
+        <!-- Section divider -->
+        <div style="border-top: 2px solid #3a9e9e; margin: 35px 0;"></div>
+        
+        <h2 style="font-size: 18px; font-weight: bold; color: #1b3a3a; margin: 25px 0 15px 0; letter-spacing: 0.5px;">VAD VI HJÄLPER DIG MED</h2>
+        
+        <p style="font-size: 14px; line-height: 1.8; color: #333333; margin: 0 0 20px 0;">Vi på Astomed är inte bara en maskinleverantör – vi är din partner genom hela din kliniks utveckling. Utöver världsklass-utrustning hjälper vi dig med:</p>
+        
+        <ul style="list-style: none; padding: 0; margin: 0 0 20px 0;">
+            <li style="font-size: 14px; line-height: 1.8; color: #333333; margin-bottom: 15px; padding-left: 25px; position: relative;">
+                <span style="position: absolute; left: 0; color: #3a9e9e; font-weight: bold;">▸</span>
+                <strong>Service & Support:</strong> Trygga serviceavtal, årliga funktionskontroller och snabb teknisk support för att minimera driftstopp.
+            </li>
+            <li style="font-size: 14px; line-height: 1.8; color: #333333; margin-bottom: 15px; padding-left: 25px; position: relative;">
+                <span style="position: absolute; left: 0; color: #3a9e9e; font-weight: bold;">▸</span>
+                <strong>Utbildning & Kompetens:</strong> Certifierande utbildningar inom Laser, IPL, injektioner och resultatinriktad hudvård.
+            </li>
+            <li style="font-size: 14px; line-height: 1.8; color: #333333; margin-bottom: 15px; padding-left: 25px; position: relative;">
+                <span style="position: absolute; left: 0; color: #3a9e9e; font-weight: bold;">▸</span>
+                <strong>Regelverk & Lagar:</strong> Kostnadsfri guidning vid anmälan till kommunen, mallar för egenkontroll och strålsäkerhet (SSMFS 2026:1).
+            </li>
+            <li style="font-size: 14px; line-height: 1.8; color: #333333; padding-left: 25px; position: relative;">
+                <span style="position: absolute; left: 0; color: #3a9e9e; font-weight: bold;">▸</span>
+                <strong>Affärsutveckling:</strong> Professionella hudvårdsprodukter, förbrukningsmaterial och strategisk rådgivning för hållbar lönsamhet.
+            </li>
         </ul>
-
-        <div style="margin-top: 40px; border-top: 1px solid #e2e8f0; padding-top: 30px;">
-            <p style="font-size: 15px; line-height: 1.6; color: #475569;">Har du några frågor om din kalkyl, våra maskiner eller hur vi kan hjälpa dig att ta nästa steg? Tveka inte att svara på detta mail eller kontakta oss direkt.</p>
-            
-            <p style="margin-top: 30px; margin-bottom: 5px; font-size: 16px; color: #475569;">Vänliga hälsningar,</p>
-            <p style="font-weight: bold; color: #0f766e; margin-top: 0; font-size: 18px;">Astomed Pro-teamet</p>
-        </div>
+        
+        <!-- Section divider -->
+        <div style="border-top: 1px solid #e0e0e0; margin: 35px 0;"></div>
+        
+        <p style="font-size: 14px; line-height: 1.8; color: #333333;">Har du frågor om din kalkyl, våra maskiner eller nästa steg? Tveka inte att svara på detta mail eller kontakta oss direkt. Vi är här för att stötta dig!</p>
+        
+        <p style="margin-top: 30px; margin-bottom: 0; font-size: 14px; color: #333333;">Vänliga hälsningar,</p>
+        <p style="margin: 5px 0 0 0; font-weight: bold; color: #1b3a3a; font-size: 16px;">Astomed Pro</p>
     </div>
     
-    <div style="background-color: #f1f5f9; color: #64748b; text-align: center; padding: 20px; font-size: 13px; border-top: 1px solid #e2e8f0;">
-        <p style="margin: 0 0 5px 0;">Astomed Sverige AB</p>
-        <p style="margin: 0;">© ${new Date().getFullYear()} Alla rättigheter förbehållna.</p>
+    <!-- Footer -->
+    <div style="background-color: #f5f5f5; padding: 20px 30px; text-align: center; border-top: 1px solid #e0e0e0; font-size: 12px; color: #666666;">
+        <p style="margin: 0 0 5px 0;">Astomed Sverige AB | Jägerhorns väg 5 | 141 75 Kungens Kurva</p>
+        <p style="margin: 0;">Org.nr: 556709-9964</p>
     </div>
 </div>
 `;
