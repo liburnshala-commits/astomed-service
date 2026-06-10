@@ -9,7 +9,8 @@ import {
   FileCheck, 
   Users as UsersIcon, 
   Archive,
-  ChevronRight
+  ChevronRight,
+  Calculator
 } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
@@ -24,6 +25,7 @@ export default function MobileMenu() {
   const userRole = user?.role || "technician";
   const menuItems = [
     { label: "Serviceförfrågningar", page: "PublicServiceLeads", icon: ClipboardList, color: "text-blue-500", bg: "bg-blue-100", roles: ["admin"] },
+    { label: "Klinikberäkningar", page: "ClinicCalculations", icon: Calculator, color: "text-indigo-500", bg: "bg-indigo-100", roles: ["admin", "technician"] },
     { label: "Uppföljningar (To-Do)", page: "Tasks", icon: CheckSquare, color: "text-orange-500", bg: "bg-orange-100", roles: ["admin"] },
     { label: "Serviceärenden", page: "ServiceRecords", icon: Wrench, color: "text-teal-600", bg: "bg-teal-100", roles: ["admin", "technician"] },
     { label: "Servicekalender", page: "Calendar", icon: CalendarDays, color: "text-purple-500", bg: "bg-purple-100", roles: ["admin", "technician"] },
