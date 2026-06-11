@@ -306,7 +306,12 @@ export default function Calculator() {
                   <Badge variant="outline" className="bg-primary/5 text-primary border-primary/20 mb-2">
                     Behandlingsområden ({categoryStep + 1} av {astomedCategories.length})
                   </Badge>
-                  <h3 className="font-bold text-2xl mb-1">Vill du erbjuda {astomedCategories[categoryStep].title.toLowerCase()}?</h3>
+                  <h3 className="font-bold text-2xl mb-1">
+                    {astomedCategories[categoryStep].id === "ovriga" 
+                      ? "Vill du utforska övriga maskiner som kan komplettera din klinik?"
+                      : `Vill du erbjuda ${astomedCategories[categoryStep].title.toLowerCase()}?`
+                    }
+                  </h3>
                   <p className="text-slate-500 text-sm max-w-2xl mx-auto">
                     Läs mer om området nedan och kryssa i rutan om det är något du vill arbeta med på din klinik.
                   </p>
