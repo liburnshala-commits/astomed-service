@@ -343,7 +343,10 @@ export default function Calculator() {
                           className="w-6 h-6 data-[state=checked]:bg-teal-600 data-[state=checked]:border-teal-600 pointer-events-none"
                         />
                         <Label className="text-lg sm:text-xl font-bold text-slate-900 cursor-pointer flex-1 pointer-events-none">
-                          Ja, jag vill erbjuda {astomedCategories[categoryStep].title.toLowerCase()}
+                          {astomedCategories[categoryStep].id === "ovriga" 
+                            ? "Jag vill gärna läsa mer om andra maskiner"
+                            : `Ja, jag vill erbjuda ${astomedCategories[categoryStep].title.toLowerCase()}`
+                          }
                         </Label>
                       </div>
                       <p className="text-base text-slate-600 leading-relaxed">{astomedCategories[categoryStep].description}</p>
