@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Send, Wrench, ArrowLeft, ExternalLink, AlertCircle, LogIn, CheckCircle2, Shield, Settings, Info, CalendarClock, BookOpen, AlertTriangle, ChevronDown, Monitor, Box } from "lucide-react";
+import { Send, Wrench, ArrowLeft, ExternalLink, AlertCircle, LogIn, CheckCircle2, Shield, Settings, Info, CalendarClock, BookOpen, AlertTriangle, ChevronDown, Monitor, Box, Menu, X } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -46,6 +46,7 @@ export default function PublicServiceRequest() {
   const [privacyAccepted, setPrivacyAccepted] = useState(false);
   const [showPrivacyDialog, setShowPrivacyDialog] = useState(false);
   const [orgNumberWarning, setOrgNumberWarning] = useState("");
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const set = (field, value) => setForm((prev) => ({ ...prev, [field]: value }));
 
@@ -161,10 +162,33 @@ export default function PublicServiceRequest() {
            <button onClick={() => navigate('/Calculator')} className="text-[#3a9e9e] font-bold hover:text-white transition-colors">Klinikkalkylator</button>
            <a href="https://www.stralsakerhetsmyndigheten.se/omraden/kroppsbehandlingar/anmalan-av-estetisk-verksamhet/" target="_blank" rel="noopener noreferrer" className="text-[#3a9e9e] font-bold hover:text-white transition-colors">Anmäl din klinik</a>
         </div>
-        <Button onClick={() => base44.auth.redirectToLogin()} variant="outline" className="text-[#1b3a3a] bg-white hover:bg-slate-100 border-0 hidden sm:flex">
-          <LogIn className="w-4 h-4 mr-2" /> Kundportal
-        </Button>
+        <div className="flex items-center gap-3">
+          <Button onClick={() => base44.auth.redirectToLogin()} variant="outline" className="text-[#1b3a3a] bg-white hover:bg-slate-100 border-0 hidden sm:flex">
+            <LogIn className="w-4 h-4 mr-2" /> Kundportal
+          </Button>
+          <button 
+            className="md:hidden text-white hover:text-white/80 p-1" 
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          >
+            {isMobileMenuOpen ? <X className="w-7 h-7" /> : <Menu className="w-7 h-7" />}
+          </button>
+        </div>
       </header>
+
+      {/* Mobile Menu */}
+      {isMobileMenuOpen && (
+        <div className="md:hidden fixed inset-0 z-40 bg-[#1b3a3a] pt-[88px] px-6 flex flex-col gap-6 text-white text-lg overflow-y-auto pb-10">
+           <a href="#om-oss" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-[#3a9e9e] transition-colors border-b border-white/10 pb-3">Om oss</a>
+           <a href="#tjanster" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-[#3a9e9e] transition-colors border-b border-white/10 pb-3">Våra tjänster</a>
+           <a href="#ssm-lagen" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-[#3a9e9e] transition-colors border-b border-white/10 pb-3">Nya SSM-lagen</a>
+           <a href="#anmalan" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-[#3a9e9e] transition-colors border-b border-white/10 pb-3">Serviceavtal</a>
+           <button onClick={() => { setIsMobileMenuOpen(false); navigate('/Calculator'); }} className="text-[#3a9e9e] font-bold text-left hover:text-white transition-colors border-b border-white/10 pb-3">Klinikkalkylator</button>
+           <a href="https://www.stralsakerhetsmyndigheten.se/omraden/kroppsbehandlingar/anmalan-av-estetisk-verksamhet/" target="_blank" rel="noopener noreferrer" className="text-[#3a9e9e] font-bold hover:text-white transition-colors pb-3">Anmäl din klinik</a>
+           <Button onClick={() => base44.auth.redirectToLogin()} variant="outline" className="text-[#1b3a3a] bg-white hover:bg-slate-100 border-0 mt-4 sm:hidden w-full max-w-sm mx-auto h-12 text-base">
+             <LogIn className="w-5 h-5 mr-2" /> Kundportal
+           </Button>
+        </div>
+      )}
 
       {/* Hero Section */}
       <section className="relative bg-[#002B3C] text-white py-24 px-6 md:px-12 overflow-hidden">
