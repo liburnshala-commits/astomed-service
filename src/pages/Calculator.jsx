@@ -220,8 +220,10 @@ export default function Calculator() {
                 <div className="text-xs text-white/70">Klinikkalkylator</div>
               </div>
             </div>
-            <CardTitle className="flex items-center gap-2"><CalcIcon /> Beräkna din investering</CardTitle>
-            <CardDescription className="text-slate-200">En väg till lönsamhet på 6 minuter</CardDescription>
+            <div className="mt-8 mb-4">
+              <CardTitle className="flex items-center gap-2 text-2xl"><CalcIcon className="w-6 h-6" /> Beräkna din investering</CardTitle>
+              <CardDescription className="text-slate-200 text-base mt-2">En väg till lönsamhet på 6 minuter</CardDescription>
+            </div>
           </CardHeader>
           <CardContent className="p-4 sm:p-6 md:p-8">
             
@@ -284,7 +286,7 @@ export default function Calculator() {
                 </div>
 
                 <div className="pt-6 flex justify-end border-t">
-                  <Button size="lg" className="w-full sm:w-auto" onClick={() => setStep(2)}>
+                  <Button size="lg" className="w-full sm:w-auto h-14" onClick={() => setStep(2)}>
                     Välj arbetsområden <ArrowRight className="ml-2 w-4 h-4"/>
                   </Button>
                 </div>
@@ -335,9 +337,9 @@ export default function Calculator() {
                   ))}
                 </div>
 
-                <div className="pt-6 flex flex-col sm:flex-row gap-3 border-t">
-                  <Button variant="outline" size="lg" onClick={() => setStep(1)} className="sm:w-1/3">Tillbaka</Button>
-                  <Button size="lg" className="flex-1" onClick={() => setStep(3)} disabled={formData.categoryIds.length === 0}>
+                <div className="pt-6 flex flex-col-reverse sm:flex-row gap-3 border-t">
+                  <Button variant="outline" size="lg" onClick={() => setStep(1)} className="w-full sm:w-1/3 h-14">Tillbaka</Button>
+                  <Button size="lg" className="w-full flex-1 h-14" onClick={() => setStep(3)} disabled={formData.categoryIds.length === 0}>
                     Se rekommenderad utrustning <ArrowRight className="ml-2 w-4 h-4"/>
                   </Button>
                 </div>
@@ -460,9 +462,9 @@ export default function Calculator() {
                   </div>
                 )}
 
-                <div className="pt-6 flex flex-col sm:flex-row gap-3 border-t">
-                  <Button variant="outline" size="lg" onClick={() => setStep(2)} className="sm:w-1/3">Tillbaka</Button>
-                  <Button size="lg" className="flex-1" onClick={() => setStep(4)} disabled={formData.machineIds.length === 0}>
+                <div className="pt-6 flex flex-col-reverse sm:flex-row gap-3 border-t">
+                  <Button variant="outline" size="lg" onClick={() => setStep(2)} className="w-full sm:w-1/3 h-14">Tillbaka</Button>
+                  <Button size="lg" className="w-full flex-1 h-14" onClick={() => setStep(4)} disabled={formData.machineIds.length === 0}>
                     Vidare till tilläggstjänster {"&"} produkter <ArrowRight className="ml-2 w-4 h-4"/>
                   </Button>
                 </div>
@@ -527,9 +529,9 @@ export default function Calculator() {
                   </div>
                 </div>
 
-                <div className="pt-6 flex flex-col sm:flex-row gap-3 border-t">
-                  <Button variant="outline" size="lg" onClick={() => setStep(3)} className="sm:w-1/3">Tillbaka</Button>
-                  <Button size="lg" className="flex-1" onClick={() => setStep(5)}>
+                <div className="pt-6 flex flex-col-reverse sm:flex-row gap-3 border-t">
+                  <Button variant="outline" size="lg" onClick={() => setStep(3)} className="w-full sm:w-1/3 h-14">Tillbaka</Button>
+                  <Button size="lg" className="w-full flex-1 h-14" onClick={() => setStep(5)}>
                     Vidare till regelverk &amp; strålskydd <ArrowRight className="ml-2 w-4 h-4"/>
                   </Button>
                 </div>
@@ -612,9 +614,9 @@ export default function Calculator() {
                   </div>
                 </div>
 
-                <div className="pt-6 flex flex-col sm:flex-row gap-3 border-t">
-                  <Button variant="outline" size="lg" onClick={() => setStep(4)} className="sm:w-1/3">Tillbaka</Button>
-                  <Button size="lg" className="flex-1" onClick={() => setStep(6)}>Vidare till finansiering <ArrowRight className="ml-2 w-4 h-4" /></Button>
+                <div className="pt-6 flex flex-col-reverse sm:flex-row gap-3 border-t">
+                  <Button variant="outline" size="lg" onClick={() => setStep(4)} className="w-full sm:w-1/3 h-14">Tillbaka</Button>
+                  <Button size="lg" className="w-full flex-1 h-14" onClick={() => setStep(6)}>Vidare till finansiering <ArrowRight className="ml-2 w-4 h-4" /></Button>
                 </div>
               </div>
             )}
@@ -659,9 +661,9 @@ export default function Calculator() {
                   )}
                 </div>
 
-                <div className="pt-6 flex flex-col sm:flex-row gap-3 border-t">
-                  <Button variant="outline" size="lg" onClick={() => setStep(5)} className="sm:w-1/3">Tillbaka</Button>
-                  <Button size="lg" className="flex-1" onClick={() => setStep(7)}>Gå vidare till ekonomi <ArrowRight className="ml-2 w-4 h-4" /></Button>
+                <div className="pt-6 flex flex-col-reverse sm:flex-row gap-3 border-t">
+                  <Button variant="outline" size="lg" onClick={() => setStep(5)} className="w-full sm:w-1/3 h-14">Tillbaka</Button>
+                  <Button size="lg" className="w-full flex-1 h-14" onClick={() => setStep(7)}>Gå vidare till ekonomi <ArrowRight className="ml-2 w-4 h-4" /></Button>
                 </div>
               </div>
             )}
@@ -803,9 +805,9 @@ export default function Calculator() {
                      </div>
                    </div>
                 </div>
-                <div className="pt-6 flex flex-col sm:flex-row gap-3 border-t">
-                  <Button variant="outline" size="lg" onClick={() => setStep(6)} className="sm:w-1/3">Tillbaka</Button>
-                  <Button size="lg" className="flex-1" onClick={() => setStep(8)}>Gå vidare till slutförande <ArrowRight className="ml-2 w-4 h-4" /></Button>
+                <div className="pt-6 flex flex-col-reverse sm:flex-row gap-3 border-t">
+                  <Button variant="outline" size="lg" onClick={() => setStep(6)} className="w-full sm:w-1/3 h-14">Tillbaka</Button>
+                  <Button size="lg" className="w-full flex-1 h-14" onClick={() => setStep(8)}>Gå vidare till slutförande <ArrowRight className="ml-2 w-4 h-4" /></Button>
                 </div>
               </div>
             )}
@@ -835,11 +837,11 @@ export default function Calculator() {
                      <Input className="bg-white text-slate-900 font-medium placeholder:text-slate-400 placeholder:font-normal" placeholder="Min Klinik AB" value={formData.company} onChange={e => handleUpdate("company", e.target.value)}/>
                    </div>
                 </div>
-                <div className="pt-6 flex flex-col sm:flex-row gap-3 border-t">
-                  <Button variant="outline" size="lg" onClick={() => setStep(7)} disabled={isSubmitting} className="sm:w-1/3">Tillbaka</Button>
+                <div className="pt-6 flex flex-col-reverse sm:flex-row gap-3 border-t">
+                  <Button variant="outline" size="lg" onClick={() => setStep(7)} disabled={isSubmitting} className="w-full sm:w-1/3 h-14">Tillbaka</Button>
                   <Button 
                     size="lg" 
-                    className="flex-1" 
+                    className="w-full flex-1 h-14" 
                     disabled={!formData.fullName || !formData.email || !formData.phone || isSubmitting}
                     onClick={async () => {
                       setIsSubmitting(true);
@@ -1183,9 +1185,9 @@ export default function Calculator() {
                   </div>
                 </div>
 
-                <div className="flex flex-col sm:flex-row gap-3 pt-6 border-t">
-                  <Button variant="outline" size="lg" onClick={() => setStep(8)} className="sm:w-1/3">Tillbaka till uppgifter</Button>
-                  <Button size="lg" className="flex-1" onClick={() => window.location.reload()}>Gör en ny beräkning</Button>
+                <div className="flex flex-col-reverse sm:flex-row gap-3 pt-6 border-t">
+                  <Button variant="outline" size="lg" onClick={() => setStep(8)} className="w-full sm:w-1/3 h-14">Tillbaka till uppgifter</Button>
+                  <Button size="lg" className="w-full flex-1 h-14" onClick={() => window.location.reload()}>Gör en ny beräkning</Button>
                 </div>
               </div>
             )}
