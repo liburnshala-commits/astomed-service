@@ -224,7 +224,7 @@ export default function Calculator() {
               </div>
             </div>
             <div className="mt-8 mb-4 text-center">
-              <CardTitle className="flex items-center justify-center gap-2 text-xl font-medium"><CalcIcon className="w-5 h-5" /> Skapa din affärsplan</CardTitle>
+              <CardTitle className="flex items-center justify-center gap-2 text-lg font-medium"><CalcIcon className="w-4 h-4" /> Skapa din affärsplan</CardTitle>
             </div>
             {/* Progress bar */}
             <div className="absolute bottom-0 left-0 right-0 h-1.5 bg-black/20">
