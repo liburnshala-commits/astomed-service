@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Checkbox } from "@/components/ui/checkbox";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
+import { Slider } from "@/components/ui/slider";
 import { Calculator as CalcIcon, ArrowRight, AlertTriangle, ShieldCheck, TrendingUp, Lightbulb, CheckCircle2, Info, BookOpen, ClipboardCheck, GraduationCap, Wrench, FileText, Handshake } from "lucide-react";
 
 const astomedCategories = [
@@ -224,6 +225,10 @@ export default function Calculator() {
             <div className="mt-8 mb-4 text-right">
               <CardTitle className="flex items-center justify-end gap-2 text-2xl"><CalcIcon className="w-6 h-6" /> Beräkna din investering</CardTitle>
               <CardDescription className="text-slate-200 text-base mt-2">En väg till lönsamhet på 6 minuter</CardDescription>
+            </div>
+            {/* Progress bar */}
+            <div className="absolute bottom-0 left-0 right-0 h-1.5 bg-black/20">
+              <div className="h-full bg-teal-400 transition-all duration-500 ease-out" style={{ width: `${(step / 9) * 100}%` }} />
             </div>
           </CardHeader>
           <CardContent className="p-4 sm:p-6 md:p-8">
@@ -602,16 +607,18 @@ export default function Calculator() {
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 bg-slate-50 p-5 md:p-6 rounded-xl border border-slate-100">
-                     <div className="space-y-2">
-                       <Label className="text-slate-700 font-semibold">Inredning {"&"} Brits (kr)</Label>
-                       <Input type="number" className="bg-white text-slate-900 font-medium h-11" value={formData.interiorCost} onChange={e => handleUpdate("interiorCost", Number(e.target.value))}/>
-                       <p className="text-xs text-slate-500 flex items-start gap-1"><Info className="w-3 h-3 mt-0.5 shrink-0" /> Möbler och belysning.</p>
-                     </div>
-                     <div className="space-y-2">
-                       <Label className="text-slate-700 font-semibold">Övriga Kostnader (kr)</Label>
-                       <Input type="number" className="bg-white text-slate-900 font-medium h-11" value={formData.otherStartup} onChange={e => handleUpdate("otherStartup", Number(e.target.value))}/>
-                       <p className="text-xs text-slate-500 flex items-start gap-1"><Info className="w-3 h-3 mt-0.5 shrink-0" /> El, vatten, avfall och andra utgifter.</p>
-                     </div>
+                    <div className="space-y-2">
+                      <Label className="text-slate-700 font-semibold">Inredning {"&"} Brits (kr)</Label>
+                      <Input type="number" className="bg-white text-slate-900 font-medium h-11" value={formData.interiorCost} onChange={e => handleUpdate("interiorCost", Number(e.target.value))}/>
+                      <Slider value={[formData.interiorCost]} onValueChange={v => handleUpdate("interiorCost", v[0])} max={200000} step={1000} className="py-2" />
+                      <p className="text-xs text-slate-500 flex items-start gap-1"><Info className="w-3 h-3 mt-0.5 shrink-0" /> Möbler och belysning.</p>
+                    </div>
+                    <div className="space-y-2">
+                      <Label className="text-slate-700 font-semibold">Övriga Kostnader (kr)</Label>
+                      <Input type="number" className="bg-white text-slate-900 font-medium h-11" value={formData.otherStartup} onChange={e => handleUpdate("otherStartup", Number(e.target.value))}/>
+                      <Slider value={[formData.otherStartup]} onValueChange={v => handleUpdate("otherStartup", v[0])} max={150000} step={1000} className="py-2" />
+                      <p className="text-xs text-slate-500 flex items-start gap-1"><Info className="w-3 h-3 mt-0.5 shrink-0" /> El, vatten, avfall och andra utgifter.</p>
+                    </div>
                   </div>
                 </div>
 
@@ -671,6 +678,18 @@ export default function Calculator() {
 
             {step === 7 && (
               <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
+                {/* Live result floating bar */}
+                <div className="sticky top-[70px] sm:top-4 z-40 bg-slate-900 text-white p-4 rounded-xl shadow-2xl mb-6 flex justify-between items-center border border-slate-700/50 backdrop-blur-md">
+                  <div>
+                    <div className="text-[10px] sm:text-xs text-teal-300 uppercase font-bold tracking-wider mb-0.5">Förväntad Vinst / Mån</div>
+                    <div className="text-xl sm:text-2xl font-black text-white">{Math.round(monthlyProfitAfterTax).toLocaleString()} kr</div>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-[10px] sm:text-xs text-amber-300 uppercase font-bold tracking-wider mb-0.5">Break-even</div>
+                    <div className="text-lg sm:text-xl font-bold">{breakEvenMonths} mån</div>
+                  </div>
+                </div>
+
                 <div className="text-center space-y-3 pb-6 border-b">
                   <Badge variant="outline" className="bg-primary/5 text-primary border-primary/20 mb-2">Ekonomi</Badge>
                   <h3 className="font-bold text-2xl mb-1">Löpande Månadskostnader {"&"} Intäkter</h3>
@@ -695,22 +714,32 @@ export default function Calculator() {
                        return (
                          <div key={m.id} className="bg-slate-50 p-4 rounded-xl border border-slate-200">
                            <h5 className="font-semibold text-slate-800 mb-3">{m.name}</h5>
-                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                              <div className="space-y-2">
                                <Label>Snittpris / behandling (inkl. moms)</Label>
-                               <Input type="number" className="bg-white text-slate-900 font-medium" value={stat.price} onChange={e => {
+                               <Input type="number" className="bg-white text-slate-900 font-medium h-11" value={stat.price} onChange={e => {
                                  setFormData(prev => ({
                                    ...prev, machineStats: { ...prev.machineStats, [m.id]: { ...stat, price: Number(e.target.value) } }
                                  }));
                                }}/>
+                               <Slider value={[stat.price]} onValueChange={v => {
+                                 setFormData(prev => ({
+                                   ...prev, machineStats: { ...prev.machineStats, [m.id]: { ...stat, price: v[0] } }
+                                 }));
+                               }} max={10000} step={100} className="py-2" />
                              </div>
                              <div className="space-y-2">
                                <Label>Behandlingar / vecka</Label>
-                               <Input type="number" className="bg-white text-slate-900 font-medium" value={stat.treatments} onChange={e => {
+                               <Input type="number" className="bg-white text-slate-900 font-medium h-11" value={stat.treatments} onChange={e => {
                                  setFormData(prev => ({
                                    ...prev, machineStats: { ...prev.machineStats, [m.id]: { ...stat, treatments: Number(e.target.value) } }
                                  }));
                                }}/>
+                               <Slider value={[stat.treatments]} onValueChange={v => {
+                                 setFormData(prev => ({
+                                   ...prev, machineStats: { ...prev.machineStats, [m.id]: { ...stat, treatments: v[0] } }
+                                 }));
+                               }} max={100} step={1} className="py-2" />
                              </div>
                            </div>
                          </div>
@@ -747,14 +776,16 @@ export default function Calculator() {
                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 animate-in fade-in duration-300">
                              <div className="space-y-2">
                                <Label className="text-teal-50">Antal anställda (heltid)</Label>
-                               <Input type="number" min="1" className="bg-white/10 border-white/20 text-white font-medium focus:bg-white/20" value={formData.employeeCount} onChange={e => handleUpdate("employeeCount", Math.max(1, Number(e.target.value)))}/>
+                               <Input type="number" min="1" className="bg-white/10 border-white/20 text-white font-medium h-11 focus:bg-white/20" value={formData.employeeCount} onChange={e => handleUpdate("employeeCount", Math.max(1, Number(e.target.value)))}/>
+                               <Slider value={[formData.employeeCount]} onValueChange={v => handleUpdate("employeeCount", Math.max(1, v[0]))} max={10} step={1} className="py-2 [&_[role=slider]]:bg-teal-400 [&_[role=slider]]:border-teal-400 [&_.bg-primary]:bg-teal-400" />
                                {formData.employeeCount < selectedMachines.length && (
                                  <p className="text-xs text-amber-300 font-medium mt-1">Tips: Med {selectedMachines.length} maskiner kan du behöva fler anställda.</p>
                                )}
                              </div>
                              <div className="space-y-2">
                                <Label className="text-teal-50">Snittlön (brutto per anställd)</Label>
-                               <Input type="number" className="bg-white/10 border-white/20 text-white font-medium focus:bg-white/20" value={formData.salaryPerEmployee} onChange={e => handleUpdate("salaryPerEmployee", Number(e.target.value))}/>
+                               <Input type="number" className="bg-white/10 border-white/20 text-white font-medium h-11 focus:bg-white/20" value={formData.salaryPerEmployee} onChange={e => handleUpdate("salaryPerEmployee", Number(e.target.value))}/>
+                               <Slider value={[formData.salaryPerEmployee]} onValueChange={v => handleUpdate("salaryPerEmployee", v[0])} max={80000} step={1000} className="py-2 [&_[role=slider]]:bg-teal-400 [&_[role=slider]]:border-teal-400 [&_.bg-primary]:bg-teal-400" />
                                <p className="text-xs text-teal-100/70 mt-1">Kalkylen lägger till sociala avgifter (31,42%), semester (12%) {"&"} pension (~10%).</p>
                              </div>
                            </div>
@@ -775,16 +806,19 @@ export default function Calculator() {
                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                        <div className="space-y-2">
                          <Label>Hyra (exkl. moms, kr/mån)</Label>
-                         <Input type="number" className="bg-white text-slate-900 font-medium" value={formData.rent} onChange={e => handleUpdate("rent", Number(e.target.value))}/>
+                         <Input type="number" className="bg-white text-slate-900 font-medium h-11" value={formData.rent} onChange={e => handleUpdate("rent", Number(e.target.value))}/>
+                         <Slider value={[formData.rent]} onValueChange={v => handleUpdate("rent", v[0])} max={100000} step={1000} className="py-2" />
                          <p className="text-xs text-slate-500">Valfritt. Kan sättas till 0 om du redan har en lokal.</p>
                        </div>
                        <div className="space-y-2">
                          <Label>Bokningssystem (t.ex. Bokadirekt, kr/mån)</Label>
-                         <Input type="number" className="bg-white text-slate-900 font-medium" value={formData.bookingSystem} onChange={e => handleUpdate("bookingSystem", Number(e.target.value))}/>
+                         <Input type="number" className="bg-white text-slate-900 font-medium h-11" value={formData.bookingSystem} onChange={e => handleUpdate("bookingSystem", Number(e.target.value))}/>
+                         <Slider value={[formData.bookingSystem]} onValueChange={v => handleUpdate("bookingSystem", v[0])} max={5000} step={100} className="py-2" />
                        </div>
-                       <div className="space-y-2">
+                       <div className="space-y-2 sm:col-span-2">
                          <Label>Försäkring {"&"} Marknadsföring (kr/mån)</Label>
-                         <Input type="number" className="bg-white text-slate-900 font-medium" value={formData.insuranceAndOther} onChange={e => handleUpdate("insuranceAndOther", Number(e.target.value))}/>
+                         <Input type="number" className="bg-white text-slate-900 font-medium h-11" value={formData.insuranceAndOther} onChange={e => handleUpdate("insuranceAndOther", Number(e.target.value))}/>
+                         <Slider value={[formData.insuranceAndOther]} onValueChange={v => handleUpdate("insuranceAndOther", v[0])} max={50000} step={500} className="py-2" />
                        </div>
                      </div>
                    </div>
