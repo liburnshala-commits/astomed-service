@@ -320,70 +320,60 @@ export default function Calculator() {
             )}
 
             {step === 2 && (
-              <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500" key={`cat-${categoryStep}`}>
+              <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
                 <div className="text-center space-y-3 pb-6 border-b">
                   <Badge variant="outline" className="bg-primary/5 text-primary border-primary/20 mb-2">
-                    Behandlingsområden ({categoryStep + 1} av {astomedCategories.length})
+                    Behandlingsområden
                   </Badge>
                   <h3 className="font-bold text-2xl mb-1">
-                    {astomedCategories[categoryStep].id === "ovriga" 
-                      ? "Vill du utforska övriga maskiner som kan komplettera din klinik?"
-                      : `Vill du erbjuda ${astomedCategories[categoryStep].title.toLowerCase()}?`
-                    }
+                    Vilka behandlingar vill du erbjuda?
                   </h3>
                   <p className="text-slate-500 text-sm max-w-2xl mx-auto">
-                    Läs mer om området nedan och kryssa i rutan om det är något du vill arbeta med på din klinik.
+                    Välj ett eller flera områden du vill arbeta med på din klinik.
                   </p>
                 </div>
                 
-                <div className="max-w-xl mx-auto">
-                  <div 
-                    className={`rounded-xl border-2 transition-all cursor-pointer overflow-hidden flex flex-col ${formData.categoryIds.includes(astomedCategories[categoryStep].id) ? 'border-teal-600 ring-2 ring-teal-600/20 shadow-md' : 'border-slate-200 hover:border-teal-300'}`} 
-                    onClick={() => {
-                      const cat = astomedCategories[categoryStep];
-                      const isSelected = formData.categoryIds.includes(cat.id);
-                      handleUpdate("categoryIds", isSelected 
-                        ? formData.categoryIds.filter(id => id !== cat.id)
-                        : [...formData.categoryIds, cat.id]
-                      );
-                    }}
-                  >
-                    <div className="relative h-64 bg-slate-100 overflow-hidden">
-                      {astomedCategories[categoryStep].image && (
-                        <img src={astomedCategories[categoryStep].image} alt={astomedCategories[categoryStep].title} className="w-full h-full object-cover" />
-                      )}
-                      <div className={`absolute inset-0 transition-all ${formData.categoryIds.includes(astomedCategories[categoryStep].id) ? 'bg-teal-600/20' : 'bg-black/0'}`} />
-                    </div>
-                    <div className={`p-6 flex-1 flex flex-col gap-4 ${formData.categoryIds.includes(astomedCategories[categoryStep].id) ? 'bg-teal-50' : 'bg-white'}`}>
-                      <div className="flex items-center gap-3">
-                        <Checkbox 
-                          checked={formData.categoryIds.includes(astomedCategories[categoryStep].id)} 
-                          onCheckedChange={() => {}} 
-                          className="w-6 h-6 data-[state=checked]:bg-teal-600 data-[state=checked]:border-teal-600 pointer-events-none"
-                        />
-                        <Label className="text-lg sm:text-xl font-bold text-slate-900 cursor-pointer flex-1 pointer-events-none">
-                          {astomedCategories[categoryStep].id === "ovriga" 
-                            ? "Jag vill gärna läsa mer om andra maskiner"
-                            : `Ja, jag vill erbjuda ${astomedCategories[categoryStep].title.toLowerCase()}`
-                          }
-                        </Label>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-4xl mx-auto">
+                  {astomedCategories.map((category) => (
+                    <div 
+                      key={category.id}
+                      className={`rounded-xl border-2 transition-all cursor-pointer overflow-hidden flex flex-col ${formData.categoryIds.includes(category.id) ? 'border-teal-600 ring-2 ring-teal-600/20 shadow-md' : 'border-slate-200 hover:border-teal-300'}`} 
+                      onClick={() => {
+                        const isSelected = formData.categoryIds.includes(category.id);
+                        handleUpdate("categoryIds", isSelected 
+                          ? formData.categoryIds.filter(id => id !== category.id)
+                          : [...formData.categoryIds, category.id]
+                        );
+                      }}
+                    >
+                      <div className="relative h-48 bg-slate-100 overflow-hidden">
+                        {category.image && (
+                          <img src={category.image} alt={category.title} className="w-full h-full object-cover" />
+                        )}
+                        <div className={`absolute inset-0 transition-all ${formData.categoryIds.includes(category.id) ? 'bg-teal-600/20' : 'bg-black/0'}`} />
                       </div>
-                      <p className="text-base text-slate-600 leading-relaxed">{astomedCategories[categoryStep].description}</p>
+                      <div className={`p-5 flex-1 flex flex-col gap-3 ${formData.categoryIds.includes(category.id) ? 'bg-teal-50' : 'bg-white'}`}>
+                        <div className="flex items-center gap-3">
+                          <Checkbox 
+                            checked={formData.categoryIds.includes(category.id)} 
+                            onCheckedChange={() => {}} 
+                            className="w-5 h-5 data-[state=checked]:bg-teal-600 data-[state=checked]:border-teal-600 pointer-events-none"
+                          />
+                          <Label className="text-base font-bold text-slate-900 cursor-pointer flex-1 pointer-events-none">
+                            {category.title}
+                          </Label>
+                        </div>
+                        <p className="text-sm text-slate-600 leading-relaxed line-clamp-3 pointer-events-none">{category.description}</p>
+                      </div>
                     </div>
-                  </div>
+                  ))}
                 </div>
 
                 <div className="pt-6 flex flex-col-reverse sm:flex-row gap-3 border-t">
                   <Button 
                     variant="outline" 
                     size="lg" 
-                    onClick={() => {
-                      if (categoryStep > 0) {
-                        setCategoryStep(categoryStep - 1);
-                      } else {
-                        setStep(1);
-                      }
-                    }} 
+                    onClick={() => setStep(1)} 
                     className="w-full sm:w-1/3 h-14"
                   >
                     Tillbaka
@@ -391,19 +381,13 @@ export default function Calculator() {
                   <Button 
                     size="lg" 
                     className="w-full sm:w-2/3 h-14" 
-                    onClick={() => {
-                      if (categoryStep < astomedCategories.length - 1) {
-                        setCategoryStep(categoryStep + 1);
-                      } else {
-                        setStep(3);
-                      }
-                    }}
-                    disabled={categoryStep === astomedCategories.length - 1 && formData.categoryIds.length === 0}
+                    onClick={() => setStep(3)}
+                    disabled={formData.categoryIds.length === 0}
                   >
-                    {categoryStep < astomedCategories.length - 1 ? "Nästa område" : "Se rekommenderad utrustning"} <ArrowRight className="ml-2 w-4 h-4"/>
+                    Se rekommenderad utrustning <ArrowRight className="ml-2 w-4 h-4"/>
                   </Button>
                 </div>
-                {categoryStep === astomedCategories.length - 1 && formData.categoryIds.length === 0 && (
+                {formData.categoryIds.length === 0 && (
                   <p className="text-center text-sm text-amber-600 mt-2 font-medium">Du måste välja minst ett område för att gå vidare.</p>
                 )}
               </div>
