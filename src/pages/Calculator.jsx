@@ -246,56 +246,75 @@ export default function Calculator() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <Card className="border-slate-200 shadow-sm hover:shadow-md transition-shadow cursor-pointer" onClick={() => { setCategoryStep(0); setStep(2); }}>
-                    <CardContent className="p-4 sm:p-5 flex gap-4">
-                      <div className="bg-blue-50 p-3 rounded-xl h-fit"><Handshake className="w-6 h-6 text-blue-600" /></div>
-                      <div>
-                        <h4 className="font-bold text-slate-900">Process {"&"} Start</h4>
-                        <p className="text-sm text-slate-600 mt-1">Vi hjälper dig med affärsplan, finansieringslösningar och guidar dig genom de anmälningar som krävs till kommunen.</p>
+                    <CardContent className="p-4 sm:p-5 flex gap-4 flex-col h-full">
+                      <div className="flex gap-4">
+                        <div className="bg-blue-50 p-3 rounded-xl h-fit"><Handshake className="w-6 h-6 text-blue-600" /></div>
+                        <div className="flex-1">
+                          <h4 className="font-bold text-slate-900">Process {"&"} Start</h4>
+                          <p className="text-sm text-slate-600 mt-1">Vi hjälper dig med affärsplan, finansieringslösningar och guidar dig genom de anmälningar som krävs till kommunen.</p>
+                        </div>
+                      </div>
+                      <div className="text-xs text-teal-600 font-semibold flex items-center gap-1 mt-auto pt-3 border-t border-slate-100">
+                        Gå vidare <ArrowRight className="w-3 h-3" />
                       </div>
                     </CardContent>
                   </Card>
                   <Card className="border-slate-200 shadow-sm hover:shadow-md transition-shadow cursor-pointer" onClick={() => { setCategoryStep(0); setStep(2); }}>
-                    <CardContent className="p-4 sm:p-5 flex gap-4">
-                      <div className="bg-emerald-50 p-3 rounded-xl h-fit"><ShieldCheck className="w-6 h-6 text-emerald-600" /></div>
-                      <div>
-                        <h4 className="font-bold text-slate-900">Regelverk {"&"} Säkerhet</h4>
-                        <p className="text-sm text-slate-600 mt-1">Få stöd att uppfylla kraven från SSMFS och Miljöbalken, inklusive egenkontroll och upprättande av skyddsrutiner.</p>
+                    <CardContent className="p-4 sm:p-5 flex gap-4 flex-col h-full">
+                      <div className="flex gap-4">
+                        <div className="bg-emerald-50 p-3 rounded-xl h-fit"><ShieldCheck className="w-6 h-6 text-emerald-600" /></div>
+                        <div className="flex-1">
+                          <h4 className="font-bold text-slate-900">Regelverk {"&"} Säkerhet</h4>
+                          <p className="text-sm text-slate-600 mt-1">Få stöd att uppfylla kraven från SSMFS och Miljöbalken, inklusive egenkontroll och upprättande av skyddsrutiner.</p>
+                        </div>
+                      </div>
+                      <div className="text-xs text-teal-600 font-semibold flex items-center gap-1 mt-auto pt-3 border-t border-slate-100">
+                        Gå vidare <ArrowRight className="w-3 h-3" />
                       </div>
                     </CardContent>
                   </Card>
                   <Card className="border-slate-200 shadow-sm hover:shadow-md transition-shadow cursor-pointer" onClick={() => { setCategoryStep(0); setStep(2); }}>
-                    <CardContent className="p-4 sm:p-5 flex gap-4">
-                      <div className="bg-purple-50 p-3 rounded-xl h-fit"><GraduationCap className="w-6 h-6 text-purple-600" /></div>
-                      <div>
-                        <h4 className="font-bold text-slate-900">Utbildning {"&"} Kompetens</h4>
-                        <p className="text-sm text-slate-600 mt-1">Gedigna certifieringsutbildningar för dig och din personal, samt löpande kunskapslyft för att ni alltid ska ligga i framkant.</p>
+                    <CardContent className="p-4 sm:p-5 flex gap-4 flex-col h-full">
+                      <div className="flex gap-4">
+                        <div className="bg-purple-50 p-3 rounded-xl h-fit"><GraduationCap className="w-6 h-6 text-purple-600" /></div>
+                        <div className="flex-1">
+                          <h4 className="font-bold text-slate-900">Utbildning {"&"} Kompetens</h4>
+                          <p className="text-sm text-slate-600 mt-1">Gedigna certifieringsutbildningar för dig och din personal, samt löpande kunskapslyft för att ni alltid ska ligga i framkant.</p>
+                        </div>
+                      </div>
+                      <div className="text-xs text-teal-600 font-semibold flex items-center gap-1 mt-auto pt-3 border-t border-slate-100">
+                        Gå vidare <ArrowRight className="w-3 h-3" />
                       </div>
                     </CardContent>
                   </Card>
                   <Card className="border-slate-200 shadow-sm hover:shadow-md transition-shadow cursor-pointer" onClick={() => { setCategoryStep(0); setStep(2); }}>
-                    <CardContent className="p-4 sm:p-5 flex gap-4">
-                      <div className="bg-orange-50 p-3 rounded-xl h-fit"><Wrench className="w-6 h-6 text-orange-600" /></div>
-                      <div>
-                        <h4 className="font-bold text-slate-900">Service {"&"} Drift</h4>
-                        <p className="text-sm text-slate-600 mt-1">Våra serviceavtal säkerställer att er utrustning fungerar tryggt, minimerar driftstopp och ger snabb teknisk support.</p>
+                    <CardContent className="p-4 sm:p-5 flex gap-4 flex-col h-full">
+                      <div className="flex gap-4">
+                        <div className="bg-orange-50 p-3 rounded-xl h-fit"><Wrench className="w-6 h-6 text-orange-600" /></div>
+                        <div className="flex-1">
+                          <h4 className="font-bold text-slate-900">Service {"&"} Drift</h4>
+                          <p className="text-sm text-slate-600 mt-1">Våra serviceavtal säkerställer att er utrustning fungerar tryggt, minimerar driftstopp och ger snabb teknisk support.</p>
+                        </div>
+                      </div>
+                      <div className="text-xs text-teal-600 font-semibold flex items-center gap-1 mt-auto pt-3 border-t border-slate-100">
+                        Gå vidare <ArrowRight className="w-3 h-3" />
                       </div>
                     </CardContent>
                   </Card>
                   <Card className="border-slate-200 shadow-sm hover:shadow-md transition-shadow sm:col-span-2 cursor-pointer" onClick={() => { setCategoryStep(0); setStep(2); }}>
-                    <CardContent className="p-4 sm:p-5 flex gap-4">
-                      <div className="bg-rose-50 p-3 rounded-xl h-fit"><FileText className="w-6 h-6 text-rose-600" /></div>
-                      <div>
-                        <h4 className="font-bold text-slate-900">Portal {"&"} Aktuell info</h4>
-                        <p className="text-sm text-slate-600 mt-1">I vår kundportal får du direkt tillgång till dina certifikat, behandlingsprotokoll, serviceloggar och den senaste branschinformationen.</p>
+                    <CardContent className="p-4 sm:p-5 flex gap-4 flex-col h-full">
+                      <div className="flex gap-4">
+                        <div className="bg-rose-50 p-3 rounded-xl h-fit"><FileText className="w-6 h-6 text-rose-600" /></div>
+                        <div className="flex-1">
+                          <h4 className="font-bold text-slate-900">Portal {"&"} Aktuell info</h4>
+                          <p className="text-sm text-slate-600 mt-1">I vår kundportal får du direkt tillgång till dina certifikat, behandlingsprotokoll, serviceloggar och den senaste branschinformationen.</p>
+                        </div>
+                      </div>
+                      <div className="text-xs text-teal-600 font-semibold flex items-center gap-1 mt-auto pt-3 border-t border-slate-100">
+                        Gå vidare <ArrowRight className="w-3 h-3" />
                       </div>
                     </CardContent>
                   </Card>
-                </div>
-
-                <div className="pt-6 flex justify-end border-t">
-                  <Button size="lg" className="w-full sm:w-auto h-14" onClick={() => { setCategoryStep(0); setStep(2); }}>
-                    Välj arbetsområden <ArrowRight className="ml-2 w-4 h-4"/>
-                  </Button>
                 </div>
               </div>
             )}
