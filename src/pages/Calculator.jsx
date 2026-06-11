@@ -310,10 +310,13 @@ export default function Calculator() {
                       className={`rounded-xl border-2 transition-all cursor-pointer overflow-hidden flex flex-col ${formData.categoryIds.includes(category.id) ? 'border-teal-600' : 'border-slate-200 hover:border-teal-300'}`} 
                       onClick={() => {
                         const isSelected = formData.categoryIds.includes(category.id);
-                        handleUpdate("categoryIds", isSelected 
+                        const newCategoryIds = isSelected 
                           ? formData.categoryIds.filter(id => id !== category.id)
-                          : [...formData.categoryIds, category.id]
-                        );
+                          : [...formData.categoryIds, category.id];
+                        handleUpdate("categoryIds", newCategoryIds);
+                        if (newCategoryIds.length > 0) {
+                          setStep(3);
+                        }
                       }}
                     >
                       <div className="relative h-40 bg-slate-100 overflow-hidden">
