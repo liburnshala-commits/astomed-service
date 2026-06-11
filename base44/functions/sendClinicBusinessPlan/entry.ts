@@ -1,5 +1,6 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.31';
 import { jsPDF } from 'npm:jspdf@4.0.0';
+import nodemailer from 'npm:nodemailer';
 
 Deno.serve(async (req) => {
     try {
@@ -290,14 +291,36 @@ Deno.serve(async (req) => {
 `;
 
         try {
-            await base44.asServiceRole.integrations.Core.SendEmail({
-                to: formData.email,
-                subject: "Din affärsplan och kalkyl från Astomed",
-                body: emailBody,
-                from_name: "Astomed Pro"
-            });
+            // Använder nodemailer med egna SMTP-uppgifter istället för den inbyggda integrationen
+            // för att undvika eventuella sandbox-begränsningar.
+            if (Deno.env.get("SMTP_HOST") && Deno.env.get("SMTP_USER")) {
+                const transporter = nodemailer.createTransport({
+                    host: Deno.env.get("SMTP_HOST"),
+                    port: parseInt(Deno.env.get("SMTP_PORT") || "465"),
+                    secure: parseInt(Deno.env.get("SMTP_PORT")) === 465,
+                    auth: {
+                        user: Deno.env.get("SMTP_USER"),
+                        pass: Deno.env.get("SMTP_PASSWORD"),
+                    },
+                });
+
+                await transporter.sendMail({
+                    from: '"Astomed Pro" <' + Deno.env.get("SMTP_USER") + '>',
+                    to: formData.email,
+                    subject: "Din affärsplan och kalkyl från Astomed",
+                    html: emailBody,
+                });
+            } else {
+                // Fallback till Base44 Core.SendEmail om SMTP-uppgifter saknas
+                await base44.asServiceRole.integrations.Core.SendEmail({
+                    to: formData.email,
+                    subject: "Din affärsplan och kalkyl från Astomed",
+                    body: emailBody,
+                    from_name: "Astomed Pro"
+                });
+            }
         } catch (emailError) {
-            console.warn("Kunde inte skicka e-post (oftast sandbox-begränsning):", emailError.message);
+            console.warn("Kunde inte skicka e-post:", emailError.message);
         }
         
         // 4. Register Lead in system as ClinicCalculation
