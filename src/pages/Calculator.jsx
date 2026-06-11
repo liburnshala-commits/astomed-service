@@ -88,6 +88,7 @@ const astomedCategories = [
 export default function Calculator() {
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
+  const [categoryStep, setCategoryStep] = useState(0);
   const [products, setProducts] = useState([]);
   const [templates, setTemplates] = useState([]);
   const [formData, setFormData] = useState({
@@ -244,7 +245,7 @@ export default function Calculator() {
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <Card className="border-slate-200 shadow-sm hover:shadow-md transition-shadow cursor-pointer" onClick={() => setStep(2)}>
+                  <Card className="border-slate-200 shadow-sm hover:shadow-md transition-shadow cursor-pointer" onClick={() => { setCategoryStep(0); setStep(2); }}>
                     <CardContent className="p-4 sm:p-5 flex gap-4">
                       <div className="bg-blue-50 p-3 rounded-xl h-fit"><Handshake className="w-6 h-6 text-blue-600" /></div>
                       <div>
@@ -253,7 +254,7 @@ export default function Calculator() {
                       </div>
                     </CardContent>
                   </Card>
-                  <Card className="border-slate-200 shadow-sm hover:shadow-md transition-shadow cursor-pointer" onClick={() => setStep(2)}>
+                  <Card className="border-slate-200 shadow-sm hover:shadow-md transition-shadow cursor-pointer" onClick={() => { setCategoryStep(0); setStep(2); }}>
                     <CardContent className="p-4 sm:p-5 flex gap-4">
                       <div className="bg-emerald-50 p-3 rounded-xl h-fit"><ShieldCheck className="w-6 h-6 text-emerald-600" /></div>
                       <div>
@@ -262,7 +263,7 @@ export default function Calculator() {
                       </div>
                     </CardContent>
                   </Card>
-                  <Card className="border-slate-200 shadow-sm hover:shadow-md transition-shadow cursor-pointer" onClick={() => setStep(2)}>
+                  <Card className="border-slate-200 shadow-sm hover:shadow-md transition-shadow cursor-pointer" onClick={() => { setCategoryStep(0); setStep(2); }}>
                     <CardContent className="p-4 sm:p-5 flex gap-4">
                       <div className="bg-purple-50 p-3 rounded-xl h-fit"><GraduationCap className="w-6 h-6 text-purple-600" /></div>
                       <div>
@@ -271,7 +272,7 @@ export default function Calculator() {
                       </div>
                     </CardContent>
                   </Card>
-                  <Card className="border-slate-200 shadow-sm hover:shadow-md transition-shadow cursor-pointer" onClick={() => setStep(2)}>
+                  <Card className="border-slate-200 shadow-sm hover:shadow-md transition-shadow cursor-pointer" onClick={() => { setCategoryStep(0); setStep(2); }}>
                     <CardContent className="p-4 sm:p-5 flex gap-4">
                       <div className="bg-orange-50 p-3 rounded-xl h-fit"><Wrench className="w-6 h-6 text-orange-600" /></div>
                       <div>
@@ -280,7 +281,7 @@ export default function Calculator() {
                       </div>
                     </CardContent>
                   </Card>
-                  <Card className="border-slate-200 shadow-sm hover:shadow-md transition-shadow sm:col-span-2 cursor-pointer" onClick={() => setStep(2)}>
+                  <Card className="border-slate-200 shadow-sm hover:shadow-md transition-shadow sm:col-span-2 cursor-pointer" onClick={() => { setCategoryStep(0); setStep(2); }}>
                     <CardContent className="p-4 sm:p-5 flex gap-4">
                       <div className="bg-rose-50 p-3 rounded-xl h-fit"><FileText className="w-6 h-6 text-rose-600" /></div>
                       <div>
@@ -292,7 +293,7 @@ export default function Calculator() {
                 </div>
 
                 <div className="pt-6 flex justify-end border-t">
-                  <Button size="lg" className="w-full sm:w-auto h-14" onClick={() => setStep(2)}>
+                  <Button size="lg" className="w-full sm:w-auto h-14" onClick={() => { setCategoryStep(0); setStep(2); }}>
                     Välj arbetsområden <ArrowRight className="ml-2 w-4 h-4"/>
                   </Button>
                 </div>
@@ -300,55 +301,84 @@ export default function Calculator() {
             )}
 
             {step === 2 && (
-              <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
+              <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500" key={`cat-${categoryStep}`}>
                 <div className="text-center space-y-3 pb-6 border-b">
-                  <Badge variant="outline" className="bg-primary/5 text-primary border-primary/20 mb-2">Behandlingsområden</Badge>
-                  <h3 className="font-bold text-2xl mb-1">Vad vill du jobba med?</h3>
+                  <Badge variant="outline" className="bg-primary/5 text-primary border-primary/20 mb-2">
+                    Behandlingsområden ({categoryStep + 1} av {astomedCategories.length})
+                  </Badge>
+                  <h3 className="font-bold text-2xl mb-1">Vill du erbjuda {astomedCategories[categoryStep].title.toLowerCase()}?</h3>
                   <p className="text-slate-500 text-sm max-w-2xl mx-auto">
-                    Välj de behandlingsområden du vill erbjuda på din klinik. Du kan välja ett eller flera områden.
+                    Läs mer om området nedan och kryssa i rutan om det är något du vill arbeta med på din klinik.
                   </p>
                 </div>
                 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {astomedCategories.map(category => (
-                    <div 
-                      key={category.id}
-                      className={`rounded-xl border-2 transition-all cursor-pointer overflow-hidden flex flex-col ${formData.categoryIds.includes(category.id) ? 'border-teal-600' : 'border-slate-200 hover:border-teal-300'}`} 
-                      onClick={() => {
-                        const isSelected = formData.categoryIds.includes(category.id);
-                        handleUpdate("categoryIds", isSelected 
-                          ? formData.categoryIds.filter(id => id !== category.id)
-                          : [...formData.categoryIds, category.id]
-                        );
-                      }}
-                    >
-                      <div className="relative h-40 bg-slate-100 overflow-hidden">
-                        {category.image && (
-                          <img src={category.image} alt={category.title} className="w-full h-full object-cover" />
-                        )}
-                        <div className={`absolute inset-0 transition-all ${formData.categoryIds.includes(category.id) ? 'bg-teal-600/20' : 'bg-black/0'}`} />
-                      </div>
-                      <div className={`p-5 flex-1 flex flex-col gap-3 ${formData.categoryIds.includes(category.id) ? 'bg-teal-50' : 'bg-white'}`}>
-                        <div className="flex items-start gap-3">
-                          <Checkbox 
-                            checked={formData.categoryIds.includes(category.id)} 
-                            onCheckedChange={() => {}} 
-                            className="mt-0.5"
-                          />
-                          <Label className="text-base font-bold text-slate-900 cursor-pointer flex-1">{category.title}</Label>
-                        </div>
-                        <p className="text-sm text-slate-600">{category.description}</p>
-                      </div>
+                <div className="max-w-xl mx-auto">
+                  <div 
+                    className={`rounded-xl border-2 transition-all cursor-pointer overflow-hidden flex flex-col ${formData.categoryIds.includes(astomedCategories[categoryStep].id) ? 'border-teal-600 ring-2 ring-teal-600/20 shadow-md' : 'border-slate-200 hover:border-teal-300'}`} 
+                    onClick={() => {
+                      const cat = astomedCategories[categoryStep];
+                      const isSelected = formData.categoryIds.includes(cat.id);
+                      handleUpdate("categoryIds", isSelected 
+                        ? formData.categoryIds.filter(id => id !== cat.id)
+                        : [...formData.categoryIds, cat.id]
+                      );
+                    }}
+                  >
+                    <div className="relative h-64 bg-slate-100 overflow-hidden">
+                      {astomedCategories[categoryStep].image && (
+                        <img src={astomedCategories[categoryStep].image} alt={astomedCategories[categoryStep].title} className="w-full h-full object-cover" />
+                      )}
+                      <div className={`absolute inset-0 transition-all ${formData.categoryIds.includes(astomedCategories[categoryStep].id) ? 'bg-teal-600/20' : 'bg-black/0'}`} />
                     </div>
-                  ))}
+                    <div className={`p-6 flex-1 flex flex-col gap-4 ${formData.categoryIds.includes(astomedCategories[categoryStep].id) ? 'bg-teal-50' : 'bg-white'}`}>
+                      <div className="flex items-center gap-3">
+                        <Checkbox 
+                          checked={formData.categoryIds.includes(astomedCategories[categoryStep].id)} 
+                          onCheckedChange={() => {}} 
+                          className="w-6 h-6 data-[state=checked]:bg-teal-600 data-[state=checked]:border-teal-600 pointer-events-none"
+                        />
+                        <Label className="text-lg sm:text-xl font-bold text-slate-900 cursor-pointer flex-1 pointer-events-none">
+                          Ja, jag vill erbjuda {astomedCategories[categoryStep].title.toLowerCase()}
+                        </Label>
+                      </div>
+                      <p className="text-base text-slate-600 leading-relaxed">{astomedCategories[categoryStep].description}</p>
+                    </div>
+                  </div>
                 </div>
 
                 <div className="pt-6 flex flex-col-reverse sm:flex-row gap-3 border-t">
-                  <Button variant="outline" size="lg" onClick={() => setStep(1)} className="w-full sm:w-1/3 h-14">Tillbaka</Button>
-                  <Button size="lg" className="w-full flex-1 h-14" onClick={() => setStep(3)} disabled={formData.categoryIds.length === 0}>
-                    Se rekommenderad utrustning <ArrowRight className="ml-2 w-4 h-4"/>
+                  <Button 
+                    variant="outline" 
+                    size="lg" 
+                    onClick={() => {
+                      if (categoryStep > 0) {
+                        setCategoryStep(categoryStep - 1);
+                      } else {
+                        setStep(1);
+                      }
+                    }} 
+                    className="w-full sm:w-1/3 h-14"
+                  >
+                    Tillbaka
+                  </Button>
+                  <Button 
+                    size="lg" 
+                    className="w-full flex-1 h-14" 
+                    onClick={() => {
+                      if (categoryStep < astomedCategories.length - 1) {
+                        setCategoryStep(categoryStep + 1);
+                      } else {
+                        setStep(3);
+                      }
+                    }}
+                    disabled={categoryStep === astomedCategories.length - 1 && formData.categoryIds.length === 0}
+                  >
+                    {categoryStep < astomedCategories.length - 1 ? "Nästa område" : "Se rekommenderad utrustning"} <ArrowRight className="ml-2 w-4 h-4"/>
                   </Button>
                 </div>
+                {categoryStep === astomedCategories.length - 1 && formData.categoryIds.length === 0 && (
+                  <p className="text-center text-sm text-amber-600 mt-2 font-medium">Du måste välja minst ett område för att gå vidare.</p>
+                )}
               </div>
             )}
 
