@@ -253,7 +253,7 @@ export default function Calculator() {
                           <p className="text-sm text-slate-600 mt-1">Vi hjälper dig med affärsplan, finansieringslösningar och guidar dig genom de anmälningar som krävs till kommunen.</p>
                         </div>
                       </div>
-                      <div className="text-xs text-teal-600 font-semibold flex items-center gap-1 mt-auto pt-3 border-t border-slate-100">
+                      <div className="text-xs text-teal-600 font-semibold flex items-center gap-1 mt-auto pt-3 border-t border-slate-100 justify-end">
                         Gå vidare <ArrowRight className="w-3 h-3" />
                       </div>
                     </CardContent>
@@ -267,7 +267,7 @@ export default function Calculator() {
                           <p className="text-sm text-slate-600 mt-1">Få stöd att uppfylla kraven från SSMFS och Miljöbalken, inklusive egenkontroll och upprättande av skyddsrutiner.</p>
                         </div>
                       </div>
-                      <div className="text-xs text-teal-600 font-semibold flex items-center gap-1 mt-auto pt-3 border-t border-slate-100">
+                      <div className="text-xs text-teal-600 font-semibold flex items-center gap-1 mt-auto pt-3 border-t border-slate-100 justify-end">
                         Gå vidare <ArrowRight className="w-3 h-3" />
                       </div>
                     </CardContent>
@@ -281,7 +281,7 @@ export default function Calculator() {
                           <p className="text-sm text-slate-600 mt-1">Gedigna certifieringsutbildningar för dig och din personal, samt löpande kunskapslyft för att ni alltid ska ligga i framkant.</p>
                         </div>
                       </div>
-                      <div className="text-xs text-teal-600 font-semibold flex items-center gap-1 mt-auto pt-3 border-t border-slate-100">
+                      <div className="text-xs text-teal-600 font-semibold flex items-center gap-1 mt-auto pt-3 border-t border-slate-100 justify-end">
                         Gå vidare <ArrowRight className="w-3 h-3" />
                       </div>
                     </CardContent>
@@ -295,7 +295,7 @@ export default function Calculator() {
                           <p className="text-sm text-slate-600 mt-1">Våra serviceavtal säkerställer att er utrustning fungerar tryggt, minimerar driftstopp och ger snabb teknisk support.</p>
                         </div>
                       </div>
-                      <div className="text-xs text-teal-600 font-semibold flex items-center gap-1 mt-auto pt-3 border-t border-slate-100">
+                      <div className="text-xs text-teal-600 font-semibold flex items-center gap-1 mt-auto pt-3 border-t border-slate-100 justify-end">
                         Gå vidare <ArrowRight className="w-3 h-3" />
                       </div>
                     </CardContent>
@@ -309,7 +309,7 @@ export default function Calculator() {
                           <p className="text-sm text-slate-600 mt-1">I vår kundportal får du direkt tillgång till dina certifikat, behandlingsprotokoll, serviceloggar och den senaste branschinformationen.</p>
                         </div>
                       </div>
-                      <div className="text-xs text-teal-600 font-semibold flex items-center gap-1 mt-auto pt-3 border-t border-slate-100">
+                      <div className="text-xs text-teal-600 font-semibold flex items-center gap-1 mt-auto pt-3 border-t border-slate-100 justify-end">
                         Gå vidare <ArrowRight className="w-3 h-3" />
                       </div>
                     </CardContent>
