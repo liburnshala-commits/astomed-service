@@ -419,58 +419,57 @@ export default function Calculator() {
                             
                             return (
                               <div 
-                                key={m.id} 
-                                className={`shrink-0 snap-center w-[85vw] max-w-[280px] sm:w-[280px] bg-white rounded-xl border-2 shadow-sm transition-all flex flex-col overflow-hidden ${formData.machineIds.includes(m.id) ? 'border-teal-600 ring-2 ring-teal-600/20' : 'border-slate-200 hover:border-teal-300'}`}
-                              >
-                                {m.image && (
-                                  <div className="h-44 bg-white relative border-b border-slate-100 p-4 flex items-center justify-center">
-                                    <img src={m.image} alt={m.name} className="max-h-full max-w-full object-contain mix-blend-multiply" />
-                                    <div className="absolute top-3 left-3 bg-white/90 backdrop-blur rounded-full p-1 shadow-sm">
-                                      <Checkbox 
-                                        id={`machine-${m.id}`}
-                                        checked={formData.machineIds.includes(m.id)}
-                                        onCheckedChange={(checked) => {
-                                          let newIds = [];
-                                          if (checked) {
-                                            newIds = [...formData.machineIds, m.id];
-                                          } else {
-                                            newIds = formData.machineIds.filter(id => id !== m.id);
-                                          }
-                                          setFormData(prev => ({
-                                            ...prev,
-                                            machineIds: newIds
-                                          }));
-                                        }}
-                                        className="data-[state=checked]:bg-teal-600 data-[state=checked]:border-teal-600"
-                                      />
-                                    </div>
-                                  </div>
-                                )}
-                                <div className="p-4 flex-1 flex flex-col">
-                                  <Label htmlFor={`machine-${m.id}`} className="cursor-pointer flex-1 flex flex-col">
-                                    <div className="text-[10px] text-teal-600 font-bold uppercase tracking-wider mb-1">{m.subtitle}</div>
-                                    <div className="text-base font-bold text-slate-800 mb-2 leading-tight">{m.name}</div>
-                                    <p className="text-xs text-slate-500 leading-relaxed mb-4 flex-1">
-                                      {m.description}
-                                    </p>
-                                    <div className="mt-auto pt-3 border-t border-slate-100">
-                                      {m.leasingPrice ? (
-                                        <div className="text-xs font-semibold text-slate-800 bg-slate-100 inline-block px-2.5 py-1.5 rounded-md w-full text-center">
-                                          Från {m.leasingPrice.toLocaleString()} kr/mån
-                                        </div>
-                                      ) : price > 0 ? (
-                                        <div className="text-xs font-semibold text-slate-800 bg-slate-100 inline-block px-2.5 py-1.5 rounded-md w-full text-center">
-                                          Pris: {price.toLocaleString()} kr
-                                        </div>
-                                      ) : (
-                                        <div className="text-xs font-medium text-slate-400 italic text-center w-full">
-                                          Pris på förfrågan
-                                        </div>
-                                      )}
-                                    </div>
-                                  </Label>
-                                </div>
-                              </div>
+                                 key={m.id} 
+                                 onClick={() => {
+                                   const isSelected = formData.machineIds.includes(m.id);
+                                   const newIds = isSelected 
+                                     ? formData.machineIds.filter(id => id !== m.id)
+                                     : [...formData.machineIds, m.id];
+                                   setFormData(prev => ({
+                                     ...prev,
+                                     machineIds: newIds
+                                   }));
+                                 }}
+                                 className={`shrink-0 snap-center w-[85vw] max-w-[280px] sm:w-[280px] bg-white rounded-xl border-2 shadow-sm transition-all flex flex-col overflow-hidden cursor-pointer ${formData.machineIds.includes(m.id) ? 'border-teal-600 ring-2 ring-teal-600/20' : 'border-slate-200 hover:border-teal-300'}`}
+                               >
+                                 {m.image && (
+                                   <div className="h-44 bg-white relative border-b border-slate-100 p-4 flex items-center justify-center">
+                                     <img src={m.image} alt={m.name} className="max-h-full max-w-full object-contain mix-blend-multiply" />
+                                     <div className="absolute top-3 left-3 bg-white/90 backdrop-blur rounded-full p-1 shadow-sm pointer-events-none">
+                                       <Checkbox 
+                                         id={`machine-${m.id}`}
+                                         checked={formData.machineIds.includes(m.id)}
+                                         onCheckedChange={() => {}}
+                                         className="data-[state=checked]:bg-teal-600 data-[state=checked]:border-teal-600"
+                                       />
+                                     </div>
+                                   </div>
+                                 )}
+                                 <div className="p-4 flex-1 flex flex-col pointer-events-none">
+                                   <div className="flex-1 flex flex-col">
+                                     <div className="text-[10px] text-teal-600 font-bold uppercase tracking-wider mb-1">{m.subtitle}</div>
+                                     <div className="text-base font-bold text-slate-800 mb-2 leading-tight">{m.name}</div>
+                                     <p className="text-xs text-slate-500 leading-relaxed mb-4 flex-1">
+                                       {m.description}
+                                     </p>
+                                     <div className="mt-auto pt-3 border-t border-slate-100">
+                                       {m.leasingPrice ? (
+                                         <div className="text-xs font-semibold text-slate-800 bg-slate-100 inline-block px-2.5 py-1.5 rounded-md w-full text-center">
+                                           Från {m.leasingPrice.toLocaleString()} kr/mån
+                                         </div>
+                                       ) : price > 0 ? (
+                                         <div className="text-xs font-semibold text-slate-800 bg-slate-100 inline-block px-2.5 py-1.5 rounded-md w-full text-center">
+                                           Pris: {price.toLocaleString()} kr
+                                         </div>
+                                       ) : (
+                                         <div className="text-xs font-medium text-slate-400 italic text-center w-full">
+                                           Pris på förfrågan
+                                         </div>
+                                       )}
+                                     </div>
+                                   </div>
+                                 </div>
+                               </div>
                             );
                           })}
                         </div>
