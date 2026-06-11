@@ -238,7 +238,7 @@ export default function Calculator() {
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <Card className="border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                  <Card className="border-slate-200 shadow-sm hover:shadow-md transition-shadow cursor-pointer" onClick={() => setStep(2)}>
                     <CardContent className="p-4 sm:p-5 flex gap-4">
                       <div className="bg-blue-50 p-3 rounded-xl h-fit"><Handshake className="w-6 h-6 text-blue-600" /></div>
                       <div>
@@ -247,7 +247,7 @@ export default function Calculator() {
                       </div>
                     </CardContent>
                   </Card>
-                  <Card className="border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                  <Card className="border-slate-200 shadow-sm hover:shadow-md transition-shadow cursor-pointer" onClick={() => setStep(2)}>
                     <CardContent className="p-4 sm:p-5 flex gap-4">
                       <div className="bg-emerald-50 p-3 rounded-xl h-fit"><ShieldCheck className="w-6 h-6 text-emerald-600" /></div>
                       <div>
@@ -256,7 +256,7 @@ export default function Calculator() {
                       </div>
                     </CardContent>
                   </Card>
-                  <Card className="border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                  <Card className="border-slate-200 shadow-sm hover:shadow-md transition-shadow cursor-pointer" onClick={() => setStep(2)}>
                     <CardContent className="p-4 sm:p-5 flex gap-4">
                       <div className="bg-purple-50 p-3 rounded-xl h-fit"><GraduationCap className="w-6 h-6 text-purple-600" /></div>
                       <div>
@@ -265,7 +265,7 @@ export default function Calculator() {
                       </div>
                     </CardContent>
                   </Card>
-                  <Card className="border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                  <Card className="border-slate-200 shadow-sm hover:shadow-md transition-shadow cursor-pointer" onClick={() => setStep(2)}>
                     <CardContent className="p-4 sm:p-5 flex gap-4">
                       <div className="bg-orange-50 p-3 rounded-xl h-fit"><Wrench className="w-6 h-6 text-orange-600" /></div>
                       <div>
@@ -274,7 +274,7 @@ export default function Calculator() {
                       </div>
                     </CardContent>
                   </Card>
-                  <Card className="border-slate-200 shadow-sm hover:shadow-md transition-shadow sm:col-span-2">
+                  <Card className="border-slate-200 shadow-sm hover:shadow-md transition-shadow sm:col-span-2 cursor-pointer" onClick={() => setStep(2)}>
                     <CardContent className="p-4 sm:p-5 flex gap-4">
                       <div className="bg-rose-50 p-3 rounded-xl h-fit"><FileText className="w-6 h-6 text-rose-600" /></div>
                       <div>
