@@ -95,6 +95,7 @@ export default function Calculator() {
     trainingIds: [],
     machineStats: {},
     rent: 15000,
+    hasEmployees: false,
     salaryPerEmployee: 35000,
     employeeCount: 1,
     isAesthetic: true,
@@ -144,7 +145,7 @@ export default function Calculator() {
     return sum + (Number(stat.treatments) * 4 * priceEx);
   }, 0);
 
-  const baseSalaryTotal = formData.salaryPerEmployee * formData.employeeCount;
+  const baseSalaryTotal = formData.hasEmployees ? formData.salaryPerEmployee * formData.employeeCount : 0;
   const socialFees = baseSalaryTotal * 0.3142; // Arbetsgivaravgifter 31.42%
   const vacationPay = baseSalaryTotal * 0.12; // Semesterersättning 12%
   const pensionAndInsurance = baseSalaryTotal * 0.10; // Tjänstepension & försäkringar ~10%
@@ -724,25 +725,45 @@ export default function Calculator() {
                      </div>
                      
                      <div className="relative z-10 p-6 sm:p-8">
-                       <h4 className="font-bold text-xl text-white mb-2">Personal {"&"} Löner</h4>
-                       <p className="text-teal-50 text-sm mb-6 max-w-lg opacity-90">
-                         Att ha rätt personal är avgörande. Beräkna dina personalkostnader för att se hur det påverkar lönsamheten.
-                       </p>
-                       
-                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                         <div className="space-y-2">
-                           <Label className="text-teal-50">Antal anställda (heltid)</Label>
-                           <Input type="number" min="1" className="bg-white/10 border-white/20 text-white font-medium focus:bg-white/20" value={formData.employeeCount} onChange={e => handleUpdate("employeeCount", Math.max(1, Number(e.target.value)))}/>
-                           {formData.employeeCount < selectedMachines.length && (
-                             <p className="text-xs text-amber-300 font-medium mt-1">Tips: Med {selectedMachines.length} maskiner kan du behöva fler anställda.</p>
-                           )}
-                         </div>
-                         <div className="space-y-2">
-                           <Label className="text-teal-50">Snittlön (brutto per anställd)</Label>
-                           <Input type="number" className="bg-white/10 border-white/20 text-white font-medium focus:bg-white/20" value={formData.salaryPerEmployee} onChange={e => handleUpdate("salaryPerEmployee", Number(e.target.value))}/>
-                           <p className="text-xs text-teal-100/70 mt-1">Kalkylen lägger till sociala avgifter (31,42%), semester (12%) {"&"} pension (~10%).</p>
+                       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-2">
+                         <h4 className="font-bold text-xl text-white">Personal {"&"} Löner</h4>
+                         <div className="flex items-center gap-2">
+                           <Checkbox 
+                             id="has-employees"
+                             checked={formData.hasEmployees}
+                             onCheckedChange={(checked) => handleUpdate("hasEmployees", checked)}
+                             className="border-white/50 data-[state=checked]:bg-teal-500 data-[state=checked]:border-teal-500"
+                           />
+                           <Label htmlFor="has-employees" className="text-teal-50 cursor-pointer">Jag har anställd personal</Label>
                          </div>
                        </div>
+                       
+                       {formData.hasEmployees ? (
+                         <>
+                           <p className="text-teal-50 text-sm mb-6 max-w-lg opacity-90">
+                             Att ha rätt personal är avgörande. Beräkna dina personalkostnader för att se hur det påverkar lönsamheten.
+                           </p>
+                           
+                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 animate-in fade-in duration-300">
+                             <div className="space-y-2">
+                               <Label className="text-teal-50">Antal anställda (heltid)</Label>
+                               <Input type="number" min="1" className="bg-white/10 border-white/20 text-white font-medium focus:bg-white/20" value={formData.employeeCount} onChange={e => handleUpdate("employeeCount", Math.max(1, Number(e.target.value)))}/>
+                               {formData.employeeCount < selectedMachines.length && (
+                                 <p className="text-xs text-amber-300 font-medium mt-1">Tips: Med {selectedMachines.length} maskiner kan du behöva fler anställda.</p>
+                               )}
+                             </div>
+                             <div className="space-y-2">
+                               <Label className="text-teal-50">Snittlön (brutto per anställd)</Label>
+                               <Input type="number" className="bg-white/10 border-white/20 text-white font-medium focus:bg-white/20" value={formData.salaryPerEmployee} onChange={e => handleUpdate("salaryPerEmployee", Number(e.target.value))}/>
+                               <p className="text-xs text-teal-100/70 mt-1">Kalkylen lägger till sociala avgifter (31,42%), semester (12%) {"&"} pension (~10%).</p>
+                             </div>
+                           </div>
+                         </>
+                       ) : (
+                         <p className="text-teal-50 text-sm opacity-90">
+                           Kryssa i rutan ovan om du vill inkludera personalkostnader i kalkylen. Om du driver kliniken själv utan anställda kan du lämna rutan urbockad.
+                         </p>
+                       )}
                      </div>
                    </div>
                    
