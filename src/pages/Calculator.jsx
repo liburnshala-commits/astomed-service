@@ -371,7 +371,7 @@ export default function Calculator() {
                   </Button>
                   <Button 
                     size="lg" 
-                    className="w-full flex-1 h-14" 
+                    className="w-full sm:w-2/3 h-14" 
                     onClick={() => {
                       if (categoryStep < astomedCategories.length - 1) {
                         setCategoryStep(categoryStep + 1);
@@ -508,7 +508,7 @@ export default function Calculator() {
 
                 <div className="pt-6 flex flex-col-reverse sm:flex-row gap-3 border-t">
                   <Button variant="outline" size="lg" onClick={() => setStep(2)} className="w-full sm:w-1/3 h-14">Tillbaka</Button>
-                  <Button size="lg" className="w-full flex-1 h-14" onClick={() => setStep(4)} disabled={formData.machineIds.length === 0}>
+                  <Button size="lg" className="w-full sm:w-2/3 h-14" onClick={() => setStep(4)} disabled={formData.machineIds.length === 0}>
                     Vidare till tilläggstjänster {"&"} produkter <ArrowRight className="ml-2 w-4 h-4"/>
                   </Button>
                 </div>
@@ -575,7 +575,7 @@ export default function Calculator() {
 
                 <div className="pt-6 flex flex-col-reverse sm:flex-row gap-3 border-t">
                   <Button variant="outline" size="lg" onClick={() => setStep(3)} className="w-full sm:w-1/3 h-14">Tillbaka</Button>
-                  <Button size="lg" className="w-full flex-1 h-14" onClick={() => setStep(5)}>
+                  <Button size="lg" className="w-full sm:w-2/3 h-14" onClick={() => setStep(5)}>
                     Vidare till regelverk &amp; strålskydd <ArrowRight className="ml-2 w-4 h-4"/>
                   </Button>
                 </div>
@@ -662,7 +662,7 @@ export default function Calculator() {
 
                 <div className="pt-6 flex flex-col-reverse sm:flex-row gap-3 border-t">
                   <Button variant="outline" size="lg" onClick={() => setStep(4)} className="w-full sm:w-1/3 h-14">Tillbaka</Button>
-                  <Button size="lg" className="w-full flex-1 h-14" onClick={() => setStep(6)}>Vidare till finansiering <ArrowRight className="ml-2 w-4 h-4" /></Button>
+                  <Button size="lg" className="w-full sm:w-2/3 h-14" onClick={() => setStep(6)}>Vidare till finansiering <ArrowRight className="ml-2 w-4 h-4" /></Button>
                 </div>
               </div>
             )}
@@ -709,7 +709,7 @@ export default function Calculator() {
 
                 <div className="pt-6 flex flex-col-reverse sm:flex-row gap-3 border-t">
                   <Button variant="outline" size="lg" onClick={() => setStep(5)} className="w-full sm:w-1/3 h-14">Tillbaka</Button>
-                  <Button size="lg" className="w-full flex-1 h-14" onClick={() => setStep(7)}>Gå vidare till ekonomi <ArrowRight className="ml-2 w-4 h-4" /></Button>
+                  <Button size="lg" className="w-full sm:w-2/3 h-14" onClick={() => setStep(7)}>Gå vidare till ekonomi <ArrowRight className="ml-2 w-4 h-4" /></Button>
                 </div>
               </div>
             )}
@@ -900,7 +900,7 @@ export default function Calculator() {
                 </div>
                 <div className="pt-6 flex flex-col-reverse sm:flex-row gap-3 border-t">
                   <Button variant="outline" size="lg" onClick={() => setStep(6)} className="w-full sm:w-1/3 h-14">Tillbaka</Button>
-                  <Button size="lg" className="w-full flex-1 h-14" onClick={() => setStep(8)}>Gå vidare till slutförande <ArrowRight className="ml-2 w-4 h-4" /></Button>
+                  <Button size="lg" className="w-full sm:w-2/3 h-14" onClick={() => setStep(8)}>Gå vidare till slutförande <ArrowRight className="ml-2 w-4 h-4" /></Button>
                 </div>
               </div>
             )}
@@ -934,7 +934,7 @@ export default function Calculator() {
                   <Button variant="outline" size="lg" onClick={() => setStep(7)} disabled={isSubmitting} className="w-full sm:w-1/3 h-14">Tillbaka</Button>
                   <Button 
                     size="lg" 
-                    className="w-full flex-1 h-14" 
+                    className="w-full sm:w-2/3 h-14" 
                     disabled={!formData.fullName || !formData.email || !formData.phone || isSubmitting}
                     onClick={async () => {
                       setIsSubmitting(true);
@@ -1280,7 +1280,7 @@ export default function Calculator() {
 
                 <div className="flex flex-col-reverse sm:flex-row gap-3 pt-6 border-t">
                   <Button variant="outline" size="lg" onClick={() => setStep(8)} className="w-full sm:w-1/3 h-14">Tillbaka till uppgifter</Button>
-                  <Button size="lg" className="w-full flex-1 h-14" onClick={() => window.location.reload()}>Gör en ny beräkning</Button>
+                  <Button size="lg" className="w-full sm:w-2/3 h-14" onClick={() => window.location.reload()}>Gör en ny beräkning <ArrowRight className="ml-2 w-4 h-4" /></Button>
                 </div>
               </div>
             )}
