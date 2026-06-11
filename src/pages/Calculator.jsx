@@ -221,8 +221,8 @@ export default function Calculator() {
                 <div className="text-xs text-white/70">Klinikkalkylator</div>
               </div>
             </div>
-            <div className="mt-8 mb-4">
-              <CardTitle className="flex items-center gap-2 text-2xl"><CalcIcon className="w-6 h-6" /> Beräkna din investering</CardTitle>
+            <div className="mt-8 mb-4 text-right">
+              <CardTitle className="flex items-center justify-end gap-2 text-2xl"><CalcIcon className="w-6 h-6" /> Beräkna din investering</CardTitle>
               <CardDescription className="text-slate-200 text-base mt-2">En väg till lönsamhet på 6 minuter</CardDescription>
             </div>
           </CardHeader>
