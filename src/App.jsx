@@ -97,7 +97,7 @@ const AuthenticatedApp = () => {
 
   // Strict routing for customers
   if (user && user.role === 'customer' && !isPublicRoute) {
-    const allowedCustomerPaths = ['/CustomerDashboard', '/ClinicDevelopment', '/ServiceRecords', '/Machines', '/DeliveryControls', '/DeliveryControlForm', '/FunctionControls', '/FunctionControlForm', '/RadiationSafety'];
+    const allowedCustomerPaths = ['/CustomerDashboard', '/ServiceRecords', '/Machines', '/DeliveryControls', '/DeliveryControlForm', '/FunctionControls', '/FunctionControlForm', '/RadiationSafety'];
     if (!allowedCustomerPaths.includes(currentPath)) {
       return <Navigate to="/CustomerDashboard" replace />;
     }
