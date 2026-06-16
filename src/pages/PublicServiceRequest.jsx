@@ -525,6 +525,7 @@ export default function PublicServiceRequest() {
                 <img src="https://astomed.se/wp-content/uploads/2026/04/Liburn-2026.jpg" alt="Liburn" className="w-28 h-28 rounded-full object-cover shadow-lg border-4 border-white mb-3" />
                 <span className="font-bold text-[#1b3a3a]">Liburn</span>
                 <span className="text-sm text-slate-500">Produktspecialist Service</span>
+                <a href="tel:0761616855" className="text-sm text-[#3a9e9e] font-semibold mt-1 hover:underline">076-161 68 55</a>
               </div>
               <div className="flex flex-col items-center">
                 <img src="https://cdn.shopify.com/s/files/1/0548/7348/9459/files/Astomed_2025-11-25_kl._10.53.12.png?v=1764064622" alt="Elman" className="w-28 h-28 rounded-full object-cover shadow-lg border-4 border-white mb-3" />
