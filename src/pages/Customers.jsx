@@ -47,8 +47,8 @@ export default function Customers() {
         return { customers: ownCustomers, machines: [] };
       } else {
         const [c, m] = await Promise.all([
-          base44.entities.Customer.list("-created_date"),
-          base44.entities.Machine.list()
+          base44.entities.Customer.list("-created_date", 10000),
+          base44.entities.Machine.list("-created_date", 10000)
         ]);
         let u = [];
         if (user?.role === "admin") {
