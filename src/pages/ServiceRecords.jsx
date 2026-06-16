@@ -65,11 +65,12 @@ export default function ServiceRecords() {
   const [viewing, setViewing] = useState(null);
 
   const { user } = useAuth();
+  const userRole = user?.role === 'user' ? 'customer' : user?.role;
 
   const { data: pageData } = useQuery({
-    queryKey: ["serviceRecordsPage", user?.role, user?.email],
+    queryKey: ["serviceRecordsPage", userRole, user?.email],
     queryFn: async () => {
-      if (user?.role === "customer") {
+      if (userRole === "customer") {
         const allCustomers = await base44.entities.Customer.filter({ email: user.email });
         const cust = allCustomers[0] || null;
         if (cust) {
@@ -123,7 +124,7 @@ export default function ServiceRecords() {
   };
 
   const filtered = records.filter(r => {
-    if (user?.role === "customer" && userCustomer && r.customer_id !== userCustomer.id) return false;
+    if (userRole === "customer" && userCustomer && r.customer_id !== userCustomer.id) return false;
 
     const machine = getMachine(r.machine_id);
     const customer = getCustomer(r.customer_id);
@@ -261,12 +262,12 @@ export default function ServiceRecords() {
           )}
           {!preselectedMachine && !preselectedModel && <p className="astomed-subtitle text-sm">{records.length} totalt</p>}
         </div>
-        {user?.role !== "customer" && (
+        {userRole !== "customer" && (
           <Button onClick={() => { setEditing(null); setShowForm(true); }} className="astomed-btn-primary">
             <Plus className="w-4 h-4 mr-2" /> Nytt ärende
           </Button>
         )}
-        {user?.role === "customer" && (
+        {userRole === "customer" && (
           <Button onClick={() => { setEditing(null); setShowForm(true); }} className="astomed-btn-primary">
             <Plus className="w-4 h-4 mr-2" /> Beställ service
           </Button>
@@ -342,7 +343,7 @@ export default function ServiceRecords() {
                       <Button size="sm" variant="outline" onClick={() => { setEditing(record); setShowForm(true); }}>
                         Redigera
                       </Button>
-                      {(user?.role !== "customer" || record.status === "pending") && (
+                      {(userRole !== "customer" || record.status === "pending") && (
                         <Button size="sm" variant="ghost" className="text-red-500 hover:text-red-700 hover:bg-red-50" onClick={(e) => handleDelete(record, e)}>
                           <Trash2 className="w-4 h-4" />
                         </Button>
@@ -422,7 +423,7 @@ export default function ServiceRecords() {
                             <Button className="flex-1 h-11" variant="outline" onClick={() => { setEditing(record); setShowForm(true); }}>
                               Redigera
                             </Button>
-                            {(user?.role !== "customer" || record.status === "pending") && (
+                            {(userRole !== "customer" || record.status === "pending") && (
                               <Button className="h-11 px-4 text-red-500 hover:text-red-700 hover:bg-red-50 border border-transparent hover:border-red-100" variant="ghost" onClick={(e) => handleDelete(record, e)}>
                                 <Trash2 className="w-5 h-5" />
                               </Button>
@@ -447,7 +448,7 @@ export default function ServiceRecords() {
         </TabsContent>
       </Tabs>
 
-      {showForm && user?.role === "customer" && (
+      {showForm && userRole === "customer" && (
         <CustomerServiceRequestForm
           machines={machines}
           customer={userCustomer}
@@ -456,7 +457,7 @@ export default function ServiceRecords() {
         />
       )}
 
-      {showForm && user?.role !== "customer" && (
+      {showForm && userRole !== "customer" && (
         <ServiceRecordForm
           record={editing}
           machines={machines}
@@ -472,7 +473,7 @@ export default function ServiceRecords() {
           record={viewing}
           machine={getMachine(viewing.machine_id)}
           customer={getCustomer(viewing.customer_id)}
-          userRole={user?.role}
+          userRole={userRole}
           onClose={() => setViewing(null)}
           onEdit={() => { setEditing(viewing); setViewing(null); setShowForm(true); }}
           onUpdated={load}

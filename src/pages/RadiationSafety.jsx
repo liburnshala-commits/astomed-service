@@ -83,7 +83,7 @@ export default function RadiationSafety() {
   const [currentAudit, setCurrentAudit, openNewAudit, clearAuditDraft] = useDraftState('rs_draft_audit', () => ({}));
 
   const [selectedAdminClinicId, setSelectedAdminClinicId] = useState('all');
-  const isCustomer = user?.role === 'customer';
+  const isCustomer = ['customer', 'user'].includes(user?.role);
   const clinicId = isCustomer ? user.id : selectedAdminClinicId;
 
   const { data: customers = [] } = useQuery({

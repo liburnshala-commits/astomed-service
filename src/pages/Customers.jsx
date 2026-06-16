@@ -38,7 +38,7 @@ export default function Customers() {
   const { data: pageData } = useQuery({
     queryKey: ["customersPage", user?.role, user?.email],
     queryFn: async () => {
-      if (user?.role === "customer") {
+      if (['customer', 'user'].includes(user?.role)) {
         const ownCustomers = await base44.entities.Customer.filter({ email: user.email });
         if (ownCustomers[0]) {
           const m = await base44.entities.Machine.filter({ customer_id: ownCustomers[0].id });

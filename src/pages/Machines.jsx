@@ -54,12 +54,12 @@ export default function Machines() {
   }, [location.search]);
 
   const { user } = useAuth();
-  const userRole = user?.role;
+  const userRole = user?.role === 'user' ? 'customer' : user?.role;
 
   const { data: pageData } = useQuery({
-    queryKey: ["machinesPage", user?.role, user?.email],
+    queryKey: ["machinesPage", userRole, user?.email],
     queryFn: async () => {
-      if (user?.role === "customer") {
+      if (userRole === "customer") {
         const ownCustomers = await base44.entities.Customer.filter({ email: user.email });
         const cust = ownCustomers[0];
         if (cust) {
