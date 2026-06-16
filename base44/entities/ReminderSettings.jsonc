@@ -47,6 +47,10 @@
       "type": "string",
       "format": "date-time",
       "description": "Senaste g\u00e5ng p\u00e5minnelser skickades"
+    },
+    "description": {
+      "type": "string",
+      "maxLength": 1000
     }
   },
   "required": [

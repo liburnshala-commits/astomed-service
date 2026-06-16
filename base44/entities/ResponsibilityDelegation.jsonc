@@ -31,6 +31,10 @@
       "type": "string",
       "format": "date",
       "description": "Datum f\u00f6r godk\u00e4nnande"
+    },
+    "description": {
+      "type": "string",
+      "maxLength": 1000
     }
   },
   "required": [

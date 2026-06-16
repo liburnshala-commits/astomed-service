@@ -49,6 +49,10 @@
     "signature": {
       "type": "string",
       "description": "Signatur av den som utf\u00f6rde behandlingen"
+    },
+    "description": {
+      "type": "string",
+      "maxLength": 1000
     }
   },
   "required": [

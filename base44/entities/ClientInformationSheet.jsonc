@@ -25,6 +25,10 @@
       "type": "string",
       "default": "1.0",
       "description": "Versionsnummer"
+    },
+    "description": {
+      "type": "string",
+      "maxLength": 1000
     }
   },
   "required": [

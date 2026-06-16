@@ -37,6 +37,10 @@
       "type": "boolean",
       "default": false,
       "description": "L\u00e4st status"
+    },
+    "description": {
+      "type": "string",
+      "maxLength": 1000
     }
   },
   "required": [

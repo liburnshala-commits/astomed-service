@@ -46,6 +46,10 @@
       "type": "boolean",
       "default": false,
       "description": "Om f\u00f6rseningsmailet har skickats ut"
+    },
+    "description": {
+      "type": "string",
+      "maxLength": 1000
     }
   },
   "required": [

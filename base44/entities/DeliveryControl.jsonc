@@ -258,6 +258,10 @@
     "report_pdf_url": {
       "type": "string",
       "description": "L\u00e4nk till PDF-rapport"
+    },
+    "description": {
+      "type": "string",
+      "maxLength": 1000
     }
   },
   "required": [
