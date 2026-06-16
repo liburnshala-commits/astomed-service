@@ -3,7 +3,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { createPageUrl } from "@/utils";
 import { Link } from "react-router-dom";
-import { Plus, Search, Building2, Phone, Mail, ExternalLink, Trash2, UserPlus, Check, Copy, Loader2, Database, Upload, MessageSquare } from "lucide-react";
+import { Plus, Search, Building2, Phone, Mail, ExternalLink, Trash2, UserPlus, Check, Copy, Loader2, Database, Upload, MessageSquare, Download } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -282,6 +282,27 @@ export default function Customers() {
     }
   };
 
+  const exportToCsv = () => {
+    const headers = ["Företag", "Kontaktperson", "Telefon", "E-post", "Ort"];
+    const rows = filtered.map(c => [
+      `"${(c.company_name || "").replace(/"/g, '""')}"`,
+      `"${(c.contact_person || "").replace(/"/g, '""')}"`,
+      `"${(c.phone || "").replace(/"/g, '""')}"`,
+      `"${(c.email || "").replace(/"/g, '""')}"`,
+      `"${(c.city || "").replace(/"/g, '""')}"`
+    ]);
+    
+    const csvContent = [headers.join(","), ...rows.map(r => r.join(","))].join("\n");
+    const blob = new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]), csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", `Kunder_${new Date().toISOString().split('T')[0]}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   const renderCard = (customer, isMobile = false) => {
     const contractInfo = getContractStatusInfo(customer.id);
     return (
@@ -446,6 +467,9 @@ export default function Customers() {
           )}
           <Button onClick={() => setShowImport(true)} variant="outline" className="border-dashed">
             <Upload className="w-4 h-4 sm:mr-2" /> <span className="hidden sm:inline">Importera</span>
+          </Button>
+          <Button onClick={exportToCsv} variant="outline" className="border-dashed">
+            <Download className="w-4 h-4 sm:mr-2" /> <span className="hidden sm:inline">Exportera</span>
           </Button>
           <Button onClick={() => { setEditing(null); setShowForm(true); }} className="astomed-btn-primary">
             <Plus className="w-4 h-4 sm:mr-2" /> <span className="hidden sm:inline">Ny kund</span>
