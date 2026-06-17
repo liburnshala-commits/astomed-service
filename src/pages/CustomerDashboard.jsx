@@ -180,27 +180,7 @@ export default function CustomerDashboard() {
         </Link>
       </div>
 
-      {/* Controls section */}
-      <div>
-        <h2 className="text-sm font-semibold astomed-label mb-4 flex items-center gap-2">
-          <FileCheck className="w-4 h-4" />
-          Kontroller
-        </h2>
-        <Card className="astomed-card" style={{ background: "#f4f9f9" }}>
-          <CardContent className="p-4 flex gap-3">
-            <Button variant="outline" className="flex-1 bg-white hover:bg-slate-50 border-slate-200" asChild>
-              <Link to={createPageUrl("DeliveryControls")}>
-                <Box className="w-4 h-4 mr-2 text-slate-600" /> Leveranskontroll
-              </Link>
-            </Button>
-            <Button variant="outline" className="flex-1 bg-white hover:bg-slate-50 border-slate-200" asChild>
-              <Link to={createPageUrl("FunctionControls")}>
-                <CheckCircle className="w-4 h-4 mr-2 text-green-600" /> Funktionskontroll
-              </Link>
-            </Button>
-          </CardContent>
-        </Card>
-      </div>
+
 
       {/* Machines section */}
       <div>
@@ -367,20 +347,7 @@ export default function CustomerDashboard() {
           </Card>
           </div>
 
-      {/* Catalog Link */}
-      <Card className="astomed-card overflow-hidden border-0 bg-gradient-to-r from-[#1b3a3a] to-[#2a5a5a] text-white">
-        <CardContent className="p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div>
-            <h2 className="text-lg font-bold mb-1">Uppgradera din klinik?</h2>
-            <p className="text-sm text-slate-200">Upptäck vårt senaste utbud av maskiner och utrustning på klinikutrustning.se</p>
-          </div>
-          <Button variant="secondary" asChild className="shrink-0 bg-white text-[#1b3a3a] hover:bg-slate-100">
-            <a href="https://klinikutrustning.se/" target="_blank" rel="noopener noreferrer">
-              Visa utbud
-            </a>
-          </Button>
-        </CardContent>
-      </Card>
+
 
       {showOtherMachineForm && (
         <OtherMachineServiceForm

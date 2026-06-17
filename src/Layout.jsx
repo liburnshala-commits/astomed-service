@@ -44,7 +44,7 @@ const navSections = [
       { label: "Dashboard", page: "Dashboard", icon: LayoutDashboard, roles: ["admin", "technician"] },
       { label: "Min översikt", page: "CustomerDashboard", icon: LayoutDashboard, roles: ["customer"] },
       { label: "Klinikutveckling", page: "ClinicDevelopment", icon: TrendingUp, roles: ["admin"] },
-      { label: "Strålsäkerhet (SSM)", page: "RadiationSafety", icon: Shield, roles: ["customer", "admin"] },
+      { label: "Strålsäkerhet (SSM)", page: "RadiationSafety", icon: Shield, roles: ["admin"] },
     ]
   },
   {
@@ -55,8 +55,8 @@ const navSections = [
       { label: "Klinikberäkningar", page: "ClinicCalculations", icon: Calculator, roles: ["admin", "technician"] },
       { label: "Chattsupport", page: "ChatSupport", icon: MessageSquare, roles: ["admin"] },
       { label: "Serviceärenden", page: "ServiceRecords", icon: Wrench, roles: ["admin", "technician", "customer"] },
-      { label: "Leveranskontroller", page: "DeliveryControls", icon: FileCheck, roles: ["admin", "customer"] },
-      { label: "Funktionskontroller", page: "FunctionControls", icon: CheckSquare, roles: ["admin", "customer"] },
+      { label: "Leveranskontroller", page: "DeliveryControls", icon: FileCheck, roles: ["admin"] },
+      { label: "Funktionskontroller", page: "FunctionControls", icon: CheckSquare, roles: ["admin"] },
       { label: "Servicekalender", page: "Calendar", icon: CalendarDays, roles: ["admin", "technician"] },
       { label: "Serviceavtal", page: "ServiceContracts", icon: FileCheck, roles: ["admin", "technician"] },
       { label: "Avtalsprospekt", page: "ServiceContractLeads", icon: UsersIcon, roles: ["admin"] },
