@@ -143,7 +143,7 @@ export default function Layout({ children, currentPageName }) {
     return <PrivacyPolicyModal onAccepted={() => { setShowPrivacyModal(false); setUser(u => u ? { ...u, privacy_policy_accepted: true } : u); }} />;
   }
 
-  const userRole = user?.role === 'user' ? 'customer' : (user?.role || "technician");
+  const userRole = user?.role || "technician";
   const isRootScreen = ["Dashboard", "ServiceRecords", "Customers", "MobileMenu"].includes(currentPageName);
 
   const handleDeleteAccount = async () => {

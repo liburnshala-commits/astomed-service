@@ -65,7 +65,7 @@ export default function ServiceRecords() {
   const [viewing, setViewing] = useState(null);
 
   const { user } = useAuth();
-  const userRole = user?.role === 'user' ? 'customer' : user?.role;
+  const userRole = user?.role;
 
   const { data: pageData } = useQuery({
     queryKey: ["serviceRecordsPage", userRole, user?.email],

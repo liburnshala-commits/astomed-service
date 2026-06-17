@@ -54,7 +54,7 @@ export default function Machines() {
   }, [location.search]);
 
   const { user } = useAuth();
-  const userRole = user?.role === 'user' ? 'customer' : user?.role;
+  const userRole = user?.role;
 
   const { data: pageData } = useQuery({
     queryKey: ["machinesPage", userRole, user?.email],

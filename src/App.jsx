@@ -137,7 +137,7 @@ const AuthenticatedApp = () => {
         <Route path="/FunctionControlForm" element={<AnimatedPage><FunctionControlForm /></AnimatedPage>} />
         <Route path="/RadiationSafety" element={<AnimatedPage><LayoutWrapper currentPageName="RadiationSafety"><RadiationSafety /></LayoutWrapper></AnimatedPage>} />
         <Route path="/NewCustomers" element={<AnimatedPage><LayoutWrapper currentPageName="NewCustomers"><NewCustomers /></LayoutWrapper></AnimatedPage>} />
-        <Route path="/PendingApproval" element={<AnimatedPage><LayoutWrapper currentPageName="PendingApproval"><PendingApproval /></LayoutWrapper></AnimatedPage>} />
+        <Route path="/PendingApproval" element={<AnimatedPage><PendingApproval /></AnimatedPage>} />
         <Route path="/Calculator" element={<AnimatedPage><Calculator /></AnimatedPage>} />
         <Route path="/ClinicCalculations" element={<AnimatedPage><LayoutWrapper currentPageName="ClinicCalculations"><ClinicCalculations /></LayoutWrapper></AnimatedPage>} />
         {Object.entries(Pages).map(([path, Page]) => (

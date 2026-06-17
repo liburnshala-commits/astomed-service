@@ -205,8 +205,8 @@ export default function Users() {
                         <SelectContent>
                           <SelectItem value="admin">Admin</SelectItem>
                           <SelectItem value="technician">Tekniker</SelectItem>
-                          <SelectItem value="user">Användare</SelectItem>
-                          <SelectItem value="customer">Kund</SelectItem>
+                          <SelectItem value="customer">Kund (Godkänd)</SelectItem>
+                          <SelectItem value="user">Väntande / Ogodkänd</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -276,8 +276,8 @@ export default function Users() {
                 <SelectContent>
                   <SelectItem value="admin">Administratör</SelectItem>
                   <SelectItem value="technician">Service Tekniker</SelectItem>
-                  <SelectItem value="customer">Kund</SelectItem>
-                  <SelectItem value="user">Användare</SelectItem>
+                  <SelectItem value="customer">Kund (Godkänd)</SelectItem>
+                  <SelectItem value="user">Väntande / Ogodkänd</SelectItem>
                 </SelectContent>
               </Select>
             </div>
