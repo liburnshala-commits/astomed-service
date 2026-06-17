@@ -94,7 +94,7 @@ export default function NewCustomers() {
           <div className="hidden md:flex flex-col space-y-3">
             {filtered.map(customer => {
               const customerUser = users.find(u => u.email === customer.email);
-              const isPending = customerUser?.role === 'pending_customer';
+              const isPending = ['pending_customer', 'user'].includes(customerUser?.role);
               return (
               <div key={customer.id} className="bg-white border rounded-xl p-5 hover:shadow-md transition-shadow">
                 <div className="flex items-start justify-between gap-4">
@@ -158,7 +158,7 @@ export default function NewCustomers() {
               <CarouselContent>
                 {filtered.map(customer => {
                   const customerUser = users.find(u => u.email === customer.email);
-                  const isPending = customerUser?.role === 'pending_customer';
+                  const isPending = ['pending_customer', 'user'].includes(customerUser?.role);
                   return (
                   <CarouselItem key={customer.id} className="basis-11/12 sm:basis-8/12">
                     <Card className="bg-white shadow-sm border-slate-200 mx-1 h-full flex flex-col">

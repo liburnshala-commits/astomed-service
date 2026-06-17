@@ -88,15 +88,15 @@ const AuthenticatedApp = () => {
     }
   }
 
-  // Strict routing for pending customers
-  if (user && user.role === 'pending_customer' && !isPublicRoute) {
+  // Strict routing for pending customers and newly registered default users
+  if (user && ['pending_customer', 'user'].includes(user.role) && !isPublicRoute) {
     if (currentPath !== '/PendingApproval') {
       return <Navigate to="/PendingApproval" replace />;
     }
   }
 
-  // Strict routing for customers and default users
-  if (user && ['customer', 'user'].includes(user.role) && !isPublicRoute) {
+  // Strict routing for customers
+  if (user && user.role === 'customer' && !isPublicRoute) {
     const allowedCustomerPaths = ['/CustomerDashboard', '/ServiceRecords', '/Machines', '/DeliveryControls', '/DeliveryControlForm', '/FunctionControls', '/FunctionControlForm', '/RadiationSafety'];
     if (!allowedCustomerPaths.includes(currentPath)) {
       return <Navigate to="/CustomerDashboard" replace />;
