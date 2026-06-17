@@ -15,8 +15,8 @@ Deno.serve(async (req) => {
             if (admin.email) {
                 await base44.asServiceRole.integrations.Core.SendEmail({
                     to: admin.email,
-                    subject: "Nytt konto skapat i Astomed Pro",
-                    body: `Ett nytt kundkonto har registrerats via den publika sidan.\n\nNamn: ${full_name || 'Okänt'}\nE-post: ${email || 'Okänt'}\nFöretag: ${company_name || 'Okänt'}\nDatum: ${new Date().toLocaleString('sv-SE')}`
+                    subject: "Väntande kund - portalaktivering i Astomed Pro",
+                    body: `En ny kund har ansökt och väntar på att få sin portal aktiverad.\n\nNamn: ${full_name || 'Okänt'}\nE-post: ${email || 'Okänt'}\nFöretag: ${company_name || 'Okänt'}\nAnsökan gjordes: ${new Date().toLocaleString('sv-SE', { timeZone: 'Europe/Stockholm' })}\n\nGå in i Astomed Pro under Nya Kunder / Användare och ändra deras roll till "Kund (Godkänd)" för att aktivera portalen.`
                 });
             }
         }
