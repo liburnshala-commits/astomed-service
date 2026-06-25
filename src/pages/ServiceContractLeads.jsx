@@ -65,9 +65,9 @@ export default function ServiceContractLeads() {
   const fetchData = async () => {
     setLoading(true);
     const [leadsData, customersData, machinesData] = await Promise.all([
-      base44.entities.ServiceContractLead.list(),
-      base44.entities.Customer.list(),
-      base44.entities.Machine.list()
+      base44.entities.ServiceContractLead.filter({}),
+      base44.entities.Customer.filter({}),
+      base44.entities.Machine.filter({})
     ]);
     setLeads(leadsData);
     setCustomers(customersData);
