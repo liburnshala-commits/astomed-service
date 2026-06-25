@@ -69,17 +69,49 @@ Deno.serve(async (req) => {
         let failCount = 0;
         let skippedCount = 0;
 
-        // Fetch existing leads to avoid duplicates (based on company_name)
-        const existingLeads = await base44.asServiceRole.entities.ServiceContractLead.filter({});
-        const existingCompanyNames = new Set(existingLeads.map(l => l.company_name.trim().toLowerCase()));
+        // Hämta befintliga prospekt och kunder för att undvika dubbletter
+        const [existingLeads, existingCustomers] = await Promise.all([
+            base44.asServiceRole.entities.ServiceContractLead.filter({}),
+            base44.asServiceRole.entities.Customer.filter({})
+        ]);
+        
+        const existingCompanyNames = new Set(existingLeads.map(l => l.company_name?.trim().toLowerCase()).filter(Boolean));
+        const existingLeadOrgNumbers = new Set(existingLeads.map(l => l.org_number?.trim().replace(/\D/g, '')).filter(Boolean));
+        
+        const customerByOrgNumber = new Map();
+        existingCustomers.forEach(c => {
+            if (c.org_number) {
+                customerByOrgNumber.set(c.org_number.trim().replace(/\D/g, ''), c.id);
+            }
+        });
         
         const newRecords = [];
         for (const record of records) {
-            if (existingCompanyNames.has(record.company_name.trim().toLowerCase())) {
+            const cleanOrgNumber = record.org_number ? record.org_number.trim().replace(/\D/g, '') : null;
+            const cleanCompanyName = record.company_name ? record.company_name.trim().toLowerCase() : null;
+
+            let isDuplicate = false;
+
+            // 1. Kontrollera org.nummer bland befintliga prospekt
+            if (cleanOrgNumber && existingLeadOrgNumbers.has(cleanOrgNumber)) {
+                isDuplicate = true;
+            }
+            // 2. Fallback: Kontrollera företagsnamn
+            else if (cleanCompanyName && existingCompanyNames.has(cleanCompanyName)) {
+                isDuplicate = true;
+            }
+
+            if (isDuplicate) {
                 skippedCount++;
             } else {
+                // Om vi hittar en befintlig kund med samma org-nummer, koppla prospektet till kunden!
+                if (cleanOrgNumber && customerByOrgNumber.has(cleanOrgNumber)) {
+                    record.customer_id = customerByOrgNumber.get(cleanOrgNumber);
+                }
+                
                 newRecords.push(record);
-                existingCompanyNames.add(record.company_name.trim().toLowerCase());
+                if (cleanCompanyName) existingCompanyNames.add(cleanCompanyName);
+                if (cleanOrgNumber) existingLeadOrgNumbers.add(cleanOrgNumber);
             }
         }
 
