@@ -52,11 +52,15 @@ Deno.serve(async (req) => {
       continue;
     }
 
-    // Find or create customer (match on org_number or company_name)
-    let customer = existingCustomers.find(c =>
-      (row.org_number && c.org_number && c.org_number === row.org_number) ||
-      c.company_name?.toLowerCase() === row.company_name?.toLowerCase()
-    );
+    // Find or create customer (match primarily on org_number)
+    let customer = null;
+    if (row.org_number) {
+      customer = existingCustomers.find(c => c.org_number && c.org_number.trim() === row.org_number.trim());
+    }
+    // Fallback to company_name if org_number is missing or no match found
+    if (!customer && row.company_name) {
+      customer = existingCustomers.find(c => c.company_name?.toLowerCase().trim() === row.company_name?.toLowerCase().trim());
+    }
 
     if (!customer) {
       const portalToken = Math.random().toString(36).substring(2, 18);
@@ -113,9 +117,10 @@ Deno.serve(async (req) => {
           status: 'new',
           proposed_machines: [],
         };
-        if (row.machine_model && row.serial_number) {
+        const parsedModel = row.model || row.machine_model;
+        if (parsedModel && row.serial_number) {
           leadData.proposed_machines.push({
-            model: row.machine_model,
+            model: parsedModel,
             serial_number: row.serial_number,
           });
         }
@@ -128,18 +133,23 @@ Deno.serve(async (req) => {
     }
 
     // Create machine if model provided
-    if (customer && row.machine_model) {
-      // Skip if serial number already exists
-      const serialExists = row.serial_number &&
-        existingMachines.some(m => m.serial_number && m.serial_number === row.serial_number);
-      if (serialExists) {
+    const parsedModel = row.model || row.machine_model;
+    if (customer && parsedModel) {
+      // Skip if this exact machine (model + serial) already exists for this customer
+      const machineExists = existingMachines.some(m => 
+        m.customer_id === customer.id && 
+        m.model === parsedModel && 
+        (row.serial_number ? m.serial_number === row.serial_number : true)
+      );
+
+      if (machineExists) {
         skipped_machines++;
       } else {
         let machineAttempts = 0;
         while (machineAttempts < 5) {
           try {
             const newMachine = await base44.asServiceRole.entities.Machine.create({
-              model: row.machine_model,
+              model: parsedModel,
               serial_number: row.serial_number || '',
               service_date: row.latest_service_date || null,
               customer_id: customer.id,
