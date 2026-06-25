@@ -11,7 +11,7 @@ import { createPageUrl } from "@/utils";
 import { useAuth } from "@/lib/AuthContext";
 import { addMonths, format, isPast, parseISO } from "date-fns";
 import { sv } from "date-fns/locale";
-import { FileCheck, Search, Building2, Monitor, Pencil, Clock, Download, Trash2, Phone, UserPlus, Check, Loader2, Copy } from "lucide-react";
+import { FileCheck, Search, Building2, Monitor, Pencil, Clock, Download, Trash2, Phone, UserPlus, Check, Loader2, Copy, Star } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ServiceContractModal from "@/components/machines/ServiceContractModal";
 import PendingContractApproval from "@/components/contracts/PendingContractApproval";
@@ -48,6 +48,7 @@ export default function ServiceContracts() {
   const [users, setUsers] = useState([]);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState(initialStatusFilter);
+  const [specialFilter, setSpecialFilter] = useState("all");
   const [editingMachine, setEditingMachine] = useState(null);
   const [showMultiContract, setShowMultiContract] = useState(false);
   const [inviting, setInviting] = useState(null);
@@ -188,8 +189,14 @@ export default function ServiceContracts() {
     .filter(m => m.service_contract && m.service_contract !== "none")
     .filter(m => {
       if (isTechnician && contractStatus(m) !== "active") return false;
-      if (!search) return true;
+      
       const cust = customerMap[m.customer_id];
+      const s = contractStatus(m);
+      
+      if (specialFilter === "imported" && !cust?.is_imported) return false;
+      if (specialFilter === "active_pending" && s !== "active" && s !== "pending_signature") return false;
+
+      if (!search) return true;
       const q = search.toLowerCase();
       return (
         m.model?.toLowerCase().includes(q) ||
@@ -268,9 +275,16 @@ export default function ServiceContracts() {
                 <Building2 className="w-4 h-4 text-slate-400 flex-shrink-0" />
                 <div className="min-w-0 flex-1">
                   {cust ? (
-                    <Link to={createPageUrl(`CustomerDetails?id=${cust.id}`)} className="font-medium truncate text-slate-800 block hover:text-[#3a9e9e] hover:underline">
-                      {cust.company_name || "–"}
-                    </Link>
+                    <div className="flex items-center gap-1.5 flex-wrap">
+                      <Link to={createPageUrl(`CustomerDetails?id=${cust.id}`)} className="font-medium truncate text-slate-800 block hover:text-[#3a9e9e] hover:underline">
+                        {cust.company_name || "–"}
+                      </Link>
+                      {cust.is_imported && (
+                        <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200 px-1.5 py-0 h-5 text-[10px] gap-1 shrink-0 flex items-center">
+                          <Star className="w-2.5 h-2.5 fill-current" /> Ny
+                        </Badge>
+                      )}
+                    </div>
                   ) : (
                     <div className="font-medium truncate text-slate-800">–</div>
                   )}
@@ -361,9 +375,16 @@ export default function ServiceContracts() {
             <Building2 className="w-4 h-4 text-slate-400 flex-shrink-0" />
             <div>
               {cust ? (
-                <Link to={createPageUrl(`CustomerDetails?id=${cust.id}`)} className="font-medium text-slate-800 hover:text-[#3a9e9e] hover:underline">
-                  {cust.company_name || "–"}
-                </Link>
+                <div className="flex items-center gap-1.5 flex-wrap">
+                  <Link to={createPageUrl(`CustomerDetails?id=${cust.id}`)} className="font-medium text-slate-800 hover:text-[#3a9e9e] hover:underline">
+                    {cust.company_name || "–"}
+                  </Link>
+                  {cust.is_imported && (
+                    <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200 px-1.5 py-0 h-5 text-[10px] gap-1 shrink-0 flex items-center">
+                      <Star className="w-2.5 h-2.5 fill-current" /> Ny
+                    </Badge>
+                  )}
+                </div>
               ) : (
                 <div className="font-medium text-slate-800">–</div>
               )}
@@ -493,6 +514,16 @@ export default function ServiceContracts() {
           <p className="text-sm astomed-muted">Översikt av alla tecknade serviceavtal</p>
         </div>
         <div className="ml-auto flex gap-3 items-center">
+          <Select value={specialFilter} onValueChange={setSpecialFilter}>
+            <SelectTrigger className="w-[200px] bg-white h-10 border-slate-200">
+              <SelectValue placeholder="Filtrera lista..." />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">Alla avtal</SelectItem>
+              <SelectItem value="imported">Nyimporterade (stjärna)</SelectItem>
+              <SelectItem value="active_pending">Aktiva & Under signering</SelectItem>
+            </SelectContent>
+          </Select>
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
             <Input
