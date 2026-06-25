@@ -13,7 +13,6 @@ import { useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import ServiceAgreementTemplates from './pages/ServiceAgreementTemplates';
 import CustomerDetails from './pages/CustomerDetails';
-import ServiceContractLeads from './pages/ServiceContractLeads';
 import ClosedLeads from './pages/ClosedLeads';
 import DeletedMachines from './pages/DeletedMachines';
 import ChatSupport from './pages/ChatSupport';
@@ -124,7 +123,6 @@ const AuthenticatedApp = () => {
         <Route path="/PublicServiceRequest" element={<AnimatedPage><PublicServiceRequest /></AnimatedPage>} />
         <Route path="/ServiceAgreementTemplates" element={<AnimatedPage><LayoutWrapper currentPageName="ServiceAgreementTemplates"><ServiceAgreementTemplates /></LayoutWrapper></AnimatedPage>} />
         <Route path="/CustomerDetails" element={<AnimatedPage><LayoutWrapper currentPageName="CustomerDetails"><CustomerDetails /></LayoutWrapper></AnimatedPage>} />
-        <Route path="/ServiceContractLeads" element={<AnimatedPage><LayoutWrapper currentPageName="ServiceContractLeads"><ServiceContractLeads /></LayoutWrapper></AnimatedPage>} />
         <Route path="/ClosedLeads" element={<AnimatedPage><LayoutWrapper currentPageName="ClosedLeads"><ClosedLeads /></LayoutWrapper></AnimatedPage>} />
         <Route path="/DeletedMachines" element={<AnimatedPage><LayoutWrapper currentPageName="Machines"><DeletedMachines /></LayoutWrapper></AnimatedPage>} />
         <Route path="/ChatSupport" element={<AnimatedPage><LayoutWrapper currentPageName="ChatSupport"><ChatSupport /></LayoutWrapper></AnimatedPage>} />
