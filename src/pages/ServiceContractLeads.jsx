@@ -65,9 +65,9 @@ export default function ServiceContractLeads() {
   const fetchData = async () => {
     setLoading(true);
     const [leadsData, customersData, machinesData] = await Promise.all([
-      base44.entities.ServiceContractLead.list("-created_date", 10000),
-      base44.entities.Customer.list("-created_date", 10000),
-      base44.entities.Machine.list("-created_date", 10000)
+      base44.entities.ServiceContractLead.filter({}, "-created_date", 10000),
+      base44.entities.Customer.filter({}, "-created_date", 10000),
+      base44.entities.Machine.filter({}, "-created_date", 10000)
     ]);
     setLeads(leadsData);
     setCustomers(customersData);
