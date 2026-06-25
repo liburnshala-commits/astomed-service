@@ -22,7 +22,7 @@ const astomedCategories = [
       { id: "aldix", name: "Aldix Smart Laser", subtitle: "Permanent hårborttagning", description: "Laserhårborttagning med välbeprövad diodlaser", image: "https://astomed.se/cdn/shop/files/Aldix-smart-laser-astomed_641a1065-8411-4a13-88f0-dc814e6999ff.png?v=1777023855&width=360", price: 350000, leasingPrice: 7071 },
       { id: "pento", name: "Pento Laser", subtitle: "Laserbehandling", description: "Utrustning som ger resultat med YAG- och Alexandritlaser", image: "https://astomed.se/cdn/shop/files/Pento-astomed_cf1f9d36-4e60-49f1-98ab-7128fe3e8555.png?v=1777023891&width=360", price: 775000, leasingPrice: 15199 },
       { id: "splendorx", name: "Splendor X", subtitle: "Permanent hårborttagning", description: "Laserutrustning i världsklass från välkända Lumenis", image: "https://astomed.se/cdn/shop/files/Splendor-astomed_44e60ad1-527b-4c98-af94-01f04c08a9e1.png?v=1777023900&width=360", price: 1330000, leasingPrice: 25646 },
-      { id: "clearlight", name: "Clear light IPL", subtitle: "Skin rejuvenation", description: "Välbeprövad IPL som behandlar flera indikationer", image: "https://astomed.se/cdn/shop/files/Clearlight-ipl-astomed_22012080-31ca-4dee-97ea-8297bae9c6c6.png?v=1777023054&width=360", price: 278000, leasingPrice: 5616 },
+      { id: "clearlight", name: "Clearlight IPL", subtitle: "Skin rejuvenation", description: "Välbeprövad IPL som behandlar flera indikationer", image: "https://astomed.se/cdn/shop/files/Clearlight-ipl-astomed_22012080-31ca-4dee-97ea-8297bae9c6c6.png?v=1777023054&width=360", price: 278000, leasingPrice: 5616 },
       { id: "sopranoice", name: "Soprano Ice Platinum", subtitle: "Permanent hårborttagning", description: "#1 på hårborttagning i Sverige sedan 10 år tillbaka", image: "https://astomed.se/cdn/shop/files/Soprano.png?v=1777030661&width=360", price: 624000, leasingPrice: 12443 },
       { id: "sopranotitanium", name: "Soprano Titanium", subtitle: "Permanent hårborttagning", description: "Laserhårborttagning i toppklass med tre-i en teknologi", image: "https://astomed.se/cdn/shop/files/Soprano-titanium.png?v=1777030764&width=360", price: 885000, leasingPrice: 17469 }
     ]
@@ -64,7 +64,7 @@ const astomedCategories = [
     machines: [
       { id: "cryopen", name: "Cryopen O+", subtitle: "Cryoterapi", description: "Peka och frys! På 20 sekunder eliminerar du oönskade hudfläckar", image: "https://astomed.se/cdn/shop/files/Cryopen_bf185c87-971c-4743-9001-669abfafcca8.png?v=1777032103&width=360", price: 23500, leasingPrice: null },
       { id: "cryoiq", name: "Cryo IQ", subtitle: "Cryoterapi", description: "Frys bort vårtor och hudfläckar enkelt och smärtfritt", image: "https://astomed.se/cdn/shop/files/Cryo-iq.png?v=1777033475&width=360", price: 6950, leasingPrice: null },
-      { id: "clearlight_p", name: "Clear light IPL", subtitle: "Skin rejuvenation", description: "Välbeprövad IPL som behandlar flera indikationer", image: "https://astomed.se/cdn/shop/files/Clearlight-ipl-astomed_22012080-31ca-4dee-97ea-8297bae9c6c6.png?v=1777023054&width=360", price: 278000, leasingPrice: 5616 }
+      { id: "clearlight_p", name: "Clearlight IPL", subtitle: "Skin rejuvenation", description: "Välbeprövad IPL som behandlar flera indikationer", image: "https://astomed.se/cdn/shop/files/Clearlight-ipl-astomed_22012080-31ca-4dee-97ea-8297bae9c6c6.png?v=1777023054&width=360", price: 278000, leasingPrice: 5616 }
     ]
   },
   {

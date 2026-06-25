@@ -17,7 +17,7 @@ import { useAuth } from "@/lib/AuthContext";
 
 const MODELS = [
   "Soprano Platinum", "Soprano Titanium", "Alma Harmony", "Aldix (Triodus)",
-  "PrimeLase", "Elysion", "PicoLo", "Helius", "Splendor X", "Pento"
+  "PrimeLase", "Elysion", "PicoLo", "Helius", "Splendor X", "Pento", "Clearlight IPL"
 ];
 
 const statusColor = { active: "bg-green-100 text-green-700", inactive: "bg-slate-100 text-slate-600", service: "bg-orange-100 text-orange-700" };

@@ -9,7 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 
 const MODELS = [
   "Soprano Platinum", "Soprano Titanium", "Alma Harmony", "Aldix (Triodus)",
-  "PrimeLase", "Elysion", "PicoLo", "Helius", "Splendor X", "Pento", "Annan"
+  "PrimeLase", "Elysion", "PicoLo", "Helius", "Splendor X", "Pento", "Clearlight IPL", "Annan"
 ];
 
 export default function CustomerForm({ customer, onSave, onClose }) {

@@ -2,6 +2,7 @@ export const MACHINE_MODELS = [
   "Alma Harmony",
   "Aldix (Triodus) / Aldix Smart Laser",
   "CoolTech",
+  "Clearlight IPL",
   "Elysion / Cocoon Elysion",
   "Fraction CO2",
   "Helios / Helios III",

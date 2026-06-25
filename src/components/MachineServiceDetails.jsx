@@ -43,6 +43,28 @@ export const machineServiceDetails = {
     ],
     additionalInfo: "Pris: 600 kr/månad eller 7 200 kr per år"
   },
+  "Clearlight IPL": {
+    title: "Standardservice och underhåll – Clearlight IPL",
+    details: [
+      "Byte av pneumatisk avjoniseringsfilter A",
+      "Byte av pneumatisk avjoniseringsfilter B",
+      "Byte av snabbkopplingar till filter",
+      "Påfyllning av destillerat avjoniserat kylvätska",
+      "Spolning av pneumatisk krets",
+      "Läckagekontroll",
+      "Kontroll av luftintagsfilter",
+      "Lasereffektmätning",
+      "Rengöring av värmeväxlare",
+      "Rengörning av Switchade nätaggret",
+      "Kontroll av nödstopp och interlock",
+      "Upprättande av serviceprotokoll",
+      "Serviceuppmärkning av utrustning",
+      "Kontroll av säkerhetsrem",
+      "20 % på arbetstid för övriga reparationer",
+      "20 % på resekostnader"
+    ],
+    additionalInfo: "Pris: 600 kr/månad eller 7 200 kr per år"
+  },
   "CoolTech": {
     title: "Standardservice och underhåll – CoolTech",
     details: [
