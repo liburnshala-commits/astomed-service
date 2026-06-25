@@ -13,6 +13,9 @@ export default function EditLeadModal({ lead, onClose, onSave }) {
     contact_person: lead.contact_person || "",
     email: lead.email || "",
     phone: lead.phone || "",
+    address: lead.address || "",
+    postal_code: lead.postal_code || "",
+    city: lead.city || "",
     notes: lead.notes || "",
   });
 
@@ -56,6 +59,21 @@ export default function EditLeadModal({ lead, onClose, onSave }) {
             <div className="space-y-2">
               <Label>Telefon</Label>
               <Input value={form.phone} onChange={e => set("phone", e.target.value)} />
+            </div>
+          </div>
+          
+          <div className="grid grid-cols-3 gap-4">
+            <div className="space-y-2">
+              <Label>Adress</Label>
+              <Input value={form.address} onChange={e => set("address", e.target.value)} placeholder="Gatuadress" />
+            </div>
+            <div className="space-y-2">
+              <Label>Postnummer</Label>
+              <Input value={form.postal_code} onChange={e => set("postal_code", e.target.value)} placeholder="Postnummer" />
+            </div>
+            <div className="space-y-2">
+              <Label>Ort</Label>
+              <Input value={form.city} onChange={e => set("city", e.target.value)} placeholder="Ort" />
             </div>
           </div>
 

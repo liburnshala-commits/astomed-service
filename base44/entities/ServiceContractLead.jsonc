@@ -26,6 +26,18 @@
       "type": "string",
       "description": "Telefon"
     },
+    "address": {
+      "type": "string",
+      "description": "Postadress"
+    },
+    "postal_code": {
+      "type": "string",
+      "description": "Postnummer"
+    },
+    "city": {
+      "type": "string",
+      "description": "Postort"
+    },
     "machine_ids": {
       "type": "array",
       "items": {
