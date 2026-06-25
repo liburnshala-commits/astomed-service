@@ -54,10 +54,10 @@ Deno.serve(async (req) => {
             // Eftersom installationsdatumet ("08-dec.-2016") inte följer YYYY-MM-DD hoppar vi över det,
             // annars kraschar valideringen.
 
-            if (row.model && row.serial_number) {
+            if (row.model) {
                 lead.proposed_machines.push({
                     model: row.model,
-                    serial_number: row.serial_number,
+                    serial_number: row.serial_number || 'Okänt',
                     notes: row.notes || undefined
                 });
             }
