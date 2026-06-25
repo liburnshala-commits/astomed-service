@@ -86,6 +86,11 @@ export default function Customers() {
   const filtered = customers.filter(c => {
     if (specialFilter === "imported" && !c.is_imported) return false;
     if (specialFilter === "updated_import" && !c.has_added_machine_via_import) return false;
+    if (specialFilter === "active_contract") {
+      const customerMachines = machines.filter(m => m.customer_id === c.id && m.service_contract && m.service_contract !== "none");
+      const hasActive = customerMachines.some(m => !m.contract_status || m.contract_status === "active");
+      if (!hasActive) return false;
+    }
 
     const searchLower = search.toLowerCase();
     const matchSearch = c.company_name?.toLowerCase().includes(searchLower) ||
@@ -498,6 +503,7 @@ export default function Customers() {
             <SelectItem value="all">Alla kunder</SelectItem>
             <SelectItem value="imported">Nyimporterade (stjärna)</SelectItem>
             <SelectItem value="updated_import">Uppdaterade vid import (maskin)</SelectItem>
+            <SelectItem value="active_contract">Aktiva serviceavtal</SelectItem>
           </SelectContent>
         </Select>
         <div className="relative flex-1">
