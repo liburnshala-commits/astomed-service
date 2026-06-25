@@ -3,7 +3,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { createPageUrl } from "@/utils";
 import { Link } from "react-router-dom";
-import { Plus, Search, Building2, Phone, Mail, ExternalLink, Trash2, UserPlus, Check, Copy, Loader2, Database, Upload, MessageSquare, Download } from "lucide-react";
+import { Plus, Search, Building2, Phone, Mail, ExternalLink, Trash2, UserPlus, Check, Copy, Loader2, Database, Upload, MessageSquare, Download, Star, MonitorUp } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -329,7 +329,14 @@ export default function Customers() {
                 {customer.company_name}
               </Link>
               {customer.is_imported && (
-                <span title="Importerad via CSV" className="text-xs bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded font-medium flex-shrink-0">⭐ Import</span>
+                <span title="Ny kund via import" className="text-xs bg-yellow-100 text-yellow-700 px-1.5 py-0.5 rounded font-medium flex items-center gap-1 flex-shrink-0">
+                  <Star className="w-3 h-3 fill-current" /> Ny
+                </span>
+              )}
+              {customer.has_added_machine_via_import && (
+                <span title="Fått ny maskin tillagd via import" className="text-xs bg-emerald-100 text-emerald-700 px-1.5 py-0.5 rounded font-medium flex items-center gap-1 flex-shrink-0">
+                  <MonitorUp className="w-3 h-3" /> Uppdaterad
+                </span>
               )}
             </div>
             {userRole === "admin" && (

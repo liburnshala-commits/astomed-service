@@ -88,6 +88,7 @@ Deno.serve(async (req) => {
             portal_token: portalToken,
             is_imported: true,
           });
+          customer.newly_created_in_this_import = true;
           existingCustomers.push(customer);
           created_customers++;
           break;
@@ -165,6 +166,12 @@ Deno.serve(async (req) => {
             });
             existingMachines.push(newMachine);
             created_machines++;
+
+            // Mark existing customer if they just got a machine via import
+            if (!customer.newly_created_in_this_import && !customer.has_added_machine_via_import) {
+              await base44.asServiceRole.entities.Customer.update(customer.id, { has_added_machine_via_import: true });
+              customer.has_added_machine_via_import = true;
+            }
             break;
           } catch (e) {
             if (e.status === 429) {

@@ -47,6 +47,11 @@
       "default": false,
       "description": "Importerad via CSV-import"
     },
+    "has_added_machine_via_import": {
+      "type": "boolean",
+      "default": false,
+      "description": "Har f\u00e5tt maskin tillagd via import"
+    },
     "is_invited": {
       "type": "boolean",
       "default": false,
