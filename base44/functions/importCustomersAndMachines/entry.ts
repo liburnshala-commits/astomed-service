@@ -1,9 +1,6 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.23';
 import Papa from 'npm:papaparse';
 
-// Helper: sleep for ms milliseconds
-const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
-
 Deno.serve(async (req) => {
   const base44 = createClientFromRequest(req);
   const user = await base44.auth.me();
@@ -49,9 +46,70 @@ Deno.serve(async (req) => {
   let skipped_rows = 0;
   const errors = [];
 
-  // Load existing customers once
+  // Load existing customers and machines once
   const existingCustomers = await base44.asServiceRole.entities.Customer.list();
   const existingMachines = await base44.asServiceRole.entities.Machine.list();
+  const existingLeads = await base44.asServiceRole.entities.ServiceContractLead.filter({});
+
+  // 1. Prepare new customers
+  const newCustomerDataList = [];
+  const processedCompanies = new Set();
+  
+  for (const row of rows) {
+    if (!row.company_name) continue;
+    
+    let customer = null;
+    if (row.org_number) {
+      customer = existingCustomers.find(c => c.org_number && c.org_number.trim() === row.org_number.trim());
+    }
+    if (!customer && row.company_name) {
+      customer = existingCustomers.find(c => c.company_name?.toLowerCase().trim() === row.company_name?.toLowerCase().trim());
+    }
+
+    if (!customer) {
+      const identifier = row.org_number ? row.org_number.trim() : row.company_name.toLowerCase().trim();
+      if (!processedCompanies.has(identifier)) {
+        processedCompanies.add(identifier);
+        const portalToken = Math.random().toString(36).substring(2, 18);
+        newCustomerDataList.push({
+          company_name: row.company_name,
+          org_number: row.org_number || '',
+          address: row.address || '',
+          postal_code: row.postal_code || '',
+          city: row.city || '',
+          contact_person: row.contact_person || '',
+          email: row.email || '',
+          phone: row.phone || '',
+          notes: row.notes || '',
+          portal_token: portalToken,
+          is_imported: true,
+        });
+      }
+    }
+  }
+
+  // 2. Insert new customers in batches
+  if (newCustomerDataList.length > 0) {
+    for (let i = 0; i < newCustomerDataList.length; i += 100) {
+      try {
+        const batch = newCustomerDataList.slice(i, i + 100);
+        const created = await base44.asServiceRole.entities.Customer.bulkCreate(batch);
+        created.forEach(c => {
+          c.newly_created_in_this_import = true;
+          existingCustomers.push(c);
+        });
+        created_customers += created.length;
+      } catch (e) {
+        errors.push(`Kunde inte skapa batch med kunder: ${e.message}`);
+      }
+    }
+  }
+
+  // 3. Prepare leads, machines, and customer updates
+  const newMachinesData = [];
+  const newLeadsData = [];
+  const customersToUpdateMap = new Map();
+  const processedMachines = new Set();
 
   for (const row of rows) {
     if (!row.company_name) {
@@ -59,62 +117,24 @@ Deno.serve(async (req) => {
       continue;
     }
 
-    // Find or create customer (match primarily on org_number)
     let customer = null;
     if (row.org_number) {
       customer = existingCustomers.find(c => c.org_number && c.org_number.trim() === row.org_number.trim());
     }
-    // Fallback to company_name if org_number is missing or no match found
     if (!customer && row.company_name) {
       customer = existingCustomers.find(c => c.company_name?.toLowerCase().trim() === row.company_name?.toLowerCase().trim());
     }
 
-    if (!customer) {
-      const portalToken = Math.random().toString(36).substring(2, 18);
-      // Retry on rate limit
-      let attempts = 0;
-      while (attempts < 5) {
-        try {
-          customer = await base44.asServiceRole.entities.Customer.create({
-            company_name: row.company_name,
-            org_number: row.org_number || '',
-            address: row.address || '',
-            postal_code: row.postal_code || '',
-            city: row.city || '',
-            contact_person: row.contact_person || '',
-            email: row.email || '',
-            phone: row.phone || '',
-            notes: row.notes || '',
-            portal_token: portalToken,
-            is_imported: true,
-          });
-          customer.newly_created_in_this_import = true;
-          existingCustomers.push(customer);
-          created_customers++;
-          break;
-        } catch (e) {
-          if (e.status === 429) {
-            attempts++;
-            await sleep(1000 * attempts); // exponential backoff
-          } else {
-            errors.push(`Kund "${row.company_name}": ${e.message}`);
-            break;
-          }
-        }
-      }
-    } else {
+    if (!customer) continue; // Should not happen
+
+    if (!customer.newly_created_in_this_import) {
       skipped_customers++;
     }
 
-    // Create ServiceContractLead for newly created customers
-    if (customer && created_customers > 0) {
-      // Only create lead for customers just created in this iteration
-      const justCreated = existingCustomers[existingCustomers.length - 1]?.id === customer.id &&
-        existingCustomers.filter(c => c.id === customer.id).length === 1;
-      
-      // Check if lead already exists for this customer
-      const existingLeads = await base44.asServiceRole.entities.ServiceContractLead.filter({ customer_id: customer.id });
-      if (existingLeads.length === 0) {
+    // Lead creation for newly created customers
+    if (customer.newly_created_in_this_import) {
+      const leadExists = existingLeads.some(l => l.customer_id === customer.id) || newLeadsData.some(l => l.customer_id === customer.id);
+      if (!leadExists) {
         const leadData = {
           customer_id: customer.id,
           company_name: customer.company_name,
@@ -132,62 +152,76 @@ Deno.serve(async (req) => {
             serial_number: row.serial_number,
           });
         }
-        try {
-          await base44.asServiceRole.entities.ServiceContractLead.create(leadData);
-        } catch (e) {
-          errors.push(`Prospekt för "${row.company_name}": ${e.message}`);
-        }
+        newLeadsData.push(leadData);
       }
     }
 
-    // Create machine if model provided
+    // Machine creation
     const parsedModel = row.model || row.machine_model;
-    if (customer && parsedModel) {
-      // Skip if this exact machine (model + serial) already exists for this customer
+    if (parsedModel) {
+      const serial = row.serial_number || '';
       const machineExists = existingMachines.some(m => 
         m.customer_id === customer.id && 
         m.model === parsedModel && 
-        (row.serial_number ? m.serial_number === row.serial_number : true)
+        (serial ? m.serial_number === serial : true)
       );
+      
+      const machineIdentifier = `${customer.id}-${parsedModel}-${serial}`;
+      const machineInBatch = processedMachines.has(machineIdentifier);
 
-      if (machineExists) {
+      if (machineExists || machineInBatch) {
         skipped_machines++;
       } else {
-        let machineAttempts = 0;
-        while (machineAttempts < 5) {
-          try {
-            const newMachine = await base44.asServiceRole.entities.Machine.create({
-              model: parsedModel,
-              serial_number: row.serial_number || '',
-              service_date: row.latest_service_date || null,
-              customer_id: customer.id,
-              status: 'active',
-              service_contract: 'none',
-            });
-            existingMachines.push(newMachine);
-            created_machines++;
+        newMachinesData.push({
+          model: parsedModel,
+          serial_number: serial,
+          service_date: row.latest_service_date || null,
+          customer_id: customer.id,
+          status: 'active',
+          service_contract: 'none',
+        });
+        processedMachines.add(machineIdentifier);
 
-            // Mark existing customer if they just got a machine via import
-            if (!customer.newly_created_in_this_import && !customer.has_added_machine_via_import) {
-              await base44.asServiceRole.entities.Customer.update(customer.id, { has_added_machine_via_import: true });
-              customer.has_added_machine_via_import = true;
-            }
-            break;
-          } catch (e) {
-            if (e.status === 429) {
-              machineAttempts++;
-              await sleep(1000 * machineAttempts);
-            } else {
-              errors.push(`Maskin för "${row.company_name}": ${e.message}`);
-              break;
-            }
-          }
+        if (!customer.newly_created_in_this_import && !customer.has_added_machine_via_import) {
+          customersToUpdateMap.set(customer.id, { id: customer.id, has_added_machine_via_import: true });
+          customer.has_added_machine_via_import = true;
         }
       }
     }
+  }
 
-    // Small pause between rows to avoid rate limiting
-    await sleep(150);
+  // 4. Execute bulk operations for leads, machines, and customer updates
+  if (newLeadsData.length > 0) {
+    for (let i = 0; i < newLeadsData.length; i += 100) {
+      try {
+        await base44.asServiceRole.entities.ServiceContractLead.bulkCreate(newLeadsData.slice(i, i + 100));
+      } catch (e) {
+        errors.push(`Kunde inte skapa batch med prospekt: ${e.message}`);
+      }
+    }
+  }
+
+  if (newMachinesData.length > 0) {
+    for (let i = 0; i < newMachinesData.length; i += 100) {
+      try {
+        const batch = newMachinesData.slice(i, i + 100);
+        await base44.asServiceRole.entities.Machine.bulkCreate(batch);
+        created_machines += batch.length;
+      } catch (e) {
+        errors.push(`Kunde inte skapa batch med maskiner: ${e.message}`);
+      }
+    }
+  }
+
+  const customersToUpdateList = Array.from(customersToUpdateMap.values());
+  if (customersToUpdateList.length > 0) {
+    for (let i = 0; i < customersToUpdateList.length; i += 100) {
+      try {
+        await base44.asServiceRole.entities.Customer.bulkUpdate(customersToUpdateList.slice(i, i + 100));
+      } catch (e) {
+        errors.push(`Kunde inte uppdatera befintliga kunders import-markeringar: ${e.message}`);
+      }
+    }
   }
 
   return Response.json({
