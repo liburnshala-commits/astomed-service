@@ -21,6 +21,13 @@ Deno.serve(async (req) => {
   // Remove BOM if present (often added by Excel)
   text = text.replace(/^\uFEFF/, '');
 
+  // Remove the first line if it contains only separators (e.g. empty Excel export row)
+  const lines = text.split('\n');
+  if (lines.length > 0 && lines[0].replace(/[;,\s]/g, '') === '') {
+    lines.shift();
+  }
+  text = lines.join('\n');
+
   const parsed = Papa.parse(text.trim(), {
     header: true,
     skipEmptyLines: true,
