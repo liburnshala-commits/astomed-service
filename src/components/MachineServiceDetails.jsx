@@ -46,9 +46,8 @@ export const machineServiceDetails = {
   "Clearlight IPL": {
     title: "Standardservice och underhåll – Clearlight IPL",
     details: [
-      "Byte av pneumatisk avjoniseringsfilter A",
-      "Byte av pneumatisk avjoniseringsfilter B",
-      "Byte av snabbkopplingar till filter",
+      "Byte av avjoniseringsfilter",
+      "Byte av ev snabbkopplingar till filter",
       "Påfyllning av destillerat avjoniserat kylvätska",
       "Spolning av pneumatisk krets",
       "Läckagekontroll",
