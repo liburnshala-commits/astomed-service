@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import CustomerForm from "@/components/customers/CustomerForm.jsx";
 import DeleteCustomerDialog from "@/components/gdpr/DeleteCustomerDialog.jsx";
 import CustomerLatestInteraction from "@/components/customers/CustomerLatestInteraction.jsx";
@@ -21,6 +22,7 @@ import { useAuth } from "@/lib/AuthContext";
 export default function Customers() {
   const queryClient = useQueryClient();
   const [search, setSearch] = useState("");
+  const [specialFilter, setSpecialFilter] = useState("all");
   const [showForm, setShowForm] = useState(false);
   const [editing, setEditing] = useState(null);
   const [inviting, setInviting] = useState(null);
@@ -82,6 +84,9 @@ export default function Customers() {
   const filterParam = urlParams.get("filter");
 
   const filtered = customers.filter(c => {
+    if (specialFilter === "imported" && !c.is_imported) return false;
+    if (specialFilter === "updated_import" && !c.has_added_machine_via_import) return false;
+
     const searchLower = search.toLowerCase();
     const matchSearch = c.company_name?.toLowerCase().includes(searchLower) ||
       c.org_number?.toLowerCase().includes(searchLower) ||
@@ -484,9 +489,21 @@ export default function Customers() {
         </div>
       </div>
 
-      <div className="relative">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 astomed-muted" />
-        <Input placeholder="Sök kund, org.nr, kontaktperson, stad..." className="pl-9" value={search} onChange={e => setSearch(e.target.value)} />
+      <div className="flex flex-col sm:flex-row gap-3">
+        <Select value={specialFilter} onValueChange={setSpecialFilter}>
+          <SelectTrigger className="w-full sm:w-[250px] bg-white h-10 border-slate-200">
+            <SelectValue placeholder="Filtrera lista..." />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">Alla kunder</SelectItem>
+            <SelectItem value="imported">Nyimporterade (stjärna)</SelectItem>
+            <SelectItem value="updated_import">Uppdaterade vid import (maskin)</SelectItem>
+          </SelectContent>
+        </Select>
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 astomed-muted" />
+          <Input placeholder="Sök kund, org.nr, kontaktperson, stad..." className="pl-9 bg-white" value={search} onChange={e => setSearch(e.target.value)} />
+        </div>
       </div>
 
       {filtered.length === 0 ? (
