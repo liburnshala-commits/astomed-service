@@ -30,7 +30,6 @@ export default function MobileMenu() {
     { label: "Serviceärenden", page: "ServiceRecords", icon: Wrench, color: "text-teal-600", bg: "bg-teal-100", roles: ["admin", "technician"] },
     { label: "Servicekalender", page: "Calendar", icon: CalendarDays, color: "text-purple-500", bg: "bg-purple-100", roles: ["admin", "technician"] },
     { label: "Serviceavtal", page: "ServiceContracts", icon: FileCheck, color: "text-emerald-500", bg: "bg-emerald-100", roles: ["admin", "technician"] },
-    { label: "Avtalsprospekt", page: "ServiceContractLeads", icon: UsersIcon, color: "text-indigo-500", bg: "bg-indigo-100", roles: ["admin"] },
     { label: "Avslutade prospekt", page: "ClosedLeads", icon: Archive, color: "text-slate-500", bg: "bg-slate-100", roles: ["admin"] },
     { label: "Serviceavtalsmallar", page: "ServiceAgreementTemplates", icon: FileCheck, color: "text-cyan-600", bg: "bg-cyan-100", roles: ["admin"] },
   ].filter(item => item.roles.includes(userRole));

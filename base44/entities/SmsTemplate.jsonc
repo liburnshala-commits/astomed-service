@@ -1,0 +1,52 @@
+{
+  "name": "SmsTemplate",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Namn p\u00e5 mallen"
+    },
+    "content": {
+      "type": "string",
+      "description": "Inneh\u00e5ll/text i mallen",
+      "maxLength": 1000
+    }
+  },
+  "required": [
+    "name",
+    "content"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": {
+          "$in": [
+            "admin",
+            "technician"
+          ]
+        }
+      }
+    },
+    "read": {},
+    "update": {
+      "user_condition": {
+        "role": {
+          "$in": [
+            "admin",
+            "technician"
+          ]
+        }
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": {
+          "$in": [
+            "admin",
+            "technician"
+          ]
+        }
+      }
+    }
+  }
+}
