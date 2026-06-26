@@ -96,6 +96,12 @@ export default function Customers() {
       const hasMobile = phone.startsWith("+467") || phone.startsWith("467") || phone.startsWith("07") || phone.startsWith("7");
       if (!hasMobile) return false;
     }
+    if (specialFilter === "imported_mobile") {
+      if (!c.is_imported) return false;
+      const phone = (c.phone || "").replace(/[\s-]/g, "");
+      const hasMobile = phone.startsWith("+467") || phone.startsWith("467") || phone.startsWith("07") || phone.startsWith("7");
+      if (!hasMobile) return false;
+    }
 
     const searchLower = search.toLowerCase();
     const matchSearch = c.company_name?.toLowerCase().includes(searchLower) ||
@@ -510,6 +516,7 @@ export default function Customers() {
             <SelectItem value="updated_import">Uppdaterade vid import (maskin)</SelectItem>
             <SelectItem value="active_contract">Aktiva serviceavtal</SelectItem>
             <SelectItem value="mobile_number">Mobilnummer (07, +467...)</SelectItem>
+            <SelectItem value="imported_mobile">Importerade med mobilnummer</SelectItem>
           </SelectContent>
         </Select>
         <div className="relative flex-1">
