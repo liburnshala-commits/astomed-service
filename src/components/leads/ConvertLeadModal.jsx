@@ -15,7 +15,7 @@ const MODELS = [
   "Soprano Titanium",
   "Helios III",
   "Picolo",
-  "Cocoon Elysion",
+  "Sinclair Elysion",
   "Aldix Smart Laser",
   "Pento 9900",
   "PrimeLase HR",

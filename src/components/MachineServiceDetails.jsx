@@ -84,7 +84,7 @@ export const machineServiceDetails = {
     ],
     additionalInfo: "Pris: 600 kr/månad eller 7 200 kr per år"
   },
-  "Elysion / Cocoon Elysion": {
+  "Elysion / Sinclair Elysion": {
     title: "Standardservice och underhåll – Elysion",
     details: [
       "Byte av mekanisk vattenfilter",
