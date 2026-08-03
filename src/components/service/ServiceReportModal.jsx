@@ -158,7 +158,6 @@ export default function ServiceReportModal({ record, machine, customer, onClose 
           <h2 className="font-bold text-sm print:text-[11px] mb-2 print:mb-0.5">Ärende</h2>
           <ul className="list-disc list-inside space-y-1 mb-4 print:mb-1">
             <li><strong>Typ av service:</strong> {typeLabel}</li>
-            <li><strong>Ankomstdatum:</strong> Service utförd hos kund</li>
           </ul>
 
           <hr className="my-5 print:my-1 border-slate-200" />
