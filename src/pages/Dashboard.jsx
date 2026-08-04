@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import TechnicianDashboard from "@/components/dashboard/TechnicianDashboard";
 import ContractsPieChart from "@/components/dashboard/ContractsPieChart";
 import UpcomingServiceReminders from "@/components/dashboard/UpcomingServiceReminders";
+import ServiceRecordsChart from "@/components/dashboard/ServiceRecordsChart";
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -35,7 +36,7 @@ export default function Dashboard() {
         if (cust && !cust.is_deleted) {
           const [m, r, t] = await Promise.all([
             base44.entities.Machine.filter({ customer_id: cust.id }),
-            base44.entities.ServiceRecord.filter({ customer_id: cust.id }, "-service_date", 50),
+            base44.entities.ServiceRecord.filter({ customer_id: cust.id }, "-service_date", 500),
             base44.entities.ServiceAgreementTemplate.list()
           ]);
           setMachines(m.filter(x => !x.is_deleted));
@@ -47,7 +48,7 @@ export default function Dashboard() {
         const [m, c, r, l, t] = await Promise.all([
           base44.entities.Machine.list("-created_date"),
           base44.entities.Customer.list("-created_date"),
-          base44.entities.ServiceRecord.list("-created_date", 50),
+          base44.entities.ServiceRecord.list("-created_date", 500),
           base44.entities.ServiceContractLead.list(),
           base44.entities.ServiceAgreementTemplate.list()
         ]);
@@ -355,6 +356,9 @@ export default function Dashboard() {
             <div className="min-h-[300px]">
                <ContractsPieChart machines={machines} templates={templates} />
             </div>
+          </div>
+          <div className="min-h-[300px] mt-4">
+             <ServiceRecordsChart records={records} />
           </div>
         </>
       )}
