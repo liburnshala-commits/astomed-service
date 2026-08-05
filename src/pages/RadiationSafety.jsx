@@ -330,7 +330,7 @@ export default function RadiationSafety() {
               onChange={e => setSelectedAdminClinicId(e.target.value)}
             >
               <option value="all">Alla kunder (Översikt)</option>
-              {customers.map(c => (
+              {[...customers].sort((a, b) => (a.company_name || "").localeCompare(b.company_name || "")).map(c => (
                 <option key={c.id} value={c.id}>{c.company_name}</option>
               ))}
             </select>
