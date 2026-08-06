@@ -183,27 +183,29 @@ export default function ServiceRecordForm({ record, machines, customers, presele
       
       // If no explicit template is set, try to find a matching template by machine model
       if (!templateToApply && machine && machine.model) {
-        const modelLower = machine.model.toLowerCase();
-        templateToApply = templates.find(t => {
-          const tNameLower = t.name.toLowerCase();
-          // Check if either includes the other, or if they share significant keywords
-          if (modelLower.includes(tNameLower) || tNameLower.includes(modelLower)) return true;
-          // E.g. "Soprano Platinum" and "Soprano ICE Platinum"
-          const modelParts = modelLower.split(/[\s/]+/);
-          const tNameParts = tNameLower.split(/[\s/]+/);
-          return modelParts.length > 0 && tNameParts.length > 0 && 
-                 modelParts.some(p => p.length > 3 && tNameParts.includes(p)) &&
-                 (modelLower.includes('soprano') && tNameLower.includes('soprano') ? true : false); // rough heuristic, let's keep it simpler
-        });
-      }
-
-      // Final attempt: simple word overlap
-      if (!templateToApply && machine && machine.model) {
-         const modelWords = machine.model.toLowerCase().split(/[\s/]+/).filter(w => w.length > 2);
-         templateToApply = templates.find(t => {
-            const tWords = t.name.toLowerCase().split(/[\s/]+/).filter(w => w.length > 2);
-            return modelWords.some(mw => tWords.includes(mw));
-         });
+        const modelLower = machine.model.toLowerCase().trim();
+        
+        // 1. Exact match
+        templateToApply = templates.find(t => t.name.toLowerCase().trim() === modelLower);
+        
+        // 2. Contains match
+        if (!templateToApply) {
+          templateToApply = templates.find(t => {
+            const tNameLower = t.name.toLowerCase().trim();
+            return tNameLower.includes(modelLower) || modelLower.includes(tNameLower);
+          });
+        }
+        
+        // 3. Match Soprano variations exactly if no better match
+        if (!templateToApply && modelLower.includes('soprano')) {
+           if (modelLower.includes('titanium')) {
+              templateToApply = templates.find(t => t.name.toLowerCase().includes('soprano titanium'));
+           } else if (modelLower.includes('platinum')) {
+              templateToApply = templates.find(t => t.name.toLowerCase().includes('soprano ice platinum'));
+           } else if (modelLower.includes('ice')) {
+              templateToApply = templates.find(t => t.name.toLowerCase().includes('soprano ice'));
+           }
+        }
       }
 
       if (templateToApply) {
