@@ -180,9 +180,32 @@ export default function ServiceRecordForm({ record, machines, customers, presele
       if (machine?.service_agreement_template_id) {
         templateToApply = templates.find(t => t.id === machine.service_agreement_template_id);
       }
-      if (!templateToApply && templates.length > 0) {
-        templateToApply = templates[0];
+      
+      // If no explicit template is set, try to find a matching template by machine model
+      if (!templateToApply && machine && machine.model) {
+        const modelLower = machine.model.toLowerCase();
+        templateToApply = templates.find(t => {
+          const tNameLower = t.name.toLowerCase();
+          // Check if either includes the other, or if they share significant keywords
+          if (modelLower.includes(tNameLower) || tNameLower.includes(modelLower)) return true;
+          // E.g. "Soprano Platinum" and "Soprano ICE Platinum"
+          const modelParts = modelLower.split(/[\s/]+/);
+          const tNameParts = tNameLower.split(/[\s/]+/);
+          return modelParts.length > 0 && tNameParts.length > 0 && 
+                 modelParts.some(p => p.length > 3 && tNameParts.includes(p)) &&
+                 (modelLower.includes('soprano') && tNameLower.includes('soprano') ? true : false); // rough heuristic, let's keep it simpler
+        });
       }
+
+      // Final attempt: simple word overlap
+      if (!templateToApply && machine && machine.model) {
+         const modelWords = machine.model.toLowerCase().split(/[\s/]+/).filter(w => w.length > 2);
+         templateToApply = templates.find(t => {
+            const tWords = t.name.toLowerCase().split(/[\s/]+/).filter(w => w.length > 2);
+            return modelWords.some(mw => tWords.includes(mw));
+         });
+      }
+
       if (templateToApply) {
         applyTemplate(templateToApply.id);
       }
