@@ -522,7 +522,7 @@ export default function PublicServiceRequest() {
           <div className="flex flex-col items-center text-center mb-12">
             <div className="flex items-start gap-8 mb-8">
               <div className="flex flex-col items-center">
-                <img src="https://astomed.se/wp-content/uploads/2026/04/Liburn-2026.jpg" alt="Liburn" className="w-28 h-28 rounded-full object-cover shadow-lg border-4 border-white mb-3" />
+                <img src="https://media.base44.com/images/public/69a9446fcb1cd4ab529479ba/bebd0b7cf_Liburn-2026.jpg" alt="Liburn" className="w-28 h-28 rounded-full object-cover shadow-lg border-4 border-white mb-3" />
                 <span className="font-bold text-[#1b3a3a]">Liburn</span>
                 <span className="text-sm text-slate-500">Produktspecialist Service</span>
                 <a href="tel:0761616855" className="text-sm text-[#3a9e9e] font-semibold mt-1 hover:underline">076-161 68 55</a>
