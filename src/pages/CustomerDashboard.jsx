@@ -9,6 +9,7 @@ import ServiceRecordDetail from "@/components/service/ServiceRecordDetail";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { format } from "date-fns";
 import { sv } from "date-fns/locale";
 
@@ -29,6 +30,19 @@ export default function CustomerDashboard() {
   const [showOtherMachineForm, setShowOtherMachineForm] = useState(false);
   const [requestingContractFor, setRequestingContractFor] = useState(null);
   const [viewingRecord, setViewingRecord] = useState(null);
+  const [editingSnFor, setEditingSnFor] = useState(null);
+
+  const handleUpdateSn = async (machineId, newSn) => {
+    if (!newSn || newSn.trim() === "") return;
+    try {
+      await base44.entities.Machine.update(machineId, { serial_number: newSn });
+      setMachines(prev => prev.map(m => m.id === machineId ? { ...m, serial_number: newSn } : m));
+      setEditingSnFor(null);
+    } catch (err) {
+      console.error("Kunde inte uppdatera serienummer", err);
+      alert("Kunde inte uppdatera serienumret. Försök igen senare.");
+    }
+  };
 
   useEffect(() => {
     const load = async () => {
@@ -184,6 +198,16 @@ export default function CustomerDashboard() {
 
       {/* Machines section */}
       <div>
+        {machines.filter(m => !m.serial_number || m.serial_number.toLowerCase() === "okänd" || m.serial_number.toLowerCase() === "saknas" || m.serial_number.trim() === "").length > 0 && (
+          <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 flex items-start gap-3 mb-6">
+            <AlertTriangle className="w-5 h-5 text-amber-500 mt-0.5 flex-shrink-0" />
+            <div>
+              <h3 className="font-semibold text-amber-800">Viktig information saknas</h3>
+              <p className="text-sm text-amber-700 mt-1">En eller flera av dina maskiner saknar ett registrerat serienummer. Vänligen klicka på "Ändra" bredvid serienumret på maskinen för att fylla i det. Detta är viktigt för att service och avtal ska kopplas rätt.</p>
+            </div>
+          </div>
+        )}
+
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-sm font-semibold astomed-label flex items-center gap-2">
             <Monitor className="w-4 h-4" />
@@ -195,7 +219,9 @@ export default function CustomerDashboard() {
         </div>
         {machines.length > 0 ? (
           <div className="space-y-3">
-            {machines.map((machine, idx) => (
+            {machines.map((machine, idx) => {
+              const isMissingSn = !machine.serial_number || machine.serial_number.toLowerCase() === "okänd" || machine.serial_number.toLowerCase() === "saknas" || machine.serial_number.trim() === "";
+              return (
               <div key={machine.id}>
                 <Card className="astomed-card" style={{ background: "#f4f9f9" }}>
                     <CardContent className="p-4">
@@ -205,7 +231,42 @@ export default function CustomerDashboard() {
                       </div>
                       <div className="flex-1 min-w-0">
                         <h3 className="text-sm font-semibold astomed-title">{machine.model}</h3>
-                        <p className="text-xs astomed-muted mb-2">SN: {machine.serial_number}</p>
+                        
+                        {editingSnFor?.id === machine.id ? (
+                          <div className="mt-2 mb-3 flex items-center gap-2">
+                            <Input 
+                              value={editingSnFor.serial_number} 
+                              onChange={e => setEditingSnFor({...editingSnFor, serial_number: e.target.value})}
+                              placeholder="Ange serienummer"
+                              className="h-8 text-xs w-40 bg-white"
+                            />
+                            <Button 
+                              size="sm" 
+                              className="h-8 px-2 astomed-btn-primary"
+                              onClick={() => handleUpdateSn(machine.id, editingSnFor.serial_number)}
+                            >
+                              Spara
+                            </Button>
+                            <Button size="sm" variant="ghost" className="h-8 px-2 text-slate-500" onClick={() => setEditingSnFor(null)}>
+                              Avbryt
+                            </Button>
+                          </div>
+                        ) : (
+                          <div className="flex items-center gap-2 mb-2 mt-1">
+                            <p className={`text-xs ${isMissingSn ? 'text-amber-600 font-semibold' : 'astomed-muted'}`}>
+                              SN: {isMissingSn ? "Saknas" : machine.serial_number}
+                            </p>
+                            <Button 
+                              size="sm" 
+                              variant="ghost" 
+                              className="h-5 px-1.5 text-[10px] text-blue-600 hover:text-blue-800 hover:bg-blue-50"
+                              onClick={() => setEditingSnFor({ id: machine.id, serial_number: isMissingSn ? '' : machine.serial_number })}
+                            >
+                              ✏️ Ändra
+                            </Button>
+                          </div>
+                        )}
+
                         <div className="text-xs space-y-1">
                           {(() => {
                             if (machine.service_contract_status === "pending") {
@@ -291,7 +352,7 @@ export default function CustomerDashboard() {
                 </Card>
                 {idx < machines.length - 1 && <div className="h-px" style={{ background: "#dce8e8" }} />}
               </div>
-            ))}
+            )})}
           </div>
         ) : (
           <Card className="astomed-card" style={{ background: "#f4f9f9" }}>

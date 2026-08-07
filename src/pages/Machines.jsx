@@ -3,7 +3,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { createPageUrl } from "@/utils";
 import { Link, useLocation } from "react-router-dom";
-import { Plus, Search, Monitor, Wrench, Building2, FileCheck, Download, Trash2, FileText } from "lucide-react";
+import { Plus, Search, Monitor, Wrench, Building2, FileCheck, Download, Trash2, FileText, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
@@ -36,6 +36,19 @@ export default function Machines() {
   const [editing, setEditing] = useState(null);
   const [contractMachine, setContractMachine] = useState(null);
   const [reportData, setReportData] = useState(null);
+  const [editingSnFor, setEditingSnFor] = useState(null);
+
+  const handleUpdateSn = async (machineId, newSn) => {
+    if (!newSn || newSn.trim() === "") return;
+    try {
+      await base44.entities.Machine.update(machineId, { serial_number: newSn });
+      setEditingSnFor(null);
+      load();
+    } catch (err) {
+      console.error("Kunde inte uppdatera serienummer", err);
+      alert("Kunde inte uppdatera serienumret. Försök igen senare.");
+    }
+  };
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -252,8 +265,47 @@ export default function Machines() {
           </div>
           <Link to={createPageUrl(`ServiceRecords?machine=${machine.id}`)} className="block w-fit group" title="Visa serviceärenden för denna maskin">
             <h3 className="font-bold astomed-title mb-0.5 group-hover:underline group-hover:text-[#3a9e9e] transition-colors">{machine.model}</h3>
-            <p className="text-xs astomed-muted mb-3 font-mono group-hover:text-slate-600 transition-colors">SN: {machine.serial_number}</p>
           </Link>
+          {(() => {
+            const isMissingSn = !machine.serial_number || machine.serial_number.toLowerCase() === "okänd" || machine.serial_number.toLowerCase() === "saknas" || machine.serial_number.trim() === "";
+            if (editingSnFor?.id === machine.id) {
+              return (
+                <div className="mt-1 mb-3 flex items-center gap-2" onClick={e => e.stopPropagation()}>
+                  <Input 
+                    value={editingSnFor.serial_number} 
+                    onChange={e => setEditingSnFor({...editingSnFor, serial_number: e.target.value})}
+                    placeholder="Ange serienummer"
+                    className="h-8 text-xs w-36 bg-white"
+                  />
+                  <Button 
+                    size="sm" 
+                    className="h-8 px-2 astomed-btn-primary"
+                    onClick={() => handleUpdateSn(machine.id, editingSnFor.serial_number)}
+                  >
+                    Spara
+                  </Button>
+                  <Button size="sm" variant="ghost" className="h-8 px-2 text-slate-500" onClick={() => setEditingSnFor(null)}>
+                    Avbryt
+                  </Button>
+                </div>
+              );
+            }
+            return (
+              <div className="flex items-center gap-2 mb-3 mt-0.5">
+                <p className={`text-xs font-mono transition-colors ${isMissingSn ? 'text-amber-600 font-semibold' : 'astomed-muted group-hover:text-slate-600'}`}>
+                  SN: {isMissingSn ? "Saknas" : machine.serial_number}
+                </p>
+                <Button 
+                  size="sm" 
+                  variant="ghost" 
+                  className="h-5 px-1.5 text-[10px] text-blue-600 hover:text-blue-800 hover:bg-blue-50"
+                  onClick={(e) => { e.preventDefault(); setEditingSnFor({ id: machine.id, serial_number: isMissingSn ? '' : machine.serial_number }); }}
+                >
+                  ✏️ Ändra
+                </Button>
+              </div>
+            );
+          })()}
           {customer && (
             <Link to={createPageUrl(`CustomerDetails?id=${customer.id}`)} className="flex items-center gap-1.5 text-sm astomed-subtitle mb-3 hover:opacity-80 transition-opacity w-fit">
               <Building2 className="w-3.5 h-3.5 astomed-muted" />
@@ -375,6 +427,16 @@ export default function Machines() {
            </div>
          )}
        </div>
+
+      {userRole === "customer" && machines.filter(m => !m.serial_number || m.serial_number.toLowerCase() === "okänd" || m.serial_number.toLowerCase() === "saknas" || m.serial_number.trim() === "").length > 0 && (
+        <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 flex items-start gap-3">
+          <AlertTriangle className="w-5 h-5 text-amber-500 mt-0.5 flex-shrink-0" />
+          <div>
+            <h3 className="font-semibold text-amber-800">Viktig information saknas</h3>
+            <p className="text-sm text-amber-700 mt-1">En eller flera av dina maskiner saknar ett registrerat serienummer. Vänligen klicka på "Ändra" bredvid serienumret på maskinen för att fylla i det. Detta är viktigt för att service och avtal ska kopplas rätt.</p>
+          </div>
+        </div>
+      )}
 
       <div className="flex flex-col sm:flex-row gap-3">
         <div className="relative flex-1">
