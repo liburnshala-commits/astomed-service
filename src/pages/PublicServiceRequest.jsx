@@ -7,7 +7,6 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { machineServiceDetails } from "../components/MachineServiceDetails";
 import PrivacyPolicyContent from "../components/PrivacyPolicyContent";
 import ChatWidget from "../components/chat/ChatWidget";
 import { base44 } from "@/api/base44Client";
@@ -47,8 +46,21 @@ export default function PublicServiceRequest() {
   const [showPrivacyDialog, setShowPrivacyDialog] = useState(false);
   const [orgNumberWarning, setOrgNumberWarning] = useState("");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [templates, setTemplates] = useState([]);
 
   const set = (field, value) => setForm((prev) => ({ ...prev, [field]: value }));
+
+  useEffect(() => {
+    const fetchTemplates = async () => {
+      try {
+        const data = await base44.entities.ServiceAgreementTemplate.list();
+        setTemplates(data);
+      } catch (err) {
+        console.error("Failed to load templates", err);
+      }
+    };
+    fetchTemplates();
+  }, []);
 
   useEffect(() => {
     const checkOrgNumber = async () => {
@@ -590,9 +602,10 @@ export default function PublicServiceRequest() {
                       <SelectValue placeholder="Välj maskintyp" />
                     </SelectTrigger>
                     <SelectContent>
-                      {Object.keys(machineServiceDetails).map((machine) =>
-                        <SelectItem key={machine} value={machine}>{machine}</SelectItem>
+                      {templates.map((template) =>
+                        <SelectItem key={template.id} value={template.name}>{template.name}</SelectItem>
                       )}
+                      <SelectItem value="Annan">Annan</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -609,47 +622,58 @@ export default function PublicServiceRequest() {
                   </div>
                 }
 
-                {form.machine_name && machineServiceDetails[form.machine_name] &&
-                  <div className="sm:col-span-2 p-5 bg-[#f0f7f7] rounded-xl border border-[#d2e8e8]">
-                    <h4 className="font-bold text-[#1b3a3a] mb-3 flex items-center gap-2">
-                      <Wrench className="w-4 h-4 text-[#3a9e9e]" />
-                      {machineServiceDetails[form.machine_name].title}
-                    </h4>
-                    <ul className="space-y-2.5 text-sm text-slate-700">
-                      {machineServiceDetails[form.machine_name].details.map((detail, idx) =>
-                        <li key={idx} className="flex gap-2.5 items-start">
-                          <CheckCircle2 className="w-4 h-4 text-[#3a9e9e] shrink-0 mt-0.5" />
-                          <span dangerouslySetInnerHTML={{ __html: detail }} />
-                        </li>
-                      )}
-                    </ul>
-                    {machineServiceDetails[form.machine_name].additionalInfo &&
-                      <div className="mt-4 pt-4 border-t border-[#d2e8e8]">
-                        {(() => {
-                          const info = machineServiceDetails[form.machine_name].additionalInfo;
-                          const match = info.match(/(\d+)/);
-                          const price = match ? parseInt(match[0], 10) : null;
-                          
-                          return (
-                            <>
-                              <p className="text-sm font-semibold text-[#1b3a3a]">
-                                {info}
-                              </p>
-                              {price && (
-                                <div className="mt-4 pt-4 border-t border-slate-200 text-right">
-                                  <p className="text-xs text-slate-500 mb-1">Jämförspris vid Engångsservice (utan avtal):</p>
-                                  <p className="text-lg font-bold text-[#1b3a3a] mb-2">{Math.round(price * 12 * 1.30).toLocaleString('sv-SE')} kr / gång</p>
-                                  <p className="text-xs text-slate-500 italic">* Inkluderar ej rabatt på reservdelar, arbetskostnader eller resor.</p>
-                                  <p className="text-xs text-slate-500 italic">* Engångsservice kan ej prioriteras vid hög belastning.</p>
-                                </div>
-                              )}
-                            </>
-                          );
-                        })()}
+                {(() => {
+                  const selectedTemplate = templates.find(t => t.name === form.machine_name);
+                  if (selectedTemplate) {
+                    return (
+                      <div className="sm:col-span-2 p-5 bg-[#f0f7f7] rounded-xl border border-[#d2e8e8]">
+                        <h4 className="font-bold text-[#1b3a3a] mb-3 flex items-center gap-2">
+                          <Wrench className="w-4 h-4 text-[#3a9e9e]" />
+                          Standardservice och underhåll – {selectedTemplate.name}
+                        </h4>
+                        <ul className="space-y-2.5 text-sm text-slate-700">
+                          {selectedTemplate.included_services && selectedTemplate.included_services.map((detail, idx) =>
+                            <li key={idx} className="flex gap-2.5 items-start">
+                              <CheckCircle2 className="w-4 h-4 text-[#3a9e9e] shrink-0 mt-0.5" />
+                              <span>{detail}</span>
+                            </li>
+                          )}
+                        </ul>
+                        {selectedTemplate.price_per_month && (
+                          <div className="mt-4 pt-4 border-t border-[#d2e8e8]">
+                            <p className="text-sm font-semibold text-[#1b3a3a]">
+                              Pris: {selectedTemplate.price_per_month} kr/månad eller {selectedTemplate.price_per_month * 12} kr per år
+                            </p>
+                            <div className="mt-4 pt-4 border-t border-slate-200 text-right">
+                              <p className="text-xs text-slate-500 mb-1">Jämförspris vid Engångsservice (utan avtal):</p>
+                              <p className="text-lg font-bold text-[#1b3a3a] mb-2">{Math.round(selectedTemplate.price_per_month * 12 * 1.30).toLocaleString('sv-SE')} kr / gång</p>
+                              <p className="text-xs text-slate-500 italic">* Inkluderar ej rabatt på reservdelar, arbetskostnader eller resor.</p>
+                              <p className="text-xs text-slate-500 italic">* Engångsservice kan ej prioriteras vid hög belastning.</p>
+                            </div>
+                          </div>
+                        )}
                       </div>
-                    }
-                  </div>
-                }
+                    );
+                  }
+                  
+                  if (form.machine_name === "Annan") {
+                    return (
+                      <div className="sm:col-span-2 p-5 bg-[#f0f7f7] rounded-xl border border-[#d2e8e8]">
+                        <h4 className="font-bold text-[#1b3a3a] mb-3 flex items-center gap-2">
+                          <Wrench className="w-4 h-4 text-[#3a9e9e]" />
+                          Maskin som ej finns i listan
+                        </h4>
+                        <ul className="space-y-2.5 text-sm text-slate-700">
+                          <li className="flex gap-2.5 items-start">
+                            <CheckCircle2 className="w-4 h-4 text-[#3a9e9e] shrink-0 mt-0.5" />
+                            <span>Vi återkommer till dig angående om vi kan serva just din maskin</span>
+                          </li>
+                        </ul>
+                      </div>
+                    );
+                  }
+                  return null;
+                })()}
               </div>
             </div>
 
