@@ -7,51 +7,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { base44 } from "@/api/base44Client";
 import { machineServiceDetails } from "../MachineServiceDetails";
+import { MACHINE_MODELS } from "@/lib/constants";
 
 const TECHNICIANS = ["Elman@astomed.se", "Liburn@Astomed.se"];
-
-const MODELS = [
-  "Soprano ICE Platinum",
-  "Soprano Titanium",
-  "Helios III",
-  "Picolo",
-  "Sinclair Elysion",
-  "Aldix Smart Laser",
-  "Pento 9900",
-  "PrimeLase HR",
-  "PrimeLase Excel",
-  "PrimeLase Excel HR",
-  "Soprano Platinum",
-  "Soprano Titanium Special Edition",
-  "Aldix (Triodus)",
-  "PrimeLase",
-  "Elysion",
-  "PicoLo",
-  "Helius",
-  "Splendor X",
-  "Pento",
-  "Clearlight IPL",
-  "Fraction CO2",
-  "Mezotix",
-  "IOXO Laser",
-  "IOXO Microneedling",
-  "Focus Dual",
-  "Ultraformer III",
-  "Powershape 2",
-  "Indiba",
-  "CMSlim",
-  "Coolshaping 2",
-  "Hydra Beauty 2",
-  "Dermadrop",
-  "Carbomed",
-  "Cryopen",
-  "CryoIQ",
-  "Reoxy",
-  "Oxyhelp",
-  "Omega PDT",
-  "Eskimo Luftkylare",
-  "TBH Röksug"
-];
 
 export default function ConvertLeadModal({ lead, onClose, onConverted }) {
   const [form, setForm] = useState({
@@ -66,12 +24,12 @@ export default function ConvertLeadModal({ lead, onClose, onConverted }) {
     notes: ""
   });
   const [machineModel, setMachineModel] = useState(() => {
-    if (lead.machine_name && MODELS.includes(lead.machine_name)) return lead.machine_name;
+    if (lead.machine_name && MACHINE_MODELS.includes(lead.machine_name)) return lead.machine_name;
     if (lead.machine_name) return "Annan";
     return "Soprano Platinum";
   });
   const [customModel, setCustomModel] = useState(() => {
-    if (lead.machine_name && !MODELS.includes(lead.machine_name)) return lead.machine_name;
+    if (lead.machine_name && !MACHINE_MODELS.includes(lead.machine_name)) return lead.machine_name;
     return "";
   });
   const [serialNumber, setSerialNumber] = useState(lead.serial_number || "");
@@ -232,7 +190,7 @@ export default function ConvertLeadModal({ lead, onClose, onConverted }) {
                 <Select value={machineModel} onValueChange={setMachineModel}>
                   <SelectTrigger><SelectValue placeholder="Välj modell" /></SelectTrigger>
                   <SelectContent>
-                    {MODELS.map(m => <SelectItem key={m} value={m}>{m}</SelectItem>)}
+                    {MACHINE_MODELS.map(m => <SelectItem key={m} value={m}>{m}</SelectItem>)}
                     <SelectItem value="Annan">Annan</SelectItem>
                   </SelectContent>
                 </Select>

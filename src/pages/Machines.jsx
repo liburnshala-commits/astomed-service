@@ -14,11 +14,7 @@ import MachineForm from "@/components/machines/MachineForm.jsx";
 import ServiceContractModal from "@/components/machines/ServiceContractModal.jsx";
 import ServiceReportModal from "@/components/service/ServiceReportModal.jsx";
 import { useAuth } from "@/lib/AuthContext";
-
-const MODELS = [
-  "Soprano Platinum", "Soprano Titanium", "Alma Harmony", "Aldix (Triodus)",
-  "PrimeLase", "Elysion", "PicoLo", "Helius", "Splendor X", "Pento", "Clearlight IPL"
-];
+import { MACHINE_MODELS } from "@/lib/constants";
 
 const statusColor = { active: "bg-green-100 text-green-700", inactive: "bg-slate-100 text-slate-600", service: "bg-orange-100 text-orange-700" };
 const statusLabel = { active: "Aktiv", inactive: "Inaktiv", service: "På service" };
@@ -389,7 +385,7 @@ export default function Machines() {
           <SelectTrigger className="w-full sm:w-48"><SelectValue placeholder="Alla modeller" /></SelectTrigger>
           <SelectContent>
             <SelectItem value="all">Alla modeller</SelectItem>
-            {MODELS.map(m => <SelectItem key={m} value={m}>{m}</SelectItem>)}
+            {MACHINE_MODELS.map(m => <SelectItem key={m} value={m}>{m}</SelectItem>)}
           </SelectContent>
         </Select>
         <Select value={filterCustomer} onValueChange={setFilterCustomer}>

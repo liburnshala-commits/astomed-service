@@ -6,11 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-
-const MODELS = [
-  "Soprano Platinum", "Soprano Titanium", "Alma Harmony", "Aldix (Triodus)",
-  "PrimeLase", "Elysion", "PicoLo", "Helius", "Splendor X", "Pento", "Clearlight IPL", "Annan"
-];
+import { MACHINE_MODELS } from "@/lib/constants";
 
 export default function CustomerForm({ customer, onSave, onClose }) {
   const [form, setForm] = useState({
@@ -28,6 +24,7 @@ export default function CustomerForm({ customer, onSave, onClose }) {
 
   const [machine, setMachine] = useState({
     model: "",
+    custom_model: "",
     serial_number: "",
     service_date: ""
   });
@@ -40,7 +37,14 @@ export default function CustomerForm({ customer, onSave, onClose }) {
   const isNew = !customer;
 
   const handleSubmit = () => {
-    const machineData = isNew && machine.model ? machine : null;
+    let machineData = null;
+    if (isNew && machine.model) {
+      machineData = { ...machine };
+      if (machineData.model === "Annan") {
+        machineData.model = machineData.custom_model;
+      }
+      delete machineData.custom_model;
+    }
     onSave(form, machineData, invite);
   };
 
@@ -117,10 +121,17 @@ export default function CustomerForm({ customer, onSave, onClose }) {
                       <SelectValue placeholder="Välj modell..." />
                     </SelectTrigger>
                     <SelectContent>
-                      {MODELS.map(m => <SelectItem key={m} value={m}>{m}</SelectItem>)}
+                      {MACHINE_MODELS.map(m => <SelectItem key={m} value={m}>{m}</SelectItem>)}
+                      <SelectItem value="Annan">Annan</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
+                {machine.model === "Annan" && (
+                  <div className="col-span-2 space-y-1">
+                    <Label>Maskinnamn *</Label>
+                    <Input value={machine.custom_model} onChange={e => setM("custom_model", e.target.value)} placeholder="Ange maskinens namn" />
+                  </div>
+                )}
                 {machine.model && (
                   <>
                     <div className="space-y-1">
