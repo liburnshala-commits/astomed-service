@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { createPageUrl } from "@/utils";
 import { Link } from "react-router-dom";
-import { Monitor, Wrench, CheckCircle, Clock, Building2, Mail, Phone, MapPin, User, AlertTriangle, Plus, FileCheck, FileText, Download, Box } from "lucide-react";
+import { Monitor, Wrench, CheckCircle, Clock, Building2, Mail, Phone, MapPin, User, AlertTriangle, Plus, FileCheck, FileText, Download, Box, Shield, ExternalLink } from "lucide-react";
 import OtherMachineServiceForm from "@/components/portal/OtherMachineServiceForm";
 import RequestContractModal from "@/components/portal/RequestContractModal";
 import ServiceRecordDetail from "@/components/service/ServiceRecordDetail";
@@ -194,7 +194,47 @@ export default function CustomerDashboard() {
         </Link>
       </div>
 
-
+      {/* Tillståndsansökan SSM */}
+      <div>
+        <h2 className="text-sm font-semibold astomed-label mb-4 flex items-center gap-2">
+          <Shield className="w-4 h-4 text-amber-600" />
+          Viktiga krav från Strålsäkerhetsmyndigheten (SSM)
+        </h2>
+        <Card className="astomed-card border-l-4" style={{ borderLeftColor: "#d97706", background: "#fffbeb" }}>
+          <CardContent className="p-5">
+            <div className="flex items-start gap-4">
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: "#fef3c7" }}>
+                <AlertTriangle className="w-5 h-5 text-amber-600" />
+              </div>
+              <div className="flex-1">
+                <h3 className="text-sm font-bold text-amber-900 mb-1">Dags att anmäla estetisk verksamhet (SSMFS 2026:1)</h3>
+                <p className="text-xs text-amber-800 mb-3 leading-relaxed">
+                  Från den 4 maj 2026 gäller nya krav för verksamheter som utför estetiska behandlingar (Laser, IPL, HIFU, Radiofrekvens etc). 
+                  Alla kliniker måste anmäla sin verksamhet till SSM. Viss utrustning (laserklass 3B och 4) kan dessutom kräva ett specifikt <strong>lasertillstånd</strong> utöver anmälan. 
+                  Våra serviceavtal hjälper dig säkerställa att din servicehistorik och maskindokumentation uppfyller myndighetens krav.
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  <a href="https://anmalningsplikt.ssm.se/" target="_blank" rel="noopener noreferrer">
+                    <Button size="sm" className="h-8 text-xs bg-amber-600 hover:bg-amber-700 text-white border-0">
+                      Anmäl verksamhet (anmalningsplikt.ssm.se) <ExternalLink className="w-3 h-3 ml-1.5" />
+                    </Button>
+                  </a>
+                  <a href="https://tillstand.ssm.se/login" target="_blank" rel="noopener noreferrer">
+                    <Button size="sm" variant="outline" className="h-8 text-xs text-amber-800 border-amber-300 hover:bg-amber-200">
+                      Ansök om lasertillstånd (tillstand.ssm.se) <ExternalLink className="w-3 h-3 ml-1.5" />
+                    </Button>
+                  </a>
+                  <a href="https://www.stralsakerhetsmyndigheten.se/omraden/kroppsbehandlingar/for-dig-som-utfor-kroppsbehandlingar-med-icke-joniserande-stralning/" target="_blank" rel="noopener noreferrer">
+                    <Button size="sm" variant="ghost" className="h-8 text-xs text-amber-800 hover:bg-amber-200">
+                      Läs mer om lagkraven <ExternalLink className="w-3 h-3 ml-1.5" />
+                    </Button>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
 
       {/* Machines section */}
       <div>
