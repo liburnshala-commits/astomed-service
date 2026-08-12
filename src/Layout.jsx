@@ -335,44 +335,29 @@ export default function Layout({ children, currentPageName }) {
 
       {/* Bottom Navigation */}
       <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-card border-t border-border z-40 flex items-center justify-around pb-[env(safe-area-inset-bottom)] h-[calc(4rem+env(safe-area-inset-bottom))] shadow-[0_-4px_10px_rgba(0,0,0,0.05)]">
-        <Link 
-          to={createPageUrl(user?.role === "customer" ? "CustomerDashboard" : "Dashboard")} 
-          onClick={(e) => { 
-            const target = user?.role === "customer" ? "CustomerDashboard" : "Dashboard";
-            if (currentPageName === target) { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); navigate(`/${target}`, { replace: true }); } 
-          }}
-          className={`flex flex-col items-center justify-center w-full h-full ${["Dashboard", "CustomerDashboard"].includes(currentPageName) ? 'text-primary' : 'text-muted-foreground'}`}
-        >
-          <LayoutDashboard className="w-5 h-5 mb-1" />
-          <span className="text-[10px] font-medium">Översikt</span>
-        </Link>
-        <Link 
-          to={createPageUrl("ServiceRecords")} 
-          onClick={(e) => { if (currentPageName === 'ServiceRecords') { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); navigate('/ServiceRecords', { replace: true }); } }}
-          className={`flex flex-col items-center justify-center w-full h-full ${currentPageName === 'ServiceRecords' ? 'text-primary' : 'text-muted-foreground'}`}
-        >
-          <Wrench className="w-5 h-5 mb-1" />
-          <span className="text-[10px] font-medium">Service</span>
-        </Link>
-        {user?.role === "customer" ? (
+        {[
+          { target: user?.role === "customer" ? "CustomerDashboard" : "Dashboard", icon: LayoutDashboard, label: "Översikt", active: ["Dashboard", "CustomerDashboard"].includes(currentPageName) },
+          { target: "ServiceRecords", icon: Wrench, label: "Service", active: currentPageName === 'ServiceRecords' },
+          user?.role === "customer" 
+            ? { target: "Machines", icon: Monitor, label: "Maskiner", active: currentPageName === 'Machines' }
+            : { target: "Customers", icon: Users, label: "Kunder", active: currentPageName === 'Customers' }
+        ].map(({ target, icon: Icon, label, active }) => (
           <Link 
-            to={createPageUrl("Machines")} 
-            onClick={(e) => { if (currentPageName === 'Machines') { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); navigate('/Machines', { replace: true }); } }}
-            className={`flex flex-col items-center justify-center w-full h-full ${currentPageName === 'Machines' ? 'text-primary' : 'text-muted-foreground'}`}
+            key={target}
+            to={createPageUrl(target)} 
+            onClick={(e) => { 
+              if (currentPageName === target) { 
+                e.preventDefault(); 
+                window.scrollTo({ top: 0, behavior: 'smooth' }); 
+                navigate(`/${target}`, { replace: true }); 
+              } 
+            }}
+            className={`flex flex-col items-center justify-center w-full h-full ${active ? 'text-primary' : 'text-muted-foreground'}`}
           >
-            <Monitor className="w-5 h-5 mb-1" />
-            <span className="text-[10px] font-medium">Maskiner</span>
+            <Icon className="w-5 h-5 mb-1" />
+            <span className="text-[10px] font-medium">{label}</span>
           </Link>
-        ) : (
-          <Link 
-            to={createPageUrl("Customers")} 
-            onClick={(e) => { if (currentPageName === 'Customers') { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); navigate('/Customers', { replace: true }); } }}
-            className={`flex flex-col items-center justify-center w-full h-full ${currentPageName === 'Customers' ? 'text-primary' : 'text-muted-foreground'}`}
-          >
-            <Users className="w-5 h-5 mb-1" />
-            <span className="text-[10px] font-medium">Kunder</span>
-          </Link>
-        )}
+        ))}
       </div>
     </div>
   );
