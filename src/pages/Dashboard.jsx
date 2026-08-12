@@ -14,6 +14,24 @@ import ContractsPieChart from "@/components/dashboard/ContractsPieChart";
 import UpcomingServiceReminders from "@/components/dashboard/UpcomingServiceReminders";
 import ServiceRecordsChart from "@/components/dashboard/ServiceRecordsChart";
 
+const StatCard = ({ to, bg, title, value, icon: Icon, iconBg, iconColor, hFull }) => (
+  <Link to={createPageUrl(to)} className={`block ${hFull ? 'h-full' : ''}`}>
+    <Card className={`astomed-card cursor-pointer ${hFull ? 'h-full' : ''}`} style={{ background: bg || "#f4f9f9" }}>
+      <CardContent className={`p-5 ${hFull ? 'h-full flex flex-col justify-center' : ''}`}>
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-xs astomed-muted font-medium uppercase tracking-wide">{title}</p>
+            <p className="text-3xl font-bold astomed-title mt-1">{value}</p>
+          </div>
+          <div className="w-10 h-10 astomed-icon-box" style={{ width: 40, height: 40, ...(iconBg ? { background: iconBg } : {}) }}>
+            <Icon className="w-5 h-5" style={iconColor ? { color: iconColor } : { color: "#1b3a3a" }} />
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  </Link>
+);
+
 export default function Dashboard() {
   const navigate = useNavigate();
   const dashboardRef = useRef(null);
@@ -91,11 +109,12 @@ export default function Dashboard() {
     invoiced: "Fakturerad"
   };
 
-  const activeContractsCount = machines.filter(m => m.service_contract && m.service_contract !== 'none' && (!m.contract_status || m.contract_status === 'active')).length;
-  const signedCustomersCount = new Set(machines.filter(m => m.service_contract && m.service_contract !== 'none' && (!m.contract_status || m.contract_status === 'active')).map(m => m.customer_id)).size;
-  const pendingContractsCount = machines.filter(m => m.service_contract && m.service_contract !== 'none' && m.contract_status === 'pending_signature').length;
-  const inactiveContractsCount = machines.filter(m => m.service_contract && m.service_contract !== 'none' && m.contract_status === 'inactive').length;
-  const rejectedContractsCount = machines.filter(m => m.service_contract && m.service_contract !== 'none' && m.contract_status === 'rejected').length;
+  const contractedMachines = machines.filter(m => m.service_contract && m.service_contract !== 'none');
+  const activeContractsCount = contractedMachines.filter(m => !m.contract_status || m.contract_status === 'active').length;
+  const signedCustomersCount = new Set(contractedMachines.filter(m => !m.contract_status || m.contract_status === 'active').map(m => m.customer_id)).size;
+  const pendingContractsCount = contractedMachines.filter(m => m.contract_status === 'pending_signature').length;
+  const inactiveContractsCount = contractedMachines.filter(m => m.contract_status === 'inactive').length;
+  const rejectedContractsCount = contractedMachines.filter(m => m.contract_status === 'rejected').length;
 
   const estimatedActiveRevenue = activeContractsCount * 600;
   const estimatedPendingRevenue = pendingContractsCount * 600;
@@ -155,198 +174,30 @@ export default function Dashboard() {
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
-        <Link to={createPageUrl("Machines")} className="block">
-          <Card className="astomed-card cursor-pointer" style={{ background: "#f4f9f9" }}>
-            <CardContent className="p-5">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-xs astomed-muted font-medium uppercase tracking-wide">Maskiner</p>
-                  <p className="text-3xl font-bold astomed-title mt-1">{machines.length}</p>
-                </div>
-                <div className="w-10 h-10 astomed-icon-box" style={{ width: 40, height: 40 }}>
-                  <Monitor className="w-5 h-5" style={{ color: "#1b3a3a" }} />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </Link>
-        <Link to={createPageUrl("Customers")} className="block">
-          <Card className="astomed-card cursor-pointer" style={{ background: "#f4f9f9" }}>
-            <CardContent className="p-5">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-xs astomed-muted font-medium uppercase tracking-wide">Kunder</p>
-                  <p className="text-3xl font-bold astomed-title mt-1">{customers.length}</p>
-                </div>
-                <div className="w-10 h-10 astomed-icon-box" style={{ width: 40, height: 40 }}>
-                  <Users className="w-5 h-5" style={{ color: "#1b3a3a" }} />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </Link>
-        <Link to={createPageUrl("Customers") + "?filter=signed"} className="block">
-          <Card className="astomed-card cursor-pointer" style={{ background: "#f0fdf4" }}>
-            <CardContent className="p-5">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-xs astomed-muted font-medium uppercase tracking-wide">Signerade Kunder</p>
-                  <p className="text-3xl font-bold astomed-title mt-1">{signedCustomersCount}</p>
-                </div>
-                <div className="w-10 h-10 astomed-icon-box" style={{ width: 40, height: 40, background: "#dcfce7" }}>
-                  <CheckCircle className="w-5 h-5" style={{ color: "#166534" }} />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </Link>
+        <StatCard to="Machines" title="Maskiner" value={machines.length} icon={Monitor} />
+        <StatCard to="Customers" title="Kunder" value={customers.length} icon={Users} />
+        <StatCard to="Customers?filter=signed" bg="#f0fdf4" title="Signerade Kunder" value={signedCustomersCount} icon={CheckCircle} iconBg="#dcfce7" iconColor="#166534" />
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <Link to={createPageUrl("ServiceContracts") + "?status=active"} className="block">
-          <Card className="astomed-card cursor-pointer" style={{ background: "#f4f9f9" }}>
-            <CardContent className="p-5">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-xs astomed-muted font-medium uppercase tracking-wide">Maskiner med avtal</p>
-                  <p className="text-3xl font-bold astomed-title mt-1">{activeContractsCount}</p>
-                </div>
-                <div className="w-10 h-10 astomed-icon-box" style={{ width: 40, height: 40 }}>
-                  <Monitor className="w-5 h-5" style={{ color: "#1b3a3a" }} />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </Link>
-        <Link to={createPageUrl("ServiceContracts") + "?status=pending_signature"} className="block">
-          <Card className="astomed-card cursor-pointer" style={{ background: "#fffaf0" }}>
-            <CardContent className="p-5">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-xs astomed-muted font-medium uppercase tracking-wide">Under signering</p>
-                  <p className="text-3xl font-bold astomed-title mt-1">{pendingContractsCount}</p>
-                </div>
-                <div className="w-10 h-10 astomed-icon-box" style={{ width: 40, height: 40 }}>
-                  <Clock className="w-5 h-5" style={{ color: "#e6a817" }} />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </Link>
-        <Link to={createPageUrl("ServiceContracts") + "?status=inactive"} className="block">
-          <Card className="astomed-card cursor-pointer" style={{ background: "#f1f5f9" }}>
-            <CardContent className="p-5">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-xs astomed-muted font-medium uppercase tracking-wide">Inaktiva avtal</p>
-                  <p className="text-3xl font-bold astomed-title mt-1">{inactiveContractsCount}</p>
-                </div>
-                <div className="w-10 h-10 astomed-icon-box" style={{ width: 40, height: 40, background: "#e2e8f0" }}>
-                  <Monitor className="w-5 h-5" style={{ color: "#64748b" }} />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </Link>
-        <Link to={createPageUrl("ServiceContracts") + "?status=rejected"} className="block">
-          <Card className="astomed-card cursor-pointer" style={{ background: "#fef2f2" }}>
-            <CardContent className="p-5">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-xs astomed-muted font-medium uppercase tracking-wide">Avvisade avtal</p>
-                  <p className="text-3xl font-bold astomed-title mt-1">{rejectedContractsCount}</p>
-                </div>
-                <div className="w-10 h-10 astomed-icon-box" style={{ width: 40, height: 40, background: "#fee2e2" }}>
-                  <Monitor className="w-5 h-5" style={{ color: "#ef4444" }} />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </Link>
+        <StatCard to="ServiceContracts?status=active" title="Maskiner med avtal" value={activeContractsCount} icon={Monitor} />
+        <StatCard to="ServiceContracts?status=pending_signature" bg="#fffaf0" title="Under signering" value={pendingContractsCount} icon={Clock} iconColor="#e6a817" />
+        <StatCard to="ServiceContracts?status=inactive" bg="#f1f5f9" title="Inaktiva avtal" value={inactiveContractsCount} icon={Monitor} iconBg="#e2e8f0" iconColor="#64748b" />
+        <StatCard to="ServiceContracts?status=rejected" bg="#fef2f2" title="Avvisade avtal" value={rejectedContractsCount} icon={Monitor} iconBg="#fee2e2" iconColor="#ef4444" />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <Link to={createPageUrl("ServiceContracts") + "?status=active"} className="block h-full">
-          <Card className="astomed-card cursor-pointer h-full" style={{ background: "#f4f9f9" }}>
-            <CardContent className="p-5 h-full flex flex-col justify-center">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-xs astomed-muted font-medium uppercase tracking-wide">Avtalsintäkt (Aktiva)</p>
-                  <p className="text-3xl font-bold astomed-title mt-1">{estimatedActiveRevenue.toLocaleString("sv-SE")} kr</p>
-                </div>
-                <div className="w-10 h-10 astomed-icon-box" style={{ width: 40, height: 40 }}>
-                  <CheckCircle className="w-5 h-5" style={{ color: "#1b3a3a" }} />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </Link>
-        <Link to={createPageUrl("ServiceContracts") + "?status=pending_signature"} className="block h-full">
-          <Card className="astomed-card cursor-pointer h-full" style={{ background: "#fffaf0" }}>
-            <CardContent className="p-5 h-full flex flex-col justify-center">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-xs astomed-muted font-medium uppercase tracking-wide">Förväntad intäkt (Signering)</p>
-                  <p className="text-3xl font-bold astomed-title mt-1">{estimatedPendingRevenue.toLocaleString("sv-SE")} kr</p>
-                </div>
-                <div className="w-10 h-10 astomed-icon-box" style={{ width: 40, height: 40, background: "#fef3c7" }}>
-                  <Clock className="w-5 h-5" style={{ color: "#e6a817" }} />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </Link>
+        <StatCard hFull to="ServiceContracts?status=active" title="Avtalsintäkt (Aktiva)" value={`${estimatedActiveRevenue.toLocaleString("sv-SE")} kr`} icon={CheckCircle} />
+        <StatCard hFull to="ServiceContracts?status=pending_signature" bg="#fffaf0" title="Förväntad intäkt (Signering)" value={`${estimatedPendingRevenue.toLocaleString("sv-SE")} kr`} icon={Clock} iconBg="#fef3c7" iconColor="#e6a817" />
       </div>
 
       {userRole !== "customer" && (
         <>
           <h2 className="text-lg font-bold astomed-title mt-8 mb-4">Serviceärenden</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-              <Link to={createPageUrl("ServiceRecords") + "?status=completed"} className="block">
-                <Card className="astomed-card cursor-pointer h-full" style={{ background: "#f0fdf4" }}>
-                  <CardContent className="p-5 h-full flex flex-col justify-center">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-xs astomed-muted font-medium uppercase tracking-wide">Genomförda</p>
-                        <p className="text-3xl font-bold astomed-title mt-1">{completedServices}</p>
-                      </div>
-                      <div className="w-10 h-10 astomed-icon-box" style={{ width: 40, height: 40, background: "#dcfce7" }}>
-                        <CheckCircle className="w-5 h-5" style={{ color: "#166534" }} />
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </Link>
-              <Link to={createPageUrl("ServiceRecords") + "?status=planned"} className="block">
-                <Card className="astomed-card cursor-pointer h-full" style={{ background: "#fffaf0" }}>
-                  <CardContent className="p-5 h-full flex flex-col justify-center">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-xs astomed-muted font-medium uppercase tracking-wide">Bokade/Planerade</p>
-                        <p className="text-3xl font-bold astomed-title mt-1">{plannedServices}</p>
-                      </div>
-                      <div className="w-10 h-10 astomed-icon-box" style={{ width: 40, height: 40, background: "#fef3c7" }}>
-                        <Clock className="w-5 h-5" style={{ color: "#d97706" }} />
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </Link>
-              <Link to={createPageUrl("ServiceRecords") + "?status=in_progress"} className="block">
-                <Card className="astomed-card cursor-pointer h-full" style={{ background: "#eff6ff" }}>
-                  <CardContent className="p-5 h-full flex flex-col justify-center">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-xs astomed-muted font-medium uppercase tracking-wide">Pågående</p>
-                        <p className="text-3xl font-bold astomed-title mt-1">{inProgressServices}</p>
-                      </div>
-                      <div className="w-10 h-10 astomed-icon-box" style={{ width: 40, height: 40, background: "#dbeafe" }}>
-                        <Wrench className="w-5 h-5" style={{ color: "#1d4ed8" }} />
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </Link>
+            <StatCard hFull to="ServiceRecords?status=completed" bg="#f0fdf4" title="Genomförda" value={completedServices} icon={CheckCircle} iconBg="#dcfce7" iconColor="#166534" />
+            <StatCard hFull to="ServiceRecords?status=planned" bg="#fffaf0" title="Bokade/Planerade" value={plannedServices} icon={Clock} iconBg="#fef3c7" iconColor="#d97706" />
+            <StatCard hFull to="ServiceRecords?status=in_progress" bg="#eff6ff" title="Pågående" value={inProgressServices} icon={Wrench} iconBg="#dbeafe" iconColor="#1d4ed8" />
           </div>
           
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
