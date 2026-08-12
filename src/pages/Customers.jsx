@@ -84,46 +84,37 @@ export default function Customers() {
   const filterParam = urlParams.get("filter");
 
   const filtered = customers.filter(c => {
+    // 1. Basic properties
+    const phone = (c.phone || "").replace(/[\s-]/g, "");
+    const hasMobile = phone.startsWith("+467") || phone.startsWith("467") || phone.startsWith("07") || phone.startsWith("7");
+    
+    // 2. Contract status helper
+    const hasActiveContract = machines.some(m => 
+      m.customer_id === c.id && 
+      m.service_contract && 
+      m.service_contract !== "none" && 
+      (!m.contract_status || m.contract_status === "active")
+    );
+
+    // 3. Dropdowns (specialFilter)
     if (specialFilter === "imported" && !c.is_imported) return false;
     if (specialFilter === "updated_import" && !c.has_added_machine_via_import) return false;
-    if (specialFilter === "active_contract") {
-      const customerMachines = machines.filter(m => m.customer_id === c.id && m.service_contract && m.service_contract !== "none");
-      const hasActive = customerMachines.some(m => !m.contract_status || m.contract_status === "active");
-      if (!hasActive) return false;
-    }
-    if (specialFilter === "mobile_number") {
-      const phone = (c.phone || "").replace(/[\s-]/g, "");
-      const hasMobile = phone.startsWith("+467") || phone.startsWith("467") || phone.startsWith("07") || phone.startsWith("7");
-      if (!hasMobile) return false;
-    }
-    if (specialFilter === "imported_mobile") {
-      if (!c.is_imported) return false;
-      const phone = (c.phone || "").replace(/[\s-]/g, "");
-      const hasMobile = phone.startsWith("+467") || phone.startsWith("467") || phone.startsWith("07") || phone.startsWith("7");
-      if (!hasMobile) return false;
-    }
-    if (specialFilter === "mobile_no_contract") {
-      const phone = (c.phone || "").replace(/[\s-]/g, "");
-      const hasMobile = phone.startsWith("+467") || phone.startsWith("467") || phone.startsWith("07") || phone.startsWith("7");
-      if (!hasMobile) return false;
-      const customerMachines = machines.filter(m => m.customer_id === c.id && m.service_contract && m.service_contract !== "none");
-      const hasActive = customerMachines.some(m => !m.contract_status || m.contract_status === "active");
-      if (hasActive) return false;
-    }
+    if (specialFilter === "active_contract" && !hasActiveContract) return false;
+    if (specialFilter === "mobile_number" && !hasMobile) return false;
+    if (specialFilter === "imported_mobile" && (!c.is_imported || !hasMobile)) return false;
+    if (specialFilter === "mobile_no_contract" && (!hasMobile || hasActiveContract)) return false;
 
+    // 4. URL Param (signed)
+    if (filterParam === "signed" && !hasActiveContract) return false;
+
+    // 5. Text Search
     const searchLower = search.toLowerCase();
-    const matchSearch = c.company_name?.toLowerCase().includes(searchLower) ||
+    return c.company_name?.toLowerCase().includes(searchLower) ||
       c.org_number?.toLowerCase().includes(searchLower) ||
       c.contact_person?.toLowerCase().includes(searchLower) ||
       c.email?.toLowerCase().includes(searchLower) ||
       c.phone?.toLowerCase().includes(searchLower) ||
       c.city?.toLowerCase().includes(searchLower);
-
-    const matchFilter = filterParam === "signed" ? 
-      machines.some(m => m.customer_id === c.id && m.service_contract && m.service_contract !== "none" && (!m.contract_status || m.contract_status === "active")) 
-      : true;
-
-    return matchSearch && matchFilter;
   });
 
   const getMachineCount = (customerId) => machines.filter(m => m.customer_id === customerId).length;
