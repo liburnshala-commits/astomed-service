@@ -102,6 +102,14 @@ export default function Customers() {
       const hasMobile = phone.startsWith("+467") || phone.startsWith("467") || phone.startsWith("07") || phone.startsWith("7");
       if (!hasMobile) return false;
     }
+    if (specialFilter === "mobile_no_contract") {
+      const phone = (c.phone || "").replace(/[\s-]/g, "");
+      const hasMobile = phone.startsWith("+467") || phone.startsWith("467") || phone.startsWith("07") || phone.startsWith("7");
+      if (!hasMobile) return false;
+      const customerMachines = machines.filter(m => m.customer_id === c.id && m.service_contract && m.service_contract !== "none");
+      const hasActive = customerMachines.some(m => !m.contract_status || m.contract_status === "active");
+      if (hasActive) return false;
+    }
 
     const searchLower = search.toLowerCase();
     const matchSearch = c.company_name?.toLowerCase().includes(searchLower) ||
@@ -517,6 +525,7 @@ export default function Customers() {
             <SelectItem value="active_contract">Aktiva serviceavtal</SelectItem>
             <SelectItem value="mobile_number">Mobilnummer (07, +467...)</SelectItem>
             <SelectItem value="imported_mobile">Importerade med mobilnummer</SelectItem>
+            <SelectItem value="mobile_no_contract">Mobilnummer utan serviceavtal</SelectItem>
           </SelectContent>
         </Select>
         <div className="relative flex-1">
