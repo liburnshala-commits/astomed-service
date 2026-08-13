@@ -176,6 +176,7 @@ export default function PublicServiceFormSection({ onSuccess, onOpenPrivacy }) {
                     <SelectValue placeholder="Välj maskintyp" />
                   </SelectTrigger>
                   <SelectContent>
+                    {templates.length === 0 && <SelectItem value="Laddar..." disabled>Laddar...</SelectItem>}
                     {templates.map((template) =>
                       <SelectItem key={template.id} value={template.name}>{template.name}</SelectItem>
                     )}
