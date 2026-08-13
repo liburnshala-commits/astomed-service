@@ -48,9 +48,15 @@ export default function PublicMachineTypesSection() {
             return (
               <div key={machineName} className="bg-white rounded-xl p-6 border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
                 <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-[#e8f2f2] rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
-                    <Monitor className="w-6 h-6 text-[#3a9e9e]" />
-                  </div>
+                  {template?.image_url ? (
+                    <div className="w-16 h-16 rounded-lg flex items-center justify-center flex-shrink-0 mt-1 overflow-hidden bg-white">
+                      <img src={template.image_url} alt={machineName} className="w-full h-full object-contain" />
+                    </div>
+                  ) : (
+                    <div className="w-16 h-16 bg-[#e8f2f2] rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
+                      <Monitor className="w-8 h-8 text-[#3a9e9e]" />
+                    </div>
+                  )}
                   <div>
                     <h4 className="text-lg font-bold text-[#1b3a3a] mb-2">{machineName}</h4>
                     <p className="text-sm text-slate-600 leading-relaxed">
