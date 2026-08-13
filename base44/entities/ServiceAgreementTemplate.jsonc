@@ -10,6 +10,10 @@
       "type": "string",
       "description": "Beskrivning av serviceavtalet"
     },
+    "image_url": {
+      "type": "string",
+      "description": "URL till bild p\u00e5 maskinen"
+    },
     "binding_months": {
       "type": "number",
       "enum": [
