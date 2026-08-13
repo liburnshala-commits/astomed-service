@@ -1,14 +1,11 @@
 import { useState, useEffect } from "react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { createPageUrl } from "@/utils";
 import { useLocation } from "react-router-dom";
-import { Plus, Search, Wrench, Trash2, Copy } from "lucide-react";
+import { Plus, Search, Wrench } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
 import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import ServiceRecordForm from "@/components/service/ServiceRecordForm.jsx";
@@ -18,9 +15,9 @@ import AdvancedFilters from "@/components/service/AdvancedFilters.jsx";
 import PullToRefresh from "@/components/ui/pull-to-refresh.jsx";
 import ServiceRecordCard from "@/components/service/ServiceRecordCard.jsx";
 import { useAuth } from "@/lib/AuthContext";
+import { useServiceRecords } from "@/hooks/useServiceRecords";
 
 export default function ServiceRecords() {
-  const queryClient = useQueryClient();
   const location = useLocation();
   const urlParams = new URLSearchParams(location.search);
   const preselectedMachine = urlParams.get("machine");
@@ -42,54 +39,18 @@ export default function ServiceRecords() {
     sortBy: "date_desc",
   });
   const [showForm, setShowForm] = useState(isNewParam);
+  const [editing, setEditing] = useState(null);
+  const [viewing, setViewing] = useState(null);
+
+  const { user } = useAuth();
+  const userRole = user?.role;
+  const { records, machines, customers, userCustomer, load } = useServiceRecords();
 
   useEffect(() => {
     if (isNewParam) {
       setShowForm(true);
     }
   }, [isNewParam]);
-  const [editing, setEditing] = useState(null);
-  const [viewing, setViewing] = useState(null);
-
-  const { user } = useAuth();
-  const userRole = user?.role;
-
-  const { data: pageData } = useQuery({
-    queryKey: ["serviceRecordsPage", userRole, user?.email],
-    queryFn: async () => {
-      if (userRole === "customer") {
-        const allCustomers = await base44.entities.Customer.filter({ email: user.email });
-        const cust = allCustomers[0] || null;
-        if (cust) {
-          const [r, m] = await Promise.all([
-            base44.entities.ServiceRecord.filter({ customer_id: cust.id }, "-created_date"),
-            base44.entities.Machine.filter({ customer_id: cust.id })
-          ]);
-          return { records: r, machines: m, customers: [cust], userCustomer: cust };
-        }
-        return { records: [], machines: [], customers: [], userCustomer: null };
-      } else {
-        const [r, m, c] = await Promise.all([
-          base44.entities.ServiceRecord.list("-created_date"),
-          base44.entities.Machine.list(),
-          base44.entities.Customer.list()
-        ]);
-        return { records: r, machines: m, customers: c, userCustomer: null };
-      }
-    },
-    enabled: !!user,
-    staleTime: 30 * 1000,
-    retry: 3,
-    retryDelay: (attempt) => Math.min(1000 * 2 ** attempt, 10000),
-    keepPreviousData: true,
-  });
-
-  const records = pageData?.records || [];
-  const machines = pageData?.machines || [];
-  const customers = pageData?.customers || [];
-  const userCustomer = pageData?.userCustomer || null;
-
-  const load = () => queryClient.invalidateQueries({ queryKey: ["serviceRecordsPage"] });
 
   useEffect(() => {
     if (preselectedId && records.length > 0) {

@@ -1,13 +1,9 @@
 import { useState, useEffect } from "react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
-import { createPageUrl } from "@/utils";
 import { Link, useLocation } from "react-router-dom";
-import { Plus, Search, Monitor, Wrench, Building2, FileCheck, Download, Trash2, FileText, AlertTriangle } from "lucide-react";
+import { Plus, Search, Monitor, Trash2, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import MachineForm from "@/components/machines/MachineForm.jsx";
@@ -16,10 +12,10 @@ import ServiceReportModal from "@/components/service/ServiceReportModal.jsx";
 import MachineCard from "@/components/machines/MachineCard.jsx";
 import { useAuth } from "@/lib/AuthContext";
 import { MACHINE_MODELS } from "@/lib/constants";
+import { useMachines } from "@/hooks/useMachines";
 
 export default function Machines() {
   const location = useLocation();
-  const queryClient = useQueryClient();
   
   const urlParams = new URLSearchParams(location.search);
   const preselectedCustomer = urlParams.get("customer");
@@ -35,6 +31,10 @@ export default function Machines() {
   const [contractMachine, setContractMachine] = useState(null);
   const [reportData, setReportData] = useState(null);
   const [editingSnFor, setEditingSnFor] = useState(null);
+
+  const { user } = useAuth();
+  const userRole = user?.role;
+  const { machines, records, customers, products, load } = useMachines();
 
   const handleUpdateSn = async (machineId, newSn) => {
     if (!newSn || newSn.trim() === "") return;
@@ -59,48 +59,6 @@ export default function Machines() {
       setFilterContract(contractParam);
     }
   }, [location.search]);
-
-  const { user } = useAuth();
-  const userRole = user?.role;
-
-  const { data: pageData } = useQuery({
-    queryKey: ["machinesPage", userRole, user?.email],
-    queryFn: async () => {
-      if (userRole === "customer") {
-        const ownCustomers = await base44.entities.Customer.filter({ email: user.email });
-        const cust = ownCustomers[0];
-        if (cust) {
-          const [m, r, p] = await Promise.all([
-            base44.entities.Machine.filter({ customer_id: cust.id }, "-created_date"),
-            base44.entities.ServiceRecord.filter({ customer_id: cust.id }, "-created_date"),
-            base44.entities.Product.list()
-          ]);
-          return { machines: m.filter(x => !x.is_deleted), records: r, customers: [cust], products: p };
-        }
-        return { machines: [], records: [], customers: [], products: [] };
-      } else {
-        const [m, c, r, p] = await Promise.all([
-          base44.entities.Machine.list("-created_date"),
-          base44.entities.Customer.list(),
-          base44.entities.ServiceRecord.list("-created_date"),
-          base44.entities.Product.list()
-        ]);
-        return { machines: m.filter(x => !x.is_deleted), customers: c, records: r, products: p };
-      }
-    },
-    enabled: !!user,
-    staleTime: 30 * 1000,
-    retry: 3,
-    retryDelay: (attempt) => Math.min(1000 * 2 ** attempt, 10000),
-    keepPreviousData: true,
-  });
-
-  const machines = pageData?.machines || [];
-  const customers = pageData?.customers || [];
-  const records = pageData?.records || [];
-  const products = pageData?.products || [];
-
-  const load = () => queryClient.invalidateQueries({ queryKey: ["machinesPage"] });
 
   useEffect(() => {
     if (preselectedCustomer) setFilterCustomer(preselectedCustomer);
