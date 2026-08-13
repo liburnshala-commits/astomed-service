@@ -10,6 +10,8 @@ import MachineForm from "@/components/machines/MachineForm.jsx";
 import ServiceContractModal from "@/components/machines/ServiceContractModal.jsx";
 import ServiceReportModal from "@/components/service/ServiceReportModal.jsx";
 import MachineCard from "@/components/machines/MachineCard.jsx";
+import MachinesFilterBar from "@/components/machines/MachinesFilterBar.jsx";
+import MachinesList from "@/components/machines/MachinesList.jsx";
 import { useAuth } from "@/lib/AuthContext";
 import { MACHINE_MODELS } from "@/lib/constants";
 import { useMachines } from "@/hooks/useMachines";
@@ -252,66 +254,15 @@ export default function Machines() {
         </div>
       )}
 
-      <div className="flex flex-col sm:flex-row gap-3">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-          <Input placeholder="Sök serienummer eller modell..." className="pl-9" value={search} onChange={e => setSearch(e.target.value)} />
-        </div>
-        <Select value={filterModel} onValueChange={setFilterModel}>
-          <SelectTrigger className="w-full sm:w-48"><SelectValue placeholder="Alla modeller" /></SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">Alla modeller</SelectItem>
-            {MACHINE_MODELS.map(m => <SelectItem key={m} value={m}>{m}</SelectItem>)}
-          </SelectContent>
-        </Select>
-        <Select value={filterCustomer} onValueChange={setFilterCustomer}>
-          <SelectTrigger className="w-full sm:w-48"><SelectValue placeholder="Alla kunder" /></SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">Alla kunder</SelectItem>
-            {customers.map(c => <SelectItem key={c.id} value={c.id}>{c.company_name}</SelectItem>)}
-          </SelectContent>
-        </Select>
-        <Select value={filterContract} onValueChange={setFilterContract}>
-          <SelectTrigger className="w-full sm:w-48"><SelectValue placeholder="Avtalsstatus" /></SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">Alla maskiner</SelectItem>
-            <SelectItem value="active">Aktivt avtal</SelectItem>
-            <SelectItem value="none">Inget avtal</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
-
-      {filtered.length === 0 ? (
-        <div className="col-span-full text-center py-12 text-slate-400">
-          <Monitor className="w-12 h-12 mx-auto mb-3 opacity-30" />
-          <p>Inga maskiner hittades</p>
-        </div>
-      ) : (
-        <>
-          {/* Desktop Grid View */}
-          <div className="hidden md:grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-            {filtered.map(machine => renderCard(machine))}
-          </div>
-
-          {/* Mobile Carousel View */}
-          <div className="md:hidden">
-            {filtered.length > 1 && (
-              <div className="text-center text-xs text-slate-400 mb-3 flex items-center justify-center gap-2">
-                <span>←</span> Svep för fler maskiner ({filtered.length} st) <span>→</span>
-              </div>
-            )}
-            <Carousel className="w-full" opts={{ align: "start" }}>
-              <CarouselContent>
-                {filtered.map(machine => (
-                  <CarouselItem key={machine.id} className="basis-11/12 sm:basis-8/12">
-                    {renderCard(machine, true)}
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-            </Carousel>
-          </div>
-        </>
-      )}
+      <MachinesFilterBar
+        search={search} setSearch={setSearch}
+        filterModel={filterModel} setFilterModel={setFilterModel}
+        filterCustomer={filterCustomer} setFilterCustomer={setFilterCustomer}
+        filterContract={filterContract} setFilterContract={setFilterContract}
+        customers={customers}
+      />
+      
+      <MachinesList machines={filtered} renderCard={renderCard} />
 
       {contractMachine && (
         <ServiceContractModal
