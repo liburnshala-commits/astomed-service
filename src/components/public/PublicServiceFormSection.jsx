@@ -16,7 +16,7 @@ export default function PublicServiceFormSection({ onSuccess, onOpenPrivacy }) {
     address: "",
     postal_code: "",
     city: "",
-    machine_name: "",
+    machine_name: undefined,
     serial_number: "",
     notes: ""
   });
@@ -27,11 +27,28 @@ export default function PublicServiceFormSection({ onSuccess, onOpenPrivacy }) {
 
   const set = (field, value) => setForm((prev) => ({ ...prev, [field]: value }));
 
+  const machineOptions = [
+    "Aldix (Triodus) / Aldix Smart Laser",
+    "Alma Harmony",
+    "Alma Rejuve",
+    "Clearlight IPL",
+    "CoolTech",
+    "Elysion / Cocoon Elysion",
+    "Fraction CO2",
+    "Helios / Helios III",
+    "Pento / Pento 9900",
+    "Picolo",
+    "PrimeLase (alla)",
+    "Soprano ICE Platinum",
+    "Soprano Titanium",
+    "Splendor X"
+  ];
+
   useEffect(() => {
     const fetchTemplates = async () => {
       try {
         const data = await base44.entities.ServiceAgreementTemplate.list();
-        setTemplates(data.sort((a, b) => a.name.localeCompare(b.name)));
+        setTemplates(data);
       } catch (err) {
         console.error("Failed to load templates", err);
       }
@@ -171,14 +188,13 @@ export default function PublicServiceFormSection({ onSuccess, onOpenPrivacy }) {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div className="space-y-1.5">
                 <Label className="text-slate-700">Maskintyp *</Label>
-                <Select value={form.machine_name || undefined} onValueChange={(v) => set("machine_name", v)} required>
+                <Select value={form.machine_name || undefined} onValueChange={(v) => set("machine_name", v)}>
                   <SelectTrigger className="h-11 bg-slate-50/50">
                     <SelectValue placeholder="Välj maskintyp" />
                   </SelectTrigger>
                   <SelectContent>
-                    {templates.length === 0 && <SelectItem value="Laddar..." disabled>Laddar...</SelectItem>}
-                    {templates.map((template) =>
-                      <SelectItem key={template.id} value={template.name}>{template.name}</SelectItem>
+                    {machineOptions.map((name) =>
+                      <SelectItem key={name} value={name}>{name}</SelectItem>
                     )}
                     <SelectItem value="Annan">Annan</SelectItem>
                   </SelectContent>
