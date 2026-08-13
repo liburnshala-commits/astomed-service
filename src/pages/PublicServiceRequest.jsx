@@ -20,6 +20,7 @@ import SsmRequirementsSection from "@/components/public/SsmRequirementsSection";
 import PublicPortalSection from "@/components/public/PublicPortalSection";
 import PublicServiceFormSection from "@/components/public/PublicServiceFormSection";
 import PublicAboutUsSection from "@/components/public/PublicAboutUsSection";
+import PublicMachineTypesSection from "@/components/public/PublicMachineTypesSection";
 
 export default function PublicServiceRequest() {
   const { isAuthenticated, user, isLoadingAuth } = useAuth();
@@ -83,6 +84,7 @@ export default function PublicServiceRequest() {
         <div className="hidden md:flex items-center gap-8 text-sm font-medium">
            <a href="#om-oss" className="hover:text-[#3a9e9e] transition-colors">Om oss</a>
            <a href="#tjanster" className="hover:text-[#3a9e9e] transition-colors">Våra tjänster</a>
+           <a href="#maskintyper" className="hover:text-[#3a9e9e] transition-colors">Maskiner</a>
            <a href="#ssm-lagen" className="hover:text-[#3a9e9e] transition-colors">Nya SSM-lagen</a>
            <a href="#anmalan" className="hover:text-[#3a9e9e] transition-colors">Serviceavtal</a>
            <button onClick={() => navigate('/Calculator')} className="text-[#3a9e9e] font-bold hover:text-white transition-colors">Klinikkalkylator</button>
@@ -106,6 +108,7 @@ export default function PublicServiceRequest() {
         <div className="md:hidden fixed inset-0 z-40 bg-[#1b3a3a] pt-[88px] px-6 flex flex-col gap-6 text-white text-lg overflow-y-auto pb-10">
            <a href="#om-oss" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-[#3a9e9e] transition-colors border-b border-white/10 pb-3">Om oss</a>
            <a href="#tjanster" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-[#3a9e9e] transition-colors border-b border-white/10 pb-3">Våra tjänster</a>
+           <a href="#maskintyper" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-[#3a9e9e] transition-colors border-b border-white/10 pb-3">Maskiner</a>
            <a href="#ssm-lagen" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-[#3a9e9e] transition-colors border-b border-white/10 pb-3">Nya SSM-lagen</a>
            <a href="#anmalan" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-[#3a9e9e] transition-colors border-b border-white/10 pb-3">Serviceavtal</a>
            <button onClick={() => { setIsMobileMenuOpen(false); navigate('/Calculator'); }} className="text-[#3a9e9e] font-bold text-left hover:text-white transition-colors border-b border-white/10 pb-3">Klinikkalkylator</button>
@@ -126,6 +129,9 @@ export default function PublicServiceRequest() {
 
       {/* Våra tjänster / Serviceavtal */}
       <PublicServicesSection />
+      
+      {/* Maskintyper */}
+      <PublicMachineTypesSection />
 
       {/* Vad kommer att krävas i anmälan */}
       <SsmRequirementsSection />
