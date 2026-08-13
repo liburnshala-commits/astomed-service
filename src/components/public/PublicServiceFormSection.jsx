@@ -31,7 +31,7 @@ export default function PublicServiceFormSection({ onSuccess, onOpenPrivacy }) {
     const fetchTemplates = async () => {
       try {
         const data = await base44.entities.ServiceAgreementTemplate.list();
-        setTemplates(data);
+        setTemplates(data.sort((a, b) => a.name.localeCompare(b.name)));
       } catch (err) {
         console.error("Failed to load templates", err);
       }
