@@ -188,11 +188,12 @@ export default function ServiceRecordForm({ record, machines, customers, presele
         // 1. Exact match
         templateToApply = templates.find(t => t.name.toLowerCase().trim() === modelLower);
         
-        // 2. Contains match
+        // 2. Contains match (be more strict to avoid matching short template names)
         if (!templateToApply) {
           templateToApply = templates.find(t => {
             const tNameLower = t.name.toLowerCase().trim();
-            return tNameLower.includes(modelLower) || modelLower.includes(tNameLower);
+            if (tNameLower.length < 4) return false; // Avoid matching too short names
+            return modelLower.includes(tNameLower);
           });
         }
         
