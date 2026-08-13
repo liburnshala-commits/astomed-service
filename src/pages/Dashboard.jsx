@@ -94,7 +94,12 @@ export default function Dashboard() {
 
   const contractedMachines = machines.filter(m => m.service_contract && m.service_contract !== 'none');
   const activeContractsCount = contractedMachines.filter(m => !m.contract_status || m.contract_status === 'active').length;
-  const signedCustomersCount = new Set(contractedMachines.filter(m => !m.contract_status || m.contract_status === 'active').map(m => m.customer_id)).size;
+  const activeCustomerIds = new Set(customers.map(c => c.id));
+  const signedCustomersCount = new Set(
+    contractedMachines
+      .filter(m => (!m.contract_status || m.contract_status === 'active') && activeCustomerIds.has(m.customer_id))
+      .map(m => m.customer_id)
+  ).size;
   const pendingContractsCount = contractedMachines.filter(m => m.contract_status === 'pending_signature').length;
   const inactiveContractsCount = contractedMachines.filter(m => m.contract_status === 'inactive').length;
   const rejectedContractsCount = contractedMachines.filter(m => m.contract_status === 'rejected').length;
