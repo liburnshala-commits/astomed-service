@@ -24,6 +24,13 @@ Deno.serve(async (req) => {
             last_message_at: new Date().toISOString()
         });
 
+        await base44.asServiceRole.entities.ChatMessage.create({
+            conversation_id: currentConv.id,
+            sender_type: 'system',
+            sender_name: 'Astomed',
+            content: 'Välkommen till Astomed Support! En tekniker kommer att besvara dina frågor så snart som möjligt. Du kan börja skriva ditt ärende här nedan.'
+        });
+
         return Response.json({ conversation: currentConv });
     } catch (error) {
         return Response.json({ error: error.message }, { status: 500 });
