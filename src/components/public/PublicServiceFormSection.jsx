@@ -171,7 +171,7 @@ export default function PublicServiceFormSection({ onSuccess, onOpenPrivacy }) {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div className="space-y-1.5">
                 <Label className="text-slate-700">Maskintyp *</Label>
-                <Select value={form.machine_name} onValueChange={(v) => set("machine_name", v)} required>
+                <Select value={form.machine_name || undefined} onValueChange={(v) => set("machine_name", v)} required>
                   <SelectTrigger className="h-11 bg-slate-50/50">
                     <SelectValue placeholder="Välj maskintyp" />
                   </SelectTrigger>
