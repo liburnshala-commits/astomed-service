@@ -32,6 +32,7 @@ const navSections = [
     title: null,
     items: [
       { label: "Dashboard", page: "Dashboard", icon: LayoutDashboard, roles: ["admin", "technician"] },
+      { label: "Intern KPI", page: "InternalDashboard", icon: TrendingUp, roles: ["admin", "technician"] },
       { label: "Min översikt", page: "CustomerDashboard", icon: LayoutDashboard, roles: ["customer"] },
       { label: "Klinikutveckling", page: "ClinicDevelopment", icon: TrendingUp, roles: ["admin"] },
       { label: "Strålsäkerhet (SSM)", page: "RadiationSafety", icon: Shield, roles: ["admin"] },
