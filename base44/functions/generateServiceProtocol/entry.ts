@@ -111,22 +111,64 @@ Deno.serve(async (req) => {
         doc.text(splitDesc, 20, y);
         y += (splitDesc.length * 5) + 5;
 
-        if (record.measured_laser_power) {
+        let hasMeasurements = false;
+        if (record.measured_laser_power || record.pulse_count) {
             doc.setFont('helvetica', 'bold');
-            doc.text('Uppmätt lasereffekt:', 20, y);
-            doc.setFont('helvetica', 'normal');
-            doc.text(record.measured_laser_power, 60, y);
+            doc.text(machine?.model === "Soprano Titanium" ? 'Handenhet 1' : 'Mätvärden', 20, y);
             y += 6;
+            doc.setFont('helvetica', 'normal');
+            if (record.measured_laser_power) {
+                doc.text(`Lasereffekt: ${record.measured_laser_power}`, 25, y);
+                y += 6;
+            }
+            if (record.pulse_count) {
+                doc.text(`Pulser: ${record.pulse_count.toLocaleString('sv-SE')}`, 25, y);
+                y += 6;
+            }
+            hasMeasurements = true;
         }
-        if (record.pulse_count) {
+
+        if (record.measured_laser_power_2 || record.pulse_count_2) {
+            if (hasMeasurements) y += 2;
             doc.setFont('helvetica', 'bold');
-            doc.text('Antal pulser:', 20, y);
-            doc.setFont('helvetica', 'normal');
-            doc.text(record.pulse_count.toString(), 60, y);
+            doc.text('Handenhet 2', 20, y);
             y += 6;
+            doc.setFont('helvetica', 'normal');
+            if (record.measured_laser_power_2) {
+                doc.text(`Lasereffekt: ${record.measured_laser_power_2}`, 25, y);
+                y += 6;
+            }
+            if (record.pulse_count_2) {
+                doc.text(`Pulser: ${record.pulse_count_2.toLocaleString('sv-SE')}`, 25, y);
+                y += 6;
+            }
+            hasMeasurements = true;
+        }
+
+        if (record.extra_handpieces && record.extra_handpieces.length > 0) {
+            record.extra_handpieces.forEach((hp: any) => {
+                if (hasMeasurements) y += 2;
+                doc.setFont('helvetica', 'bold');
+                doc.text(hp.label || 'Extra handenhet', 20, y);
+                y += 6;
+                doc.setFont('helvetica', 'normal');
+                if (hp.measured_power) {
+                    doc.text(`Lasereffekt: ${hp.measured_power}`, 25, y);
+                    y += 6;
+                }
+                if (hp.pulse_count) {
+                    doc.text(`Pulser: ${hp.pulse_count.toLocaleString('sv-SE')}`, 25, y);
+                    y += 6;
+                }
+                hasMeasurements = true;
+            });
         }
         
-        y += 4;
+        if (hasMeasurements) {
+             y += 4;
+        } else {
+             y -= 5;
+        }
         doc.setDrawColor(slate200);
         doc.line(20, y, 190, y);
         y += 10;

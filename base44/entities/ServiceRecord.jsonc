@@ -47,6 +47,24 @@
       "type": "number",
       "description": "Antal pulser handenhet 2"
     },
+    "extra_handpieces": {
+      "type": "array",
+      "description": "Fler handenheter (ut\u00f6ver 1 och 2)",
+      "items": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string"
+          },
+          "measured_power": {
+            "type": "string"
+          },
+          "pulse_count": {
+            "type": "number"
+          }
+        }
+      }
+    },
     "parts_used": {
       "type": "array",
       "description": "Anv\u00e4nda reservdelar",

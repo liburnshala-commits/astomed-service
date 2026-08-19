@@ -62,8 +62,17 @@ export default function ServiceRecordForm({ record, machines, customers, presele
     measured_laser_power: record?.measured_laser_power || "",
     pulse_count: record?.pulse_count || "",
     measured_laser_power_2: record?.measured_laser_power_2 || "",
-    pulse_count_2: record?.pulse_count_2 || ""
+    pulse_count_2: record?.pulse_count_2 || "",
+    extra_handpieces: record?.extra_handpieces || []
   });
+
+  const addExtraHandpiece = () => setForm(prev => ({ ...prev, extra_handpieces: [...prev.extra_handpieces, { label: `Handenhet ${prev.extra_handpieces.length + 3}`, measured_power: "", pulse_count: "" }] }));
+  const updateExtraHandpiece = (i, field, value) => {
+    const arr = [...form.extra_handpieces];
+    arr[i] = { ...arr[i], [field]: value };
+    setForm(prev => ({ ...prev, extra_handpieces: arr }));
+  };
+  const removeExtraHandpiece = (i) => setForm(prev => ({ ...prev, extra_handpieces: prev.extra_handpieces.filter((_, idx) => idx !== i) }));
 
   const [invoiceError, setInvoiceError] = useState(null);
   const [uploading, setUploading] = useState(false);
@@ -321,7 +330,11 @@ export default function ServiceRecordForm({ record, machines, customers, presele
       measured_laser_power: form.measured_laser_power || undefined,
       pulse_count: form.pulse_count === "" ? undefined : Number(form.pulse_count),
       measured_laser_power_2: form.measured_laser_power_2 || undefined,
-      pulse_count_2: form.pulse_count_2 === "" ? undefined : Number(form.pulse_count_2)
+      pulse_count_2: form.pulse_count_2 === "" ? undefined : Number(form.pulse_count_2),
+      extra_handpieces: form.extra_handpieces.map(h => ({
+        ...h,
+        pulse_count: h.pulse_count === "" ? undefined : Number(h.pulse_count)
+      }))
     });
   };
 
@@ -572,6 +585,38 @@ export default function ServiceRecordForm({ record, machines, customers, presele
                       </div>
                     </>
                   )}
+
+                  <div className="col-span-2 border-t border-blue-200 pt-4 mt-2">
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="text-xs font-semibold text-blue-800 uppercase tracking-wide">Fler handenheter</div>
+                      <Button size="sm" variant="outline" className="h-7 text-xs bg-white" onClick={addExtraHandpiece}>
+                        <Plus className="w-3 h-3 mr-1" /> Lägg till
+                      </Button>
+                    </div>
+                    {form.extra_handpieces.map((hp, i) => (
+                      <div key={i} className="bg-white p-3 rounded-lg border border-blue-100 mb-2 relative">
+                        <Button size="icon" variant="ghost" className="absolute top-1 right-1 h-6 w-6 text-red-400 hover:text-red-600" onClick={() => removeExtraHandpiece(i)}>
+                          <Trash2 className="w-3 h-3" />
+                        </Button>
+                        <div className="space-y-2 pr-6">
+                          <div>
+                            <Label className="text-[10px]">Benämning</Label>
+                            <Input className="h-7 text-xs" value={hp.label} onChange={e => updateExtraHandpiece(i, "label", e.target.value)} placeholder="T.ex. Handenhet 3" />
+                          </div>
+                          <div className="grid grid-cols-2 gap-2">
+                            <div>
+                              <Label className="text-[10px]">Lasereffekt (W/J)</Label>
+                              <Input className="h-7 text-xs" value={hp.measured_power} onChange={e => updateExtraHandpiece(i, "measured_power", e.target.value)} />
+                            </div>
+                            <div>
+                              <Label className="text-[10px]">Antal pulser</Label>
+                              <Input type="number" className="h-7 text-xs" value={hp.pulse_count} onChange={e => updateExtraHandpiece(i, "pulse_count", e.target.value)} />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               )}
 
