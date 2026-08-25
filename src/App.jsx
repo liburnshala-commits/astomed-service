@@ -29,6 +29,7 @@ import PendingApproval from './pages/PendingApproval';
 import Calculator from './pages/Calculator';
 import ClinicCalculations from './pages/ClinicCalculations';
 import InternalDashboard from './pages/InternalDashboard';
+import Duplicates from './pages/Duplicates';
 
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
@@ -140,6 +141,7 @@ const AuthenticatedApp = () => {
         <Route path="/Calculator" element={<AnimatedPage><Calculator /></AnimatedPage>} />
         <Route path="/ClinicCalculations" element={<AnimatedPage><LayoutWrapper currentPageName="ClinicCalculations"><ClinicCalculations /></LayoutWrapper></AnimatedPage>} />
         <Route path="/InternalDashboard" element={<AnimatedPage><LayoutWrapper currentPageName="InternalDashboard"><InternalDashboard /></LayoutWrapper></AnimatedPage>} />
+        <Route path="/Duplicates" element={<AnimatedPage><LayoutWrapper currentPageName="Duplicates"><Duplicates /></LayoutWrapper></AnimatedPage>} />
         {Object.entries(Pages).map(([path, Page]) => (
           <Route
             key={path}
