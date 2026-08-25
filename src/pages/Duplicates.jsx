@@ -3,7 +3,7 @@ import { base44 } from "@/api/base44Client";
 import { useAuth } from "@/lib/AuthContext";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { AlertTriangle, Users, Monitor, ShieldAlert } from "lucide-react";
+import { AlertTriangle, Users, Monitor, ShieldAlert, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export default function DuplicatesPage() {
@@ -20,10 +20,14 @@ export default function DuplicatesPage() {
 
     const fetchData = async () => {
       try {
-        const [customers, machines] = await Promise.all([
+        const [customers, machines, agreements] = await Promise.all([
           base44.entities.Customer.list(),
-          base44.entities.Machine.list()
+          base44.entities.Machine.list(),
+          base44.entities.ServiceAgreementInstance.list()
         ]);
+
+        const activeAgreements = agreements.filter(a => a.status === 'active');
+        const customerHasAgreement = (customerId) => activeAgreements.some(a => a.customer_id === customerId);
 
         // Process customers
         const customerNameCounts = {};
@@ -42,7 +46,10 @@ export default function DuplicatesPage() {
           .map(name => ({
             name: customerNameGroups[name][0].company_name,
             count: customerNameGroups[name].length,
-            records: customerNameGroups[name]
+            records: customerNameGroups[name].map(c => ({
+              ...c,
+              has_agreement: customerHasAgreement(c.id) || machines.some(m => m.customer_id === c.id && m.service_contract && m.service_contract !== 'none')
+            }))
           }));
 
         // Process machines
@@ -63,7 +70,10 @@ export default function DuplicatesPage() {
             serial: machineSerialGroups[sn][0].serial_number,
             model: machineSerialGroups[sn][0].model,
             count: machineSerialGroups[sn].length,
-            records: machineSerialGroups[sn]
+            records: machineSerialGroups[sn].map(m => ({
+              ...m,
+              has_agreement: (m.service_contract && m.service_contract !== 'none') || activeAgreements.some(a => a.machine_ids?.includes(m.id))
+            }))
           }));
 
         setDuplicateCustomers(dCustomers);
@@ -132,7 +142,14 @@ export default function DuplicatesPage() {
                       {group.records.map(record => (
                         <div key={record.id} className="text-sm bg-white border rounded-md p-3 flex justify-between items-center shadow-sm">
                           <div>
-                            <div className="font-medium text-slate-700">{record.contact_person || 'Ingen kontaktperson'}</div>
+                            <div className="flex items-center gap-2">
+                              <span className="font-medium text-slate-700">{record.contact_person || 'Ingen kontaktperson'}</span>
+                              {record.has_agreement && (
+                                <Badge variant="secondary" className="bg-green-100 text-green-800 text-[10px] px-1.5 py-0">
+                                  <ShieldCheck className="w-3 h-3 mr-1" /> Avtal finns
+                                </Badge>
+                              )}
+                            </div>
                             <div className="text-slate-500 text-xs mt-1">
                               {record.email || 'Ingen e-post'} • {record.org_number || 'Inget org.nr'}
                             </div>
@@ -184,7 +201,14 @@ export default function DuplicatesPage() {
                       {group.records.map(record => (
                         <div key={record.id} className="text-sm bg-white border rounded-md p-3 flex justify-between items-center shadow-sm">
                           <div>
-                            <div className="font-medium text-slate-700">{record.model}</div>
+                            <div className="flex items-center gap-2">
+                              <span className="font-medium text-slate-700">{record.model}</span>
+                              {record.has_agreement && (
+                                <Badge variant="secondary" className="bg-green-100 text-green-800 text-[10px] px-1.5 py-0">
+                                  <ShieldCheck className="w-3 h-3 mr-1" /> Avtal finns
+                                </Badge>
+                              )}
+                            </div>
                             <div className="text-slate-500 text-xs mt-1">
                               ID: {record.id.slice(-6)}
                             </div>
