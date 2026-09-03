@@ -117,21 +117,12 @@ export default function RadiationOnboarding() {
         signed_date: new Date().toISOString()
       });
 
-      // Update user profile
-      await base44.auth.updateMe({
-        radiation_safety_onboarding_completed: true,
-        radiation_safety_onboarding_date: new Date().toISOString()
-      });
+      // (User profile update removed since it's no longer a blocking requirement, tracked via the entity)
 
       toast({ title: 'Klart', description: 'Onboarding slutförd och signerad.' });
       
-      // Navigate to appropriate page
-      const targetPath = user.radiation_safety_onboarding_completed 
-        ? '/RadiationSafety' 
-        : (user.role === 'customer' ? '/CustomerDashboard' : '/Dashboard');
-      navigate(targetPath);
-      // Force reload to update auth context easily
-      window.location.reload();
+      // Navigate back to the radiation safety dashboard
+      navigate('/RadiationSafety');
       
     } catch (error) {
       console.error('Error signing onboarding:', error);
@@ -182,7 +173,7 @@ export default function RadiationOnboarding() {
         
         <div className="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-md">
           <p className="text-sm text-blue-800">
-            Denna guide måste läsas och avbockas innan du får tillgång till systemet. Genom att signera i slutet intygar du att du tagit del av och förstått innehållet.
+            Denna guide måste läsas och avbockas. Genom att signera i slutet intygar du att du tagit del av och förstått innehållet.
           </p>
         </div>
 

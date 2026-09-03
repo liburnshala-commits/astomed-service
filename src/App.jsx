@@ -97,13 +97,6 @@ const AuthenticatedApp = () => {
     }
   }
 
-  // Guard for Radiation Safety Onboarding
-  if (user && ['customer', 'technician', 'admin'].includes(user.role) && !isPublicRoute && currentPath !== '/RadiationOnboarding') {
-    if (!user.radiation_safety_onboarding_completed) {
-      return <Navigate to="/RadiationOnboarding" replace />;
-    }
-  }
-
   // Strict routing for customers
   if (user && user.role === 'customer' && !isPublicRoute && currentPath !== '/RadiationOnboarding') {
     const allowedCustomerPaths = ['/CustomerDashboard', '/ServiceRecords', '/Machines'];
