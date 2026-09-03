@@ -32,6 +32,10 @@
       "format": "date",
       "description": "Garantins utg\u00e5ngsdatum"
     },
+    "operating_location": {
+      "type": "string",
+      "description": "Driftst\u00e4lle (var maskinen \u00e4r placerad)"
+    },
     "status": {
       "type": "string",
       "enum": [

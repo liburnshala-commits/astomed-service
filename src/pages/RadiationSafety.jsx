@@ -1301,39 +1301,103 @@ export default function RadiationSafety() {
               </div>
             </div>
 
-            <div className="border border-slate-200 rounded-md p-4 space-y-4 bg-slate-50 mt-2">
-              <h4 className="font-semibold text-sm border-b pb-2">Kontrollpunkter</h4>
+            <div className="border border-slate-200 rounded-md p-4 space-y-6 bg-slate-50 mt-2">
+              <h4 className="font-semibold text-sm border-b pb-2">Kontrollpunkter (Komplett checklista)</h4>
               
-              <div className="flex items-start gap-3">
-                <Checkbox className="mt-0.5" id="chk_signs" checked={currentLocationCheck.warning_signs_present || false} onCheckedChange={c => setCurrentLocationCheck({...currentLocationCheck, warning_signs_present: c})} />
-                <label htmlFor="chk_signs" className="text-sm cursor-pointer">
-                  <span className="font-medium text-slate-800">Varningsskyltar finns på dörrar</span>
-                  <p className="text-xs text-muted-foreground">Korrekt varselmärkning för Laser/IPL sitter väl synligt i anslutning till behandlingsrummet.</p>
-                </label>
+              <div className="space-y-4">
+                <h5 className="text-xs font-bold text-slate-500 uppercase tracking-wider">1. Fysisk avgränsning och tillträdeskontroll</h5>
+                <div className="flex items-start gap-3">
+                  <Checkbox className="mt-0.5" id="chk_enc" checked={currentLocationCheck.room_enclosed || false} onCheckedChange={c => setCurrentLocationCheck({...currentLocationCheck, room_enclosed: c})} />
+                  <label htmlFor="chk_enc" className="text-sm cursor-pointer"><span className="font-medium text-slate-800">Avgränsat behandlingsrum</span><p className="text-xs text-muted-foreground">Lokalen har ett dedikerat, stängbart rum för behandlingarna.</p></label>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Checkbox className="mt-0.5" id="chk_acc" checked={currentLocationCheck.access_controlled || false} onCheckedChange={c => setCurrentLocationCheck({...currentLocationCheck, access_controlled: c})} />
+                  <label htmlFor="chk_acc" className="text-sm cursor-pointer"><span className="font-medium text-slate-800">Skydd mot obehörigt tillträde</span><p className="text-xs text-muted-foreground">Dörren kan hållas stängd, låst utifrån eller har dörrbrytare (interlock).</p></label>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Checkbox className="mt-0.5" id="chk_signs" checked={currentLocationCheck.warning_signs_present || false} onCheckedChange={c => setCurrentLocationCheck({...currentLocationCheck, warning_signs_present: c})} />
+                  <label htmlFor="chk_signs" className="text-sm cursor-pointer"><span className="font-medium text-slate-800">Varningsskyltar finns på dörrar</span><p className="text-xs text-muted-foreground">Korrekt varselmärkning för Laser/IPL sitter väl synligt utanför behandlingsrummet.</p></label>
+                </div>
               </div>
 
-              <div className="flex items-start gap-3">
-                <Checkbox className="mt-0.5" id="chk_win" checked={currentLocationCheck.windows_covered || false} onCheckedChange={c => setCurrentLocationCheck({...currentLocationCheck, windows_covered: c})} />
-                <label htmlFor="chk_win" className="text-sm cursor-pointer">
-                  <span className="font-medium text-slate-800">Fönster och öppningar är insynsskyddade</span>
-                  <p className="text-xs text-muted-foreground">Persienner eller rullgardiner är nere och förhindrar att utomstående kan exponeras för strålning.</p>
-                </label>
+              <div className="space-y-4">
+                <h5 className="text-xs font-bold text-slate-500 uppercase tracking-wider">2. Fönster och reflekterande ytor</h5>
+                <div className="flex items-start gap-3">
+                  <Checkbox className="mt-0.5" id="chk_win" checked={currentLocationCheck.windows_covered || false} onCheckedChange={c => setCurrentLocationCheck({...currentLocationCheck, windows_covered: c})} />
+                  <label htmlFor="chk_win" className="text-sm cursor-pointer"><span className="font-medium text-slate-800">Avskärmade fönster</span><p className="text-xs text-muted-foreground">Fönster i rummet är täckta för att strålning inte ska tränga ut.</p></label>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Checkbox className="mt-0.5" id="chk_ref" checked={currentLocationCheck.no_reflecting_surfaces || false} onCheckedChange={c => setCurrentLocationCheck({...currentLocationCheck, no_reflecting_surfaces: c})} />
+                  <label htmlFor="chk_ref" className="text-sm cursor-pointer"><span className="font-medium text-slate-800">Minimerade reflektionsrisker</span><p className="text-xs text-muted-foreground">Inga speglar eller blanka, reflekterande metallytor i direkt anslutning till strålgången.</p></label>
+                </div>
               </div>
 
-              <div className="flex items-start gap-3">
-                <Checkbox className="mt-0.5" id="chk_ref" checked={currentLocationCheck.no_reflecting_surfaces || false} onCheckedChange={c => setCurrentLocationCheck({...currentLocationCheck, no_reflecting_surfaces: c})} />
-                <label htmlFor="chk_ref" className="text-sm cursor-pointer">
-                  <span className="font-medium text-slate-800">Inga reflekterande ytor i strålgången</span>
-                  <p className="text-xs text-muted-foreground">Speglar, tavlor eller blänkande föremål har täckts över eller tagits bort för att förhindra okontrollerad reflektion.</p>
-                </label>
+              <div className="space-y-4">
+                <h5 className="text-xs font-bold text-slate-500 uppercase tracking-wider">3. Personlig skyddsutrustning (PPE)</h5>
+                <div className="flex items-start gap-3">
+                  <Checkbox className="mt-0.5" id="chk_glass" checked={currentLocationCheck.safety_glasses_intact || false} onCheckedChange={c => setCurrentLocationCheck({...currentLocationCheck, safety_glasses_intact: c})} />
+                  <label htmlFor="chk_glass" className="text-sm cursor-pointer"><span className="font-medium text-slate-800">Märkta skyddsglasögon för behandlare</span><p className="text-xs text-muted-foreground">Finns i rummet, är certifierade (CE/EN 207) och rätt optisk täthet för maskinen.</p></label>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Checkbox className="mt-0.5" id="chk_pat_eye" checked={currentLocationCheck.patient_eye_protection || false} onCheckedChange={c => setCurrentLocationCheck({...currentLocationCheck, patient_eye_protection: c})} />
+                  <label htmlFor="chk_pat_eye" className="text-sm cursor-pointer"><span className="font-medium text-slate-800">Ögonskydd för patienten</span><p className="text-xs text-muted-foreground">Heltäckande patientglasögon eller metallsköldar anpassade för strålningen.</p></label>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Checkbox className="mt-0.5" id="chk_ppe_stor" checked={currentLocationCheck.ppe_storage_accessible || false} onCheckedChange={c => setCurrentLocationCheck({...currentLocationCheck, ppe_storage_accessible: c})} />
+                  <label htmlFor="chk_ppe_stor" className="text-sm cursor-pointer"><span className="font-medium text-slate-800">Tydlig förvaring</span><p className="text-xs text-muted-foreground">Skyddsglasögon förvaras lättillgängligt vid ingången till strålningszonen.</p></label>
+                </div>
               </div>
 
-              <div className="flex items-start gap-3">
-                <Checkbox className="mt-0.5" id="chk_glass" checked={currentLocationCheck.safety_glasses_intact || false} onCheckedChange={c => setCurrentLocationCheck({...currentLocationCheck, safety_glasses_intact: c})} />
-                <label htmlFor="chk_glass" className="text-sm cursor-pointer">
-                  <span className="font-medium text-slate-800">Skyddsglasögon är intakta och CE-märkta</span>
-                  <p className="text-xs text-muted-foreground">Rätt glasögon för de våglängder som används är på plats. Glasen har inga repor och bågarna är hela.</p>
-                </label>
+              <div className="space-y-4">
+                <h5 className="text-xs font-bold text-slate-500 uppercase tracking-wider">4. Utsug, ventilation och brandsäkerhet</h5>
+                <div className="flex items-start gap-3">
+                  <Checkbox className="mt-0.5" id="chk_smoke" checked={currentLocationCheck.smoke_evacuation || false} onCheckedChange={c => setCurrentLocationCheck({...currentLocationCheck, smoke_evacuation: c})} />
+                  <label htmlFor="chk_smoke" className="text-sm cursor-pointer"><span className="font-medium text-slate-800">Punktutsug / Rökutsug</span><p className="text-xs text-muted-foreground">Vid ablativ laser/tatueringsborttagning finns adekvat punktutsug med HEPA-/kolfilter.</p></label>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Checkbox className="mt-0.5" id="chk_vent" checked={currentLocationCheck.ventilation_adequate || false} onCheckedChange={c => setCurrentLocationCheck({...currentLocationCheck, ventilation_adequate: c})} />
+                  <label htmlFor="chk_vent" className="text-sm cursor-pointer"><span className="font-medium text-slate-800">God allmänventilation</span><p className="text-xs text-muted-foreground">Anpassad för att ventilera ut värme och lukt från verksamheten.</p></label>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Checkbox className="mt-0.5" id="chk_fire" checked={currentLocationCheck.fire_safety_equipment || false} onCheckedChange={c => setCurrentLocationCheck({...currentLocationCheck, fire_safety_equipment: c})} />
+                  <label htmlFor="chk_fire" className="text-sm cursor-pointer"><span className="font-medium text-slate-800">Brandsäkerhet</span><p className="text-xs text-muted-foreground">Brandsläckare och brandfilt finns i anslutning till rum där klass 4-laser används.</p></label>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <h5 className="text-xs font-bold text-slate-500 uppercase tracking-wider">5. Hygien och ytskikt (Hälsoskydd)</h5>
+                <div className="flex items-start gap-3">
+                  <Checkbox className="mt-0.5" id="chk_muni" checked={currentLocationCheck.municipality_registered || false} onCheckedChange={c => setCurrentLocationCheck({...currentLocationCheck, municipality_registered: c})} />
+                  <label htmlFor="chk_muni" className="text-sm cursor-pointer"><span className="font-medium text-slate-800">Lokalanmälan till kommunen</span><p className="text-xs text-muted-foreground">Anmäld till kommunens miljö- och hälsoskyddsnämnd som hygienisk verksamhet.</p></label>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Checkbox className="mt-0.5" id="chk_hand" checked={currentLocationCheck.hand_washing_facilities || false} onCheckedChange={c => setCurrentLocationCheck({...currentLocationCheck, hand_washing_facilities: c})} />
+                  <label htmlFor="chk_hand" className="text-sm cursor-pointer"><span className="font-medium text-slate-800">Tvättställ</span><p className="text-xs text-muted-foreground">Rinnande varmt/kallt vatten, flytande tvål och engångshanddukar i anslutning till rummet.</p></label>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Checkbox className="mt-0.5" id="chk_clean" checked={currentLocationCheck.cleanable_surfaces || false} onCheckedChange={c => setCurrentLocationCheck({...currentLocationCheck, cleanable_surfaces: c})} />
+                  <label htmlFor="chk_clean" className="text-sm cursor-pointer"><span className="font-medium text-slate-800">Rengöringsbara ytskikt</span><p className="text-xs text-muted-foreground">Golv, väggar och behandlingsbänkar är släta och tål ytdesinfektionsmedel.</p></label>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Checkbox className="mt-0.5" id="chk_waste" checked={currentLocationCheck.waste_management || false} onCheckedChange={c => setCurrentLocationCheck({...currentLocationCheck, waste_management: c})} />
+                  <label htmlFor="chk_waste" className="text-sm cursor-pointer"><span className="font-medium text-slate-800">Avfallshantering</span><p className="text-xs text-muted-foreground">Kärl för riskavfall och stickande/skärande samt rutiner för biologiskt avfall.</p></label>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <h5 className="text-xs font-bold text-slate-500 uppercase tracking-wider">6. Dokumentation och ordning</h5>
+                <div className="flex items-start gap-3">
+                  <Checkbox className="mt-0.5" id="chk_man" checked={currentLocationCheck.manuals_available || false} onCheckedChange={c => setCurrentLocationCheck({...currentLocationCheck, manuals_available: c})} />
+                  <label htmlFor="chk_man" className="text-sm cursor-pointer"><span className="font-medium text-slate-800">Bruksanvisning och manual</span><p className="text-xs text-muted-foreground">Tillverkarens manualer och säkerhetsföreskrifter finns tillgängliga på kliniken.</p></label>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Checkbox className="mt-0.5" id="chk_meth" checked={currentLocationCheck.methods_accessible || false} onCheckedChange={c => setCurrentLocationCheck({...currentLocationCheck, methods_accessible: c})} />
+                  <label htmlFor="chk_meth" className="text-sm cursor-pointer"><span className="font-medium text-slate-800">Skriftliga metodbeskrivningar</span><p className="text-xs text-muted-foreground">Åtkomst (pärm eller digitalt) till klinikens metodbeskrivningar för varje behandling.</p></label>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Checkbox className="mt-0.5" id="chk_stop" checked={currentLocationCheck.emergency_stop_clear || false} onCheckedChange={c => setCurrentLocationCheck({...currentLocationCheck, emergency_stop_clear: c})} />
+                  <label htmlFor="chk_stop" className="text-sm cursor-pointer"><span className="font-medium text-slate-800">Synlig nödstoppsrutin</span><p className="text-xs text-muted-foreground">Maskinens nödstopp är fritt från hinder och personal vet hur den används.</p></label>
+                </div>
               </div>
             </div>
 

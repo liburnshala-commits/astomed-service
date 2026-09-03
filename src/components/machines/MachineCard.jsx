@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Monitor, Wrench, Building2, FileCheck, Download, Trash2, FileText } from "lucide-react";
+import { Monitor, Wrench, Building2, FileCheck, Download, Trash2, FileText, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -97,10 +97,16 @@ export default function MachineCard({
           </div>
         )}
         {customer && (
-          <Link to={createPageUrl(`CustomerDetails?id=${customer.id}`)} className="flex items-center gap-1.5 text-sm astomed-subtitle mb-3 hover:opacity-80 transition-opacity w-fit">
+          <Link to={createPageUrl(`CustomerDetails?id=${customer.id}`)} className={`flex items-center gap-1.5 text-sm astomed-subtitle hover:opacity-80 transition-opacity w-fit ${machine.operating_location ? 'mb-1' : 'mb-3'}`}>
             <Building2 className="w-3.5 h-3.5 astomed-muted" />
             <span className="hover:underline">{customer.company_name}</span>
           </Link>
+        )}
+        {machine.operating_location && (
+          <div className="flex items-center gap-1.5 text-xs text-slate-500 mb-3">
+            <MapPin className="w-3.5 h-3.5 astomed-muted" />
+            <span>{machine.operating_location}</span>
+          </div>
         )}
         <div className="text-xs astomed-muted mb-4 pt-3 border-t space-y-1 flex-1" style={{ borderColor: "#dce8e8" }}>
           <div className="flex items-center justify-between">

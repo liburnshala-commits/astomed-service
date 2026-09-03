@@ -14,6 +14,16 @@
       "type": "string",
       "description": "Kontrollerad av"
     },
+    "room_enclosed": {
+      "type": "boolean",
+      "default": false,
+      "description": "Avgr\u00e4nsat behandlingsrum med st\u00e4ngbar d\u00f6rr"
+    },
+    "access_controlled": {
+      "type": "boolean",
+      "default": false,
+      "description": "Skydd mot obeh\u00f6rigt tilltr\u00e4de under behandling"
+    },
     "warning_signs_present": {
       "type": "boolean",
       "default": false,
@@ -32,7 +42,67 @@
     "safety_glasses_intact": {
       "type": "boolean",
       "default": false,
-      "description": "Skyddsglas\u00f6gon \u00e4r hela, rena och CE-m\u00e4rkta f\u00f6r r\u00e4tt v\u00e5gl\u00e4ngd"
+      "description": "Skyddsglas\u00f6gon f\u00f6r behandlare \u00e4r hela, rena och CE-m\u00e4rkta f\u00f6r r\u00e4tt v\u00e5gl\u00e4ngd"
+    },
+    "patient_eye_protection": {
+      "type": "boolean",
+      "default": false,
+      "description": "Patient\u00f6gonskydd (t.ex. metallsk\u00f6ldar) finns tillg\u00e4ngliga"
+    },
+    "ppe_storage_accessible": {
+      "type": "boolean",
+      "default": false,
+      "description": "Skyddsutrustning f\u00f6rvaras l\u00e4ttillg\u00e4ngligt vid ing\u00e5ngen"
+    },
+    "smoke_evacuation": {
+      "type": "boolean",
+      "default": false,
+      "description": "Punktutsug/r\u00f6kutsug finns (vid behov f\u00f6r ablativ laser/tatuering)"
+    },
+    "ventilation_adequate": {
+      "type": "boolean",
+      "default": false,
+      "description": "God allm\u00e4nventilation anpassad f\u00f6r verksamheten"
+    },
+    "fire_safety_equipment": {
+      "type": "boolean",
+      "default": false,
+      "description": "Brandsl\u00e4ckare/brandfilt finns i anslutning till rummet"
+    },
+    "municipality_registered": {
+      "type": "boolean",
+      "default": false,
+      "description": "Verksamheten \u00e4r anm\u00e4ld till kommunens milj\u00f6- och h\u00e4lsoskyddsn\u00e4mnd"
+    },
+    "hand_washing_facilities": {
+      "type": "boolean",
+      "default": false,
+      "description": "Tv\u00e4ttst\u00e4ll med varmt/kallt vatten, tv\u00e5l och eng\u00e5ngshanddukar finns"
+    },
+    "cleanable_surfaces": {
+      "type": "boolean",
+      "default": false,
+      "description": "Ytskikt (golv, b\u00e4nkar, v\u00e4ggar) \u00e4r sl\u00e4ta och avtorkningsbara"
+    },
+    "waste_management": {
+      "type": "boolean",
+      "default": false,
+      "description": "Rutiner och k\u00e4rl f\u00f6r riskavfall/stickande avfall finns"
+    },
+    "manuals_available": {
+      "type": "boolean",
+      "default": false,
+      "description": "Bruksanvisningar och manualer finns tillg\u00e4ngliga"
+    },
+    "methods_accessible": {
+      "type": "boolean",
+      "default": false,
+      "description": "Skriftliga metodbeskrivningar \u00e4r l\u00e4ttillg\u00e4ngliga"
+    },
+    "emergency_stop_clear": {
+      "type": "boolean",
+      "default": false,
+      "description": "Apparaternas n\u00f6dstopp \u00e4r synliga och fria fr\u00e5n hinder"
     },
     "comments": {
       "type": "string",

@@ -22,6 +22,7 @@ export default function MachineForm({ machine, customers, preselectedCustomerId,
     manufacturer: machine?.manufacturer || "",
     serial_number: machine?.serial_number || "",
     customer_id: machine?.customer_id || preselectedCustomerId || "",
+    operating_location: machine?.operating_location || "",
     service_date: machine?.service_date || "",
     warranty_expiry: machine?.warranty_expiry || "",
     status: machine?.status || "active",
@@ -148,6 +149,10 @@ export default function MachineForm({ machine, customers, preselectedCustomerId,
             <div className="col-span-2 space-y-1">
               <Label>Serienummer *</Label>
               <Input value={form.serial_number} onChange={e => set("serial_number", e.target.value)} placeholder="SN-XXXXXX" />
+            </div>
+            <div className="col-span-2 space-y-1">
+              <Label>Driftställe (Valfritt)</Label>
+              <Input value={form.operating_location} onChange={e => set("operating_location", e.target.value)} placeholder="T.ex. Behandlingsrum 1" />
             </div>
             <div className="col-span-2 space-y-1">
               <Label>Kund *</Label>
