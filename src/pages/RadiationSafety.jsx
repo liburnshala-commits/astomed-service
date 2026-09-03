@@ -1171,6 +1171,10 @@ export default function RadiationSafety() {
             <div className="bg-purple-50 text-purple-800 p-3 rounded-md text-sm mb-2">
               Använd denna mall för att formellt delegera uppgifter, till exempel rollen som <strong>Strålskyddsansvarig</strong>. Det är viktigt att delegeringen är tydlig och accepterad.
             </div>
+            <div className="bg-yellow-50 text-yellow-800 p-3 rounded-md text-sm mb-2 border border-yellow-200 flex items-start gap-2">
+              <AlertTriangle className="w-5 h-5 shrink-0 mt-0.5" />
+              <p><strong>Viktigt gällande personuppgifter (GDPR):</strong> Du får endast registrera personuppgifter (såsom namn) om du har inhämtat ett aktivt samtycke från personen i fråga.</p>
+            </div>
             
             <div className="grid grid-cols-2 gap-4">
               <div className="grid gap-2">
@@ -1241,6 +1245,10 @@ export default function RadiationSafety() {
         <DialogContent className="max-w-md">
           <DialogHeader><DialogTitle>{currentPersonnel.id ? 'Redigera Kompetens & Utbildning' : 'Ny Personal'}</DialogTitle></DialogHeader>
           <div className="space-y-4 py-4">
+            <div className="bg-yellow-50 text-yellow-800 p-3 rounded-md text-sm mb-2 border border-yellow-200 flex items-start gap-2">
+              <AlertTriangle className="w-5 h-5 shrink-0 mt-0.5" />
+              <p><strong>Viktigt gällande personuppgifter (GDPR):</strong> Du får endast registrera personuppgifter (såsom namn) om du har inhämtat ett aktivt samtycke från personen i fråga.</p>
+            </div>
             <div className="grid gap-2">
               <Label>Namn på medarbetare, kollega eller partner</Label>
               <Input value={currentPersonnel.employee_name || ''} onChange={e => setCurrentPersonnel({...currentPersonnel, employee_name: e.target.value})} />
