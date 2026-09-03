@@ -143,6 +143,12 @@ export default function RadiationSafety() {
     queryFn: () => base44.entities.AnnualAudit.filter(clinicId !== 'all' ? { clinic_id: clinicId } : {}),
   });
 
+  const { data: onboardings = [] } = useQuery({
+    queryKey: ['onboardings', clinicId],
+    queryFn: () => base44.entities.RadiationSafetyOnboarding.filter(clinicId !== 'all' ? { clinic_id: clinicId } : {}),
+    enabled: !isCustomer
+  });
+
   const { data: machines = [] } = useQuery({
     queryKey: ['machines', clinicId],
     queryFn: () => base44.entities.Machine.filter(clinicId !== 'all' ? { customer_id: clinicId } : {}),
@@ -375,6 +381,50 @@ export default function RadiationSafety() {
       />
 
       <Accordion type="single" collapsible value={activeTab} onValueChange={setActiveTab} className="w-full space-y-4">
+        {!isCustomer && (
+          <AccordionItem value="onboardings" className="border rounded-lg bg-card overflow-hidden">
+            <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/50 data-[state=open]:bg-muted/50">
+              <div className="flex items-center gap-3 w-full">
+                <Users className="w-5 h-5 text-indigo-500" />
+                <span className="text-lg font-semibold flex-1 text-left">Onboarding & Introduktion</span>
+                <span className="text-sm font-normal text-muted-foreground hidden md:inline">{onboardings.length} st genomförda</span>
+              </div>
+            </AccordionTrigger>
+            <AccordionContent className="px-4 pb-4 pt-4 border-t">
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-xl font-semibold">Genomförda Onboardings</h2>
+              </div>
+              {onboardings.length === 0 ? (
+                <p className="text-muted-foreground">Inga medarbetare har genomfört onboarding än.</p>
+              ) : (
+                <div className="grid gap-4 md:grid-cols-2">
+                  {onboardings.map(obs => (
+                    <Card key={obs.id} className="bg-slate-50 border-slate-200">
+                      <CardHeader className="py-3">
+                        <div className="flex justify-between items-center">
+                          <CardTitle className="text-md flex items-center gap-2">
+                            <CheckCircle2 className="w-4 h-4 text-green-500" />
+                            {obs.user_name || obs.user_email}
+                          </CardTitle>
+                          <span className="text-xs text-muted-foreground">
+                            {obs.signed_date ? new Date(obs.signed_date).toLocaleDateString('sv-SE') : ''}
+                          </span>
+                        </div>
+                      </CardHeader>
+                      <CardContent className="py-2 text-sm text-muted-foreground">
+                        <p className="break-all">{obs.user_email}</p>
+                        <p className="mt-1">
+                          <span className="inline-block bg-green-100 text-green-800 px-2 py-0.5 rounded-full text-xs font-medium">Signerad</span>
+                        </p>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              )}
+            </AccordionContent>
+          </AccordionItem>
+        )}
+
         <AccordionItem value="info" className="border rounded-lg bg-card overflow-hidden">
           <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/50 data-[state=open]:bg-muted/50">
             <div className="flex items-center gap-3 w-full">

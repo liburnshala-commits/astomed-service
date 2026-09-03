@@ -15,6 +15,14 @@
       "type": "boolean",
       "default": false,
       "description": "Om anv\u00e4ndaren har godk\u00e4nt integritetspolicyn"
+    },
+    "radiation_safety_onboarding_completed": {
+      "type": "boolean",
+      "default": false
+    },
+    "radiation_safety_onboarding_date": {
+      "type": "string",
+      "format": "date-time"
     }
   },
   "required": []

@@ -1,0 +1,49 @@
+{
+  "name": "RadiationSafetyOnboarding",
+  "type": "object",
+  "properties": {
+    "user_id": {
+      "type": "string"
+    },
+    "user_email": {
+      "type": "string"
+    },
+    "user_name": {
+      "type": "string"
+    },
+    "clinic_id": {
+      "type": "string"
+    },
+    "completed_sections": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "all_sections_completed": {
+      "type": "boolean",
+      "default": false
+    },
+    "signed": {
+      "type": "boolean",
+      "default": false
+    },
+    "signed_date": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "user_id"
+  ],
+  "rls": {
+    "create": {},
+    "read": {},
+    "update": {},
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

@@ -30,6 +30,7 @@ import Calculator from './pages/Calculator';
 import ClinicCalculations from './pages/ClinicCalculations';
 import InternalDashboard from './pages/InternalDashboard';
 import Duplicates from './pages/Duplicates';
+import RadiationOnboarding from './pages/RadiationOnboarding';
 
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
@@ -96,8 +97,15 @@ const AuthenticatedApp = () => {
     }
   }
 
+  // Guard for Radiation Safety Onboarding
+  if (user && ['customer', 'technician', 'admin'].includes(user.role) && !isPublicRoute && currentPath !== '/RadiationOnboarding') {
+    if (!user.radiation_safety_onboarding_completed) {
+      return <Navigate to="/RadiationOnboarding" replace />;
+    }
+  }
+
   // Strict routing for customers
-  if (user && user.role === 'customer' && !isPublicRoute) {
+  if (user && user.role === 'customer' && !isPublicRoute && currentPath !== '/RadiationOnboarding') {
     const allowedCustomerPaths = ['/CustomerDashboard', '/ServiceRecords', '/Machines'];
     if (!allowedCustomerPaths.includes(currentPath)) {
       return <Navigate to="/CustomerDashboard" replace />;
@@ -142,6 +150,7 @@ const AuthenticatedApp = () => {
         <Route path="/ClinicCalculations" element={<AnimatedPage><LayoutWrapper currentPageName="ClinicCalculations"><ClinicCalculations /></LayoutWrapper></AnimatedPage>} />
         <Route path="/InternalDashboard" element={<AnimatedPage><LayoutWrapper currentPageName="InternalDashboard"><InternalDashboard /></LayoutWrapper></AnimatedPage>} />
         <Route path="/Duplicates" element={<AnimatedPage><LayoutWrapper currentPageName="Duplicates"><Duplicates /></LayoutWrapper></AnimatedPage>} />
+        <Route path="/RadiationOnboarding" element={<AnimatedPage><RadiationOnboarding /></AnimatedPage>} />
         {Object.entries(Pages).map(([path, Page]) => (
           <Route
             key={path}
