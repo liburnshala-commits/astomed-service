@@ -1242,7 +1242,7 @@ export default function RadiationSafety() {
           <DialogHeader><DialogTitle>{currentPersonnel.id ? 'Redigera Kompetens & Utbildning' : 'Ny Personal'}</DialogTitle></DialogHeader>
           <div className="space-y-4 py-4">
             <div className="grid gap-2">
-              <Label>Namn på anställd</Label>
+              <Label>Namn på medarbetare, kollega eller partner</Label>
               <Input value={currentPersonnel.employee_name || ''} onChange={e => setCurrentPersonnel({...currentPersonnel, employee_name: e.target.value})} />
             </div>
             <div className="grid gap-2">
