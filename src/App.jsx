@@ -99,7 +99,7 @@ const AuthenticatedApp = () => {
 
   // Strict routing for customers
   if (user && user.role === 'customer' && !isPublicRoute && currentPath !== '/RadiationOnboarding') {
-    const allowedCustomerPaths = ['/CustomerDashboard', '/ServiceRecords', '/Machines'];
+    const allowedCustomerPaths = ['/CustomerDashboard', '/ServiceRecords', '/Machines', '/RadiationSafety'];
     if (!allowedCustomerPaths.includes(currentPath)) {
       return <Navigate to="/CustomerDashboard" replace />;
     }
