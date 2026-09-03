@@ -92,6 +92,7 @@ export default function RadiationOnboarding() {
   const [checkedSections, setCheckedSections] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [activeSection, setActiveSection] = useState(sections[0].id);
+  const [employeeName, setEmployeeName] = useState('');
 
   const handleCheck = (id, checked) => {
     setCheckedSections(prev => ({ ...prev, [id]: checked }));
@@ -108,8 +109,8 @@ export default function RadiationOnboarding() {
       await base44.entities.RadiationSafetyOnboarding.create({
         user_id: user.id,
         user_email: user.email,
-        user_name: user.full_name || '',
-        clinic_id: user.customer_id || '',
+        user_name: employeeName.trim(),
+        clinic_id: user.role === 'customer' ? user.id : (user.customer_id || ''),
         completed_sections: sections.map(s => s.id),
         all_sections_completed: true,
         signed: true,
@@ -124,8 +125,10 @@ export default function RadiationOnboarding() {
 
       toast({ title: 'Klart', description: 'Onboarding slutförd och signerad.' });
       
-      // Navigate to dashboard
-      const targetPath = user.role === 'customer' ? '/CustomerDashboard' : '/Dashboard';
+      // Navigate to appropriate page
+      const targetPath = user.radiation_safety_onboarding_completed 
+        ? '/RadiationSafety' 
+        : (user.role === 'customer' ? '/CustomerDashboard' : '/Dashboard');
       navigate(targetPath);
       // Force reload to update auth context easily
       window.location.reload();
@@ -255,10 +258,21 @@ export default function RadiationOnboarding() {
               </p>
             </div>
             
+            <div className="grid gap-2 text-left w-full max-w-sm mb-4">
+              <label className="text-sm font-semibold">Ditt för- och efternamn (Medarbetare)</label>
+              <input 
+                type="text" 
+                className="flex h-12 w-full rounded-md border border-input bg-background px-3 py-2 text-base focus:outline-none focus:ring-2 focus:ring-primary"
+                value={employeeName}
+                onChange={(e) => setEmployeeName(e.target.value)}
+                placeholder="Skriv ditt namn här..."
+              />
+            </div>
+            
             <Button 
               size="lg" 
               className="w-full max-w-sm h-14 text-lg" 
-              disabled={!allChecked || isSubmitting}
+              disabled={!allChecked || isSubmitting || !employeeName.trim()}
               onClick={handleSign}
             >
               {isSubmitting ? 'Signerar...' : 'Signera och Gå vidare'}

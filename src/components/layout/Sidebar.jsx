@@ -37,7 +37,7 @@ const navSections = [
       { label: "Dubletter", page: "Duplicates", icon: AlertTriangle, roles: ["admin"] },
       { label: "Min översikt", page: "CustomerDashboard", icon: LayoutDashboard, roles: ["customer"] },
       { label: "Klinikutveckling", page: "ClinicDevelopment", icon: TrendingUp, roles: ["admin"] },
-      { label: "Strålsäkerhet (SSM)", page: "RadiationSafety", icon: Shield, roles: ["admin"] },
+      { label: "Strålsäkerhet (SSM)", page: "RadiationSafety", icon: Shield, roles: ["admin", "customer", "technician"] },
     ]
   },
   {

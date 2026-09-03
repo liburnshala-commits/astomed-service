@@ -146,7 +146,6 @@ export default function RadiationSafety() {
   const { data: onboardings = [] } = useQuery({
     queryKey: ['onboardings', clinicId],
     queryFn: () => base44.entities.RadiationSafetyOnboarding.filter(clinicId !== 'all' ? { clinic_id: clinicId } : {}),
-    enabled: !isCustomer
   });
 
   const { data: machines = [] } = useQuery({
@@ -381,19 +380,21 @@ export default function RadiationSafety() {
       />
 
       <Accordion type="single" collapsible value={activeTab} onValueChange={setActiveTab} className="w-full space-y-4">
-        {!isCustomer && (
-          <AccordionItem value="onboardings" className="border rounded-lg bg-card overflow-hidden">
-            <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/50 data-[state=open]:bg-muted/50">
-              <div className="flex items-center gap-3 w-full">
-                <Users className="w-5 h-5 text-indigo-500" />
-                <span className="text-lg font-semibold flex-1 text-left">Onboarding & Introduktion</span>
-                <span className="text-sm font-normal text-muted-foreground hidden md:inline">{onboardings.length} st genomförda</span>
-              </div>
-            </AccordionTrigger>
-            <AccordionContent className="px-4 pb-4 pt-4 border-t">
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-semibold">Genomförda Onboardings</h2>
-              </div>
+        <AccordionItem value="onboardings" className="border rounded-lg bg-card overflow-hidden">
+          <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/50 data-[state=open]:bg-muted/50">
+            <div className="flex items-center gap-3 w-full">
+              <Users className="w-5 h-5 text-indigo-500" />
+              <span className="text-lg font-semibold flex-1 text-left">Onboarding & Introduktion</span>
+              <span className="text-sm font-normal text-muted-foreground hidden md:inline">{onboardings.length} st genomförda</span>
+            </div>
+          </AccordionTrigger>
+          <AccordionContent className="px-4 pb-4 pt-4 border-t">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-semibold">Genomförda Onboardings</h2>
+              <Button onClick={() => window.location.href = '/RadiationOnboarding'} size="sm" className="shadow-sm">
+                <Plus className="w-4 h-4 mr-2" /> Ny Onboarding (Medarbetare)
+              </Button>
+            </div>
               {onboardings.length === 0 ? (
                 <p className="text-muted-foreground">Inga medarbetare har genomfört onboarding än.</p>
               ) : (
@@ -423,7 +424,6 @@ export default function RadiationSafety() {
               )}
             </AccordionContent>
           </AccordionItem>
-        )}
 
         <AccordionItem value="info" className="border rounded-lg bg-card overflow-hidden">
           <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/50 data-[state=open]:bg-muted/50">
