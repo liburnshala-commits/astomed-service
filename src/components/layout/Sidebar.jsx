@@ -35,6 +35,7 @@ const navSections = [
       { label: "Dashboard", page: "Dashboard", icon: LayoutDashboard, roles: ["admin", "technician"] },
       { label: "Intern KPI", page: "InternalDashboard", icon: TrendingUp, roles: ["admin", "technician"] },
       { label: "Dubletter", page: "Duplicates", icon: AlertTriangle, roles: ["admin"] },
+      { label: "Saknade Serienummer", page: "InvalidSerialMachines", icon: AlertTriangle, roles: ["admin", "technician"] },
       { label: "Min översikt", page: "CustomerDashboard", icon: LayoutDashboard, roles: ["customer"] },
       { label: "Klinikutveckling", page: "ClinicDevelopment", icon: TrendingUp, roles: ["admin"] },
       { label: "Strålsäkerhet (SSM)", page: "RadiationSafety", icon: Shield, roles: ["admin", "customer", "technician"] },

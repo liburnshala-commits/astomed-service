@@ -32,6 +32,7 @@ import InternalDashboard from './pages/InternalDashboard';
 import Duplicates from './pages/Duplicates';
 import RadiationOnboarding from './pages/RadiationOnboarding';
 import MonthlyPlanning from './pages/MonthlyPlanning';
+import InvalidSerialMachines from './pages/InvalidSerialMachines';
 
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
@@ -146,6 +147,7 @@ const AuthenticatedApp = () => {
         <Route path="/Duplicates" element={<AnimatedPage><LayoutWrapper currentPageName="Duplicates"><Duplicates /></LayoutWrapper></AnimatedPage>} />
         <Route path="/RadiationOnboarding" element={<AnimatedPage><RadiationOnboarding /></AnimatedPage>} />
         <Route path="/MonthlyPlanning" element={<AnimatedPage><LayoutWrapper currentPageName="MonthlyPlanning"><MonthlyPlanning /></LayoutWrapper></AnimatedPage>} />
+        <Route path="/InvalidSerialMachines" element={<AnimatedPage><LayoutWrapper currentPageName="InvalidSerialMachines"><InvalidSerialMachines /></LayoutWrapper></AnimatedPage>} />
         {Object.entries(Pages).map(([path, Page]) => (
           <Route
             key={path}
