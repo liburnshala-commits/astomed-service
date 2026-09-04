@@ -51,7 +51,7 @@ const navSections = [
       { label: "Leveranskontroller", page: "DeliveryControls", icon: FileCheck, roles: ["admin"] },
       { label: "Funktionskontroller", page: "FunctionControls", icon: CheckSquare, roles: ["admin"] },
       { label: "Servicekalender", page: "Calendar", icon: CalendarDays, roles: ["admin", "technician"] },
-      { label: "Månadsplanering", page: "MonthlyPlanning", icon: CalendarDays, roles: ["admin", "technician"] },
+      { label: "Serviceplanering", page: "MonthlyPlanning", icon: CalendarDays, roles: ["admin", "technician"] },
       { label: "Serviceavtal", page: "ServiceContracts", icon: FileCheck, roles: ["admin", "technician"] },
       { label: "Avslutade prospekt", page: "ClosedLeads", icon: Archive, roles: ["admin"] },
       { label: "Serviceavtalsmallar", page: "ServiceAgreementTemplates", icon: FileCheck, roles: ["admin"] },

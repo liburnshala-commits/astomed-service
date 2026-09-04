@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight, Calendar as CalendarIcon, User, Save, RefreshCw, Cpu, Monitor, Building2 } from "lucide-react";
-import { getISOWeek, format, parseISO, startOfMonth, endOfMonth, addMonths, subMonths, isSameMonth, startOfWeek, endOfWeek } from "date-fns";
+import { getISOWeek, format, parseISO, startOfMonth, endOfMonth, addMonths, subMonths, isSameMonth, startOfWeek, endOfWeek, startOfYear, endOfYear, addYears, subYears } from "date-fns";
 import { sv } from "date-fns/locale";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -19,7 +19,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
 
 export default function MonthlyPlanning() {
-  const [currentMonth, setCurrentMonth] = useState(startOfMonth(new Date()));
+  const [currentDate, setCurrentDate] = useState(startOfYear(new Date()));
   const [loading, setLoading] = useState(true);
   const [planningData, setPlanningData] = useState([]);
   const [technicians, setTechnicians] = useState([]);
@@ -43,8 +43,8 @@ export default function MonthlyPlanning() {
 
       setTechnicians(users.map(u => ({ id: u.id, name: u.full_name || u.email })));
 
-      const monthStart = startOfMonth(currentMonth);
-      const monthEnd = endOfMonth(currentMonth);
+      const yearStart = startOfYear(currentDate);
+      const yearEnd = endOfYear(currentDate);
 
       const items = [];
 
@@ -72,8 +72,8 @@ export default function MonthlyPlanning() {
           isProjection = true;
         }
 
-        // Only include if it falls in the current month
-        if (plannedDate >= monthStart && plannedDate <= monthEnd) {
+        // Only include if it falls in the current year
+        if (plannedDate >= yearStart && plannedDate <= yearEnd) {
           items.push({
             id: recordId || `proj_${machine.id}`,
             machine_id: machine.id,
@@ -102,10 +102,10 @@ export default function MonthlyPlanning() {
 
   useEffect(() => {
     fetchData();
-  }, [currentMonth]);
+  }, [currentDate]);
 
-  const handleMonthChange = (dir) => {
-    setCurrentMonth(prev => dir === "next" ? addMonths(prev, 1) : subMonths(prev, 1));
+  const handleYearChange = (dir) => {
+    setCurrentDate(prev => dir === "next" ? addYears(prev, 1) : subYears(prev, 1));
   };
 
   const handleEdit = (id, field, value) => {
@@ -184,29 +184,22 @@ export default function MonthlyPlanning() {
     };
   });
 
-  // Re-filter if someone moved a date OUT of the current month?
-  // We'll still show it in its calculated week, but it might jump to a week outside.
-  // We'll let it be grouped by its new week.
-
   const grouped = displayItems.reduce((acc, item) => {
     const d = item.display_date;
-    const weekNo = getISOWeek(d);
-    if (!acc[weekNo]) {
-      const wStart = startOfWeek(d, { weekStartsOn: 1 });
-      const wEnd = endOfWeek(d, { weekStartsOn: 1 });
-      acc[weekNo] = {
-        week: weekNo,
-        start: wStart,
-        end: wEnd,
+    const monthKey = format(d, "yyyy-MM");
+    if (!acc[monthKey]) {
+      acc[monthKey] = {
+        monthKey,
+        monthDate: startOfMonth(d),
         items: []
       };
     }
-    acc[weekNo].items.push(item);
+    acc[monthKey].items.push(item);
     return acc;
   }, {});
 
-  const sortedWeeks = Object.values(grouped).sort((a, b) => a.week - b.week);
-  sortedWeeks.forEach(w => w.items.sort((a, b) => a.display_date - b.display_date));
+  const sortedMonths = Object.values(grouped).sort((a, b) => a.monthDate - b.monthDate);
+  sortedMonths.forEach(m => m.items.sort((a, b) => a.display_date - b.display_date));
 
   return (
     <div className="p-4 md:p-8 max-w-6xl mx-auto">
@@ -214,7 +207,7 @@ export default function MonthlyPlanning() {
         <div>
           <h1 className="text-2xl font-bold astomed-title flex items-center gap-2">
             <CalendarIcon className="w-6 h-6 text-slate-500" />
-            Månadsplanering
+            Serviceplanering
           </h1>
           <p className="text-sm text-slate-500 mt-1">
             Översikt över kommande och projicerade servicar
@@ -222,13 +215,13 @@ export default function MonthlyPlanning() {
         </div>
 
         <div className="flex items-center gap-2 bg-white rounded-lg p-1 border shadow-sm">
-          <Button variant="ghost" size="icon" onClick={() => handleMonthChange("prev")}>
+          <Button variant="ghost" size="icon" onClick={() => handleYearChange("prev")}>
             <ChevronLeft className="w-4 h-4" />
           </Button>
-          <div className="px-4 font-semibold min-w-[140px] text-center capitalize">
-            {format(currentMonth, "MMMM yyyy", { locale: sv })}
+          <div className="px-4 font-semibold min-w-[140px] text-center">
+            År {format(currentDate, "yyyy", { locale: sv })}
           </div>
-          <Button variant="ghost" size="icon" onClick={() => handleMonthChange("next")}>
+          <Button variant="ghost" size="icon" onClick={() => handleYearChange("next")}>
             <ChevronRight className="w-4 h-4" />
           </Button>
           <Button variant="outline" size="sm" onClick={fetchData} disabled={loading} className="ml-2 gap-2">
@@ -240,27 +233,24 @@ export default function MonthlyPlanning() {
 
       {loading ? (
         <div className="text-center py-12 text-slate-500">Laddar planeringsunderlag...</div>
-      ) : sortedWeeks.length === 0 ? (
+      ) : sortedMonths.length === 0 ? (
         <div className="text-center py-16 bg-white rounded-xl border border-dashed text-slate-500">
           <CalendarIcon className="w-10 h-10 mx-auto mb-3 opacity-20" />
-          <p>Inga servicar infaller under {format(currentMonth, "MMMM", { locale: sv })}.</p>
+          <p>Inga servicar infaller under {format(currentDate, "yyyy", { locale: sv })}.</p>
         </div>
       ) : (
-        <div className="space-y-8">
-          {sortedWeeks.map((weekGroup) => (
-            <div key={weekGroup.week} className="bg-white rounded-xl border shadow-sm overflow-hidden">
+        <div className="space-y-12">
+          {sortedMonths.map((monthGroup) => (
+            <div key={monthGroup.monthKey} className="bg-white rounded-xl border shadow-sm overflow-hidden">
               <div className="bg-slate-50 px-4 py-3 border-b flex justify-between items-center">
-                <div className="font-semibold flex items-center gap-2">
-                  <span className="bg-slate-200 text-slate-700 px-2 py-0.5 rounded text-sm">V. {weekGroup.week}</span>
-                  <span className="text-sm text-slate-500">
-                    {format(weekGroup.start, "d MMM", { locale: sv })} - {format(weekGroup.end, "d MMM", { locale: sv })}
-                  </span>
+                <div className="font-semibold text-lg capitalize flex items-center gap-2">
+                  {format(monthGroup.monthDate, "MMMM", { locale: sv })}
                 </div>
-                <Badge variant="outline" className="bg-white">{weekGroup.items.length} st</Badge>
+                <Badge variant="outline" className="bg-white">{monthGroup.items.length} st</Badge>
               </div>
 
               <div className="divide-y">
-                {weekGroup.items.map(item => (
+                {monthGroup.items.map(item => (
                   <div key={item.id} className={cn("p-4 flex flex-col md:flex-row gap-4 items-start md:items-center transition-colors", item.is_projection ? "bg-white" : "bg-blue-50/30")}>
                     
                     {/* Info */}
