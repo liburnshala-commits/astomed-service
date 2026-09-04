@@ -58,6 +58,21 @@
       ],
       "default": "open",
       "description": "Status p\u00e5 utredningen"
+    },
+    "documents": {
+      "type": "array",
+      "description": "Uppladdade dokument (foton, utredningsrapporter)",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          }
+        }
+      }
     }
   },
   "required": [

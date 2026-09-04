@@ -18,6 +18,7 @@ import { Plus, ShieldAlert, FileText, Activity, AlertTriangle, CheckCircle, User
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/components/ui/use-toast";
 import AnnualWheel from '@/components/safety/AnnualWheel';
+import FileUpload from '@/components/safety/FileUpload';
 
 import { useSearchParams } from 'react-router-dom';
 
@@ -583,8 +584,18 @@ export default function RadiationSafety() {
                         <span className="text-xs font-medium text-slate-500 bg-slate-100 px-2 py-1 rounded-md">{new Date(inc.incident_date).toLocaleDateString()}</span>
                       </div>
                     </CardHeader>
-                    <CardContent className="py-2">
+                    <CardContent className="py-2 space-y-2">
                       <p className="text-sm text-slate-600 line-clamp-2">{inc.description}</p>
+                      {inc.documents && inc.documents.length > 0 && (
+                        <div className="flex flex-wrap gap-2 pt-1">
+                          {inc.documents.map((doc, idx) => (
+                            <div key={idx} className="flex items-center gap-1.5 text-xs bg-slate-50 border border-slate-200 px-2 py-1 rounded">
+                              <FileText className="w-3 h-3 text-slate-500" />
+                              <span className="truncate max-w-[120px]">{doc.name}</span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
                     </CardContent>
                   </Card>
                 ))}
@@ -725,8 +736,18 @@ export default function RadiationSafety() {
                     <CardTitle className="text-md flex items-center gap-2"><Users className="w-4 h-4" />{pers.employee_name}</CardTitle>
                     <CardDescription>{pers.role}</CardDescription>
                   </CardHeader>
-                  <CardContent className="py-2">
+                  <CardContent className="py-2 space-y-2">
                     {pers.radiation_safety_training && <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">Strålskyddsutbildad</span>}
+                    {pers.documents && pers.documents.length > 0 && (
+                      <div className="flex flex-wrap gap-2 pt-1">
+                        {pers.documents.map((doc, idx) => (
+                          <div key={idx} className="flex items-center gap-1.5 text-xs bg-slate-50 border border-slate-200 px-2 py-1 rounded">
+                            <FileText className="w-3 h-3 text-slate-500" />
+                            <span className="truncate max-w-[120px]">{doc.name}</span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </CardContent>
                 </Card>
               ))}
@@ -807,9 +828,19 @@ export default function RadiationSafety() {
                     <span className="text-xs text-muted-foreground">{meas.measurement_date ? new Date(meas.measurement_date).toLocaleDateString() : ''}</span>
                   </div>
                 </CardHeader>
-                <CardContent className="py-2">
+                <CardContent className="py-2 space-y-2">
                   <p className="text-sm">Effekt: {meas.laser_power_measured}</p>
                   {meas.pulse_parameters && <p className="text-sm text-slate-500">Pulser: {meas.pulse_parameters}</p>}
+                  {meas.documents && meas.documents.length > 0 && (
+                    <div className="flex flex-wrap gap-2 pt-1">
+                      {meas.documents.map((doc, idx) => (
+                        <div key={idx} className="flex items-center gap-1.5 text-xs bg-slate-50 border border-slate-200 px-2 py-1 rounded">
+                          <FileText className="w-3 h-3 text-slate-500" />
+                          <span className="truncate max-w-[120px]">{doc.name}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             ))}
@@ -1063,6 +1094,14 @@ export default function RadiationSafety() {
                 </div>
               </div>
             </div>
+
+            <FileUpload 
+              documents={currentIncident.documents || []} 
+              onChange={docs => setCurrentIncident({...currentIncident, documents: docs})}
+              label="Fotodokumentation & Utredningsrapporter"
+              description="Ladda upp relevanta bilder eller filer kopplade till händelsen"
+            />
+
             <Button onClick={() => saveIncident.mutate(currentIncident)} className="w-full" disabled={saveIncident.isPending}>
               Spara Incident
             </Button>
@@ -1286,9 +1325,16 @@ export default function RadiationSafety() {
             </div>
 
             <div className="grid gap-2">
-              <Label>Övriga anteckningar / Certifikat</Label>
-              <Textarea value={currentPersonnel.notes || ''} onChange={e => setCurrentPersonnel({...currentPersonnel, notes: e.target.value})} placeholder="Referens till sparat certifikat, diplom etc." />
+              <Label>Övriga anteckningar</Label>
+              <Textarea value={currentPersonnel.notes || ''} onChange={e => setCurrentPersonnel({...currentPersonnel, notes: e.target.value})} placeholder="Övriga anteckningar" />
             </div>
+
+            <FileUpload 
+              documents={currentPersonnel.documents || []} 
+              onChange={docs => setCurrentPersonnel({...currentPersonnel, documents: docs})}
+              label="Certifikat & Diplom"
+              description="Ladda upp utbildningsbevis, certifikat eller diplom"
+            />
 
             <div className="flex gap-2 pt-4 border-t">
               <Button onClick={() => savePersonnel.mutate(currentPersonnel)} className="flex-1" disabled={savePersonnel.isPending}>Spara Kompetensprofil</Button>
@@ -1331,6 +1377,14 @@ export default function RadiationSafety() {
             <div className="grid gap-2"><Label>Pulsparametrar</Label><Input value={currentMeasurement.pulse_parameters || ''} onChange={e => setCurrentMeasurement({...currentMeasurement, pulse_parameters: e.target.value})} /></div>
             <div className="grid gap-2"><Label>Avvikelse från grundvärde</Label><Input value={currentMeasurement.deviation_from_baseline || ''} onChange={e => setCurrentMeasurement({...currentMeasurement, deviation_from_baseline: e.target.value})} /></div>
             <div className="grid gap-2"><Label>Utförd av</Label><Input value={currentMeasurement.measured_by || ''} onChange={e => setCurrentMeasurement({...currentMeasurement, measured_by: e.target.value})} /></div>
+            
+            <FileUpload 
+              documents={currentMeasurement.documents || []} 
+              onChange={docs => setCurrentMeasurement({...currentMeasurement, documents: docs})}
+              label="Mätprotokoll & Kalibreringsintyg"
+              description="Ladda upp externa mätprotokoll eller kalibreringsintyg"
+            />
+
             <Button onClick={() => saveMeasurement.mutate(currentMeasurement)} className="w-full">Spara</Button>
           </div>
         </DialogContent>

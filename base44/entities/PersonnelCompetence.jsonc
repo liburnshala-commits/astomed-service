@@ -34,6 +34,21 @@
     "notes": {
       "type": "string",
       "description": "\u00d6vriga anteckningar/certifikat"
+    },
+    "documents": {
+      "type": "array",
+      "description": "Uppladdade dokument (certifikat, diplom)",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          }
+        }
+      }
     }
   },
   "required": [
