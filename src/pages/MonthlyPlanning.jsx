@@ -18,7 +18,27 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
 
-export default function MonthlyPlanning() {
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+  static getDerivedStateFromError(error) {
+    return { hasError: true, error };
+  }
+  render() {
+    if (this.state.hasError) {
+      return <div className="p-8 text-red-500"><h1>Error i vyn!</h1><pre>{this.state.error.message}</pre></div>;
+    }
+    return this.props.children;
+  }
+}
+
+export default function MonthlyPlanningWrapper() {
+  return <ErrorBoundary><MonthlyPlanning /></ErrorBoundary>;
+}
+
+function MonthlyPlanning() {
   const [currentDate, setCurrentDate] = useState(startOfYear(new Date()));
   const [loading, setLoading] = useState(true);
   const [planningData, setPlanningData] = useState([]);
@@ -49,7 +69,7 @@ export default function MonthlyPlanning() {
       const items = [];
 
       for (const machine of machines) {
-        if (!machine.service_date || machine.service_date.trim() === "") continue;
+        if (!machine.service_date || typeof machine.service_date !== "string" || machine.service_date.trim() === "") continue;
 
         // Check if there's a pending/planned record for this machine
         const existingRecord = records.find(r => r.machine_id === machine.id);
@@ -67,10 +87,15 @@ export default function MonthlyPlanning() {
           // Calculate projection: service_date + interval (default 12 months if missing)
           const interval = Number(machine.service_interval) || 12;
           const lastService = new Date(machine.service_date);
-          plannedDate = new Date(lastService);
-          plannedDate.setMonth(plannedDate.getMonth() + interval);
+          if (!isNaN(lastService.getTime())) {
+            plannedDate = new Date(lastService);
+            plannedDate.setMonth(plannedDate.getMonth() + interval);
+          }
           isProjection = true;
         }
+
+        // Validate date
+        if (!plannedDate || isNaN(plannedDate.getTime())) continue;
 
         // Only include if it falls in the current year
         if (plannedDate >= yearStart && plannedDate <= yearEnd) {
