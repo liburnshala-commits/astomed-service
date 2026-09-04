@@ -66,6 +66,21 @@
       "type": "string",
       "format": "date-time",
       "description": "Datum n\u00e4r kunden markerades f\u00f6r radering"
+    },
+    "documents": {
+      "type": "array",
+      "description": "Uppladdade dokument (t.ex. avtal, PDF)",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          }
+        }
+      }
     }
   },
   "required": [

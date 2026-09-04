@@ -11,6 +11,7 @@ import CustomerInteractions from "@/components/customers/CustomerInteractions";
 import ServiceContractModal from "@/components/machines/ServiceContractModal";
 import ServiceReportModal from "@/components/service/ServiceReportModal.jsx";
 import SendSmsModal from "@/components/customers/SendSmsModal";
+import FileUpload from "@/components/safety/FileUpload";
 import { format } from "date-fns";
 import { sv } from "date-fns/locale";
 import { useAuth } from "@/lib/AuthContext";
@@ -182,6 +183,21 @@ export default function CustomerDetails() {
                   </Button>
                 </Link>
               </div>
+            </CardContent>
+          </Card>
+
+          <Card className="astomed-card border-0 shadow-sm">
+            <CardContent className="p-5">
+              <h3 className="font-semibold text-slate-800 border-b pb-2">Kunddokument</h3>
+              <FileUpload 
+                documents={customer.documents || []}
+                onChange={async (newDocs) => {
+                  await base44.entities.Customer.update(customer.id, { documents: newDocs });
+                  queryClient.invalidateQueries({ queryKey: ["customerDetails", customerId] });
+                }}
+                label="Filer & Avtal"
+                description="Ladda upp dokument kopplade till denna kund"
+              />
             </CardContent>
           </Card>
 
