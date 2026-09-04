@@ -49,7 +49,7 @@ export default function MonthlyPlanning() {
       const items = [];
 
       for (const machine of machines) {
-        if (!machine.service_date || !machine.service_interval) continue;
+        if (!machine.service_date || machine.service_date.trim() === "") continue;
 
         // Check if there's a pending/planned record for this machine
         const existingRecord = records.find(r => r.machine_id === machine.id);
@@ -64,10 +64,11 @@ export default function MonthlyPlanning() {
           recordId = existingRecord.id;
           assignedTech = existingRecord.technician_name || "";
         } else {
-          // Calculate projection
+          // Calculate projection: service_date + interval (default 12 months if missing)
+          const interval = Number(machine.service_interval) || 12;
           const lastService = new Date(machine.service_date);
           plannedDate = new Date(lastService);
-          plannedDate.setMonth(plannedDate.getMonth() + Number(machine.service_interval));
+          plannedDate.setMonth(plannedDate.getMonth() + interval);
           isProjection = true;
         }
 
