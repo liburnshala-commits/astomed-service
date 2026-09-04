@@ -34,9 +34,40 @@ Deno.serve(async (req) => {
     const targetDateStr = targetDate.toISOString().split('T')[0];
 
     // Get all service records
-    const allRecords = await base44.asServiceRole.entities.ServiceRecord.list('-service_date', 1000);
+    // Get data
+    const [machines, allRecords] = await Promise.all([
+      base44.asServiceRole.entities.Machine.list(),
+      base44.asServiceRole.entities.ServiceRecord.list('-service_date', 1000)
+    ]);
 
     let remindersToSend = [];
+
+    const daysUntil = (dateStr) => {
+      const d = new Date(dateStr);
+      d.setHours(0, 0, 0, 0);
+      const startOfDay = new Date(today);
+      startOfDay.setHours(0, 0, 0, 0);
+      return Math.round((d - startOfDay) / (1000 * 60 * 60 * 24));
+    };
+
+    // --- Check for expiring service contracts ---
+    for (const machine of machines) {
+      if (machine.service_contract === 'basic' && machine.contract_start_date && machine.contract_binding_months) {
+        const start = new Date(machine.contract_start_date);
+        start.setMonth(start.getMonth() + Number(machine.contract_binding_months));
+        start.setHours(0, 0, 0, 0);
+        const days = daysUntil(start);
+
+        if (days === 30) {
+          remindersToSend.push({
+            type: 'contract_expiry',
+            customer_id: machine.customer_id,
+            machine_id: machine.id,
+            target_date: start.toLocaleDateString('sv-SE')
+          });
+        }
+      }
+    }
 
     for (const record of allRecords) {
       // --- Check next_service_date for upcoming scheduled service ---
@@ -85,6 +116,9 @@ Deno.serve(async (req) => {
         const dateFormatted = new Date(reminder.next_service_date).toLocaleDateString('sv-SE');
         title = 'Påminnelse: Planerad service närmar sig';
         message = `Planerad service för ${machine?.model || 'din maskin'} är schemalagd till ${dateFormatted}. Vänligen se till att maskinen är tillgänglig för service.`;
+      } else if (reminder.type === 'contract_expiry') {
+        title = 'Påminnelse: Serviceavtal löper snart ut';
+        message = `Ert serviceavtal för ${machine?.model || 'maskinen'} löper ut den ${reminder.target_date} (om 30 dagar). Kontakta oss för att förnya avtalet och säkerställa fortsatt support.`;
       } else {
         title = 'Påminnelse: Offert väntar på godkännande';
         message = `Din offert för ${machine?.model || 'din maskin'} väntar på ditt godkännande. Vänligen granska och svara på offerten.`;

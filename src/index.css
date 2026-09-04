@@ -75,7 +75,50 @@
   }
 }
 
+/* Astomed brand custom classes */
+@layer components {
+  .astomed-card {
+    background: hsl(var(--card));
+    border: 1px solid hsl(var(--border));
+    border-radius: 12px;
+    transition: box-shadow 0.2s, border-color 0.2s;
+  }
+  .astomed-card:hover {
+    box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+    border-color: hsl(var(--primary));
+  }
+  .astomed-icon-box {
+    background: hsl(var(--accent));
+    color: hsl(var(--accent-foreground));
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .astomed-btn-primary {
+    background: hsl(var(--primary)) !important;
+    color: hsl(var(--primary-foreground)) !important;
+    border: none !important;
+  }
+  .astomed-btn-primary:hover {
+    background: hsl(var(--primary) / 0.9) !important;
+  }
+  .astomed-title { color: hsl(var(--foreground)); font-weight: 700; }
+  .astomed-subtitle { color: hsl(var(--muted-foreground)); }
+  .astomed-muted { color: hsl(var(--muted-foreground)); }
+  .astomed-label { color: hsl(var(--foreground)); font-weight: 600; }
 
+  @media print {
+    @page { margin: 10mm; }
+    body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    body * { visibility: hidden; }
+    #service-report, #service-report * { visibility: visible; }
+    #service-report { position: absolute; left: 0; top: 0; width: 100%; margin: 0; padding: 0; }
+    
+    .fixed { position: absolute !important; overflow: visible !important; }
+    .overflow-y-auto { overflow: visible !important; }
+    .max-h-\[90vh\] { max-height: none !important; }
+    .print\:hidden { display: none !important; }
+  }
+}
 
 @layer base {
   * {
