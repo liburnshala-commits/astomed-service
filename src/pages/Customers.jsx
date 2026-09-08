@@ -115,7 +115,8 @@ export default function Customers() {
       c.contact_person?.toLowerCase().includes(searchLower) ||
       c.email?.toLowerCase().includes(searchLower) ||
       c.phone?.toLowerCase().includes(searchLower) ||
-      c.city?.toLowerCase().includes(searchLower);
+      c.city?.toLowerCase().includes(searchLower) ||
+      c.postal_code?.toLowerCase().includes(searchLower);
   });
 
   const getMachineCount = (customerId) => machines.filter(m => m.customer_id === customerId).length;
@@ -408,7 +409,7 @@ export default function Customers() {
         </Select>
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 astomed-muted" />
-          <Input placeholder="Sök kund, org.nr, kontaktperson, stad..." className="pl-9 bg-white" value={search} onChange={e => setSearch(e.target.value)} />
+          <Input placeholder="Sök kund, org.nr, kontaktperson, stad, postnummer..." className="pl-9 bg-white" value={search} onChange={e => setSearch(e.target.value)} />
         </div>
       </div>
 
