@@ -25,7 +25,8 @@ import {
   CheckSquare,
   Calculator,
   TrendingUp,
-  AlertTriangle
+  AlertTriangle,
+  FileWarning
 } from "lucide-react";
 
 const navSections = [
@@ -36,6 +37,7 @@ const navSections = [
       { label: "Intern KPI", page: "InternalDashboard", icon: TrendingUp, roles: ["admin", "technician"] },
       { label: "Dubletter", page: "Duplicates", icon: AlertTriangle, roles: ["admin"] },
       { label: "Saknade Serienummer", page: "InvalidSerialMachines", icon: AlertTriangle, roles: ["admin", "technician"] },
+      { label: "Saknar Protokoll", page: "MissingProtocols", icon: FileWarning, roles: ["admin", "technician"] },
       { label: "Min översikt", page: "CustomerDashboard", icon: LayoutDashboard, roles: ["customer"] },
       { label: "Klinikutveckling", page: "ClinicDevelopment", icon: TrendingUp, roles: ["admin"] },
       { label: "Strålsäkerhet (SSM)", page: "RadiationSafety", icon: Shield, roles: ["admin", "customer", "technician"] },
