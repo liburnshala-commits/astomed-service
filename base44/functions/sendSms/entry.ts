@@ -11,7 +11,7 @@ Deno.serve(async (req) => {
         }
 
         const payload = await req.json();
-        const { to, message, from = "Astomed" } = payload;
+        const { to, message, from = "+46761616855" } = payload;
 
         if (!to || !message) {
             return Response.json({ error: 'Missing required fields: to, message' }, { status: 400 });

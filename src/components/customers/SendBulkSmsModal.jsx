@@ -44,7 +44,7 @@ export default function SendBulkSmsModal({ customers, onClose }) {
         await base44.functions.invoke("sendSms", {
           to: phone,
           message: message,
-          from: "Astomed"
+          from: "+46761616855"
         });
         
         successCount++;
