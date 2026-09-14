@@ -164,7 +164,7 @@ export default function Dashboard() {
       <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
         <StatCard to="Machines" title="Maskiner" value={machines.length} icon={Monitor} />
         <StatCard to="Customers" title="Kunder" value={customers.length} icon={Users} />
-        <StatCard to="Customers?filter=signed" bg="#f0fdf4" title="Signerade Kunder" value={signedCustomersCount} icon={CheckCircle} iconBg="#dcfce7" iconColor="#166534" />
+        <StatCard to="ServiceContracts?status=active" bg="#f0fdf4" title="Signerade avtal" value={activeContractsCount} icon={CheckCircle} iconBg="#dcfce7" iconColor="#166534" />
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
