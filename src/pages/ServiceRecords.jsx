@@ -176,6 +176,11 @@ export default function ServiceRecords() {
         });
       } else {
         const created = await base44.entities.ServiceRecord.create(data);
+        
+        const machine = getMachine(data.machine_id);
+        const customer = getCustomer(data.customer_id);
+        toast.success(`Service inlagd på maskin ${machine?.model || 'Okänd'} för kund ${customer?.company_name || 'Okänd'}`);
+        
         base44.functions.invoke('logAuditEntry', {
           action: 'create',
           entity_type: 'ServiceRecord',
