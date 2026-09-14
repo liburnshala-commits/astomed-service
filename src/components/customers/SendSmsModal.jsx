@@ -26,7 +26,7 @@ export default function SendSmsModal({ customer, onClose }) {
       await base44.functions.invoke("sendSms", {
         to: phone,
         message: message,
-        from: "Sinclair"
+        from: "Astomed"
       });
       toast.success("SMS skickades framgångsrikt.");
       
