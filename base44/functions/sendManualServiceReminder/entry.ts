@@ -28,7 +28,7 @@ Deno.serve(async (req) => {
                 <p>Det börjar närma sig dags för service på er maskin <b>${machine.model}</b> (SN: ${machine.serial_number}).</p>
                 ${machine.next_service_date ? `<p>Nästa rekommenderade servicedatum är <b>${machine.next_service_date}</b>.</p>` : ''}
                 <p>Vänligen kontakta oss för att boka en tid för service, eller boka direkt via vårt formulär (ingen inloggning krävs):</p>
-                <p><a href="https://serviceastomed.se/PublicServiceRequest#anmalan" style="display:inline-block; padding: 10px 20px; background-color: #3a9e9e; color: #ffffff; text-decoration: none; font-weight: bold; border-radius: 6px;">Boka service nu</a></p>
+                <p><a href="https://serviceastomed.se/PublicServiceBooking#anmalan" style="display:inline-block; padding: 10px 20px; background-color: #3a9e9e; color: #ffffff; text-decoration: none; font-weight: bold; border-radius: 6px;">Boka service nu</a></p>
                 <p>Passa även på att spana in vårt senaste utbud av utrustning på <a href="https://astomed.se/maskiner/">astomed.se</a>.</p>
                 <br>
                 <p>Med vänliga hälsningar,<br><b>Astomed Service</b></p>

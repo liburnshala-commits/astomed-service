@@ -9,6 +9,7 @@ import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import PublicServiceRequest from './pages/PublicServiceRequest';
+import PublicServiceBooking from './pages/PublicServiceBooking';
 import { useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import ServiceAgreementTemplates from './pages/ServiceAgreementTemplates';
@@ -70,7 +71,7 @@ const AuthenticatedApp = () => {
 
   // Public routes that don't require authentication
   const cleanPath = currentPath.toLowerCase().split('?')[0].replace(/\/$/, '') || '/';
-  const isPublicRoute = cleanPath === '/' || cleanPath === '/publicservicerequest' || cleanPath === '/calculator';
+  const isPublicRoute = cleanPath === '/' || cleanPath === '/publicservicerequest' || cleanPath === '/publicservicebooking' || cleanPath === '/calculator';
 
   // Show loading spinner while checking app public settings or auth (skip for public routes)
   if (!isPublicRoute && (isLoadingPublicSettings || isLoadingAuth)) {
@@ -126,6 +127,7 @@ const AuthenticatedApp = () => {
       <Routes location={location} key={location.pathname}>
         <Route path="/" element={<AnimatedPage><PublicServiceRequest /></AnimatedPage>} />
         <Route path="/PublicServiceRequest" element={<AnimatedPage><PublicServiceRequest /></AnimatedPage>} />
+        <Route path="/PublicServiceBooking" element={<AnimatedPage><PublicServiceBooking /></AnimatedPage>} />
         <Route path="/ServiceAgreementTemplates" element={<AnimatedPage><LayoutWrapper currentPageName="ServiceAgreementTemplates"><ServiceAgreementTemplates /></LayoutWrapper></AnimatedPage>} />
         <Route path="/CustomerDetails" element={<AnimatedPage><LayoutWrapper currentPageName="CustomerDetails"><CustomerDetails /></LayoutWrapper></AnimatedPage>} />
         <Route path="/ClosedLeads" element={<AnimatedPage><LayoutWrapper currentPageName="ClosedLeads"><ClosedLeads /></LayoutWrapper></AnimatedPage>} />

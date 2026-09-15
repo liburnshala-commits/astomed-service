@@ -238,7 +238,28 @@ export default function PublicServiceBookingFormSection({ onSuccess, onOpenPriva
                           </li>
                         )}
                       </ul>
-                      ()}
+                    </div>
+                  );
+                }
+                
+                if (form.machine_name === "Annan") {
+                  return (
+                    <div className="sm:col-span-2 p-5 bg-[#f0f7f7] rounded-xl border border-[#d2e8e8]">
+                      <h4 className="font-bold text-[#1b3a3a] mb-3 flex items-center gap-2">
+                        <Wrench className="w-4 h-4 text-[#3a9e9e]" />
+                        Maskin som ej finns i listan
+                      </h4>
+                      <ul className="space-y-2.5 text-sm text-slate-700">
+                        <li className="flex gap-2.5 items-start">
+                          <CheckCircle2 className="w-4 h-4 text-[#3a9e9e] shrink-0 mt-0.5" />
+                          <span>Vi återkommer till dig angående om vi kan serva just din maskin</span>
+                        </li>
+                      </ul>
+                    </div>
+                  );
+                }
+                return null;
+              })()}
             </div>
           </div>
 
