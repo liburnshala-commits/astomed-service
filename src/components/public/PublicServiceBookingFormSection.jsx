@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Badge } from "@/components/ui/badge";
 import { base44 } from "@/api/base44Client";
 
 export default function PublicServiceBookingFormSection({ onSuccess, onOpenPrivacy }) {
@@ -239,10 +240,22 @@ export default function PublicServiceBookingFormSection({ onSuccess, onOpenPriva
                 if (selectedTemplate) {
                   return (
                     <div className="sm:col-span-2 p-5 bg-[#f0f7f7] rounded-xl border border-[#d2e8e8]">
-                      <h4 className="font-bold text-[#1b3a3a] mb-3 flex items-center gap-2">
-                        <Wrench className="w-4 h-4 text-[#3a9e9e]" />
-                        Standardservice och underhåll – {selectedTemplate.name}
-                      </h4>
+                      <div className="flex flex-wrap items-center gap-2 mb-3">
+                        <h4 className="font-bold text-[#1b3a3a] flex items-center gap-2">
+                          <Wrench className="w-4 h-4 text-[#3a9e9e]" />
+                          {selectedTemplate.name}
+                        </h4>
+                        <Badge style={{ background: "#e8f2f2", color: "#1b3a3a" }}>{selectedTemplate.agreement_type}</Badge>
+                        <Badge variant="outline" className="bg-white">{selectedTemplate.binding_months || 12} mån</Badge>
+                        {selectedTemplate.price_per_month && (
+                          <Badge variant="outline" className="bg-white">{selectedTemplate.price_per_month} kr/mån</Badge>
+                        )}
+                      </div>
+                      
+                      <p className="text-sm font-medium text-slate-700 mb-4">
+                        Standardservice och underhåll {selectedTemplate.name}
+                      </p>
+
                       {selectedTemplate.description && (
                         <p className="text-sm text-slate-600 mb-4">{selectedTemplate.description}</p>
                       )}
@@ -255,17 +268,11 @@ export default function PublicServiceBookingFormSection({ onSuccess, onOpenPriva
                         )}
                       </ul>
                       {selectedTemplate.price_per_month && (
-                        <div className="mt-4 pt-4 border-t border-[#d2e8e8]">
-                          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-                            <div>
-                              <p className="text-xs text-slate-500 mb-1">Pris vid Engångsservice (utan avtal):</p>
-                              <p className="text-lg font-bold text-[#1b3a3a]">{Math.round(selectedTemplate.price_per_month * 12 * 1.30).toLocaleString('sv-SE')} kr / gång</p>
-                            </div>
-                            <div className="text-left md:text-right">
-                              <p className="text-xs text-slate-500 italic">* Inkluderar ej rabatt på reservdelar, arbetskostnader eller resor.</p>
-                              <p className="text-xs text-slate-500 italic">* Engångsservice kan ej prioriteras vid hög belastning.</p>
-                            </div>
-                          </div>
+                        <div className="mt-4 pt-4 border-t border-[#d2e8e8] text-right">
+                          <p className="text-xs text-slate-500 mb-1">Jämförspris vid Engångsservice (utan avtal):</p>
+                          <p className="text-lg font-bold text-[#1b3a3a] mb-2">{Math.round(selectedTemplate.price_per_month * 12 * 1.30).toLocaleString('sv-SE')} kr / gång</p>
+                          <p className="text-xs text-slate-500 italic">* Inkluderar ej 20% rabatt på reservdelar, arbetskostnader och resor.</p>
+                          <p className="text-xs text-slate-500 italic">* Engångsservice kan ej prioriteras på samma sätt som avtalskunder då vi har över 1200 maskinkunder i Sverige.</p>
                         </div>
                       )}
                     </div>
