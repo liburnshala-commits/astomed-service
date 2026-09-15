@@ -121,7 +121,7 @@ Deno.serve(async (req) => {
                     const smsText = `Astomed: Dags att boka service för ${machine.model} (senast ${dateFormatted}). Boka smidigt via portalen: ${portalUrl}`;
                     
                     const params = new URLSearchParams();
-                    params.append('from', 'Sinclair');
+                    params.append('from', '+46761616855');
                     params.append('to', customer.phone);
                     params.append('message', smsText);
 
