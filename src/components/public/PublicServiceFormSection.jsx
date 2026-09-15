@@ -47,8 +47,12 @@ export default function PublicServiceFormSection({ onSuccess, onOpenPrivacy }) {
   useEffect(() => {
     const fetchTemplates = async () => {
       try {
-        const data = await base44.entities.ServiceAgreementTemplate.list();
-        setTemplates(data);
+        const appUrl = window.location.origin;
+        const res = await fetch(`${appUrl}/api/functions/getPublicServiceAgreementTemplates`, { method: "POST" });
+        if (res.ok) {
+          const data = await res.json();
+          setTemplates(Array.isArray(data) ? data : []);
+        }
       } catch (err) {
         console.error("Failed to load templates", err);
       }
@@ -71,9 +75,17 @@ export default function PublicServiceFormSection({ onSuccess, onOpenPrivacy }) {
 
       if (isValidFormat) {
         try {
-          const customers = await base44.entities.Customer.filter({ org_number: orgNo });
-          if (customers.length > 0) {
-            setOrgNumberWarning(`Detta organisationsnummer finns redan registrerat på kunden "${customers[0].company_name}".`);
+          const appUrl = window.location.origin;
+          const res = await fetch(`${appUrl}/api/functions/checkPublicOrgNumber`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ org_number: orgNo })
+          });
+          if (res.ok) {
+            const data = await res.json();
+            if (data.exists) {
+              setOrgNumberWarning(`Detta organisationsnummer finns redan registrerat på kunden "${data.company_name}".`);
+            }
           }
         } catch (error) {
           console.error("Kunde inte kontrollera organisationsnummer", error);

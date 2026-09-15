@@ -40,8 +40,10 @@ export default function PublicMachineTypesSection() {
 
   useEffect(() => {
     // Fetch all service agreement templates to get their descriptions
-    base44.entities.ServiceAgreementTemplate.list()
-      .then(res => setTemplates(res))
+    const appUrl = window.location.origin;
+    fetch(`${appUrl}/api/functions/getPublicServiceAgreementTemplates`, { method: "POST" })
+      .then(res => res.json())
+      .then(data => setTemplates(Array.isArray(data) ? data : []))
       .catch(console.error);
   }, []);
 
