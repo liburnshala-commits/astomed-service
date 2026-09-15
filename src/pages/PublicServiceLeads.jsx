@@ -152,6 +152,9 @@ export default function PublicServiceLeads() {
                         {lead.service_type === "advanced" && (
                           <Badge className="text-xs bg-orange-100 text-orange-800">Avancerad</Badge>
                         )}
+                        {lead.service_type === "Servicebokning" && (
+                          <Badge className="text-xs bg-teal-100 text-teal-800 border-teal-200">Servicebokning</Badge>
+                        )}
                       </div>
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-1 text-sm text-gray-600">
                         <span className="flex items-center gap-1.5">
@@ -230,6 +233,11 @@ export default function PublicServiceLeads() {
                               {lead.service_type === "advanced" && (
                                 <Badge className="border-0 px-2 py-0.5 text-[10px] bg-orange-100 text-orange-800">
                                   Avancerad
+                                </Badge>
+                              )}
+                              {lead.service_type === "Servicebokning" && (
+                                <Badge className="border-0 px-2 py-0.5 text-[10px] bg-teal-100 text-teal-800">
+                                  Servicebokning
                                 </Badge>
                               )}
                             </div>
