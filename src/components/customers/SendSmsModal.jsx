@@ -10,6 +10,7 @@ import { MessageSquare } from "lucide-react";
 
 export default function SendSmsModal({ customer, onClose }) {
   const [message, setMessage] = useState("");
+  const [sender, setSender] = useState("+46761616855");
   // Normalize phone number to standard international format roughly (46elks expects +46...)
   const initialPhone = customer.phone ? customer.phone.replace(/^0/, '+46').replace(/[^0-9+]/g, '') : "";
   const [phone, setPhone] = useState(initialPhone);
@@ -26,7 +27,7 @@ export default function SendSmsModal({ customer, onClose }) {
       await base44.functions.invoke("sendSms", {
         to: phone,
         message: message,
-        from: "+46761616855"
+        from: sender
       });
       toast.success("SMS skickades framgångsrikt.");
       
@@ -65,7 +66,17 @@ export default function SendSmsModal({ customer, onClose }) {
         </DialogHeader>
         <div className="space-y-4 py-4">
           <div className="space-y-2">
-            <Label>Telefonnummer</Label>
+            <Label>Avsändare (ditt nummer eller företagsnamn)</Label>
+            <Input 
+              value={sender} 
+              onChange={e => setSender(e.target.value)} 
+              placeholder="T.ex. +46761616855 eller ASTOMED" 
+              maxLength={15}
+            />
+            <p className="text-xs text-slate-500">Max 11 tecken om du använder bokstäver (inga mellanslag).</p>
+          </div>
+          <div className="space-y-2">
+            <Label>Mottagarens Telefonnummer</Label>
             <Input 
               value={phone} 
               onChange={e => setPhone(e.target.value)} 

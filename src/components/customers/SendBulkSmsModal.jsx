@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from "@/components/ui/dialog";
@@ -10,6 +11,7 @@ import { Progress } from "@/components/ui/progress";
 
 export default function SendBulkSmsModal({ customers, onClose }) {
   const [message, setMessage] = useState("");
+  const [sender, setSender] = useState("+46761616855");
   const [sending, setSending] = useState(false);
   const [progress, setProgress] = useState(0);
 
@@ -44,7 +46,7 @@ export default function SendBulkSmsModal({ customers, onClose }) {
         await base44.functions.invoke("sendSms", {
           to: phone,
           message: message,
-          from: "+46761616855"
+          from: sender
         });
         
         successCount++;
@@ -83,6 +85,17 @@ export default function SendBulkSmsModal({ customers, onClose }) {
           </DialogDescription>
         </DialogHeader>
         <div className="space-y-4 py-4">
+          <div className="space-y-2">
+            <Label>Avsändare (ditt nummer eller företagsnamn)</Label>
+            <Input 
+              value={sender} 
+              onChange={e => setSender(e.target.value)} 
+              placeholder="T.ex. +46761616855 eller ASTOMED" 
+              maxLength={15}
+              disabled={sending}
+            />
+            <p className="text-xs text-slate-500">Max 11 tecken om du använder bokstäver (inga mellanslag).</p>
+          </div>
           <div className="space-y-2">
             <Label>Meddelande</Label>
             <Textarea 
