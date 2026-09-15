@@ -215,15 +215,7 @@ export default function PublicServiceFormSection({ onSuccess, onOpenPrivacy }) {
               }
 
               {(() => {
-                const machineAliases = {
-                  "Aldix (Triodus) / Aldix Smart Laser": "Aldix Smart Laser",
-                  "Elysion / Cocoon Elysion": "Elysion",
-                  "Helios / Helios III": "Helios",
-                  "Pento / Pento 9900": "Pento",
-                  "PrimeLase (alla)": "PrimeLase"
-                };
-                const templateName = machineAliases[form.machine_name] || form.machine_name;
-                const selectedTemplate = templates.find(t => t.name === templateName);
+                const selectedTemplate = templates.find(t => t.name === form.machine_name);
                 if (selectedTemplate) {
                   return (
                     <div className="sm:col-span-2 p-5 bg-[#f0f7f7] rounded-xl border border-[#d2e8e8]">
