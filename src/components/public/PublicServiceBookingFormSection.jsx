@@ -228,7 +228,7 @@ export default function PublicServiceBookingFormSection({ onSuccess, onOpenPriva
                     <div className="sm:col-span-2 p-5 bg-[#f0f7f7] rounded-xl border border-[#d2e8e8]">
                       <h4 className="font-bold text-[#1b3a3a] mb-3 flex items-center gap-2">
                         <Wrench className="w-4 h-4 text-[#3a9e9e]" />
-                        Service för {selectedTemplate.name}
+                        Standardservice och underhåll – {selectedTemplate.name}
                       </h4>
                       <ul className="space-y-2.5 text-sm text-slate-700">
                         {selectedTemplate.included_services && selectedTemplate.included_services.map((detail, idx) =>
@@ -238,6 +238,20 @@ export default function PublicServiceBookingFormSection({ onSuccess, onOpenPriva
                           </li>
                         )}
                       </ul>
+                      {selectedTemplate.price_per_month && (
+                        <div className="mt-4 pt-4 border-t border-[#d2e8e8]">
+                          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+                            <div>
+                              <p className="text-xs text-slate-500 mb-1">Pris vid Engångsservice (utan avtal):</p>
+                              <p className="text-lg font-bold text-[#1b3a3a]">{Math.round(selectedTemplate.price_per_month * 12 * 1.30).toLocaleString('sv-SE')} kr / gång</p>
+                            </div>
+                            <div className="text-left md:text-right">
+                              <p className="text-xs text-slate-500 italic">* Inkluderar ej rabatt på reservdelar, arbetskostnader eller resor.</p>
+                              <p className="text-xs text-slate-500 italic">* Engångsservice kan ej prioriteras vid hög belastning.</p>
+                            </div>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   );
                 }
