@@ -18,7 +18,6 @@ export default function PublicServiceFormSection({ onSuccess, onOpenPrivacy }) {
     city: "",
     machine_name: undefined,
     serial_number: "",
-    preferred_date: "",
     notes: ""
   });
   const [submitting, setSubmitting] = useState(false);
@@ -206,12 +205,6 @@ export default function PublicServiceFormSection({ onSuccess, onOpenPrivacy }) {
                 <Label className="text-slate-700">Serienummer *</Label>
                 <Input className="h-11 bg-slate-50/50" value={form.serial_number || ""} onChange={(e) => set("serial_number", e.target.value)} placeholder="Ange maskinens serienummer" required />
                 <p className="text-xs text-slate-500">Serienumret hittar du på typskylten, oftast på baksidan av maskinen.</p>
-              </div>
-              
-              <div className="sm:col-span-2 space-y-1.5">
-                <Label className="text-slate-700">Önskat datum för service</Label>
-                <Input className="h-11 bg-slate-50/50" type="date" value={form.preferred_date || ""} onChange={(e) => set("preferred_date", e.target.value)} />
-                <p className="text-xs text-slate-500">Om du har ett specifikt önskemål för när du vill att servicen ska utföras.</p>
               </div>
               
               {form.machine_name === "Annan" &&
