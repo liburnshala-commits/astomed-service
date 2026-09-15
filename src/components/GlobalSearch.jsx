@@ -49,7 +49,8 @@ export default function GlobalSearch() {
 
         const filteredMachines = machines.filter(m => 
           m.serial_number?.toLowerCase().includes(s) || 
-          m.model?.toLowerCase().includes(s)
+          m.model?.toLowerCase().includes(s) ||
+          m.operating_location?.toLowerCase().includes(s)
         );
 
         const filteredLeads = leads.filter(lead => {
@@ -91,7 +92,7 @@ export default function GlobalSearch() {
       <div className="relative">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
         <Input 
-          placeholder="Sök serienummer..." 
+          placeholder="Sök serienummer, driftställe..." 
           className="pl-9 h-9 bg-slate-50/50 border-slate-200 focus-visible:ring-1 focus-visible:ring-[#3a9e9e] text-sm"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}

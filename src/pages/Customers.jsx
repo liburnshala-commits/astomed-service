@@ -110,13 +110,19 @@ export default function Customers() {
 
     // 5. Text Search
     const searchLower = search.toLowerCase();
+    const hasMachineMatch = machines.some(m => 
+      m.customer_id === c.id && 
+      m.operating_location?.toLowerCase().includes(searchLower)
+    );
+
     return c.company_name?.toLowerCase().includes(searchLower) ||
       c.org_number?.toLowerCase().includes(searchLower) ||
       c.contact_person?.toLowerCase().includes(searchLower) ||
       c.email?.toLowerCase().includes(searchLower) ||
       c.phone?.toLowerCase().includes(searchLower) ||
       c.city?.toLowerCase().includes(searchLower) ||
-      c.postal_code?.toLowerCase().includes(searchLower);
+      c.postal_code?.toLowerCase().includes(searchLower) ||
+      hasMachineMatch;
   });
 
   const getMachineCount = (customerId) => machines.filter(m => m.customer_id === customerId).length;

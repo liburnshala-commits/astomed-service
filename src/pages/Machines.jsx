@@ -87,6 +87,7 @@ export default function Machines() {
     const matchSearch = 
       m.serial_number?.toLowerCase().includes(searchLower) || 
       m.model?.toLowerCase().includes(searchLower) ||
+      m.operating_location?.toLowerCase().includes(searchLower) ||
       customer?.company_name?.toLowerCase().includes(searchLower) || 
       customer?.org_number?.toLowerCase().includes(searchLower) ||
       customer?.contact_person?.toLowerCase().includes(searchLower) || 
