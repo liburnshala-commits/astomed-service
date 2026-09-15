@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { base44 } from "@/api/base44Client";
-import { Monitor } from "lucide-react";
+import { Monitor, ExternalLink } from "lucide-react";
 
 export default function PublicMachineTypesSection() {
   const [templates, setTemplates] = useState([]);
@@ -21,6 +21,22 @@ export default function PublicMachineTypesSection() {
     "PrimeLase (alla)",
     "Elysion / Cocoon Elysion"
   ];
+
+  const machineDataMap = {
+    "Clearlight IPL": { description: "Välbeprövad IPL som behandlar flera indikationer.", link: "https://astomed.se/pages/clearlight-ipl" },
+    "Fraction CO2": { description: "Nya generationens fraktionerade CO2 laser för kropp och ansikte.", link: "https://astomed.se/pages/fraction-co2" },
+    "CoolTech": { description: "Fettfrysning (Cryolipolysis) för effektiv kroppsskulptering.", link: "https://astomed.se/pages/klinikutrustning" },
+    "Alma Harmony": { description: "Multifunktionell plattform för avancerade hudbehandlingar.", link: "https://astomed.se/pages/klinikutrustning" },
+    "Helios / Helios III": { description: "YAG Laser med 4 handenheter för alla tatueringsfärger.", link: "https://astomed.se/pages/helios-iii-1" },
+    "Picolo": { description: "PicoLO laser för tatueringsborttagning & hudföryngring.", link: "https://astomed.se/pages/picolo" },
+    "Soprano Titanium": { description: "Laserhårborttagning i toppklass med tre-i-en teknologi.", link: "https://astomed.se/pages/soprano-titanium-1" },
+    "Pento / Pento 9900": { description: "Utrustning som ger resultat med YAG- och Alexandritlaser.", link: "https://astomed.se/pages/pento" },
+    "Splendor X": { description: "Laserutrustning i världsklass från välkända Lumenis.", link: "https://astomed.se/pages/splendor-x" },
+    "Aldix (Triodus) / Aldix Smart Laser": { description: "Laserhårborttagning med välbeprövad diodlaser.", link: "https://astomed.se/pages/aldix-smart-laser" },
+    "Soprano ICE Platinum": { description: "#1 på hårborttagning i Sverige sedan 10 år tillbaka.", link: "https://astomed.se/pages/soprano-ice-platinum-1" },
+    "PrimeLase (alla)": { description: "Effektiv diodlaser för hårborttagning.", link: "https://astomed.se/pages/klinikutrustning" },
+    "Elysion / Cocoon Elysion": { description: "Diodlaser för snabb och säker hårborttagning.", link: "https://astomed.se/pages/klinikutrustning" }
+  };
 
   useEffect(() => {
     // Fetch all service agreement templates to get their descriptions
@@ -57,11 +73,19 @@ export default function PublicMachineTypesSection() {
                       <Monitor className="w-8 h-8 text-[#3a9e9e]" />
                     </div>
                   )}
-                  <div>
+                  <div className="flex-1">
                     <h4 className="text-lg font-bold text-[#1b3a3a] mb-2">{machineName}</h4>
-                    <p className="text-sm text-slate-600 leading-relaxed">
-                      {template?.description || "Beskrivning saknas i systemet."}
+                    <p className="text-sm text-slate-600 leading-relaxed mb-3">
+                      {machineDataMap[machineName]?.description || template?.description || "Beskrivning saknas i systemet."}
                     </p>
+                    <a 
+                      href={machineDataMap[machineName]?.link || "https://astomed.se/pages/klinikutrustning"} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center text-xs font-semibold text-[#3a9e9e] hover:text-[#2d8080] transition-colors"
+                    >
+                      Läs mer om maskinen <ExternalLink className="w-3 h-3 ml-1" />
+                    </a>
                   </div>
                 </div>
               </div>
