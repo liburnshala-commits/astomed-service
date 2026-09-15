@@ -3,11 +3,13 @@ import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
 import { X, Wrench, CheckCircle } from "lucide-react";
 
 export default function RequestServiceModal({ machines, customer, user, onClose }) {
   const [selectedMachineId, setSelectedMachineId] = useState(machines.length === 1 ? machines[0].id : "");
   const [message, setMessage] = useState("");
+  const [preferredDate, setPreferredDate] = useState("");
   const [loading, setLoading] = useState(false);
   const [done, setDone] = useState(false);
   const [error, setError] = useState(null);
@@ -19,13 +21,18 @@ export default function RequestServiceModal({ machines, customer, user, onClose 
     setLoading(true);
     setError(null);
     try {
+      const finalMessage = [
+        preferredDate ? `Önskat datum för service: ${preferredDate}` : "",
+        message.trim()
+      ].filter(Boolean).join("\n\n");
+
       await base44.functions.invoke("requestService", {
         machineId: selectedMachineId,
         machineName: selectedMachine?.model || "",
         serialNumber: selectedMachine?.serial_number || "",
         customerName: customer?.company_name || user?.full_name || "",
         customerEmail: user?.email || customer?.email || "",
-        message: message.trim(),
+        message: finalMessage,
       });
       setDone(true);
     } catch (e) {
@@ -70,6 +77,16 @@ export default function RequestServiceModal({ machines, customer, user, onClose 
                   ))}
                 </SelectContent>
               </Select>
+            </div>
+
+            <div>
+              <label className="text-sm font-medium text-slate-700 mb-1 block">Önskat datum (valfritt)</label>
+              <Input 
+                type="date" 
+                value={preferredDate}
+                onChange={e => setPreferredDate(e.target.value)}
+                min={new Date().toISOString().split('T')[0]}
+              />
             </div>
 
             <div>

@@ -44,7 +44,7 @@ Deno.serve(async (req) => {
           await base44.asServiceRole.entities.Customer.update(customer.id, { portal_token: token });
         }
         
-        const appUrl = Deno.env.get("APP_URL") || "https://unnatural-service-track-pro.base44.app";
+        const appUrl = Deno.env.get("APP_URL") || "https://serviceastomed.se";
         const portalUrl = `${appUrl}/CustomerPortal?token=${token}`;
         
         const dateFormatted = new Date(machine.next_service_date).toLocaleDateString('sv-SE');
