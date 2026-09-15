@@ -117,7 +117,7 @@ export default function PublicServiceFormSection({ onSuccess, onOpenPrivacy }) {
     }
   };
 
-  const isValid = form.company_name && form.contact_person && form.email && form.phone && form.machine_name && form.serial_number && privacyAccepted && (form.machine_name !== "Annan" || form.other_machine_name);
+  const isValid = form.company_name && form.contact_person && form.email && form.phone && form.machine_name && privacyAccepted && (form.machine_name !== "Annan" || form.other_machine_name);
 
   return (
     <section id="anmalan" className="py-24 px-4 md:px-12 bg-[#fcf8f2] relative">
@@ -202,9 +202,9 @@ export default function PublicServiceFormSection({ onSuccess, onOpenPrivacy }) {
               </div>
 
               <div className="space-y-1.5">
-                <Label className="text-slate-700">Serienummer *</Label>
-                <Input className="h-11 bg-slate-50/50" value={form.serial_number || ""} onChange={(e) => set("serial_number", e.target.value)} placeholder="Ange maskinens serienummer" required />
-                <p className="text-xs text-slate-500">Serienumret hittar du på typskylten, oftast på baksidan av maskinen.</p>
+                <Label className="text-slate-700">Serienummer</Label>
+                <Input className="h-11 bg-slate-50/50" value={form.serial_number || ""} onChange={(e) => set("serial_number", e.target.value)} placeholder="Ange maskinens serienummer" />
+                <p className="text-xs text-slate-500">Serienumret hittar du på typskylten, oftast på baksidan av maskinen (valfritt).</p>
               </div>
               
               {form.machine_name === "Annan" &&
@@ -223,6 +223,9 @@ export default function PublicServiceFormSection({ onSuccess, onOpenPrivacy }) {
                         <Wrench className="w-4 h-4 text-[#3a9e9e]" />
                         Standardservice och underhåll – {selectedTemplate.name}
                       </h4>
+                      {selectedTemplate.description && (
+                        <p className="text-sm text-slate-600 mb-4">{selectedTemplate.description}</p>
+                      )}
                       <ul className="space-y-2.5 text-sm text-slate-700">
                         {selectedTemplate.included_services && selectedTemplate.included_services.map((detail, idx) =>
                           <li key={idx} className="flex gap-2.5 items-start">
