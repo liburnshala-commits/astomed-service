@@ -158,6 +158,21 @@ Deno.serve(async (req) => {
 
     await Promise.all(promises);
 
+    // Logga interaktionen om det är en kund
+    if (customer?.id && customer?.email) {
+      try {
+        await base44.asServiceRole.entities.CustomerInteraction.create({
+          customer_id: customer.id,
+          interaction_type: 'email',
+          interaction_date: new Date().toISOString(),
+          notes: `Skickade orderbekräftelse via e-post för godkänt kostnadsförslag (Maskin: ${machine?.model}, SN: ${machine?.serial_number}).`,
+          logged_by: user.full_name || user.email || 'System'
+        });
+      } catch (e) {
+        console.error("Kunde inte logga e-post", e);
+      }
+    }
+
     return Response.json({ success: true });
   } catch (error) {
     return Response.json({ error: error.message }, { status: 500 });

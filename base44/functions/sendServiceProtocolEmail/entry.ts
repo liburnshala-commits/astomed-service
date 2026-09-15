@@ -51,6 +51,19 @@ Astomed Service
             body: emailBody
         });
 
+        // Logga interaktionen
+        try {
+            await base44.asServiceRole.entities.CustomerInteraction.create({
+                customer_id: customer.id,
+                interaction_type: 'email',
+                interaction_date: new Date().toISOString(),
+                notes: `Skickade länk till serviceprotokoll via e-post (Maskin: ${machine.model}, SN: ${machine.serial_number}).`,
+                logged_by: user.full_name || user.email || 'System'
+            });
+        } catch (e) {
+            console.error("Kunde inte logga e-post", e);
+        }
+
         return Response.json({ success: true });
     } catch (error) {
         console.error(error);

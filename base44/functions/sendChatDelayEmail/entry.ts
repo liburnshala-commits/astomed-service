@@ -43,6 +43,22 @@ Team Astomed Support`;
                 delay_email_sent: true
             });
             
+            // Logga interaktionen
+            try {
+                const customers = await base44.asServiceRole.entities.Customer.filter({ email: conv.guest_email });
+                if (customers && customers.length > 0) {
+                    await base44.asServiceRole.entities.CustomerInteraction.create({
+                        customer_id: customers[0].id,
+                        interaction_type: 'email',
+                        interaction_date: new Date().toISOString(),
+                        notes: `Skickade automatiskt förseningsemail för supportchatt till ${conv.guest_email}.`,
+                        logged_by: 'System'
+                    });
+                }
+            } catch (e) {
+                console.error("Kunde inte logga e-post", e);
+            }
+            
             processed++;
         }
 

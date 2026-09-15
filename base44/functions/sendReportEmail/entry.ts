@@ -85,6 +85,22 @@ Deno.serve(async (req) => {
       from_name: "Astomed Servicerapporter"
     });
 
+    // Logga interaktionen
+    try {
+      const customers = await base44.asServiceRole.entities.Customer.filter({ email: customerEmail });
+      if (customers && customers.length > 0) {
+        await base44.asServiceRole.entities.CustomerInteraction.create({
+          customer_id: customers[0].id,
+          interaction_type: 'email',
+          interaction_date: new Date().toISOString(),
+          notes: `Skickade servicerapport via e-post. Filter: ${filterLabel}, Antal ärenden: ${recordCount}.`,
+          logged_by: user.full_name || user.email || 'System'
+        });
+      }
+    } catch (e) {
+      console.error("Kunde inte logga e-post", e);
+    }
+
     return Response.json({ success: true });
   } catch (error) {
     return Response.json({ error: error.message }, { status: 500 });
