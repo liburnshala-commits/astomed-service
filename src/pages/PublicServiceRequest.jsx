@@ -20,6 +20,7 @@ import SsmRequirementsSection from "@/components/public/SsmRequirementsSection";
 import PublicPortalSection from "@/components/public/PublicPortalSection";
 import PublicServiceFormSection from "@/components/public/PublicServiceFormSection";
 import PublicAboutUsSection from "@/components/public/PublicAboutUsSection";
+import SakerKlinikSection from "@/components/public/SakerKlinikSection";
 import PublicMachineTypesSection from "@/components/public/PublicMachineTypesSection";
 
 export default function PublicServiceRequest() {
@@ -138,6 +139,9 @@ export default function PublicServiceRequest() {
 
       {/* Kundportalen Section */}
       <PublicPortalSection />
+
+      {/* Certifiering Section */}
+      <SakerKlinikSection />
 
       {/* Form Section */}
       <PublicServiceFormSection 
