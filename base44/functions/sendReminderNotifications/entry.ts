@@ -45,7 +45,7 @@ Deno.serve(async (req) => {
         }
         
         const appUrl = Deno.env.get("APP_URL") || "https://serviceastomed.se";
-        const portalUrl = `${appUrl}/CustomerPortal?token=${token}`;
+        const portalUrl = `${appUrl}/PublicServiceRequest#anmalan`;
         
         const dateFormatted = new Date(machine.next_service_date).toLocaleDateString('sv-SE');
         const title = 'Påminnelse: Dags att boka service';
@@ -118,7 +118,7 @@ Deno.serve(async (req) => {
                 const elksUser = Deno.env.get("ELKS_USERNAME");
                 const elksPass = Deno.env.get("ELKS_PASSWORD");
                 if (elksUser && elksPass) {
-                    const smsText = `Astomed: Dags att boka service för ${machine.model} (senast ${dateFormatted}). Boka smidigt via portalen: ${portalUrl}`;
+                    const smsText = `Astomed: Dags att boka service för ${machine.model} (senast ${dateFormatted}). Boka smidigt här: https://serviceastomed.se/PublicServiceRequest#anmalan`;
                     
                     const params = new URLSearchParams();
                     params.append('from', '+46761616855');
