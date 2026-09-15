@@ -88,6 +88,7 @@ export default function PublicServiceRequest() {
            <a href="#maskintyper" className="hover:text-[#3a9e9e] transition-colors">Maskiner</a>
            <a href="#ssm-lagen" className="hover:text-[#3a9e9e] transition-colors">Nya SSM-lagen</a>
            <a href="#anmalan" className="hover:text-[#3a9e9e] transition-colors">Serviceavtal</a>
+           <button onClick={() => navigate('/PublicServiceBooking')} className="text-[#3a9e9e] font-bold hover:text-white transition-colors">Boka Service</button>
            <button onClick={() => navigate('/Calculator')} className="text-[#3a9e9e] font-bold hover:text-white transition-colors">Klinikkalkylator</button>
            <a href="https://www.stralsakerhetsmyndigheten.se/omraden/kroppsbehandlingar/anmalan-av-estetisk-verksamhet/" target="_blank" rel="noopener noreferrer" className="text-[#3a9e9e] font-bold hover:text-white transition-colors">Anmäl din klinik</a>
         </div>
@@ -112,6 +113,7 @@ export default function PublicServiceRequest() {
            <a href="#maskintyper" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-[#3a9e9e] transition-colors border-b border-white/10 pb-3">Maskiner</a>
            <a href="#ssm-lagen" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-[#3a9e9e] transition-colors border-b border-white/10 pb-3">Nya SSM-lagen</a>
            <a href="#anmalan" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-[#3a9e9e] transition-colors border-b border-white/10 pb-3">Serviceavtal</a>
+           <button onClick={() => { setIsMobileMenuOpen(false); navigate('/PublicServiceBooking'); }} className="text-[#3a9e9e] font-bold text-left hover:text-white transition-colors border-b border-white/10 pb-3">Boka Service</button>
            <button onClick={() => { setIsMobileMenuOpen(false); navigate('/Calculator'); }} className="text-[#3a9e9e] font-bold text-left hover:text-white transition-colors border-b border-white/10 pb-3">Klinikkalkylator</button>
            <a href="https://www.stralsakerhetsmyndigheten.se/omraden/kroppsbehandlingar/anmalan-av-estetisk-verksamhet/" target="_blank" rel="noopener noreferrer" className="text-[#3a9e9e] font-bold hover:text-white transition-colors pb-3">Anmäl din klinik</a>
            <Button onClick={() => base44.auth.redirectToLogin()} variant="outline" className="text-[#1b3a3a] bg-white hover:bg-slate-100 border-0 mt-4 sm:hidden w-full max-w-sm mx-auto h-12 text-base">

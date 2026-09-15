@@ -97,7 +97,8 @@ export default function PublicServiceBookingFormSection({ onSuccess, onOpenPriva
       const submitData = {
         ...form,
         machine_name: finalMachineName,
-        service_description: form.notes || `Serviceförfrågan för ${finalMachineName}.`
+        service_type: "Servicebokning",
+        service_description: form.notes || `Bokningsförfrågan för service av ${finalMachineName}.`
       };
       const appUrl = window.location.origin;
       const res = await fetch(`${appUrl}/api/functions/createPublicServiceLead`, {

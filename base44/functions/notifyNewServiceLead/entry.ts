@@ -27,6 +27,7 @@ Deno.serve(async (req) => {
                         <p style="margin: 5px 0; color: #254f4f;"><strong>Telefon:</strong> ${data.phone}</p>
                         <p style="margin: 5px 0; color: #254f4f;"><strong>Maskin:</strong> ${data.machine_name}</p>
                         <p style="margin: 5px 0; color: #254f4f;"><strong>Servicetyp:</strong> ${data.service_type || 'Standard'}</p>
+                        ${data.preferred_date ? `<p style="margin: 5px 0; color: #254f4f;"><strong>Önskat datum (preliminärt):</strong> ${data.preferred_date}</p>` : ''}
                     </div>
 
                     <h3 style="color: #1b3a3a;">Beskrivning:</h3>
