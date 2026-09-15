@@ -82,6 +82,11 @@
       "type": "string",
       "description": "L\u00e4nk till skapat service\u00e4rende (om omvandlad)"
     },
+    "preferred_date": {
+      "type": "string",
+      "format": "date",
+      "description": "\u00d6nskat datum f\u00f6r service"
+    },
     "preferred_time_slot": {
       "type": "string",
       "enum": [

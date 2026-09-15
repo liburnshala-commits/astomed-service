@@ -24,6 +24,7 @@ Deno.serve(async (req) => {
             machine_name: data.machine_name,
             manufacturer: data.manufacturer || null,
             serial_number: data.serial_number || null,
+            preferred_date: data.preferred_date || null,
             service_description: data.service_description,
             service_type: data.service_type || "BAS - Astomed 3.0",
             status: "new"
@@ -109,6 +110,7 @@ Deno.serve(async (req) => {
                         <h3 style="color: #1b3a3a; margin-top: 0; margin-bottom: 15px; font-size: 18px;">Sammanfattning av ditt ärende</h3>
                         <p style="margin: 8px 0; color: #254f4f;"><strong>Maskin:</strong> ${data.machine_name}</p>
                         <p style="margin: 8px 0; color: #254f4f;"><strong>Serienummer:</strong> ${data.serial_number || 'Ej angivet'}</p>
+                        ${data.preferred_date ? `<p style="margin: 8px 0; color: #254f4f;"><strong>Önskat datum:</strong> ${data.preferred_date}</p>` : ''}
                         <p style="margin: 8px 0; color: #254f4f;"><strong>Beskrivning:</strong><br/> ${data.service_description}</p>
                     </div>
 
