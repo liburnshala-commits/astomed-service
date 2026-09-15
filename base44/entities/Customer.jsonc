@@ -67,6 +67,16 @@
       "format": "date-time",
       "description": "Datum n\u00e4r kunden markerades f\u00f6r radering"
     },
+    "reminder_enabled": {
+      "type": "boolean",
+      "default": true,
+      "description": "Automatisk servicep\u00e5minnelse aktiverad"
+    },
+    "reminder_days_before": {
+      "type": "number",
+      "default": 60,
+      "description": "Antal dagar innan f\u00f6rfall som p\u00e5minnelse skickas"
+    },
     "documents": {
       "type": "array",
       "description": "Uppladdade dokument (t.ex. avtal, PDF)",

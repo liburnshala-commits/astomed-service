@@ -277,6 +277,19 @@ Deno.serve(async (req) => {
             protocol_uri: uploadRes.file_uri
         });
 
+        // Auto-calculate next_service_date
+        if (record.service_date) {
+            const intervalMonths = machine?.service_interval || 12;
+            const serviceDate = new Date(record.service_date);
+            const nextServiceDate = new Date(serviceDate);
+            nextServiceDate.setMonth(nextServiceDate.getMonth() + intervalMonths);
+            
+            await base44.entities.Machine.update(machine.id, {
+                service_date: serviceDate.toISOString().split('T')[0],
+                next_service_date: nextServiceDate.toISOString().split('T')[0]
+            });
+        }
+
         return Response.json({ success: true, protocol_uri: uploadRes.file_uri });
     } catch (error) {
         console.error(error);

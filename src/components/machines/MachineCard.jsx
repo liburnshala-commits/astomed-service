@@ -42,6 +42,22 @@ export default function MachineCard({
 
   const isMissingSn = !machine.serial_number || machine.serial_number.toLowerCase() === "okänd" || machine.serial_number.toLowerCase() === "saknas" || machine.serial_number.trim() === "";
 
+  const getServiceStatusBadge = () => {
+    if (!machine.next_service_date) return null;
+    const nextService = new Date(machine.next_service_date);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const daysLeft = Math.ceil((nextService - today) / (1000 * 60 * 60 * 24));
+    
+    if (daysLeft < 0) {
+      return <Badge className="bg-red-100 text-red-700 border-red-200">Förfallen</Badge>;
+    } else if (daysLeft <= 60) {
+      return <Badge className="bg-amber-100 text-amber-700 border-amber-200">Snart förfallen ({daysLeft} d)</Badge>;
+    } else {
+      return <Badge className="bg-emerald-100 text-emerald-700 border-emerald-200">I fas</Badge>;
+    }
+  };
+
   return (
     <Card className={`astomed-card h-full flex flex-col ${isMobile ? 'mx-1' : ''}`}>
       <CardContent className="p-5 flex-1 flex flex-col">
@@ -49,15 +65,18 @@ export default function MachineCard({
           <Link to={createPageUrl(`ServiceRecords?machine=${machine.id}`)} className="astomed-icon-box flex-shrink-0 hover:opacity-80 transition-opacity" style={{ width: 40, height: 40 }} title="Visa serviceärenden för denna maskin">
             <Monitor className="w-5 h-5" style={{ color: "#1b3a3a" }} />
           </Link>
-          {machine.status === "service" ? (
-            <Link to={createPageUrl(`ServiceRecords?machine=${machine.id}`)}>
-              <Badge className={`${statusColor["service"]} cursor-pointer hover:opacity-80 underline-offset-2`}>
-                {statusLabel["service"]}
-              </Badge>
-            </Link>
-          ) : (
-            <Badge className={statusColor[machine.status || "active"]}>{statusLabel[machine.status || "active"]}</Badge>
-          )}
+          <div className="flex flex-col items-end gap-1">
+            {machine.status === "service" ? (
+              <Link to={createPageUrl(`ServiceRecords?machine=${machine.id}`)}>
+                <Badge className={`${statusColor["service"]} cursor-pointer hover:opacity-80 underline-offset-2`}>
+                  {statusLabel["service"]}
+                </Badge>
+              </Link>
+            ) : (
+              <Badge className={statusColor[machine.status || "active"]}>{statusLabel[machine.status || "active"]}</Badge>
+            )}
+            {getServiceStatusBadge()}
+          </div>
         </div>
         <Link to={createPageUrl(`ServiceRecords?machine=${machine.id}`)} className="block w-fit group" title="Visa serviceärenden för denna maskin">
           <h3 className="font-bold astomed-title mb-0.5 group-hover:underline group-hover:text-[#3a9e9e] transition-colors">{machine.model}</h3>

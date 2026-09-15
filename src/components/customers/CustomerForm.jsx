@@ -6,6 +6,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
+import { Bell } from "lucide-react";
 import { MACHINE_MODELS } from "@/lib/constants";
 
 export default function CustomerForm({ customer, onSave, onClose }) {
@@ -19,7 +21,9 @@ export default function CustomerForm({ customer, onSave, onClose }) {
     email: customer?.email || "",
     phone: customer?.phone || "",
     notes: customer?.notes || "",
-    portal_token: customer?.portal_token || ""
+    portal_token: customer?.portal_token || "",
+    reminder_enabled: customer?.reminder_enabled !== false,
+    reminder_days_before: customer?.reminder_days_before || 60
   });
 
   const [machine, setMachine] = useState({
@@ -104,6 +108,25 @@ export default function CustomerForm({ customer, onSave, onClose }) {
             <div className="col-span-2 space-y-1">
               <Label>Anteckningar</Label>
               <Textarea value={form.notes} onChange={e => set("notes", e.target.value)} placeholder="Övriga anteckningar..." rows={3} />
+            </div>
+            <div className="col-span-2 border-t pt-4 space-y-4">
+              <div className="flex items-center gap-2 text-sm font-semibold text-slate-700">
+                <Bell className="w-4 h-4" />
+                Servicepåminnelser
+              </div>
+              <div className="flex items-center justify-between p-3 border rounded-lg bg-slate-50">
+                <div>
+                  <Label className="text-sm font-medium">Aktivera automatiska påminnelser</Label>
+                  <p className="text-xs text-slate-500 mt-1">Kunden får e-post och SMS innan service förfaller</p>
+                </div>
+                <Switch checked={form.reminder_enabled} onCheckedChange={v => set("reminder_enabled", v)} />
+              </div>
+              {form.reminder_enabled && (
+                <div className="space-y-1">
+                  <Label>Dagar före förfallodatum</Label>
+                  <Input type="number" min="1" max="365" value={form.reminder_days_before} onChange={e => set("reminder_days_before", parseInt(e.target.value) || 60)} />
+                </div>
+              )}
             </div>
           </div>
 
