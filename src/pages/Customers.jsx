@@ -104,6 +104,7 @@ export default function Customers() {
     if (specialFilter === "mobile_number" && !hasMobile) return false;
     if (specialFilter === "imported_mobile" && (!c.is_imported || !hasMobile)) return false;
     if (specialFilter === "mobile_no_contract" && (!hasMobile || hasActiveContract)) return false;
+    if (specialFilter === "saker_klinik" && !c.saker_klinik_enrolled) return false;
 
     // 4. URL Param (signed)
     if (filterParam === "signed" && !hasActiveContract) return false;
@@ -411,6 +412,7 @@ export default function Customers() {
             <SelectItem value="mobile_number">Mobilnummer (07, +467...)</SelectItem>
             <SelectItem value="imported_mobile">Importerade med mobilnummer</SelectItem>
             <SelectItem value="mobile_no_contract">Mobilnummer utan serviceavtal</SelectItem>
+            <SelectItem value="saker_klinik">Säker Klinik</SelectItem>
           </SelectContent>
         </Select>
         <div className="relative flex-1">
