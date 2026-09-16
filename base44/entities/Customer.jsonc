@@ -91,6 +91,27 @@
           }
         }
       }
+    },
+    "insurance_partner": {
+      "type": "string"
+    },
+    "insurance_policy_status": {
+      "type": "string"
+    },
+    "saker_klinik_enrolled": {
+      "type": "boolean",
+      "default": false
+    },
+    "academy_access_granted": {
+      "type": "boolean",
+      "default": false
+    },
+    "academy_tier": {
+      "type": "string"
+    },
+    "academy_synced_at": {
+      "type": "string",
+      "format": "date-time"
     }
   },
   "required": [
