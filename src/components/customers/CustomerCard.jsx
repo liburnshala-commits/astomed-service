@@ -58,6 +58,11 @@ export default function CustomerCard({
                   <MonitorUp className="w-3 h-3" /> Uppdaterad
                 </span>
               )}
+              {customer.saker_klinik_enrolled && (
+                <Badge variant="outline" className="bg-[#1b3a3a] text-white border-transparent ml-2 whitespace-nowrap text-[10px] py-0 px-1.5 flex-shrink-0">
+                  Säker Klinik
+                </Badge>
+              )}
             </div>
             {userRole === "admin" && (
               <div className="ml-6 mb-2">
