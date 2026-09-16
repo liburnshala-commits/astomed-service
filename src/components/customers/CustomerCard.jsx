@@ -1,11 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Building2, Phone, Mail, ExternalLink, Trash2, UserPlus, Check, Copy, Loader2, Star, MonitorUp } from "lucide-react";
+import { Building2, Phone, Mail, ExternalLink, Trash2, UserPlus, Check, Copy, Loader2, Star, MonitorUp, GraduationCap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import CustomerLatestInteraction from "@/components/customers/CustomerLatestInteraction.jsx";
 import { createPageUrl } from "@/utils";
+import { base44 } from "@/api/base44Client";
 
 export default function CustomerCard({
   customer,
@@ -134,6 +135,31 @@ export default function CustomerCard({
                 {copiedId === customer.id ? "Kopierad" : "Kopiera länk"}
               </span>
             </Button>
+            {userRole === "admin" && (
+              <Button
+                size="sm"
+                variant={customer.academy_access_granted ? "secondary" : "outline"}
+                onClick={async () => {
+                  if (confirm("Vill du bevilja Academy-åtkomst?")) {
+                    try {
+                      await base44.functions.invoke("provisionAcademyAccess", { customer_id: customer.id });
+                      alert("Åtkomst beviljad!");
+                      window.location.reload();
+                    } catch(e) {
+                      alert("Fel: " + e.message);
+                    }
+                  }
+                }}
+                disabled={customer.academy_access_granted || !customer.email}
+                title={customer.academy_access_granted ? "Har Academy-åtkomst" : "Bevilja Academy-åtkomst"}
+                className={`relative ${customer.academy_access_granted ? "bg-purple-50 text-purple-700 border-purple-200 hover:bg-purple-100" : ""}`}
+              >
+                <GraduationCap className="w-3 h-3" />
+                <span className="ml-1 text-xs hidden sm:inline">
+                  {customer.academy_access_granted ? "Academy OK" : "Bevilja Academy"}
+                </span>
+              </Button>
+            )}
             <Button
               size="sm"
               variant={isInvited ? "secondary" : "outline"}

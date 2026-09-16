@@ -3,7 +3,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { createPageUrl } from "@/utils";
 import { Link, useNavigate } from "react-router-dom";
-import { Building2, Phone, Mail, Monitor, ArrowLeft, ExternalLink, Shield, Trash2, Download, FileCheck, FileText, CheckCircle, Box } from "lucide-react";
+import { Building2, Phone, Mail, Monitor, ArrowLeft, ExternalLink, Shield, Trash2, Download, FileCheck, FileText, CheckCircle, Box, GraduationCap } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -170,7 +170,31 @@ export default function CustomerDetails() {
 
           <Card className="astomed-card border-0 shadow-sm">
             <CardContent className="p-5 space-y-4">
-              <h3 className="font-semibold text-slate-800 border-b pb-2">Kontroller</h3>
+              <h3 className="font-semibold text-slate-800 border-b pb-2">Academy & Kontroller</h3>
+              
+              {user?.role === "admin" && (
+                <div className="mb-4 pb-4 border-b">
+                  <Button 
+                    variant={customer.academy_access_granted ? "secondary" : "outline"} 
+                    className={`w-full h-12 rounded-lg flex items-center justify-center gap-2 text-sm font-medium ${customer.academy_access_granted ? "bg-purple-50 text-purple-700 pointer-events-none" : "hover:bg-slate-50"}`}
+                    onClick={async () => {
+                      if (!customer.academy_access_granted && confirm("Vill du bevilja Academy-åtkomst?")) {
+                        try {
+                          await base44.functions.invoke("provisionAcademyAccess", { customer_id: customer.id });
+                          alert("Åtkomst beviljad!");
+                          queryClient.invalidateQueries({ queryKey: ["customerDetails", customerId] });
+                        } catch(e) {
+                          alert("Fel: " + e.message);
+                        }
+                      }
+                    }}
+                  >
+                    <GraduationCap className="w-4 h-4" /> 
+                    {customer.academy_access_granted ? "Academy-åtkomst beviljad" : "Bevilja Academy-åtkomst"}
+                  </Button>
+                </div>
+              )}
+
               <div className="grid grid-cols-2 gap-3">
                 <Link to={createPageUrl("DeliveryControls")} className="block">
                   <Button variant="outline" className="w-full h-12 rounded-lg flex items-center justify-center gap-2 text-sm font-medium hover:bg-slate-50">
